@@ -1,6 +1,6 @@
 # Engineering Backend Architect
 
-This is a standalone Codex skill for backend architecture design and review.
+This is a standalone skill for backend architecture design and review.
 
 It is intended for requests such as:
 
@@ -11,12 +11,12 @@ It is intended for requests such as:
 
 ## Files
 
-- `SKILL.md`: Agent-facing instructions, workflow, output template, and decision rules
-- `agents/openai.yaml`: UI metadata for skill display and invocation
+- `SKILL.md`: Core skill instructions, workflow, output template, and decision rules
+- `agents/openai.yaml`: Optional metadata for Codex/OpenAI-compatible tooling and UI integration
 
 ## What This Skill Does
 
-The skill guides Codex to:
+The skill guides an agent or assistant to:
 
 - frame backend requirements and assumptions
 - choose an architecture shape with explicit tradeoffs
@@ -30,7 +30,7 @@ It intentionally prefers concrete tradeoffs over generic architecture slogans, a
 ## Notes
 
 - This skill is written to operate independently. It does not require the original document to be usable.
-- The content was restructured for Codex execution, with a stronger emphasis on workflow, output shape, and triggerability.
+- The core skill is tool-agnostic. Files such as `agents/openai.yaml` are additive support for specific ecosystems and are not required to use the skill.
 
 ## Source Attribution
 
