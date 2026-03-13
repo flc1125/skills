@@ -62,8 +62,30 @@ export function SkillModal({ skill, isOpen, onClose }: SkillModalProps) {
                 </div>
 
                 <div className="max-h-[60vh] overflow-y-auto pr-4 custom-scrollbar">
-                  <div className="prose dark:prose-invert max-w-none prose-headings:font-bold prose-h1:text-3xl prose-h2:text-2xl prose-code:bg-gray-100 dark:prose-code:bg-gray-800 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none prose-pre:bg-gray-900 dark:prose-pre:bg-black prose-pre:rounded-xl">
-                    <ReactMarkdown>{skill.content}</ReactMarkdown>
+                  <div className="prose dark:prose-invert max-w-none 
+                    prose-headings:font-bold prose-h1:text-3xl prose-h2:text-2xl 
+                    prose-pre:bg-gray-900 dark:prose-pre:bg-black prose-pre:rounded-xl prose-pre:p-0">
+                    <ReactMarkdown
+                      components={{
+                        code(props) {
+                          const {children, className, ...rest} = props
+                          const match = /language-(\w+)/.exec(className || '')
+                          return match ? (
+                            <pre className="p-6 overflow-x-auto">
+                              <code className={className} {...rest}>
+                                {children}
+                              </code>
+                            </pre>
+                          ) : (
+                            <code className="bg-gray-100 dark:bg-gray-800 text-black dark:text-white px-1.5 py-0.5 rounded font-medium before:content-none after:content-none" {...rest}>
+                              {children}
+                            </code>
+                          )
+                        }
+                      }}
+                    >
+                      {skill.content}
+                    </ReactMarkdown>
                   </div>
                 </div>
 
