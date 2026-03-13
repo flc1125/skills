@@ -17,8 +17,8 @@ The core objective of this project is to build an **"Efficient, Minimalist, and 
 *   **Zero-Config Expansion**: Adding a new folder and `SKILL.md` in the `skills/` directory allows the marketplace to automatically recognize and list it. This architecture significantly reduces content maintenance costs.
 
 ## 4. Extreme Performance (Performance & SEO)
-*   **SSG Architecture**: Leverages Next.js's Static Site Generation capabilities. All Skill lists are generated as HTML during the build phase.
-*   **Instant Loading**: By reading files on the server side, the client doesn't need to make extra API requests for the initial load, ensuring an optimal user experience.
+*   **Hybrid Rendering**: The homepage preloads the skill list on the server, while full skill content is fetched on demand only when a modal is opened from a deep link or user interaction.
+*   **Instant Initial Load**: By reading files on the server side, the client doesn't need to make extra API requests for the initial list render, keeping first paint fast.
 
 ## 5. Cross-Platform Consistency
 *   **Native Dark Mode**: Full native support for system dark mode switching, from the UI to the Favicon, ensuring long-term usage comfort.

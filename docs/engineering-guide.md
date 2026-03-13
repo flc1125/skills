@@ -3,13 +3,14 @@
 This document provides detailed guidance for developing, debugging, building, and deploying the **Flc's Skills** marketplace.
 
 ## 1. Tech Stack Overview
-*   **Frontend Framework**: [Next.js 15 (App Router)](https://nextjs.org/)
+*   **Frontend Framework**: [Next.js 16 (App Router)](https://nextjs.org/)
 *   **Language**: TypeScript
 *   **Styling**: Tailwind CSS + @tailwindcss/typography
 *   **Animations**: Framer Motion
 *   **Accessible Components**: Headless UI
 *   **Data Parsing**: gray-matter (Markdown frontmatter parsing)
 *   **Icon Library**: Lucide React
+*   **Linting**: ESLint 9 with `eslint-config-next`
 
 ## 2. Local Development
 After cloning the repository, follow these steps to start the development server:
@@ -33,8 +34,8 @@ The Skill data is stored in the `skills/` directory at the root level.
 
 ```markdown
 ---
-name: My New Skill
-description: A very useful description of this new skill, ideally around three lines.
+name: my-new-skill
+description: A concise summary of what this skill does and when to use it.
 ---
 
 # Skill Title
@@ -45,15 +46,28 @@ Write the full Markdown documentation for the skill here.
 *   **Icons not displaying**: Ensure the icon name matches [Lucide Icons](https://lucide.dev/icons) naming conventions.
 *   **Styles not updating**: Verify Tailwind directives are correctly configured in `src/app/globals.css`.
 *   **Markdown rendering errors**: Check the YAML frontmatter format in `SKILL.md` (wrapped in `---` and free of YAML syntax errors).
+*   **Installation command looks wrong**: Use the frontmatter `name` field as the install identifier. The marketplace deep-link slug is a separate URL concern.
+*   **Lint command fails after a Next upgrade**: On Next.js 16, use the ESLint CLI via `npm run lint`; `next lint` is no longer the supported entrypoint.
 
 ## 5. Build & Testing
 It's recommended to perform a full build test before production deployment:
 
 ```bash
+# Run lint checks
+npm run lint
+
 # Run full build
 npm run build
 ```
-Once the build is successful, all Skill pages will be statically generated in the `.next/` directory.
+Once the build is successful, the homepage is prerendered and the skill detail API route is emitted for on-demand reads.
+
+If you are building in a restricted local sandbox and hit a Turbopack process error, use:
+
+```bash
+npx next build --webpack
+```
+
+That fallback is mainly useful for constrained local environments; standard deployments can continue using `npm run build`.
 
 ## 6. Deployment Guide (e.g., Vercel)
 This project is deeply compatible with Vercel; an automated build solution is recommended.

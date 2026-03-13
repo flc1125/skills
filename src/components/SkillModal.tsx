@@ -24,7 +24,7 @@ export function SkillModal({ skill, isOpen, onClose }: SkillModalProps) {
 
   if (!skill) return null;
 
-  const command = `npx skills add https://github.com/flc1125/skills --skill ${skill.slug}`;
+  const command = `npx skills add https://github.com/flc1125/skills --skill ${skill.installName}`;
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(command);

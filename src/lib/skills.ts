@@ -8,6 +8,7 @@ export interface SkillMetadata {
   description: string;
   path: string;
   slug: string;
+  installName: string;
 }
 
 export interface Skill extends SkillMetadata {
@@ -32,6 +33,7 @@ export async function getSkills(): Promise<SkillMetadata[]> {
       description: data.description,
       path: file,
       slug,
+      installName: data.name,
     };
   });
 
@@ -53,6 +55,7 @@ export async function getSkillBySlug(slug: string): Promise<Skill | null> {
     description: data.description,
     path: skillMeta.path,
     slug: skillMeta.slug,
+    installName: skillMeta.installName,
     content,
   };
 }
