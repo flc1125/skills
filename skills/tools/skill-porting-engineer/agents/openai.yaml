@@ -1,0 +1,4 @@
+interface:
+  display_name: "Skill Porting Engineer"
+  short_description: "Convert source agent docs into local skills"
+  default_prompt: "Use $skill-porting-engineer to turn an upstream agent or prompt document into a local skill that matches this repository's conventions."
