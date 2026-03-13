@@ -112,7 +112,7 @@ export function SkillModal({ skill, isOpen, onClose }: SkillModalProps) {
 
                 <div className="mt-8 pt-8 border-t border-gray-100 dark:border-gray-800">
                   <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3 ml-1">
-                    Install Command
+                    Install this Skill
                   </p>
                   <div className="relative group">
                     <div className="flex items-center gap-4 px-5 py-4 bg-gray-50 dark:bg-black border border-gray-100 dark:border-gray-800 rounded-2xl transition-all group-hover:border-gray-200 dark:group-hover:border-gray-700">
