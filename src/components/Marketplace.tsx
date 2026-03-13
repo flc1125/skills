@@ -16,22 +16,21 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const selectedSkillSlug = searchParams.get('skill');
   
   const [search, setSearch] = useState('');
   const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const isModalOpen = selectedSkill !== null && selectedSkillSlug !== null;
 
   // Sync modal with URL on load and URL change
   useEffect(() => {
-    const skillSlug = searchParams.get('skill');
-    if (skillSlug) {
+    if (selectedSkillSlug) {
       const fetchSkill = async () => {
         try {
-          const response = await fetch(`/api/skills/${skillSlug}`);
+          const response = await fetch(`/api/skills/${selectedSkillSlug}`);
           if (response.ok) {
             const data = await response.json();
             setSelectedSkill(data);
-            setIsModalOpen(true);
           } else {
             // If skill not found, clear URL
             router.replace(pathname);
@@ -41,10 +40,8 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
         }
       };
       fetchSkill();
-    } else {
-      setIsModalOpen(false);
     }
-  }, [searchParams, pathname, router]);
+  }, [selectedSkillSlug, pathname, router]);
 
   const filteredSkills = useMemo(() => {
     return initialSkills.filter((skill) => {
@@ -63,7 +60,7 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
   };
 
   const handleCloseModal = () => {
-    setIsModalOpen(false);
+    setSelectedSkill(null);
     router.push(pathname, { scroll: false });
   };
 
