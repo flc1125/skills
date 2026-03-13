@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { SkillMetadata, Skill } from '@/lib/skills';
 import { SkillCard } from './SkillCard';
 import { SkillModal } from './SkillModal';
@@ -12,9 +13,38 @@ interface MarketplaceProps {
 }
 
 export function Marketplace({ initialSkills }: MarketplaceProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  
   const [search, setSearch] = useState('');
   const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Sync modal with URL on load and URL change
+  useEffect(() => {
+    const skillSlug = searchParams.get('skill');
+    if (skillSlug) {
+      const fetchSkill = async () => {
+        try {
+          const response = await fetch(`/api/skills/${skillSlug}`);
+          if (response.ok) {
+            const data = await response.json();
+            setSelectedSkill(data);
+            setIsModalOpen(true);
+          } else {
+            // If skill not found, clear URL
+            router.replace(pathname);
+          }
+        } catch (error) {
+          console.error('Failed to fetch skill details:', error);
+        }
+      };
+      fetchSkill();
+    } else {
+      setIsModalOpen(false);
+    }
+  }, [searchParams, pathname, router]);
 
   const filteredSkills = useMemo(() => {
     return initialSkills.filter((skill) => {
@@ -26,15 +56,15 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
     });
   }, [initialSkills, search]);
 
-  const handleCardClick = async (skillMeta: SkillMetadata) => {
-    try {
-      const response = await fetch(`/api/skills/${skillMeta.slug}`);
-      const data = await response.json();
-      setSelectedSkill(data);
-      setIsModalOpen(true);
-    } catch (error) {
-      console.error('Failed to fetch skill details:', error);
-    }
+  const handleCardClick = (skillMeta: SkillMetadata) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('skill', skillMeta.slug);
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    router.push(pathname, { scroll: false });
   };
 
   return (
@@ -86,7 +116,7 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
       <SkillModal
         skill={selectedSkill}
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={handleCloseModal}
       />
     </div>
   );
