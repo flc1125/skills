@@ -42,9 +42,9 @@ export function SkillCard({ skill, onClick }: SkillCardProps) {
       </p>
 
       <div className="flex items-center justify-between pt-4 border-t border-gray-50 dark:border-gray-800">
-        <div className="flex -space-x-2">
+        <div className="flex flex-wrap gap-1.5">
           {skill.tags?.slice(0, 3).map((tag) => (
-            <span key={tag} className="text-[10px] bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 px-2 py-0.5 rounded text-gray-500">
+            <span key={tag} className="text-[10px] bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 px-2 py-0.5 rounded-md text-gray-500 font-medium">
               {tag}
             </span>
           ))}
