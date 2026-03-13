@@ -24,6 +24,9 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
 
   // Sync modal with URL on load and URL change
   useEffect(() => {
+    // Clear any previously selected skill when the slug changes
+    setSelectedSkill(null);
+
     if (selectedSkillSlug) {
       const fetchSkill = async () => {
         try {
