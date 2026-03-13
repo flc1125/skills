@@ -43,12 +43,12 @@ export function SkillModal({ skill, isOpen, onClose }: SkillModalProps) {
             >
               <Dialog.Panel className="w-full max-w-4xl transform overflow-hidden rounded-3xl bg-white dark:bg-gray-900 p-8 shadow-2xl transition-all border border-gray-100 dark:border-gray-800">
                 <div className="flex items-center justify-between mb-8 pb-8 border-b border-gray-100 dark:border-gray-800">
-                  <div className="flex items-center gap-6">
-                    <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-2xl">
-                      <Terminal size={32} />
+                  <div className="flex items-center gap-4">
+                    <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-xl">
+                      <Terminal size={24} />
                     </div>
                     <div>
-                      <Dialog.Title as="h3" className="text-2xl font-bold text-gray-900 dark:text-white">
+                      <Dialog.Title as="h3" className="text-xl font-bold text-gray-900 dark:text-white">
                         {skill.name}
                       </Dialog.Title>
                     </div>
@@ -57,7 +57,7 @@ export function SkillModal({ skill, isOpen, onClose }: SkillModalProps) {
                     onClick={onClose}
                     className="p-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-full transition-colors text-gray-400 hover:text-black dark:hover:text-white"
                   >
-                    <X size={24} />
+                    <X size={20} />
                   </button>
                 </div>
 
