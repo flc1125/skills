@@ -9,7 +9,7 @@
   [![React](https://img.shields.io/badge/React-19-blue?style=flat-square&logo=react)](https://react.dev/)
   [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
   [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=flat-square&logo=tailwind-css)](https://tailwindcss.com/)
-  [![Vercel](https://img.shields.io/badge/Vercel-Deployed-black?style=flat-square&logo=vercel)](https://vercel.com/)
+  [![Built on Vercel](https://img.shields.io/badge/Built%20on-Vercel-black?style=flat-square&logo=vercel)](https://vercel.com/flc1125/skills)
 
   ### 🚀 [https://skills.flc.io](https://skills.flc.io)
 </div>
