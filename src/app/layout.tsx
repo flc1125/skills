@@ -39,7 +39,9 @@ export default function RootLayout({
         <main>{children}</main>
         <footer className="border-t border-gray-100 dark:border-gray-800 py-12 mt-20">
           <div className="max-w-7xl mx-auto px-4 text-center">
-            <p className="text-gray-500 text-sm">© 2026 Flc&apos;s Skills. Built for efficiency.</p>
+            <p className="text-gray-900 dark:text-white font-medium mb-2">Flc&apos;s Skills</p>
+            <p className="text-gray-500 text-sm italic">Built with Codex and Gemini, designed for efficiency</p>
+            <p className="text-gray-400 text-xs mt-4">© 2026 Flc&apos;s Skills. All rights reserved.</p>
           </div>
         </footer>
       </body>
