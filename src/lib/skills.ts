@@ -8,9 +8,7 @@ export interface SkillMetadata {
   description: string;
   category: string;
   icon?: string;
-  author?: string;
   tags?: string[];
-  updated_at?: string;
   path: string;
   slug: string;
 }

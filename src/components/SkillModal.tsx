@@ -55,8 +55,6 @@ export function SkillModal({ skill, isOpen, onClose }: SkillModalProps) {
                       </Dialog.Title>
                       <div className="flex items-center gap-4 mt-1">
                         <span className="text-sm font-medium text-gray-400">{skill.category}</span>
-                        <span className="w-1 h-1 bg-gray-300 dark:bg-gray-700 rounded-full" />
-                        <span className="text-sm font-medium text-gray-400">By {skill.author || 'Unknown'}</span>
                       </div>
                     </div>
                   </div>

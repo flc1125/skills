@@ -49,9 +49,6 @@ export function SkillCard({ skill, onClick }: SkillCardProps) {
             </span>
           ))}
         </div>
-        <span className="text-xs font-medium text-gray-400">
-          v1.0.0
-        </span>
       </div>
     </motion.div>
   );
