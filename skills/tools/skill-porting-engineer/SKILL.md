@@ -1,11 +1,6 @@
 ---
 name: skill-porting-engineer
 description: Convert an upstream agent spec, prompt file, markdown role definition, or similar source document into a local Codex skill that matches the repository's skill conventions.
-category: Tools
-icon: FileCode
-author: flc1125
-tags: [porting, automation, codex, engineering]
-updated_at: 2026-03-13
 ---
 
 # Skill Porting Engineer

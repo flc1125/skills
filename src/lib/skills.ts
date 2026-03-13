@@ -6,9 +6,6 @@ import { glob } from 'glob';
 export interface SkillMetadata {
   name: string;
   description: string;
-  category: string;
-  icon?: string;
-  tags?: string[];
   path: string;
   slug: string;
 }
@@ -27,15 +24,12 @@ export async function getSkills(): Promise<SkillMetadata[]> {
     const fileContents = fs.readFileSync(fullPath, 'utf8');
     const { data } = matter(fileContents);
 
-    // Default category from directory if not provided
-    const category = data.category || path.dirname(file).split(path.sep)[0];
-    
     // Create a slug from the file path
     const slug = path.dirname(file).replace(/[/\\]/g, '-');
 
     return {
-      ...(data as SkillMetadata),
-      category,
+      name: data.name,
+      description: data.description,
       path: file,
       slug,
     };
@@ -55,8 +49,8 @@ export async function getSkillBySlug(slug: string): Promise<Skill | null> {
   const { data, content } = matter(fileContents);
 
   return {
-    ...(data as SkillMetadata),
-    category: skillMeta.category,
+    name: data.name,
+    description: data.description,
     path: skillMeta.path,
     slug: skillMeta.slug,
     content,

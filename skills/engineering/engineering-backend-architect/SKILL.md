@@ -1,11 +1,6 @@
 ---
 name: engineering-backend-architect
 description: Design backend system architecture for new products, large features, platform refactors, API and database design, microservices decomposition, event-driven systems, scaling, reliability, observability, and cloud deployment.
-category: Engineering
-icon: Server
-author: flc1125
-tags: [architecture, backend, design, system-design]
-updated_at: 2026-03-13
 ---
 
 # Engineering Backend Architect
