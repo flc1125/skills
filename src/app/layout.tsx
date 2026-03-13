@@ -5,6 +5,9 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Flc's Skills",
   description: "A marketplace for skills and agents",
+  icons: {
+    icon: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({
