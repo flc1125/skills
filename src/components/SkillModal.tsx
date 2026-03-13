@@ -64,20 +64,25 @@ export function SkillModal({ skill, isOpen, onClose }: SkillModalProps) {
                 <div className="max-h-[60vh] overflow-y-auto pr-4 custom-scrollbar">
                   <div className="prose dark:prose-invert max-w-none 
                     prose-headings:font-bold prose-h1:text-3xl prose-h2:text-2xl 
-                    prose-pre:bg-gray-900 dark:prose-pre:bg-black prose-pre:rounded-xl prose-pre:p-0">
+                    prose-p:leading-relaxed prose-li:leading-relaxed">
                     <ReactMarkdown
                       components={{
+                        pre({ children }) {
+                          return (
+                            <pre className="bg-gray-900 dark:bg-black p-6 rounded-xl overflow-x-auto my-6 border border-gray-800 shadow-inner">
+                              {children}
+                            </pre>
+                          )
+                        },
                         code(props) {
                           const {children, className, ...rest} = props
                           const match = /language-(\w+)/.exec(className || '')
                           return match ? (
-                            <pre className="p-6 overflow-x-auto">
-                              <code className={className} {...rest}>
-                                {children}
-                              </code>
-                            </pre>
+                            <code className={className} {...rest}>
+                              {children}
+                            </code>
                           ) : (
-                            <code className="bg-gray-100 dark:bg-gray-800 text-black dark:text-white px-1.5 py-0.5 rounded font-medium before:content-none after:content-none" {...rest}>
+                            <code className="bg-gray-100 dark:bg-gray-800 text-black dark:text-white px-2 py-0.5 mx-0.5 rounded font-medium before:content-none after:content-none" {...rest}>
                               {children}
                             </code>
                           )
