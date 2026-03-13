@@ -19,7 +19,7 @@ export default function RootLayout({
           <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 bg-black dark:bg-white rounded-lg flex items-center justify-center">
-                <span className="text-white dark:text-black font-bold text-lg">F</span>
+                <span className="text-white dark:text-black font-bold text-lg">S</span>
               </div>
               <span className="font-semibold text-xl tracking-tight">Flc&apos;s Skills</span>
             </div>
