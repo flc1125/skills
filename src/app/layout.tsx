@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import * as Icons from "lucide-react";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -23,7 +24,15 @@ export default function RootLayout({
               <span className="font-semibold text-xl tracking-tight">Skills Market</span>
             </div>
             <nav className="flex items-center gap-6">
-              <a href="https://github.com" className="text-sm font-medium text-gray-500 hover:text-black dark:hover:text-white transition-colors">Github</a>
+              <a 
+                href="https://github.com/flc1125/skills" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-black dark:hover:text-white transition-colors"
+              >
+                <Icons.Github size={18} />
+                <span>Github</span>
+              </a>
             </nav>
           </div>
         </header>
