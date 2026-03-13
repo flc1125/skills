@@ -57,35 +57,35 @@ export function SkillModal({ skill, isOpen, onClose }: SkillModalProps) {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-4xl transform overflow-hidden rounded-3xl bg-white dark:bg-gray-900 p-8 shadow-2xl transition-all border border-gray-100 dark:border-gray-800">
-                <div className="flex items-center justify-between mb-8 pb-8 border-b border-gray-100 dark:border-gray-800">
-                  <div className="flex items-center gap-4">
-                    <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-xl">
-                      <Terminal size={24} />
+              <Dialog.Panel className="w-full max-w-3xl transform overflow-hidden rounded-2xl bg-white dark:bg-gray-900 p-6 shadow-2xl transition-all border border-gray-100 dark:border-gray-800">
+                <div className="flex items-center justify-between mb-6 pb-6 border-b border-gray-100 dark:border-gray-800">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                      <Terminal size={20} />
                     </div>
                     <div>
-                      <Dialog.Title as="h3" className="text-xl font-bold text-gray-900 dark:text-white">
+                      <Dialog.Title as="h3" className="text-lg font-bold text-gray-900 dark:text-white">
                         {skill.name}
                       </Dialog.Title>
                     </div>
                   </div>
                   <button
                     onClick={onClose}
-                    className="p-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-full transition-colors text-gray-400 hover:text-black dark:hover:text-white"
+                    className="p-1.5 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-full transition-colors text-gray-400 hover:text-black dark:hover:text-white"
                   >
-                    <X size={20} />
+                    <X size={18} />
                   </button>
                 </div>
 
-                <div className="max-h-[60vh] overflow-y-auto pr-4 custom-scrollbar">
+                <div className="max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
                   <div className="prose dark:prose-invert max-w-none 
-                    prose-headings:font-bold prose-h1:text-3xl prose-h2:text-2xl 
-                    prose-p:leading-relaxed prose-li:leading-relaxed">
+                    prose-headings:font-bold prose-h1:text-2xl prose-h2:text-xl 
+                    prose-p:leading-relaxed prose-li:leading-relaxed prose-p:text-sm prose-li:text-sm">
                     <ReactMarkdown
                       components={{
                         pre({ children }) {
                           return (
-                            <pre className="bg-gray-900 dark:bg-black p-6 rounded-xl overflow-x-auto my-6 border border-gray-800 shadow-inner">
+                            <pre className="bg-gray-900 dark:bg-black p-4 rounded-lg overflow-x-auto my-4 border border-gray-800 shadow-inner text-xs">
                               {children}
                             </pre>
                           )
@@ -110,21 +110,21 @@ export function SkillModal({ skill, isOpen, onClose }: SkillModalProps) {
                   </div>
                 </div>
 
-                <div className="mt-8 pt-8 border-t border-gray-100 dark:border-gray-800">
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3 ml-1">
+                <div className="mt-6 pt-6 border-t border-gray-100 dark:border-gray-800">
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2.5 ml-1">
                     Install this Skill
                   </p>
                   <div className="relative group">
-                    <div className="flex items-center gap-4 px-5 py-4 bg-gray-50 dark:bg-black border border-gray-100 dark:border-gray-800 rounded-2xl transition-all group-hover:border-gray-200 dark:group-hover:border-gray-700">
-                      <Terminal size={18} className="text-gray-400 flex-shrink-0" />
-                      <code className="text-sm font-mono text-gray-600 dark:text-gray-400 select-all truncate pr-32">
+                    <div className="flex items-center gap-3 px-4 py-3 bg-gray-50 dark:bg-black border border-gray-100 dark:border-gray-800 rounded-xl transition-all group-hover:border-gray-200 dark:group-hover:border-gray-700">
+                      <Terminal size={16} className="text-gray-400 flex-shrink-0" />
+                      <code className="text-xs font-mono text-gray-600 dark:text-gray-400 select-all truncate pr-28">
                         {command}
                       </code>
                     </div>
-                    <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                    <div className="absolute right-1.5 top-1/2 -translate-y-1/2">
                       <button
                         onClick={copyToClipboard}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-sm transition-all shadow-sm ${
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs transition-all shadow-sm ${
                           copied 
                             ? 'bg-green-500 text-white scale-95' 
                             : 'bg-black dark:bg-white text-white dark:text-black hover:opacity-90 active:scale-95'
@@ -132,12 +132,12 @@ export function SkillModal({ skill, isOpen, onClose }: SkillModalProps) {
                       >
                         {copied ? (
                           <>
-                            <Check size={16} />
+                            <Check size={14} />
                             <span>Copied</span>
                           </>
                         ) : (
                           <>
-                            <Copy size={16} />
+                            <Copy size={14} />
                             <span>Copy</span>
                           </>
                         )}

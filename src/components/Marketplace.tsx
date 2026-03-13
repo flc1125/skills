@@ -65,25 +65,25 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
+    <div className="max-w-7xl mx-auto px-4 py-10">
       {/* Hero Section */}
-      <div className="mb-20 text-center max-w-3xl mx-auto">
-        <h1 className="text-6xl font-black mb-6 tracking-tight">
+      <div className="mb-12 text-center max-w-2xl mx-auto">
+        <h1 className="text-4xl sm:text-5xl font-extrabold mb-4 tracking-tight">
           Supercharge your <span className="text-gray-400">Agents.</span>
         </h1>
-        <p className="text-xl text-gray-500 leading-relaxed">
+        <p className="text-lg text-gray-500 leading-relaxed">
           A curated collection of specialized skills to extend the capabilities of your AI workforce.
         </p>
       </div>
 
       {/* Controls */}
-      <div className="max-w-2xl mx-auto mb-16">
+      <div className="max-w-xl mx-auto mb-12">
         <div className="relative group">
-          <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-black dark:group-focus-within:text-white transition-colors" size={24} />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-black dark:group-focus-within:text-white transition-colors" size={20} />
           <input
             type="text"
-            placeholder="Search skills by name or description..."
-            className="w-full pl-14 pr-6 py-4 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-3xl focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all shadow-lg text-lg"
+            placeholder="Search skills..."
+            className="w-full pl-12 pr-6 py-3 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all shadow-md text-base"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -91,7 +91,7 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
       </div>
 
       {/* Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <AnimatePresence mode="popLayout">
           {filteredSkills.map((skill) => (
             <SkillCard key={skill.slug} skill={skill} onClick={handleCardClick} />
