@@ -1,4 +1,14 @@
-# flc1125/skills
+<div align="center">
+  <img src="public/favicon.svg" width="64" height="64" alt="Flc's Skills Logo" />
+
+  # Flc's Skills
+
+  A curated collection of specialized skills for AI Agents, optimized for discovery and seamless integration.
+
+  ### 🚀 [https://skills.flc.io](https://skills.flc.io)
+</div>
+
+---
 
 An open repository of reusable skills maintained for personal use and public reuse.
 
