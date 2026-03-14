@@ -32,7 +32,7 @@ async function sync() {
     };
   });
 
-  const sortedSkills = skills.sort((a, b) => (a.name > b.name ? 1 : -1));
+  const sortedSkills = skills.sort((a, b) => a.name.localeCompare(b.name));
   
   const outputDir = path.dirname(OUTPUT_FILE);
   if (!fs.existsSync(outputDir)) {
