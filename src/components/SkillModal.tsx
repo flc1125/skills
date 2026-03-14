@@ -15,6 +15,14 @@ interface SkillModalProps {
 
 export function SkillModal({ skill, isLoading, isOpen, onClose }: SkillModalProps) {
   const [copied, setCopied] = useState(false);
+  // Keep the last known skill during closing animation to prevent flickering/shrinking
+  const [displaySkill, setDisplaySkill] = useState<Skill | null>(null);
+
+  useEffect(() => {
+    if (skill) {
+      setDisplaySkill(skill);
+    }
+  }, [skill]);
 
   useEffect(() => {
     if (copied) {
@@ -23,9 +31,7 @@ export function SkillModal({ skill, isLoading, isOpen, onClose }: SkillModalProp
     }
   }, [copied]);
 
-  if (!isOpen && !skill) return null;
-
-  const displaySkill = skill;
+  // Command derived from the displaySkill to ensure it stays during closing
   const command = displaySkill ? `npx skills add https://github.com/flc1125/skills --skill ${displaySkill.installName}` : '';
 
   const copyToClipboard = () => {

@@ -73,7 +73,6 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
   };
 
   const handleCloseModal = () => {
-    setSelectedSkill(null);
     router.push(pathname, { scroll: false });
   };
 
