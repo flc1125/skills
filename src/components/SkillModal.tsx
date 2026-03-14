@@ -1,13 +1,13 @@
 'use client';
 
-import { Skill } from '@/lib/skills';
+import { Skill, SkillMetadata } from '@/lib/skills';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { X, Terminal, Copy, Check } from 'lucide-react';
 
 interface SkillModalProps {
-  skill: Skill | null;
+  skill: Skill | SkillMetadata | null;
   isLoading: boolean;
   isOpen: boolean;
   onClose: () => void;
@@ -16,7 +16,7 @@ interface SkillModalProps {
 export function SkillModal({ skill, isLoading, isOpen, onClose }: SkillModalProps) {
   const [copied, setCopied] = useState(false);
   // Keep the last known skill during closing animation to prevent flickering/shrinking
-  const [displaySkill, setDisplaySkill] = useState<Skill | null>(null);
+  const [displaySkill, setDisplaySkill] = useState<Skill | SkillMetadata | null>(null);
 
   useEffect(() => {
     if (skill) {
@@ -38,6 +38,8 @@ export function SkillModal({ skill, isLoading, isOpen, onClose }: SkillModalProp
     navigator.clipboard.writeText(command);
     setCopied(true);
   };
+
+  const skillContent = displaySkill && 'content' in displaySkill ? (displaySkill as Skill).content : '';
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -86,7 +88,7 @@ export function SkillModal({ skill, isLoading, isOpen, onClose }: SkillModalProp
                 </div>
 
                 <div className="max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
-                  {isLoading && !displaySkill?.content ? (
+                  {isLoading && !skillContent ? (
                     <div className="animate-pulse space-y-4">
                       <div className="h-4 bg-gray-100 dark:bg-gray-800 rounded w-3/4" />
                       <div className="h-4 bg-gray-100 dark:bg-gray-800 rounded w-1/2" />
@@ -121,7 +123,7 @@ export function SkillModal({ skill, isLoading, isOpen, onClose }: SkillModalProp
                           }
                         }}
                       >
-                        {displaySkill?.content || ''}
+                        {skillContent}
                       </ReactMarkdown>
                     </div>
                   )}
@@ -133,14 +135,14 @@ export function SkillModal({ skill, isLoading, isOpen, onClose }: SkillModalProp
                   </p>
                   <div className="relative group">
                     <div className={`flex items-center gap-3 px-4 py-3 bg-gray-50 dark:bg-black border border-gray-100 dark:border-gray-800 rounded-xl transition-all group-hover:border-gray-200 dark:group-hover:border-gray-700 ${
-                      (!displaySkill || isLoading || !displaySkill.content) && 'opacity-50'
+                      (!displaySkill || isLoading || !skillContent) && 'opacity-50'
                     }`}>
                       <Terminal size={16} className="text-gray-400 flex-shrink-0" />
                       <code className="text-xs font-mono text-gray-600 dark:text-gray-400 select-all truncate pr-28">
                         {command || '...'}
                       </code>
                     </div>
-                    {displaySkill && !isLoading && displaySkill.content && command && (
+                    {displaySkill && !isLoading && skillContent && command && (
                       <div className="absolute right-1.5 top-1/2 -translate-y-1/2">
                         <button
                           onClick={() => {
