@@ -36,7 +36,7 @@ export async function getSkills(): Promise<SkillMetadata[]> {
     }
   }
 
-  // Fallback for development or if the file is missing
+  // Fallback when the metadata file is missing or unreadable
   const files = await glob('**/SKILL.md', { cwd: SKILLS_DIR });
 
   const skills = files.map((file) => {

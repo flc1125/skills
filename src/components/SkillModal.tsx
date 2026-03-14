@@ -132,16 +132,23 @@ export function SkillModal({ skill, isLoading, isOpen, onClose }: SkillModalProp
                     Install this Skill
                   </p>
                   <div className="relative group">
-                    <div className={`flex items-center gap-3 px-4 py-3 bg-gray-50 dark:bg-black border border-gray-100 dark:border-gray-800 rounded-xl transition-all group-hover:border-gray-200 dark:group-hover:border-gray-700 ${!displaySkill && 'opacity-50'}`}>
+                    <div className={`flex items-center gap-3 px-4 py-3 bg-gray-50 dark:bg-black border border-gray-100 dark:border-gray-800 rounded-xl transition-all group-hover:border-gray-200 dark:group-hover:border-gray-700 ${
+                      (!displaySkill || isLoading || !displaySkill.content) && 'opacity-50'
+                    }`}>
                       <Terminal size={16} className="text-gray-400 flex-shrink-0" />
                       <code className="text-xs font-mono text-gray-600 dark:text-gray-400 select-all truncate pr-28">
                         {command || '...'}
                       </code>
                     </div>
-                    {displaySkill && (
+                    {displaySkill && !isLoading && displaySkill.content && command && (
                       <div className="absolute right-1.5 top-1/2 -translate-y-1/2">
                         <button
-                          onClick={copyToClipboard}
+                          onClick={() => {
+                            if (command) {
+                              copyToClipboard();
+                            }
+                          }}
+                          disabled={!command}
                           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs transition-all shadow-sm ${
                             copied 
                               ? 'bg-green-500 text-white scale-95' 

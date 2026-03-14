@@ -19,7 +19,7 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
   const selectedSkillSlug = searchParams.get('skill');
   
   const [search, setSearch] = useState('');
-  const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
+  const [selectedSkill, setSelectedSkill] = useState<Skill | SkillMetadata | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const isModalOpen = !!selectedSkillSlug;
 
@@ -54,7 +54,7 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
     return initialSkills.find(s => s.slug === selectedSkillSlug) || null;
   }, [initialSkills, selectedSkillSlug]);
 
-  const activeSkill = selectedSkill || (currentSkillMeta as Skill | null);
+  const activeSkill: Skill | SkillMetadata | null = selectedSkill || currentSkillMeta;
 
   const filteredSkills = useMemo(() => {
     return initialSkills.filter((skill) => {
