@@ -18,12 +18,19 @@ export interface Skill extends SkillMetadata {
 const SKILLS_DIR = path.join(process.cwd(), 'skills');
 const METADATA_FILE = path.join(process.cwd(), 'src/lib/skills-data.json');
 
+// Module-level cache to store metadata in memory after the first read
+let cachedSkills: SkillMetadata[] | null = null;
+
 export async function getSkills(): Promise<SkillMetadata[]> {
-  // If the metadata file exists, use it directly for O(1) list retrieval
+  // Return from memory if available
+  if (cachedSkills) return cachedSkills;
+
+  // If the metadata file exists, use it directly
   if (fs.existsSync(METADATA_FILE)) {
     try {
       const data = fs.readFileSync(METADATA_FILE, 'utf8');
-      return JSON.parse(data);
+      cachedSkills = JSON.parse(data);
+      return cachedSkills!;
     } catch (error) {
       console.error('Failed to read skills metadata file, falling back to dynamic scan:', error);
     }
@@ -48,7 +55,8 @@ export async function getSkills(): Promise<SkillMetadata[]> {
     };
   });
 
-  return skills.sort((a, b) => (a.name > b.name ? 1 : -1));
+  cachedSkills = skills.sort((a, b) => (a.name > b.name ? 1 : -1));
+  return cachedSkills;
 }
 
 export async function getSkillBySlug(slug: string): Promise<Skill | null> {
