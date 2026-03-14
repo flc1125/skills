@@ -20,14 +20,13 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
   
   const [search, setSearch] = useState('');
   const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
-  const isModalOpen = selectedSkill !== null && selectedSkillSlug !== null;
+  const [isLoading, setIsLoading] = useState(false);
+  const isModalOpen = !!selectedSkillSlug;
 
   // Sync modal with URL on load and URL change
   useEffect(() => {
-    // Clear any previously selected skill when the slug changes
-    setSelectedSkill(null);
-
     if (selectedSkillSlug) {
+      setIsLoading(true);
       const fetchSkill = async () => {
         try {
           const response = await fetch(`/api/skills/${selectedSkillSlug}`);
@@ -40,11 +39,22 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
           }
         } catch (error) {
           console.error('Failed to fetch skill details:', error);
+        } finally {
+          setIsLoading(false);
         }
       };
       fetchSkill();
+    } else {
+      setSelectedSkill(null);
     }
   }, [selectedSkillSlug, pathname, router]);
+
+  // Find the skill metadata from initialSkills to show immediate info
+  const currentSkillMeta = useMemo(() => {
+    return initialSkills.find(s => s.slug === selectedSkillSlug) || null;
+  }, [initialSkills, selectedSkillSlug]);
+
+  const activeSkill = selectedSkill || (currentSkillMeta as Skill | null);
 
   const filteredSkills = useMemo(() => {
     return initialSkills.filter((skill) => {
@@ -114,7 +124,8 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
 
       {/* Modal */}
       <SkillModal
-        skill={selectedSkill}
+        skill={activeSkill}
+        isLoading={isLoading}
         isOpen={isModalOpen}
         onClose={handleCloseModal}
       />
