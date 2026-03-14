@@ -16,8 +16,20 @@ export interface Skill extends SkillMetadata {
 }
 
 const SKILLS_DIR = path.join(process.cwd(), 'skills');
+const METADATA_FILE = path.join(process.cwd(), 'src/lib/skills-data.json');
 
 export async function getSkills(): Promise<SkillMetadata[]> {
+  // If the metadata file exists, use it directly for O(1) list retrieval
+  if (fs.existsSync(METADATA_FILE)) {
+    try {
+      const data = fs.readFileSync(METADATA_FILE, 'utf8');
+      return JSON.parse(data);
+    } catch (error) {
+      console.error('Failed to read skills metadata file, falling back to dynamic scan:', error);
+    }
+  }
+
+  // Fallback for development or if the file is missing
   const files = await glob('**/SKILL.md', { cwd: SKILLS_DIR });
 
   const skills = files.map((file) => {
@@ -25,7 +37,6 @@ export async function getSkills(): Promise<SkillMetadata[]> {
     const fileContents = fs.readFileSync(fullPath, 'utf8');
     const { data } = matter(fileContents);
 
-    // Create a slug from the file path
     const slug = path.dirname(file).replace(/[/\\]/g, '-');
 
     return {
@@ -47,6 +58,10 @@ export async function getSkillBySlug(slug: string): Promise<Skill | null> {
   if (!skillMeta) return null;
 
   const fullPath = path.join(SKILLS_DIR, skillMeta.path);
+  
+  // Only read the content for the specific skill requested
+  if (!fs.existsSync(fullPath)) return null;
+  
   const fileContents = fs.readFileSync(fullPath, 'utf8');
   const { data, content } = matter(fileContents);
 
