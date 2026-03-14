@@ -19,14 +19,15 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
   const selectedSkillSlug = searchParams.get('skill');
   
   const [search, setSearch] = useState('');
-  const [selectedSkill, setSelectedSkill] = useState<Skill | SkillMetadata | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const isModalOpen = !!selectedSkillSlug;
+  const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
+  const isModalOpen = selectedSkill !== null && selectedSkillSlug !== null;
 
   // Sync modal with URL on load and URL change
   useEffect(() => {
+    // Clear any previously selected skill when the slug changes
+    setSelectedSkill(null);
+
     if (selectedSkillSlug) {
-      setIsLoading(true);
       const fetchSkill = async () => {
         try {
           const response = await fetch(`/api/skills/${selectedSkillSlug}`);
@@ -39,22 +40,11 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
           }
         } catch (error) {
           console.error('Failed to fetch skill details:', error);
-        } finally {
-          setIsLoading(false);
         }
       };
       fetchSkill();
-    } else {
-      setSelectedSkill(null);
     }
   }, [selectedSkillSlug, pathname, router]);
-
-  // Find the skill metadata from initialSkills to show immediate info
-  const currentSkillMeta = useMemo(() => {
-    return initialSkills.find(s => s.slug === selectedSkillSlug) || null;
-  }, [initialSkills, selectedSkillSlug]);
-
-  const activeSkill: Skill | SkillMetadata | null = selectedSkill || currentSkillMeta;
 
   const filteredSkills = useMemo(() => {
     return initialSkills.filter((skill) => {
@@ -73,6 +63,7 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
   };
 
   const handleCloseModal = () => {
+    setSelectedSkill(null);
     router.push(pathname, { scroll: false });
   };
 
@@ -123,8 +114,7 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
 
       {/* Modal */}
       <SkillModal
-        skill={activeSkill}
-        isLoading={isLoading}
+        skill={selectedSkill}
         isOpen={isModalOpen}
         onClose={handleCloseModal}
       />

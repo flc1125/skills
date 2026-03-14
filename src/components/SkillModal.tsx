@@ -1,28 +1,19 @@
 'use client';
 
-import { Skill, SkillMetadata } from '@/lib/skills';
+import { Skill } from '@/lib/skills';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { X, Terminal, Copy, Check } from 'lucide-react';
 
 interface SkillModalProps {
-  skill: Skill | SkillMetadata | null;
-  isLoading: boolean;
+  skill: Skill | null;
   isOpen: boolean;
   onClose: () => void;
 }
 
-export function SkillModal({ skill, isLoading, isOpen, onClose }: SkillModalProps) {
+export function SkillModal({ skill, isOpen, onClose }: SkillModalProps) {
   const [copied, setCopied] = useState(false);
-  // Keep the last known skill during closing animation to prevent flickering/shrinking
-  const [displaySkill, setDisplaySkill] = useState<Skill | SkillMetadata | null>(null);
-
-  useEffect(() => {
-    if (skill) {
-      setDisplaySkill(skill);
-    }
-  }, [skill]);
 
   useEffect(() => {
     if (copied) {
@@ -31,15 +22,14 @@ export function SkillModal({ skill, isLoading, isOpen, onClose }: SkillModalProp
     }
   }, [copied]);
 
-  // Command derived from the displaySkill to ensure it stays during closing
-  const command = displaySkill ? `npx skills add https://github.com/flc1125/skills --skill ${displaySkill.installName}` : '';
+  if (!skill) return null;
+
+  const command = `npx skills add https://github.com/flc1125/skills --skill ${skill.installName}`;
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(command);
     setCopied(true);
   };
-
-  const skillContent = displaySkill && 'content' in displaySkill ? (displaySkill as Skill).content : '';
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -75,7 +65,7 @@ export function SkillModal({ skill, isLoading, isOpen, onClose }: SkillModalProp
                     </div>
                     <div>
                       <Dialog.Title as="h3" className="text-lg font-bold text-gray-900 dark:text-white">
-                        {displaySkill?.name || 'Loading...'}
+                        {skill.name}
                       </Dialog.Title>
                     </div>
                   </div>
@@ -88,45 +78,36 @@ export function SkillModal({ skill, isLoading, isOpen, onClose }: SkillModalProp
                 </div>
 
                 <div className="max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
-                  {isLoading && !skillContent ? (
-                    <div className="animate-pulse space-y-4">
-                      <div className="h-4 bg-gray-100 dark:bg-gray-800 rounded w-3/4" />
-                      <div className="h-4 bg-gray-100 dark:bg-gray-800 rounded w-1/2" />
-                      <div className="h-4 bg-gray-100 dark:bg-gray-800 rounded w-5/6" />
-                      <div className="h-32 bg-gray-50 dark:bg-gray-800/50 rounded-lg w-full" />
-                    </div>
-                  ) : (
-                    <div className="prose dark:prose-invert max-w-none 
-                      prose-headings:font-bold prose-h1:text-2xl prose-h2:text-xl 
-                      prose-p:leading-relaxed prose-li:leading-relaxed prose-p:text-sm prose-li:text-sm">
-                      <ReactMarkdown
-                        components={{
-                          pre({ children }) {
-                            return (
-                              <pre className="bg-gray-900 dark:bg-black p-4 rounded-lg overflow-x-auto my-4 border border-gray-800 shadow-inner text-xs">
-                                {children}
-                              </pre>
-                            )
-                          },
-                          code(props) {
-                            const {children, className, ...rest} = props
-                            const match = /language-(\w+)/.exec(className || '')
-                            return match ? (
-                              <code className={className} {...rest}>
-                                {children}
-                              </code>
-                            ) : (
-                              <code className="bg-gray-100 dark:bg-gray-800 text-black dark:text-white px-2 py-0.5 mx-0.5 rounded font-medium before:content-none after:content-none" {...rest}>
-                                {children}
-                              </code>
-                            )
-                          }
-                        }}
-                      >
-                        {skillContent}
-                      </ReactMarkdown>
-                    </div>
-                  )}
+                  <div className="prose dark:prose-invert max-w-none 
+                    prose-headings:font-bold prose-h1:text-2xl prose-h2:text-xl 
+                    prose-p:leading-relaxed prose-li:leading-relaxed prose-p:text-sm prose-li:text-sm">
+                    <ReactMarkdown
+                      components={{
+                        pre({ children }) {
+                          return (
+                            <pre className="bg-gray-900 dark:bg-black p-4 rounded-lg overflow-x-auto my-4 border border-gray-800 shadow-inner text-xs">
+                              {children}
+                            </pre>
+                          )
+                        },
+                        code(props) {
+                          const {children, className, ...rest} = props
+                          const match = /language-(\w+)/.exec(className || '')
+                          return match ? (
+                            <code className={className} {...rest}>
+                              {children}
+                            </code>
+                          ) : (
+                            <code className="bg-gray-100 dark:bg-gray-800 text-black dark:text-white px-2 py-0.5 mx-0.5 rounded font-medium before:content-none after:content-none" {...rest}>
+                              {children}
+                            </code>
+                          )
+                        }
+                      }}
+                    >
+                      {skill.content}
+                    </ReactMarkdown>
+                  </div>
                 </div>
 
                 <div className="mt-6 pt-6 border-t border-gray-100 dark:border-gray-800">
@@ -134,43 +115,34 @@ export function SkillModal({ skill, isLoading, isOpen, onClose }: SkillModalProp
                     Install this Skill
                   </p>
                   <div className="relative group">
-                    <div className={`flex items-center gap-3 px-4 py-3 bg-gray-50 dark:bg-black border border-gray-100 dark:border-gray-800 rounded-xl transition-all group-hover:border-gray-200 dark:group-hover:border-gray-700 ${
-                      (!displaySkill || isLoading || !skillContent) && 'opacity-50'
-                    }`}>
+                    <div className="flex items-center gap-3 px-4 py-3 bg-gray-50 dark:bg-black border border-gray-100 dark:border-gray-800 rounded-xl transition-all group-hover:border-gray-200 dark:group-hover:border-gray-700">
                       <Terminal size={16} className="text-gray-400 flex-shrink-0" />
                       <code className="text-xs font-mono text-gray-600 dark:text-gray-400 select-all truncate pr-28">
-                        {command || '...'}
+                        {command}
                       </code>
                     </div>
-                    {displaySkill && !isLoading && skillContent && command && (
-                      <div className="absolute right-1.5 top-1/2 -translate-y-1/2">
-                        <button
-                          onClick={() => {
-                            if (command) {
-                              copyToClipboard();
-                            }
-                          }}
-                          disabled={!command}
-                          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs transition-all shadow-sm ${
-                            copied 
-                              ? 'bg-green-500 text-white scale-95' 
-                              : 'bg-black dark:bg-white text-white dark:text-black hover:opacity-90 active:scale-95'
-                          }`}
-                        >
-                          {copied ? (
-                            <>
-                              <Check size={14} />
-                              <span>Copied</span>
-                            </>
-                          ) : (
-                            <>
-                              <Copy size={14} />
-                              <span>Copy</span>
-                            </>
-                          )}
-                        </button>
-                      </div>
-                    )}
+                    <div className="absolute right-1.5 top-1/2 -translate-y-1/2">
+                      <button
+                        onClick={copyToClipboard}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs transition-all shadow-sm ${
+                          copied 
+                            ? 'bg-green-500 text-white scale-95' 
+                            : 'bg-black dark:bg-white text-white dark:text-black hover:opacity-90 active:scale-95'
+                        }`}
+                      >
+                        {copied ? (
+                          <>
+                            <Check size={14} />
+                            <span>Copied</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy size={14} />
+                            <span>Copy</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
                   </div>
                 </div>
               </Dialog.Panel>

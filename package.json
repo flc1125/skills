@@ -3,11 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npm run sync-skills && next dev",
-    "build": "npm run sync-skills && next build",
+    "dev": "next dev",
+    "build": "next build",
     "start": "next start",
-    "lint": "eslint .",
-    "sync-skills": "node scripts/sync-skills.mjs"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
