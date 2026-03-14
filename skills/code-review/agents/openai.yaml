@@ -1,0 +1,4 @@
+interface:
+  display_name: "Code Review"
+  short_description: "Request or perform git-backed reviews for a defined diff"
+  default_prompt: "Use $code-review to prepare a scoped git diff review request, review a SHA range against its requirements, and report findings by severity before proceeding."
