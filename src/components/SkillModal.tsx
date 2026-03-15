@@ -4,7 +4,7 @@ import { Skill } from '@/lib/skills';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { X, Terminal, Copy, Check } from 'lucide-react';
+import { X, Terminal, Copy, Check, ExternalLink } from 'lucide-react';
 
 interface SkillModalProps {
   skill: Skill | null;
@@ -25,6 +25,7 @@ export function SkillModal({ skill, isOpen, onClose }: SkillModalProps) {
   if (!skill) return null;
 
   const command = `npx skills add https://github.com/flc1125/skills --skill ${skill.installName}`;
+  const sourceUrl = `https://github.com/flc1125/skills/blob/main/skills/${skill.path}`;
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(command);
@@ -69,12 +70,23 @@ export function SkillModal({ skill, isOpen, onClose }: SkillModalProps) {
                       </Dialog.Title>
                     </div>
                   </div>
-                  <button
-                    onClick={onClose}
-                    className="p-1.5 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-full transition-colors text-gray-400 hover:text-black dark:hover:text-white"
-                  >
-                    <X size={18} />
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <a
+                      href={sourceUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-1.5 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-full transition-colors text-gray-400 hover:text-black dark:hover:text-white"
+                      title="View source file on GitHub"
+                    >
+                      <ExternalLink size={18} />
+                    </a>
+                    <button
+                      onClick={onClose}
+                      className="p-1.5 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-full transition-colors text-gray-400 hover:text-black dark:hover:text-white"
+                    >
+                      <X size={18} />
+                    </button>
+                  </div>
                 </div>
 
                 <div className="max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
