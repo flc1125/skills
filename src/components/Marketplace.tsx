@@ -20,13 +20,12 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
   
   const [search, setSearch] = useState('');
   const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
-  const isModalOpen = selectedSkill !== null && selectedSkillSlug !== null;
+  const activeSelectedSkill =
+    selectedSkillSlug && selectedSkill?.slug === selectedSkillSlug ? selectedSkill : null;
+  const isModalOpen = activeSelectedSkill !== null;
 
   // Sync modal with URL on load and URL change
   useEffect(() => {
-    // Clear any previously selected skill when the slug changes
-    setSelectedSkill(null);
-
     if (selectedSkillSlug) {
       const fetchSkill = async () => {
         try {
@@ -114,7 +113,7 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
 
       {/* Modal */}
       <SkillModal
-        skill={selectedSkill}
+        skill={activeSelectedSkill}
         isOpen={isModalOpen}
         onClose={handleCloseModal}
       />
