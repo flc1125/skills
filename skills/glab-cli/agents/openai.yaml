@@ -1,0 +1,4 @@
+interface:
+  display_name: "GLab CLI"
+  short_description: "GitLab CLI workflow and platform detection"
+  default_prompt: "Use $glab-cli to detect the current GitLab host, adapt glab commands for that platform, and work with repos, merge requests, issues, CI, releases, or the API."
