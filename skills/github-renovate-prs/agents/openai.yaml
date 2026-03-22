@@ -1,0 +1,4 @@
+interface:
+  display_name: "GitHub Renovate PRs"
+  short_description: "Scan Renovate PRs and execute a confirmed merge plan"
+  default_prompt: "Use $github-renovate-prs to scan the preset GitHub repositories or a specified repo for Renovate PRs, prepare a candidate approve-and-merge plan, and execute only after explicit confirmation."
