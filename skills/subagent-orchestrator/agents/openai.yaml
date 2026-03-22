@@ -1,0 +1,4 @@
+interface:
+  display_name: "Subagent Orchestrator"
+  short_description: "Assemble and coordinate subagent teams for complex tasks"
+  default_prompt: "Use $subagent-orchestrator to assemble a subagent team, choose roles, decide parallel versus serial execution, and coordinate the task safely."
