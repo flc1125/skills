@@ -46,17 +46,24 @@ export default function RootLayout({
               </div>
               <span className="font-semibold text-xl tracking-tight">Flc&apos;s Skills</span>
             </div>
-            <nav className="flex items-center gap-6">
-              <ThemeToggle />
-              <a 
-                href="https://github.com/flc1125/skills" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-black dark:hover:text-white transition-colors"
-              >
-                <Icons.Github size={18} />
-                <span>Github</span>
-              </a>
+            <nav className="rounded-full border border-gray-200 bg-white/70 p-1 shadow-sm backdrop-blur-md dark:border-gray-700 dark:bg-gray-900/70">
+              <div className="flex items-center gap-1">
+                <ThemeToggle />
+                <span
+                  aria-hidden="true"
+                  className="h-4 w-px bg-gray-200 dark:bg-gray-700"
+                />
+                <a 
+                  href="https://github.com/flc1125/skills" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  aria-label="View project on GitHub"
+                  className="inline-flex h-9 items-center gap-2 rounded-full px-3 text-sm text-gray-600 transition-colors hover:bg-white hover:text-black dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                >
+                  <Icons.Github size={15} />
+                  <span className="hidden sm:inline">Github</span>
+                </a>
+              </div>
             </nav>
           </div>
         </header>

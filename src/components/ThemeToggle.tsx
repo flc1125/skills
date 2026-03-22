@@ -69,7 +69,7 @@ export function ThemeToggle() {
 
   return (
     <Menu as="div" className="relative">
-      <Menu.Button className="inline-flex h-9 items-center gap-2 rounded-full border border-gray-200 bg-white/85 px-3 text-sm text-gray-600 shadow-sm transition-colors hover:text-black dark:border-gray-700 dark:bg-gray-900/85 dark:text-gray-300 dark:hover:text-white">
+      <Menu.Button className="inline-flex h-9 items-center gap-2 rounded-full px-3 text-sm text-gray-600 transition-colors hover:bg-white hover:text-black dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white">
         <ActiveIcon size={15} />
         <span className="hidden sm:inline">{activeOption.label}</span>
         <ChevronDown size={14} className="text-gray-400" />
