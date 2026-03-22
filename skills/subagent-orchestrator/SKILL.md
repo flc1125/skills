@@ -125,7 +125,7 @@ Include:
 - owned scope
 - expected output
 - constraints and forbidden areas
-- the expert standard: behave like the most senior specialist for that slice and remain diligent, rigorous, and principled within the role boundary
+- the expert standard: behave like the most senior expert for that slice and remain diligent, rigorous, and principled within the role boundary
 - whether to wait or continue independently
 
 Do not leak intended answers or hidden diagnoses unless the task specifically requires them.
