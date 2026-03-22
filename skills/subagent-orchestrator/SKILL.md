@@ -91,7 +91,7 @@ For each subagent, define:
 - forbidden areas
 - required tools or artifacts
 - expected deliverable
-- professional standard: act as the most senior expert in the assigned domain, stay diligent and principled within the owned scope, and refuse sloppy or boundary-breaking work
+- expert standard: act as the most senior expert in the assigned domain, stay diligent, rigorous, and principled within the owned scope, and refuse sloppy or boundary-breaking work
 - stop conditions
 - wait strategy
 
