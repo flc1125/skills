@@ -1,12 +1,13 @@
 'use client';
 
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useSyncExternalStore } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { Check, ChevronDown, Laptop, Moon, Sun } from 'lucide-react';
 
 type ThemeMode = 'system' | 'light' | 'dark';
 
 const STORAGE_KEY = 'theme-preference';
+const MEDIA_QUERY = '(prefers-color-scheme: dark)';
 
 const OPTIONS: Array<{
   value: ThemeMode;
@@ -22,8 +23,17 @@ function isThemeMode(value: string | null): value is ThemeMode {
   return value === 'system' || value === 'light' || value === 'dark';
 }
 
+function getStoredTheme(): ThemeMode {
+  if (typeof window === 'undefined') {
+    return 'system';
+  }
+
+  const storedTheme = localStorage.getItem(STORAGE_KEY);
+  return isThemeMode(storedTheme) ? storedTheme : 'system';
+}
+
 function getSystemTheme() {
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  return window.matchMedia(MEDIA_QUERY).matches ? 'dark' : 'light';
 }
 
 function applyTheme(mode: ThemeMode) {
@@ -35,36 +45,48 @@ function applyTheme(mode: ThemeMode) {
   root.style.colorScheme = resolvedTheme;
 }
 
+const subscribers = new Set<() => void>();
+let mediaQuery: MediaQueryList | null = null;
+
+function emitThemeChange() {
+  subscribers.forEach((callback) => callback());
+}
+
+function ensureMediaQuerySubscription() {
+  if (typeof window === 'undefined' || mediaQuery) {
+    return;
+  }
+
+  mediaQuery = window.matchMedia(MEDIA_QUERY);
+  mediaQuery.addEventListener('change', () => {
+    if (getStoredTheme() === 'system') {
+      emitThemeChange();
+    }
+  });
+}
+
+function subscribe(callback: () => void) {
+  ensureMediaQuerySubscription();
+  subscribers.add(callback);
+
+  return () => {
+    subscribers.delete(callback);
+  };
+}
+
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<ThemeMode>('system');
+  const theme = useSyncExternalStore(subscribe, getStoredTheme, (): ThemeMode => 'system');
   const activeOption = OPTIONS.find((option) => option.value === theme) ?? OPTIONS[0];
   const ActiveIcon = activeOption.icon;
 
   useEffect(() => {
-    const storedTheme = localStorage.getItem(STORAGE_KEY);
-    const initialTheme = isThemeMode(storedTheme) ? storedTheme : 'system';
-
-    setTheme(initialTheme);
-    applyTheme(initialTheme);
-
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleChange = () => {
-      const storedValue = localStorage.getItem(STORAGE_KEY);
-      const currentTheme = isThemeMode(storedValue) ? storedValue : initialTheme;
-
-      if (currentTheme === 'system') {
-        applyTheme('system');
-      }
-    };
-
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
+    applyTheme(theme);
+  }, [theme]);
 
   const handleThemeChange = (mode: ThemeMode) => {
-    setTheme(mode);
     localStorage.setItem(STORAGE_KEY, mode);
     applyTheme(mode);
+    emitThemeChange();
   };
 
   return (
