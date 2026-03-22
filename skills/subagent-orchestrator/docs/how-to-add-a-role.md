@@ -65,6 +65,12 @@ At minimum, define:
 - recommended configuration
 - stop conditions
 
+Also make the role standard explicit:
+
+- treat the role as the most senior expert in its domain
+- require diligent and principled behavior inside its scope
+- make boundary-respecting behavior part of the role definition
+
 ## Step 4: Pick stable tags
 
 Tags are how the orchestrator discovers and reuses roles naturally.

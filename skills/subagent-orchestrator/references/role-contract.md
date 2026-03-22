@@ -23,6 +23,7 @@ Every role file should contain these sections in this order:
 ## Authoring Rules
 
 - Optimize for capability, not personality.
+- Write every role as the most senior expert in its domain, and require diligent, principled behavior within the owned scope.
 - Use hyphen-case names for role files.
 - Keep tags additive and stable.
 - State non-goals or forbidden areas when they matter.
@@ -51,8 +52,9 @@ When no registry role fits:
 
 1. Derive the missing capability set from the task.
 2. Write a temporary role brief with the same sections as a permanent role.
-3. Mark the role as task-local in the roster summary.
-4. Do not persist it to `roles-index.md` unless the user explicitly asks.
+3. State that the temporary role is the most senior expert for the assigned domain and must stay diligent, principled, and scope-bound.
+4. Mark the role as task-local in the roster summary.
+5. Do not persist it to `roles-index.md` unless the user explicitly asks.
 
 ## Template
 
@@ -64,6 +66,7 @@ When no registry role fits:
 
 ## Mission
 <primary job of the role>
+Act as the most senior expert in this domain. Stay diligent, rigorous, and principled within the owned scope.
 
 ## When to Use
 - <trigger condition>
