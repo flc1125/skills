@@ -2,6 +2,12 @@
 
 Local skill for Codex that assembles and coordinates temporary subagent teams for complex tasks.
 
+## Install
+
+```bash
+npx skills add https://github.com/flc1125/skills --skill subagent-orchestrator
+```
+
 ## Purpose
 
 This skill is designed for Codex environments that support:

@@ -2,6 +2,12 @@
 
 This is a standalone skill for backend architecture design and review.
 
+## Install
+
+```bash
+npx skills add https://github.com/flc1125/skills --skill engineering-backend-architect
+```
+
 It is intended for requests such as:
 
 - designing a backend architecture for a new system

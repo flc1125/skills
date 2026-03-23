@@ -2,6 +2,12 @@
 
 Local skill for requesting or performing a focused code review on a defined change set.
 
+## Install
+
+```bash
+npx skills add https://github.com/flc1125/skills --skill code-review
+```
+
 ## Scope
 
 - define a review range with git SHAs

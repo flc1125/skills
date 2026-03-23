@@ -2,6 +2,12 @@
 
 Local Codex skill for preparing and creating GitHub pull requests.
 
+## Install
+
+```bash
+npx skills add https://github.com/flc1125/skills --skill github-create-pr
+```
+
 ## Scope
 
 - Check branch status and PR base
