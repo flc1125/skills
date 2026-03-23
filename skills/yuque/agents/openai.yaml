@@ -1,0 +1,7 @@
+interface:
+  display_name: "Yuque"
+  short_description: "Yuque OpenAPI workspace workflows"
+  default_prompt: "Use $yuque to read, search, create, update, and reorganize Yuque repos, docs, and TOC structures while guarding destructive actions."
+
+policy:
+  allow_implicit_invocation: true
