@@ -21,6 +21,8 @@ Prioritize:
 
 Assume the upstream API base URL is `https://www.yuque.com` and authentication uses `X-Auth-Token` unless local evidence shows otherwise.
 
+Read [docs/auth.md](docs/auth.md) when wiring local authentication for execution.
+
 ## Capability Model
 
 Treat Yuque operations as three execution classes.
@@ -197,6 +199,18 @@ This skill covers the major Yuque API domains:
 
 Read [references/capability-map.md](references/capability-map.md) for endpoint coverage and safety classification.
 
+## Prepare
+
+Before executing authenticated scripts, prepare local auth like this:
+
+1. Copy `skills/yuque/.env.example` to `skills/yuque/.env`
+2. Replace the placeholder `YUQUE_TOKEN` with a real token
+3. Keep `skills/yuque/.env` local only and do not commit it
+
+The scripts auto-load `skills/yuque/.env` when it exists.
+
+Read [docs/auth.md](docs/auth.md) for token resolution order and auth details.
+
 ## Scripts
 
 Use the bundled scripts when a concrete request should turn into a reproducible Yuque API call.
@@ -215,7 +229,8 @@ Script rules:
 
 - default to preview mode
 - pass `--execute` only when the target is clear and the action is allowed by this skill's safety model
-- provide `--token` or `YUQUE_TOKEN` only at execution time
+- prefer a local `skills/yuque/.env` copied from `.env.example` for normal execution
+- allow `--token` to override local config when a one-off token is necessary
 - read the current doc or TOC before using write scripts
 
 ## Error Handling

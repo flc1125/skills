@@ -7,6 +7,15 @@ Use this file when a Yuque call fails or when preparing a new request.
 - Base URL: `https://www.yuque.com`
 - Header auth: `X-Auth-Token: <token>`
 - Security scheme name in the OpenAPI file: `authToken`
+- Local auth file: `skills/yuque/.env` copied from `.env.example`
+
+Scripts auto-load `skills/yuque/.env` when it exists. Values from `.env` only fill missing environment variables and do not override variables already set in the shell.
+
+Effective token resolution order:
+
+1. `--token`
+2. `YUQUE_TOKEN`
+3. `YUQUE_AUTH_TOKEN`
 
 If auth is not already wired, treat missing `X-Auth-Token` as the first likely cause of failure.
 
@@ -32,6 +41,7 @@ Check:
 - header name is exactly `X-Auth-Token`
 - the token value is current
 - the token can access the intended API domain
+- local `skills/yuque/.env` exists and contains a real token rather than the placeholder from `.env.example`
 
 ### 403
 

@@ -1,6 +1,54 @@
 #!/usr/bin/env node
 
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 const DEFAULT_BASE_URL = 'https://www.yuque.com';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const SKILL_ROOT = path.resolve(__dirname, '..');
+const DEFAULT_ENV_PATH = path.join(SKILL_ROOT, '.env');
+
+loadEnvFile(DEFAULT_ENV_PATH);
+
+function loadEnvFile(envPath) {
+  if (!fs.existsSync(envPath)) {
+    return;
+  }
+
+  const content = fs.readFileSync(envPath, 'utf8');
+
+  for (const rawLine of content.split('\n')) {
+    const line = rawLine.trim();
+
+    if (!line || line.startsWith('#')) {
+      continue;
+    }
+
+    const separatorIndex = line.indexOf('=');
+
+    if (separatorIndex <= 0) {
+      continue;
+    }
+
+    const key = line.slice(0, separatorIndex).trim();
+    let value = line.slice(separatorIndex + 1).trim();
+
+    if (!key || process.env[key] !== undefined) {
+      continue;
+    }
+
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
+      value = value.slice(1, -1);
+    }
+
+    process.env[key] = value;
+  }
+}
 
 export function parseArgs(argv) {
   const args = {};

@@ -4,6 +4,8 @@ node_modules/
 out/
 build/
 .env*
+!.env.example
+!**/.env.example
 *.log
 .DS_Store
 tsconfig.tsbuildinfo
