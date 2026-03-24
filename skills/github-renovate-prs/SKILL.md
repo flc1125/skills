@@ -173,13 +173,17 @@ Accept natural-language overrides such as:
 
 - `只执行 1 3`
 - `排除 2`
-- `排除 #123`
+- `排除 flc1125/go-cron#123`
 - `只执行 go-cron`
 - `只处理 flc1125/go-cron`
-- `只执行 #123 #124`
+- `只执行 flc1125/go-cron#123 go-fries/fries#124`
 - `包含 major`
 
 Prefer plan indices for quick selection in multi-repository mode, and prefer `owner/repo#number` when the user needs an unambiguous persistent reference across turns.
+
+Only accept bare PR numbers such as `#123` in a single-repository context. In multi-repository mode, require either a current-plan index or a full `owner/repo#number` reference.
+
+Treat `只执行 <index>` as selecting from the current `候选执行` set by default. If the user references a `跳过` item by index, do not silently add it to execution. Instead, explain the skip reason and ask for an explicit override that matches the risk, such as `包含 major` followed by a rebuilt plan.
 
 ### 4. Confirm before execution
 
@@ -242,6 +246,8 @@ Apply these rules when the user changes scope after the plan is shown:
 - repo filters remove other repositories from the execution set
 - explicit PR numbers win over broader repo filters
 - current-plan indices are shorthand for indexed plan items in the latest visible plan
+- bare `#123` references are only valid in a single-repository context
+- skipped items do not enter the execution set unless the user gives an explicit override that addresses the skip reason
 - `包含 major` only changes the major exclusion rule; it does not bypass final confirmation
 - if the new request invalidates the current scan, rescan before execution
 
