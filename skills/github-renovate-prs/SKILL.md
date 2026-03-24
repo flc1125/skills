@@ -112,6 +112,8 @@ For every `候选执行` and `跳过` item, include:
 - raw GitHub PR URL
 - planned action for candidates, or skip reason for skipped items
 
+Use one continuous index sequence across the whole plan snapshot. `跳过` items must continue counting after the last `候选执行` item instead of restarting from `1`.
+
 In multi-repository mode, never rely on bare PR numbers such as `#111` as the only reference form because they are ambiguous across repositories.
 
 Plan indices are only valid for the current plan snapshot. If the plan is rebuilt, treat indices as refreshed.
@@ -144,19 +146,19 @@ Prefer a compact summary like:
   动作: 先添加 approve review，再 squash merge 到 PR 的目标分支，并删除分支
 
 跳过 5 个
-- flc1125/go-yuque#130 chore(deps)!: update module github.com/aaa/bbb to v2
+4. flc1125/go-yuque#130 chore(deps)!: update module github.com/aaa/bbb to v2
   https://github.com/flc1125/go-yuque/pull/130
   原因: major
-- go-tapd/tapd#131 chore(deps): update module github.com/ccc/ddd
+5. go-tapd/tapd#131 chore(deps): update module github.com/ccc/ddd
   https://github.com/go-tapd/tapd/pull/131
   原因: checks pending
-- flc1125/go-gitlab-webhook#132 chore(deps): update module github.com/eee/fff
+6. flc1125/go-gitlab-webhook#132 chore(deps): update module github.com/eee/fff
   https://github.com/flc1125/go-gitlab-webhook/pull/132
   原因: blocked
-- go-fries/fries#133 chore(deps): update module github.com/ggg/hhh
+7. go-fries/fries#133 chore(deps): update module github.com/ggg/hhh
   https://github.com/go-fries/fries/pull/133
   原因: 需人工判断
-- go-fries/fries#134 chore(deps): replace package xxx with yyy
+8. go-fries/fries#134 chore(deps): replace package xxx with yyy
   https://github.com/go-fries/fries/pull/134
   原因: 需人工判断
 
