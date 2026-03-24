@@ -178,12 +178,9 @@ When the user asks for help drafting a merge request, provide:
 
 ## Description
 <proposed MR description>
-
-## Notes
-- branch readiness concerns
-- host or auth concerns
-- suggested `glab` command if useful
 ```
+
+Add `Notes` only when there is important reviewer context, a blocker, or a useful command to call out.
 
 If the user asks to open the merge request directly, still summarize the final title, description, target branch, and any host assumptions after running the command.
 
@@ -192,7 +189,7 @@ If the user asks to open the merge request directly, still summarize the final t
 - Use the default MR Body conventions unless the user explicitly provides another structure.
 - Prefer draft merge requests when work is incomplete, risky, or waiting on feedback.
 - Keep one merge request focused on one coherent change set.
-- Explain behavior changes, migrations, and follow-up work explicitly.
+- Explain behavior changes, migrations, and follow-up work only when they materially affect review.
 - Use issue-closing syntax only when the linkage is clear and intended for GitLab.
 
 ## Red Flags

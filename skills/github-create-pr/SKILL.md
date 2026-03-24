@@ -61,8 +61,8 @@ Extract:
 
 - what changed
 - why it changed
-- user or system impact
-- risks, migrations, or rollout notes
+- user or system impact when relevant
+- risks, migrations, or rollout notes only when they materially affect review
 - any issue references already implied by commits or branch naming
 
 Do not write the PR body until the scope is understood.
@@ -123,12 +123,9 @@ When the user asks for help writing a PR, provide:
 
 ## Body
 <proposed PR body>
-
-## Notes
-- branch readiness concerns
-- missing context or blockers
-- suggested `gh` command if useful
 ```
+
+Add `Notes` only when there is important reviewer context, a blocker, or a useful command to call out.
 
 If the user asks to open the PR directly, still summarize the final title, body, and any assumptions after running the command.
 
@@ -137,7 +134,7 @@ If the user asks to open the PR directly, still summarize the final title, body,
 - Follow repository-specific PR templates or title conventions when present.
 - Prefer draft PRs when work is incomplete, risky, or waiting on feedback.
 - Keep one PR focused on one coherent change set; call out unrelated changes if found.
-- Explain behavior changes, migrations, and follow-up work explicitly.
+- Explain behavior changes, migrations, and follow-up work only when they materially affect review.
 - Use issue-closing syntax only when the linkage is clear and intended.
 
 ## Red Flags
