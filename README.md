@@ -23,16 +23,28 @@ This repo contains installable skills that can be added directly from GitHub and
 ## ✨ Overview
 
 - Install individual skills directly from this repository
-- Discover skill names from each skill's `SKILL.md`
+- Browse available skills on the visual marketplace at [skills.flc.io](https://skills.flc.io)
 - Reuse the repository as a lightweight source of portable skills
 
 ## 📦 Installation
 
-Install a specific skill from this repository with:
+Quick start:
+
+**1. Interactive selection**
+
+```bash
+npx skills add https://github.com/flc1125/skills
+```
+
+Use this if you want to browse available skills first and choose what to install interactively.
+
+**2. Install a specific skill directly**
 
 ```bash
 npx skills add https://github.com/flc1125/skills --skill <skill-name>
 ```
+
+Use this when you already know the exact skill name you want.
 
 For example:
 
@@ -40,25 +52,11 @@ For example:
 npx skills add https://github.com/flc1125/skills --skill engineering-backend-architect
 ```
 
-The `--skill` value should use the skill's declared install name from `SKILL.md`, not the marketplace URL slug.
-
-## 🔎 How to Find the Skill Name
-
-Each skill includes a `SKILL.md` file. The skill name is typically defined in the frontmatter `name` field:
-
-```yaml
-name: engineering-backend-architect
-```
-
-You can search the repository for all `SKILL.md` files with:
-
-```bash
-find skills -name SKILL.md
-```
-
-Open the relevant file and use its `name` value as the `--skill` argument.
+If you install a specific skill directly, use the skill's install name shown on the marketplace or in its `SKILL.md`, not the marketplace URL slug.
 
 ## 🚀 Usage
+
+Browse all published skills at [skills.flc.io](https://skills.flc.io).
 
 Once installed, a skill can be used through your local skills setup or any compatible tool that supports this format. Refer to the skill's own `SKILL.md` for its purpose, trigger guidance, and usage details.
 
