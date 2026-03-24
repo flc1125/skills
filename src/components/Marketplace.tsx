@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
-import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+import { useSearchParams, usePathname } from 'next/navigation';
 import { SkillMetadata, Skill } from '@/lib/skills';
 import { SkillCard } from './SkillCard';
 import { SkillModal } from './SkillModal';
@@ -13,37 +13,73 @@ interface MarketplaceProps {
 }
 
 export function Marketplace({ initialSkills }: MarketplaceProps) {
-  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const selectedSkillSlug = searchParams.get('skill');
   
   const [search, setSearch] = useState('');
   const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
+  const [isLoadingSkill, setIsLoadingSkill] = useState(false);
+  const [skillLoadError, setSkillLoadError] = useState<string | null>(null);
+  const [hasMounted, setHasMounted] = useState(false);
   const activeSelectedSkill =
     selectedSkillSlug && selectedSkill?.slug === selectedSkillSlug ? selectedSkill : null;
-  const isModalOpen = activeSelectedSkill !== null;
+  const isModalOpen = hasMounted && selectedSkillSlug !== null;
 
-  // Sync modal with URL on load and URL change
   useEffect(() => {
-    if (selectedSkillSlug) {
-      const fetchSkill = async () => {
-        try {
-          const response = await fetch(`/api/skills/${selectedSkillSlug}`);
-          if (response.ok) {
-            const data = await response.json();
-            setSelectedSkill(data);
-          } else {
-            // If skill not found, clear URL
-            router.replace(pathname);
-          }
-        } catch (error) {
-          console.error('Failed to fetch skill details:', error);
-        }
-      };
-      fetchSkill();
+    setHasMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!hasMounted) {
+      return;
     }
-  }, [selectedSkillSlug, pathname, router]);
+
+    if (!selectedSkillSlug) {
+      setSelectedSkill(null);
+      setIsLoadingSkill(false);
+      setSkillLoadError(null);
+      return;
+    }
+
+    let cancelled = false;
+
+    const fetchSkill = async () => {
+      setIsLoadingSkill(true);
+      setSkillLoadError(null);
+
+      try {
+        const response = await fetch(`/api/skills/${selectedSkillSlug}`);
+
+        if (!response.ok) {
+          throw new Error(response.status === 404 ? 'Skill not found.' : 'Failed to load skill details.');
+        }
+
+        const data = await response.json();
+
+        if (!cancelled) {
+          setSelectedSkill(data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch skill details:', error);
+
+        if (!cancelled) {
+          setSelectedSkill(null);
+          setSkillLoadError(error instanceof Error ? error.message : 'Failed to load skill details.');
+        }
+      } finally {
+        if (!cancelled) {
+          setIsLoadingSkill(false);
+        }
+      }
+    };
+
+    fetchSkill();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [hasMounted, selectedSkillSlug]);
 
   const filteredSkills = useMemo(() => {
     return initialSkills.filter((skill) => {
@@ -58,12 +94,14 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
   const handleCardClick = (skillMeta: SkillMetadata) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set('skill', skillMeta.slug);
-    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    window.history.pushState(null, '', `${pathname}?${params.toString()}`);
   };
 
   const handleCloseModal = () => {
     setSelectedSkill(null);
-    router.push(pathname, { scroll: false });
+    setSkillLoadError(null);
+    setIsLoadingSkill(false);
+    window.history.pushState(null, '', pathname);
   };
 
   return (
@@ -115,6 +153,8 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
       <SkillModal
         skill={activeSelectedSkill}
         isOpen={isModalOpen}
+        isLoading={isLoadingSkill}
+        error={skillLoadError}
         onClose={handleCloseModal}
       />
     </div>
