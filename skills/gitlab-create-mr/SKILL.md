@@ -1,9 +1,9 @@
 ---
-name: gitlab-create-pr
+name: gitlab-create-mr
 description: Create GitLab merge requests from a local branch using a reviewable workflow for branch checks, GitLab host detection, diff analysis, title and description writing, and `glab mr create`. Use when opening a GitLab merge request, drafting or improving merge request copy, preparing a branch for review, or working across GitLab.com and self-managed GitLab instances.
 ---
 
-# GitLab Create PR
+# GitLab Create MR
 
 Create GitLab merge requests with a clear, reviewable workflow.
 

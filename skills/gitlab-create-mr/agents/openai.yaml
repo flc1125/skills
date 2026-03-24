@@ -1,0 +1,4 @@
+interface:
+  display_name: "GitLab Create MR"
+  short_description: "Draft and open GitLab merge requests with a default MR body"
+  default_prompt: "Use $gitlab-create-mr to prepare a branch for review, detect the correct GitLab host, draft a strong merge request title and default MR body, and create the merge request with glab."

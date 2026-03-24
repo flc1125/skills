@@ -121,7 +121,7 @@ Rules:
 
 ```markdown
 ## Summary
-- Add a dedicated `gitlab-create-pr` skill for drafting and opening GitLab merge requests
+- Add a dedicated `gitlab-create-mr` skill for drafting and opening GitLab merge requests
 - Support both GitLab.com and self-managed GitLab host detection before write operations
 
 ## Why
