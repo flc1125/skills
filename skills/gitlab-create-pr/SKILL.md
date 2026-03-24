@@ -15,7 +15,6 @@ Prioritize:
 
 - branch hygiene before merge request creation
 - correct GitLab host selection before any write operation
-- concise reviewer context over diff narration
 - repository conventions over generic templates
 
 Assume `glab` is installed unless local evidence shows otherwise.
@@ -166,14 +165,6 @@ GITLAB_HOST="$host" glab mr list --source-branch "$branch" -R "$repo"
 ```
 
 If an existing merge request is already associated with the branch, inspect it with `glab mr view <iid>` before creating another one.
-
-### 8. Add reviewers deliberately
-
-Keep reviewer count focused. Prefer the smallest set of relevant reviewers.
-
-Infer likely reviewers only from clear local evidence such as CODEOWNERS, repository conventions, or recent authorship.
-
-If no clear reviewer command or repository convention is available, leave reviewers unset instead of guessing.
 
 ## Output Structure
 
