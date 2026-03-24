@@ -81,36 +81,11 @@ If no convention is visible, use a plain imperative summary.
 
 ### 4. Write the PR body
 
-Default to a compact structure:
-
-```markdown
-<what this PR does>
-
-<why these changes are needed>
-
-<important implementation notes, tradeoffs, or reviewer context>
-
-<issue references if relevant>
-```
-
-Include:
-
-- what changed
-- why now
-- context not obvious from the code
-- links or references to issues, tickets, or incidents
-- reviewer guidance only when it helps focus attention
-
-Avoid:
-
-- test-plan boilerplate unless the repository clearly expects it
-- checkbox cargo-cult sections
-- line-by-line diff summaries
-- vague claims like "small cleanup" when behavior actually changed
+Use the default PR body conventions in [references/pr-body-conventions.md](references/pr-body-conventions.md) unless the user explicitly asks for another format.
 
 ### 5. Create or update the PR
 
-For a new PR, prefer `gh pr create` with explicit title and body:
+For a new PR, prefer `gh pr create` with explicit title and body. Build the body from [references/pr-body-conventions.md](references/pr-body-conventions.md):
 
 ```bash
 gh pr create --title "<title>" --body "$(cat <<'EOF'

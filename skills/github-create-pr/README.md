@@ -22,8 +22,10 @@ npx skills add https://github.com/flc1125/skills --skill github-create-pr
 github-create-pr/
 ├── SKILL.md
 ├── README.md
-└── agents/
-    └── openai.yaml
+├── agents/
+│   └── openai.yaml
+└── references/
+    └── pr-body-conventions.md
 ```
 
 ## Source Attribution
@@ -41,3 +43,4 @@ This version is not a verbatim copy of the upstream content. It was rewritten to
 - The skill name was changed to `github-create-pr`
 - Sentry-specific language was generalized into a GitHub PR workflow
 - The output structure and metadata were adapted to the local Codex skill format
+- PR body conventions were moved into a local reference file for easier maintenance
