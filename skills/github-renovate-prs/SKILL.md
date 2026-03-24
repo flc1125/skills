@@ -102,11 +102,11 @@ In preset mode, query each repository directly and merge the results for one com
 
 ### 2. Build a concise candidate plan
 
-Do not force the user into a numbered selection workflow, but do assign stable per-plan indices to candidate items so the user can reference them quickly in multi-repository mode.
+Do not force the user into a numbered selection workflow, but do assign stable per-plan indices to all plan items so the user can reference them quickly in multi-repository mode.
 
 For every `候选执行` and `跳过` item, include:
 
-- current plan index for candidate items, such as `1.` or `[1]`
+- current plan index for each item, such as `1.` or `[1]`
 - `owner/repo#number`
 - PR title
 - raw GitHub PR URL
@@ -241,7 +241,7 @@ Apply these rules when the user changes scope after the plan is shown:
 
 - repo filters remove other repositories from the execution set
 - explicit PR numbers win over broader repo filters
-- current-plan indices are shorthand for candidate items in the latest visible plan
+- current-plan indices are shorthand for indexed plan items in the latest visible plan
 - `包含 major` only changes the major exclusion rule; it does not bypass final confirmation
 - if the new request invalidates the current scan, rescan before execution
 
