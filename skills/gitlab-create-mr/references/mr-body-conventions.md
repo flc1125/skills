@@ -15,7 +15,7 @@ Keep the MR body simple, clear, and easy to scan. Prefer short sections, concret
 - 
 
 ## Motivation
-- Closes #
+- 
 
 ## Testing
 - 

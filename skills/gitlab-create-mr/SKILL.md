@@ -123,9 +123,9 @@ Extract:
 
 - what changed
 - why it changed
-- user or system impact
-- risks, migrations, or rollout notes
-- issue references implied by commits, branch naming, or repository conventions
+- user or system impact when relevant
+- risks, migrations, or rollout notes only when they materially affect review
+- any issue references already implied by commits or branch naming
 
 Do not write the merge request until the scope is understood.
 
