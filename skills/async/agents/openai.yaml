@@ -1,0 +1,4 @@
+interface:
+  display_name: "Async"
+  short_description: "Run Codex subagent work as tracked async tasks"
+  default_prompt: "Use $async to launch a Codex subagent task now, keep the main thread moving, and later collect or inspect it through a stable task reference."
