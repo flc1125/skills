@@ -24,6 +24,7 @@ Always keep user pull-based actions available:
 - put the announcement before normal response content
 - include `task_ref`, status, and next action
 - do not repeatedly announce the same unchanged completion
+- reuse the exact `task_ref` already shown to the user; do not introduce a replacement name in the completion alert
 
 ## Boxed Terminal Alert
 

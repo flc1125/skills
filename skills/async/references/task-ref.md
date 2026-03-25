@@ -64,6 +64,7 @@ Bad:
 - otherwise generate one from the task objective
 - if the objective changes materially, create a new `task_ref`
 - once assigned, do not rename the `task_ref` within the same session
+- once a `task_ref` has been shown to the user, child-agent outputs and later parent announcements must reuse that exact spelling
 
 ## Mapping Rule
 

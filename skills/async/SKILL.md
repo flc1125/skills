@@ -45,6 +45,7 @@ Expose `task_ref` to the user. Keep `agent_id` internal unless debugging require
 - Default execution mode is `launch-and-continue`.
 - If the user asks to wait, or if the result is required for the next critical step, switch to `launch-and-wait`.
 - Default completion behavior is `announce-dont-auto-expand`: strongly announce that the task finished, but do not dump the full result unless the user asks or the result is short enough to inline safely.
+- If the user explicitly invokes `$async` and the task is already clear enough to delegate, launch promptly instead of lingering in a preparation-only phase.
 
 ## Operating Rules
 
@@ -70,6 +71,7 @@ Requirements:
 - map `task_ref -> agent_id` in the current session context
 - do not rename a `task_ref` once assigned
 - if the objective changes materially, launch a new task with a new `task_ref`
+- once a `task_ref` has been shown to the user, all later status updates, completion alerts, collection steps, and follow-up actions must reuse that exact `task_ref`
 
 ### 3. Launch
 
@@ -85,6 +87,11 @@ After launch:
 
 - in `launch-and-continue`, return the `task_ref`, current mode, and the next main-thread action
 - in `launch-and-wait`, wait explicitly and return the result when available
+
+If the user explicitly invoked `$async` and the task is sufficiently clear, do not silently fall back to a normal single-threaded answer before attempting launch. Either:
+
+- launch the async task promptly
+- or explain clearly why launch is being deferred, blocked, cancelled, or replaced
 
 ### 4. Track state
 
@@ -122,6 +129,8 @@ Support these user intents against `task_ref`:
 - send follow-up input
 - interrupt and redirect
 - list active async tasks
+
+If the user changes topics after an async task has already been launched, continue answering normally on the main thread, but keep the original async task tracked until it is collected, cancelled, or fails.
 
 ### 7. Keep the model honest
 
