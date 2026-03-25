@@ -1,0 +1,4 @@
+interface:
+  display_name: "OTel Go Reviewer"
+  short_description: "Review opentelemetry-go changes for spec, compatibility, changelog, and performance risks"
+  default_prompt: "Use $otel-go-reviewer to review a diff or pull request in open-telemetry/opentelemetry-go with strict attention to OpenTelemetry specification compliance, CONTRIBUTING.md rules, changelog requirements, API stability, concurrency safety, and performance evidence."
