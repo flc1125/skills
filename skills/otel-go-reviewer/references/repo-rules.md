@@ -34,6 +34,7 @@ This file summarizes the review-relevant parts of `opentelemetry-go` repository 
 - Stable exported interfaces should not be modified unless the documented repository exception applies.
 - Stable interfaces that explicitly warn that methods may be added in minor releases are the exception.
 - When functionality must be added to a stable interface that cannot change, prefer adding a separate small interface or a super-set interface instead of mutating the original interface.
+- When a specification-defined stable interface must gain a new method, check whether the SDK learned that method one release before the API change so mixed-version upgrade paths remain as safe as the repository expects.
 
 ## Configuration pattern expectations
 
@@ -59,6 +60,7 @@ Raise at least an `Important` finding when you see:
 - missing tests for changed behavior
 - missing benchmarks for performance-critical changes
 - stable interface mutation without the documented path
+- a spec-interface change that skips the repository's staged API/SDK compatibility choreography
 - missing package docs or README for a new non-internal package
 - internal package coupling that violates module boundaries
 

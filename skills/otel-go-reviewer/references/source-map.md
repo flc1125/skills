@@ -51,6 +51,13 @@ If local summaries appear stale or conflict with upstream material, prefer the u
 - Reviewing behavior and signal semantics:
   - consult the relevant OpenTelemetry specification page
 
+## Local companion summaries
+
+- [versioning-policy.md](versioning-policy.md)
+  - stable vs `v0` review thresholds
+  - stable emitted telemetry compatibility
+  - staged API and SDK interface evolution checks
+
 ## Usage note
 
 Do not pull all upstream documents into context by default.

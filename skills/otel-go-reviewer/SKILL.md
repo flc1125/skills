@@ -1,6 +1,6 @@
 ---
 name: otel-go-reviewer
-description: Review changes for the open-telemetry/opentelemetry-go repository with a senior maintainer mindset. Use when reviewing diffs, pull requests, or design changes in opentelemetry-go that may affect OpenTelemetry specification compliance, repository contribution rules, changelog requirements, API stability, performance, concurrency safety, or test coverage.
+description: Review pull requests, diffs, patches, or design proposals for the open-telemetry/opentelemetry-go repository with a senior maintainer mindset. Use when changes in opentelemetry-go may affect OpenTelemetry specification compliance, repository contribution rules, changelog requirements, module versioning boundaries, API or telemetry compatibility, performance-sensitive paths, concurrency or lifecycle behavior, or test coverage.
 ---
 
 # OTel Go Reviewer
@@ -18,7 +18,7 @@ Prioritize:
 - evidence before confidence
 - performance discipline before abstraction comfort
 
-Act like a code-cleanliness purist and performance maximalist, but do not confuse style preference with a blocking issue.
+Bias toward compatibility, hot-path efficiency, and evidence-backed findings, but do not confuse style preference with a blocking issue.
 
 Do not spend review budget on cosmetic nits unless explicitly asked.
 
@@ -26,10 +26,10 @@ Do not spend review budget on cosmetic nits unless explicitly asked.
 
 Treat these as hard review gates:
 
-- The change should conform to the OpenTelemetry specification and related semantic conventions.
-- The change should conform to `opentelemetry-go` repository rules from `CONTRIBUTING.md`.
-- User-facing changes should update `CHANGELOG.md` and follow its established format.
-- Internal-only changes can omit changelog updates only when they do not alter user-visible behavior, public API, configuration surface, generated telemetry, or compatibility expectations.
+- conform to the OpenTelemetry specification and semantic conventions
+- conform to `opentelemetry-go` repository rules from `CONTRIBUTING.md`
+- classify touched modules as stable or `v0` before judging compatibility severity
+- require `CHANGELOG.md` updates for user-facing changes
 
 If implementation convenience conflicts with the specification, call that out.
 
@@ -73,10 +73,16 @@ Identify:
 
 - review range or exact diff
 - touched packages and modules
+- touched module stability: stable, `v0`, or mixed
 - whether the change is public, internal, or mixed
 - whether the change is behavior-only, API-shaping, performance-sensitive, or release-sensitive
 
 If the scope is broad or mixed with unrelated work, say so before reviewing.
+
+Before continuing, consult:
+
+- [references/versioning-policy.md](references/versioning-policy.md) for stable vs `v0` review standards
+- [references/repo-rules.md](references/repo-rules.md) for repository process and interface rules
 
 ### 2. Classify risk
 
@@ -99,8 +105,10 @@ Use one or more labels:
 Always check:
 
 - spec compliance
+- module stability and versioning boundary
 - repository rule compliance
 - public API and interface stability
+- stable emitted telemetry compatibility when stable modules are touched
 - user-visible behavior changes
 - changelog requirements
 - performance impact on hot paths
@@ -113,6 +121,7 @@ Apply heightened scrutiny when the diff touches:
 
 - stable exported interfaces
 - SDK pipelines
+- stable emitted telemetry in stable modules
 - signal semantics
 - propagation or baggage parsing
 - exporter retry, shutdown, flush, or partial-failure paths
@@ -121,7 +130,7 @@ Apply heightened scrutiny when the diff touches:
 
 ### 5. Return findings first
 
-Use this structure:
+Prefer this structure:
 
 ```markdown
 # Review Findings
@@ -150,32 +159,17 @@ Every finding should explain:
 
 ## Review Priorities
 
-### Specification
+Use the reference files instead of restating detailed policy in-line:
 
-- Behavior should comply with the OpenTelemetry specification even when the Go API shape remains idiomatic.
-- Signal semantics matter more than local implementation symmetry.
-- Generated telemetry from stable surfaces should be treated as compatibility-sensitive.
+- [references/versioning-policy.md](references/versioning-policy.md) for stable vs `v0`, stable telemetry compatibility, and interface-evolution choreography
+- [references/spec-review.md](references/spec-review.md) for signal semantics, context handling, exporter behavior, propagation, and semconv review
+- [references/repo-rules.md](references/repo-rules.md) for tests, benchmarks, docs, interface stability, and internal package rules
+- [references/changelog-policy.md](references/changelog-policy.md) for user-facing change detection and changelog categorization
 
-### CONTRIBUTING compliance
-
-- Functional changes should have tests.
-- Performance-critical changes should have benchmarks.
-- Performance-critical additions should include benchmark output in the PR description.
-- Performance-critical modifications should include `benchstat` output in the PR description.
-- Non-internal, non-test packages should satisfy documentation and README expectations.
-- Stable interfaces should not be modified unless the documented repository exception applies.
-
-### Changelog
-
-- User-facing changes should have a changelog entry.
-- Internal-only changes can skip changelog only if they are truly not user-visible.
-- Reviewer should not accept "internal only" at face value when behavior, telemetry, API, configuration, or compatibility changes are observable to users.
-
-### Performance and cleanliness
+### Performance discipline
 
 - Prefer simpler, tighter, lower-allocation code on hot paths.
-- Be suspicious of extra indirection, reflection, hidden allocations, eager copies, and lock amplification.
-- Push back on convenience abstractions in critical paths unless they are clearly justified.
+- Focus on benchmark-backed costs such as allocation growth, lock amplification, extra copies, and retry or lifecycle regressions.
 - Do not claim a performance win without measurement.
 
 ## Decision Rules
