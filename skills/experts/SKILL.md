@@ -43,6 +43,8 @@ Common expert cards:
 - [references/role-qa-expert.md](references/role-qa-expert.md)
 - [references/example-platform-modernization-panel.md](references/example-platform-modernization-panel.md)
 - [references/example-analytics-dashboard-panel.md](references/example-analytics-dashboard-panel.md)
+- [references/example-subscription-billing-panel.md](references/example-subscription-billing-panel.md)
+- [references/example-ai-assistant-panel.md](references/example-ai-assistant-panel.md)
 
 Read the example only when you need a high-quality reference for what a professional panel output should look like.
 
