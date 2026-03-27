@@ -1,0 +1,4 @@
+interface:
+  display_name: "Experts"
+  short_description: "Assemble a panel of experts for multi-perspective recommendations"
+  default_prompt: "Use $experts to assemble a focused panel of experts, gather independent opinions, surface agreement and disagreement, and deliver a chaired recommendation with explicit tradeoffs."
