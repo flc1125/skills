@@ -49,6 +49,7 @@ Common expert cards:
 - [references/role-family-travel-expert.md](references/role-family-travel-expert.md)
 - [references/role-local-transport-expert.md](references/role-local-transport-expert.md)
 - [references/role-experience-curator.md](references/role-experience-curator.md)
+- [references/role-destination-culture-expert.md](references/role-destination-culture-expert.md)
 - [references/role-qa-expert.md](references/role-qa-expert.md)
 - [references/example-platform-modernization-panel.md](references/example-platform-modernization-panel.md)
 - [references/example-analytics-dashboard-panel.md](references/example-analytics-dashboard-panel.md)
