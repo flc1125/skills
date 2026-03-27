@@ -2,6 +2,8 @@
 
 This is a standalone skill for expert-panel assessment and recommendation.
 
+It is a cross-domain expert panel skill, not a domain-specific expert library. It can support engineering, product, risk, compliance, travel, and other complex decision areas, as long as each expert has a real professional lens, distinct judgment criteria, and expert-grade output discipline.
+
 ## Install
 
 ```bash

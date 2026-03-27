@@ -7,6 +7,8 @@ description: Assemble a panel of experts to assess a problem from multiple profe
 
 Assemble a focused panel of experts around one problem and produce a chaired recommendation.
 
+This is a cross-domain expert panel skill for complex decisions. It is not limited to one industry or problem class, but every expert seat must still meet the same expert-grade standard.
+
 This skill is for expert judgment first. It is not a generic task router.
 
 ## Operating Mode
