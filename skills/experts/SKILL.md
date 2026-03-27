@@ -48,6 +48,7 @@ Common expert cards:
 - [references/example-analytics-dashboard-panel.md](references/example-analytics-dashboard-panel.md)
 - [references/example-subscription-billing-panel.md](references/example-subscription-billing-panel.md)
 - [references/example-ai-assistant-panel.md](references/example-ai-assistant-panel.md)
+- [references/example-task-local-identity-panel.md](references/example-task-local-identity-panel.md)
 - [references/task-local-expert-template.md](references/task-local-expert-template.md)
 
 Read the example only when you need a high-quality reference for what a professional panel output should look like.
