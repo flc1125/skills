@@ -37,6 +37,24 @@ Prioritize:
 
 Assume the default target is the current user's login keychain unless local evidence shows a different requested keychain.
 
+## Runtime Requirements
+
+This skill currently assumes:
+
+- `macOS` is the host platform
+- `/usr/bin/security` is available
+- `/bin/zsh` is available for bundled helper scripts
+
+Before using bundled scripts, verify the runtime.
+If the host is not macOS, or if `security` is unavailable, stop and say this skill cannot execute in the current environment.
+If `/bin/zsh` is unavailable, do not attempt to run the bundled scripts. Instead:
+
+- explain that the current implementation depends on `zsh`
+- surface the exact missing dependency
+- propose either running equivalent `security` commands manually or porting the scripts to a more portable shell
+
+Do not pretend the scripts are portable when they are not.
+
 ## Data Model
 
 Use these fields consistently:

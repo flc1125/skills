@@ -40,6 +40,16 @@ Avoid:
 - embedding a plaintext secret in error output
 - casual debug prints containing secret material
 
+## Runtime Guard
+
+Before executing bundled scripts, verify that:
+
+- the host is `macOS`
+- `/usr/bin/security` exists
+- `/bin/zsh` exists
+
+If `zsh` is unavailable, stop and say that the current implementation cannot run as shipped. Offer a fallback plan instead of forcing execution.
+
 ## Future Script Guidance
 
 If scripts are added later, design them so that:
