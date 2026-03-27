@@ -56,6 +56,8 @@ Common expert cards:
 - [references/example-subscription-billing-panel.md](references/example-subscription-billing-panel.md)
 - [references/example-ai-assistant-panel.md](references/example-ai-assistant-panel.md)
 - [references/example-task-local-identity-panel.md](references/example-task-local-identity-panel.md)
+- [references/example-family-japan-panel.md](references/example-family-japan-panel.md)
+- [references/example-istanbul-culture-panel.md](references/example-istanbul-culture-panel.md)
 - [references/task-local-expert-template.md](references/task-local-expert-template.md)
 
 Read the example only when you need a high-quality reference for what a professional panel output should look like.
