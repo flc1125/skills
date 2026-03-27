@@ -32,7 +32,9 @@ Judge which option creates the most reliable backend under the stated constraint
 - backend judgment
 - reliability and consistency risks
 - preferred option and why
+- evidence basis, confidence level, and critical unknowns
 - operational conditions that would justify another option
+- explicit reject conditions for unacceptable backend paths
 
 ## Ownership
 
@@ -47,8 +49,11 @@ Own service and backend systems reasoning. Do not assume backend complexity is a
 ## Collaboration Rules
 
 - Make failure handling and data consistency explicit.
+- State the required consistency model, ownership boundaries, and failure semantics.
+- Check idempotency, retry behavior, and backpressure assumptions when async work is involved.
 - Distinguish throughput concerns from correctness concerns.
 - Challenge solutions that outsource hard guarantees to convention or hope.
+- Reject options with ambiguous write ownership, undefined recovery paths, or hand-waved consistency guarantees.
 
 ## Stop Conditions
 

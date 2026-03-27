@@ -35,6 +35,7 @@ Common expert cards:
 - [references/role-devops-expert.md](references/role-devops-expert.md)
 - [references/role-qa-expert.md](references/role-qa-expert.md)
 - [references/example-platform-modernization-panel.md](references/example-platform-modernization-panel.md)
+- [references/example-analytics-dashboard-panel.md](references/example-analytics-dashboard-panel.md)
 
 Read the example only when you need a high-quality reference for what a professional panel output should look like.
 
@@ -67,7 +68,7 @@ Reduce vague requests into a precise assessment question before assembling the p
 
 ### 2. Select the panel
 
-Choose a small panel with one `chair` and two to five experts.
+Choose a small panel with one `chair` and two to six experts.
 
 Pick experts that match the real decision surface. Prefer distinct viewpoints over panel size.
 
@@ -80,9 +81,13 @@ Ask each expert to assess the problem independently.
 Each opinion should cover:
 
 - core judgment
+- evidence basis and what is inferred versus directly observed
+- confidence level and the main reason for that confidence level
 - reasoning and assumptions
 - preferred option
 - main risks
+- critical unknowns that could change the recommendation
+- decision thresholds that would cause the expert to change position
 - what the expert would reject and why
 
 Do not let experts anchor on each other too early.
@@ -110,6 +115,7 @@ Return:
 - the question
 - the final panel
 - each expert's core view
+- the evidence and confidence profile behind each view
 - agreement points
 - disagreement points
 - the recommended path
@@ -125,7 +131,11 @@ Apply these rules to every expert:
 - Act as the most senior expert for the assigned perspective.
 - Stay rigorous, concrete, and scope-bound.
 - Prefer defensible reasoning over confident tone.
+- Distinguish observed facts from inference and speculation.
+- State confidence level and what would increase or decrease it.
 - Make assumptions explicit.
+- Name the key unknowns that prevent a stronger recommendation.
+- State reject conditions, not just preferred outcomes.
 - Push back on weak framing, false binaries, and unsupported claims.
 - Optimize for helping the user make a better decision, not for winning an argument.
 
@@ -154,6 +164,10 @@ Use this structure when returning a panel result:
 
 ## Expert Opinions
 - <expert>: <core judgment, rationale, major risks>
+- evidence: <what is known, what is inferred>
+- confidence: <high | medium | low> and why
+- critical unknowns: <what could still change the answer>
+- reject conditions: <what would make this expert reject a path>
 
 ## Agreement
 - <shared conclusions>
@@ -167,6 +181,10 @@ Use this structure when returning a panel result:
 
 ## Tradeoffs
 - <what is gained and what is given up>
+
+## Confidence and Unknowns
+- <where the panel is confident>
+- <where the panel is still reasoning under uncertainty>
 
 ## Boundaries
 - holds when: <conditions where this advice fits>

@@ -21,7 +21,7 @@ Read this file first. Then open only the role cards that match the assessment.
 
 - Choose exactly one `chair`.
 - Choose experts with distinct lenses.
-- Prefer two to five experts plus the `chair`.
+- Prefer two to six experts plus the `chair`.
 - Add `architect` when design boundaries or technical shape matter.
 - Add `frontend-expert` when browser UX, rendering, state, or client-side failure modes matter.
 - Add `backend-expert` when service contracts, consistency, or reliability matter.
@@ -32,6 +32,7 @@ Read this file first. Then open only the role cards that match the assessment.
 - Add `devops-expert` when rollout risk, observability, operations, or platform complexity matter.
 - Add `qa-expert` when validation depth or failure analysis matters.
 - If no listed role fits, create a task-local expert with a precise name and remit.
+- Avoid adding an expert unless that expert has a plausible reason to disagree with at least one other seat.
 
 ## Tag Vocabulary
 

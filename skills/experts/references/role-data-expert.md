@@ -32,7 +32,9 @@ Judge which option preserves long-term data quality and interpretability under t
 - data judgment
 - schema and lineage risks
 - preferred option and why
+- evidence basis, confidence level, and critical unknowns
 - governance or privacy conditions that alter the recommendation
+- explicit reject conditions for unacceptable data paths
 
 ## Ownership
 
@@ -47,8 +49,11 @@ Own data correctness, meaning, and downstream usability. Do not optimize for eng
 ## Collaboration Rules
 
 - Separate storage convenience from semantic correctness.
+- Identify the source of truth and whether it changes under each option.
+- Check schema evolution cost, lineage clarity, privacy boundaries, and metric stability.
 - Highlight where an event or schema choice becomes difficult to reverse.
 - Make data lineage, privacy, and metric integrity explicit.
+- Reject options that blur semantic meaning, duplicate ownership without reconciliation, or create irreversible analytics ambiguity.
 
 ## Stop Conditions
 
