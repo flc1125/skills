@@ -45,8 +45,11 @@ Read this file first. Then open only the role cards that match the assessment.
 - Add `compliance-expert` when controls, audit evidence, certifications, or regulatory obligations materially constrain the solution.
 - Add `ml-expert` when model quality, evaluation rigor, prompt behavior, or inference cost and risk matter.
 - Add `qa-expert` when validation depth or failure analysis matters.
-- If no listed role fits, create a task-local expert with a precise name and remit.
+- If no listed role fits, create a task-local expert with a precise name and remit by following [task-local-expert-template.md](task-local-expert-template.md).
 - Avoid adding an expert unless that expert has a plausible reason to disagree with at least one other seat.
+- Do not create a task-local expert unless it represents a real expert discipline with its own decision criteria and reject conditions.
+- Do not use task-local experts to smuggle in implementation steps, project-local labels, or duplicate versions of existing cards.
+- A task-local expert must state explicit non-goals and why an existing expert card is insufficient.
 
 ## Tag Vocabulary
 
@@ -55,3 +58,21 @@ Use tags from these groups so future expert cards plug in naturally:
 - panel tags: `chair`, `moderation`, `synthesis`, `specialist`
 - decision tags: `architecture`, `frontend`, `backend`, `product`, `security`, `privacy`, `performance`, `data`, `devops`, `platform`, `mobile`, `search`, `payments`, `compliance`, `ml`, `qa`
 - outcome tags: `recommendation`, `tradeoffs`, `risk`, `validation`
+
+## Task-Local Expert Rules
+
+Use a task-local expert only when all of these are true:
+
+- the panel needs a real expert lens that is missing from the registry
+- the missing lens has distinct evaluation criteria
+- the expert would plausibly disagree with another seat on substantive grounds
+- the expert can be described without referencing one specific project task or implementation step
+
+Before creating one, check whether the need is actually:
+
+- a narrower version of `product-expert`
+- a deeper version of `backend-expert`, `data-expert`, or `security-expert`
+- a platform or operational concern already covered by `platform-expert` or `devops-expert`
+- a validation concern already covered by `qa-expert`
+
+If any of those are true, prefer the existing card.

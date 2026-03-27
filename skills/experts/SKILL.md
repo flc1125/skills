@@ -45,6 +45,7 @@ Common expert cards:
 - [references/example-analytics-dashboard-panel.md](references/example-analytics-dashboard-panel.md)
 - [references/example-subscription-billing-panel.md](references/example-subscription-billing-panel.md)
 - [references/example-ai-assistant-panel.md](references/example-ai-assistant-panel.md)
+- [references/task-local-expert-template.md](references/task-local-expert-template.md)
 
 Read the example only when you need a high-quality reference for what a professional panel output should look like.
 
@@ -82,6 +83,37 @@ Choose a small panel with one `chair` and two to six experts.
 Pick experts that match the real decision surface. Prefer distinct viewpoints over panel size.
 
 Use the role cards in [references/roles-index.md](references/roles-index.md) when they fit. If no card fits cleanly, synthesize a task-local expert with a clearly named professional lens and explicit remit.
+
+### 2a. Synthesize a task-local expert when needed
+
+Create a task-local expert only when the registry does not cover a real decision lens.
+
+A task-local expert must:
+
+- represent a genuine expert discipline, not an ad hoc job title
+- have a narrow and defensible professional lens
+- be likely to disagree with at least one other expert for substantive reasons
+- add decision value that cannot be cleanly absorbed by an existing card
+
+Do not create fake-specialized seats such as:
+
+- feature-name experts
+- implementation-step experts
+- generic smart-reviewer variants
+- duplicate experts that only rephrase another card
+
+When you create a task-local expert, read [references/task-local-expert-template.md](references/task-local-expert-template.md) and define:
+
+- expert name
+- professional lens
+- decision surface
+- required evidence
+- core evaluation criteria
+- critical unknowns
+- reject conditions
+- explicit non-goals and boundary with nearby experts
+
+Task-local experts are valid only for the current panel unless the user explicitly asks to persist them into the library.
 
 ### 3. Gather independent opinions
 
