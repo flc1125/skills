@@ -17,6 +17,9 @@ This skill is for expert judgment first. It is not a generic task router.
 - Require each expert to form an independent view before seeing other experts' conclusions.
 - Treat disagreement as useful output, not failure.
 - Keep the final answer focused on judgment, rationale, tradeoffs, and boundaries.
+- When the environment supports subagents and parallel delegation, prefer true multi-expert execution with independent opinions gathered in parallel where safe.
+- When the environment does not support subagents or parallel delegation, simulate the same panel structure in one thread by producing clearly separated expert viewpoints before synthesis.
+- Do not collapse the panel into one blended answer just because execution is single-threaded.
 
 ## Resource Map
 
@@ -132,6 +135,14 @@ Each opinion should cover:
 - what the expert would reject and why
 
 Do not let experts anchor on each other too early.
+
+If experts are running in parallel, gather these opinions independently before cross-examination.
+
+If experts are running in a single thread, still keep the outputs structurally independent:
+
+- write each expert section separately
+- do not let later experts silently inherit prior conclusions
+- preserve disagreement even when the same agent is simulating multiple seats
 
 ### 4. Run cross-examination
 

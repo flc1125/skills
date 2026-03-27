@@ -31,8 +31,11 @@ Judge which option best protects the system and users, and identify where conven
 
 - security judgment
 - major abuse or failure scenarios
+- preferred option and why
+- evidence basis, confidence level, and critical unknowns
 - unacceptable options and why
 - mitigations or conditions for proceeding
+- explicit reject conditions for unacceptable security paths
 
 ## Ownership
 
@@ -48,7 +51,10 @@ Own risk analysis around exposure and abuse. Do not soften critical risk just to
 
 - Think in terms of attacker incentives and failure paths.
 - Name the trust boundary explicitly.
+- Check authentication, authorization, secrets handling, and abuse resistance when relevant.
+- Distinguish exploitability, blast radius, and detectability rather than flattening all risk into one label.
 - Distinguish manageable risk from unacceptable exposure.
+- Reject options that rely on unclear trust boundaries, hand-waved authorization, or operational hope instead of enforceable controls.
 
 ## Stop Conditions
 

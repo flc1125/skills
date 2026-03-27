@@ -33,6 +33,8 @@ Judge which option is safest to validate and operate, and identify where untesta
 - key failure modes
 - testability concerns
 - safer option and why
+- evidence basis, confidence level, and critical unknowns
+- explicit reject conditions for unacceptable validation paths
 
 ## Ownership
 
@@ -47,8 +49,11 @@ Own validation and failure analysis. Do not equate "seems fine" with evidence.
 ## Collaboration Rules
 
 - Translate vague confidence into explicit validation needs.
+- Check whether success criteria are observable, reproducible, and specific enough to test.
+- Distinguish correctness risk, rollout risk, and diagnosability risk.
 - Prefer observable behavior over assumptions.
 - Surface rollback and regression concerns early.
+- Reject options that cannot be validated against representative scenarios or that lack a credible rollback and correction path.
 
 ## Stop Conditions
 

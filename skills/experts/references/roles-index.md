@@ -72,6 +72,11 @@ Before creating one, check whether the need is actually:
 
 - a narrower version of `product-expert`
 - a deeper version of `backend-expert`, `data-expert`, or `security-expert`
+- a privacy or policy concern already covered by `privacy-expert` or `compliance-expert`
+- a search or retrieval concern already covered by `search-expert`
+- a mobile or device constraint already covered by `mobile-expert`
+- a billing or financial correctness concern already covered by `payments-expert`
+- an ML behavior or evaluation concern already covered by `ml-expert`
 - a platform or operational concern already covered by `platform-expert` or `devops-expert`
 - a validation concern already covered by `qa-expert`
 
