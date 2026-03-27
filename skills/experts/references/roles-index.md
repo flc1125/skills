@@ -22,6 +22,9 @@ Read this file first. Then open only the role cards that match the assessment.
 | `payments-expert` | `payments`, `billing`, `ledger`, `settlement` | The decision affects money movement, billing correctness, reconciliation, or financial failure handling | [role-payments-expert.md](role-payments-expert.md) |
 | `compliance-expert` | `compliance`, `controls`, `auditability`, `regulatory` | The decision changes policy obligations, evidence requirements, or regulated operating constraints | [role-compliance-expert.md](role-compliance-expert.md) |
 | `ml-expert` | `ml`, `model-behavior`, `evaluation`, `inference` | The decision affects model quality, evaluation discipline, inference behavior, or ML system risk | [role-ml-expert.md](role-ml-expert.md) |
+| `itinerary-expert` | `travel`, `routing`, `pace`, `itinerary-design` | The decision affects route structure, daily pacing, transfer efficiency, or sequencing of a trip | [role-itinerary-expert.md](role-itinerary-expert.md) |
+| `budget-travel-expert` | `travel`, `budget`, `cost-structure`, `value` | The decision affects total trip cost, hidden expenses, cancellation exposure, or value-for-money tradeoffs | [role-budget-travel-expert.md](role-budget-travel-expert.md) |
+| `travel-risk-expert` | `travel`, `risk`, `entry-rules`, `disruption` | The decision affects safety, entry requirements, disruption risk, health readiness, or itinerary fragility | [role-travel-risk-expert.md](role-travel-risk-expert.md) |
 | `qa-expert` | `qa`, `validation`, `failure-modes`, `testability` | The decision needs stronger validation, acceptance criteria, or regression thinking | [role-qa-expert.md](role-qa-expert.md) |
 
 ## Selection Rules
@@ -44,6 +47,9 @@ Read this file first. Then open only the role cards that match the assessment.
 - Add `payments-expert` when billing, ledger correctness, reconciliation, or irreversible money movement matter.
 - Add `compliance-expert` when controls, audit evidence, certifications, or regulatory obligations materially constrain the solution.
 - Add `ml-expert` when model quality, evaluation rigor, prompt behavior, or inference cost and risk matter.
+- Add `itinerary-expert` when trip pacing, transfer efficiency, route sequence, or day-structure quality materially changes the answer.
+- Add `budget-travel-expert` when total cost, hidden travel expenses, cancellation exposure, or value tradeoffs materially change the answer.
+- Add `travel-risk-expert` when safety, entry rules, disruption risk, weather fragility, health constraints, or scam exposure materially change the answer.
 - Add `qa-expert` when validation depth or failure analysis matters.
 - If no listed role fits, create a task-local expert with a precise name and remit by following [task-local-expert-template.md](task-local-expert-template.md).
 - Avoid adding an expert unless that expert has a plausible reason to disagree with at least one other seat.
@@ -56,7 +62,7 @@ Read this file first. Then open only the role cards that match the assessment.
 Use tags from these groups so future expert cards plug in naturally:
 
 - panel tags: `chair`, `moderation`, `synthesis`, `specialist`
-- decision tags: `architecture`, `frontend`, `backend`, `product`, `security`, `privacy`, `performance`, `data`, `devops`, `platform`, `mobile`, `search`, `payments`, `compliance`, `ml`, `qa`
+- decision tags: `architecture`, `frontend`, `backend`, `product`, `security`, `privacy`, `performance`, `data`, `devops`, `platform`, `mobile`, `search`, `payments`, `compliance`, `ml`, `travel`, `budget`, `risk`, `qa`
 - outcome tags: `recommendation`, `tradeoffs`, `risk`, `validation`
 
 ## Task-Local Expert Rules
