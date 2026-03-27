@@ -36,6 +36,7 @@ When no repository is specified, the skill scans this preset set:
 
 - `go-fries/fries`
 - `go-tapd/tapd`
+- `flc1125/go-twca`
 - `flc1125/go-cron`
 - `flc1125/go-gitlab-webhook`
 - `flc1125/go-yuque`

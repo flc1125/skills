@@ -44,6 +44,7 @@ When the user does not specify a target repository, use this fixed preset set:
 
 - `go-fries/fries`
 - `go-tapd/tapd`
+- `flc1125/go-twca`
 - `flc1125/go-cron`
 - `flc1125/go-gitlab-webhook`
 - `flc1125/go-yuque`
