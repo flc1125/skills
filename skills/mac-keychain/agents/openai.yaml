@@ -1,0 +1,7 @@
+interface:
+  display_name: "Mac Keychain"
+  short_description: "Controlled macOS Keychain credential access"
+  default_prompt: "Use $mac-keychain to store, update, inspect, retrieve, and delete macOS Keychain credentials, with explicit confirmation required before any plaintext secret access."
+
+policy:
+  allow_implicit_invocation: true
