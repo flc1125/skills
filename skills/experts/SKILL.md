@@ -211,6 +211,10 @@ Use this structure when returning a panel result:
 ## Question
 - <the decision or problem being assessed>
 
+## Decision Criteria
+- <which evaluation axes matter most in this panel>
+- <which constraints are primary versus secondary>
+
 ## Panel
 - chair: <why this chair is appropriate>
 - <expert>: <perspective and remit>
@@ -218,6 +222,7 @@ Use this structure when returning a panel result:
 ## Expert Opinions
 - <expert>: <core judgment, rationale, major risks>
 - evidence: <what is known, what is inferred>
+- evidence quality: <direct evidence | indirect evidence | expert inference>
 - confidence: <high | medium | low> and why
 - critical unknowns: <what could still change the answer>
 - reject conditions: <what would make this expert reject a path>
@@ -235,9 +240,17 @@ Use this structure when returning a panel result:
 ## Tradeoffs
 - <what is gained and what is given up>
 
+## Minority View
+- <which dissenting view did not win>
+- <under what conditions that view becomes stronger>
+
 ## Confidence and Unknowns
 - <where the panel is confident>
 - <where the panel is still reasoning under uncertainty>
+
+## Immediate Implications
+- <what should be decided, validated, or sequenced next if this recommendation is accepted>
+- <what signal should trigger re-evaluation of the panel's conclusion>
 
 ## Boundaries
 - holds when: <conditions where this advice fits>
