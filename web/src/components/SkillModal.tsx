@@ -96,22 +96,21 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
                               <span>{fileCountLabel}</span>
                             </div>
                           ) : null}
+                          <a
+                            href={sourceUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 text-gray-400 transition-colors hover:text-black dark:text-gray-500 dark:hover:text-white"
+                            title="View source file on GitHub"
+                          >
+                            <ExternalLink size={12} className="flex-shrink-0" />
+                            <span>View on GitHub</span>
+                          </a>
                         </div>
                       ) : null}
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    {skill ? (
-                      <a
-                        href={sourceUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-1.5 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-full transition-colors text-gray-400 hover:text-black dark:hover:text-white"
-                        title="View source file on GitHub"
-                      >
-                        <ExternalLink size={18} />
-                      </a>
-                    ) : null}
                     <button
                       onClick={onClose}
                       className="p-1.5 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-full transition-colors text-gray-400 hover:text-black dark:hover:text-white"
