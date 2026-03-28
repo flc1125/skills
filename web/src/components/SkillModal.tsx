@@ -172,17 +172,16 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
                   <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2.5 ml-1">
                     Install this Skill
                   </p>
-                  <div className="relative group">
-                    <div className="flex items-center gap-3 px-4 py-3 bg-gray-50 dark:bg-black border border-gray-100 dark:border-gray-800 rounded-xl transition-all group-hover:border-gray-200 dark:group-hover:border-gray-700">
+                  <div className="group">
+                    <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 py-2.5 bg-gray-50 dark:bg-black border border-gray-100 dark:border-gray-800 rounded-xl transition-all group-hover:border-gray-200 dark:group-hover:border-gray-700">
                       <Terminal size={16} className="text-gray-400 flex-shrink-0" />
-                      <code className="text-xs font-mono text-gray-600 dark:text-gray-400 select-all truncate pr-28">
+                      <code className="min-w-0 flex-1 select-all truncate text-xs font-mono text-gray-600 dark:text-gray-400">
                         {command}
                       </code>
-                    </div>
-                    <div className="absolute right-1.5 top-1/2 -translate-y-1/2">
                       <button
                         onClick={copyToClipboard}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs transition-all shadow-sm ${
+                        type="button"
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs leading-none transition-all shadow-sm ${
                           copied 
                             ? 'bg-green-500 text-white scale-95' 
                             : 'bg-black dark:bg-white text-white dark:text-black hover:opacity-90 active:scale-95'
