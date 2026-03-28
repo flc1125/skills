@@ -15,6 +15,50 @@ interface SkillModalProps {
   onClose: () => void;
 }
 
+const GITHUB_BLOB_BASE_URL = 'https://github.com/flc1125/skills/blob/main/skills';
+
+function normalizeGithubPathParts(parts: string[]) {
+  const normalized: string[] = [];
+
+  for (const part of parts) {
+    if (!part || part === '.') {
+      continue;
+    }
+
+    if (part === '..') {
+      normalized.pop();
+      continue;
+    }
+
+    normalized.push(part);
+  }
+
+  return normalized;
+}
+
+function resolveSkillContentLink(skill: Skill, href?: string) {
+  if (!href) {
+    return href;
+  }
+
+  if (
+    href.startsWith('http://') ||
+    href.startsWith('https://') ||
+    href.startsWith('mailto:') ||
+    href.startsWith('tel:') ||
+    href.startsWith('#')
+  ) {
+    return href;
+  }
+
+  const [pathname, hash = ''] = href.split('#');
+  const baseDir = skill.path.split('/').slice(0, -1);
+  const targetParts = pathname.split('/');
+  const resolvedPath = normalizeGithubPathParts([...baseDir, ...targetParts]).join('/');
+
+  return `${GITHUB_BLOB_BASE_URL}/${resolvedPath}${hash ? `#${hash}` : ''}`;
+}
+
 export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillModalProps) {
   const [copied, setCopied] = useState(false);
   const displayName = skill?.metadata?.name ?? skill?.name ?? 'Loading skill';
@@ -157,6 +201,21 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
                                 {children}
                               </code>
                             )
+                          },
+                          a({ href, children, ...props }) {
+                            const resolvedHref = skill ? resolveSkillContentLink(skill, href) : href;
+                            const isExternal = resolvedHref?.startsWith('http://') || resolvedHref?.startsWith('https://');
+
+                            return (
+                              <a
+                                href={resolvedHref}
+                                target={isExternal ? '_blank' : undefined}
+                                rel={isExternal ? 'noopener noreferrer' : undefined}
+                                {...props}
+                              >
+                                {children}
+                              </a>
+                            );
                           }
                         }}
                       >
