@@ -4,7 +4,8 @@ import { Skill } from '@/lib/skills';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { X, Terminal, Copy, Check, ExternalLink } from 'lucide-react';
+import { X, Terminal, Copy, Check, ExternalLink, CalendarDays, Files } from 'lucide-react';
+import { formatSkillPublishedAt } from '@/lib/utils';
 
 interface SkillModalProps {
   skill: Skill | null;
@@ -17,6 +18,8 @@ interface SkillModalProps {
 export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillModalProps) {
   const [copied, setCopied] = useState(false);
   const displayName = skill?.metadata?.name ?? skill?.name ?? 'Loading skill';
+  const publishedAt = formatSkillPublishedAt(skill?.metadata?.created);
+  const fileCountLabel = skill ? `${skill.fileCount} ${skill.fileCount === 1 ? 'file' : 'files'}` : null;
 
   useEffect(() => {
     if (copied) {
@@ -76,6 +79,25 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
                       <Dialog.Title as="h3" className="text-lg font-bold text-gray-900 dark:text-white">
                         {displayName}
                       </Dialog.Title>
+                      {skill ? (
+                        <div className="mt-2 flex flex-wrap items-center gap-3 text-[12px] font-medium text-gray-400 dark:text-gray-500">
+                          <span className="inline-flex items-center rounded-full bg-gray-100/80 px-2.5 py-1 text-[10px] font-medium lowercase tracking-[0.08em] text-gray-500 dark:bg-gray-800/80 dark:text-gray-400">
+                            {skill.name}
+                          </span>
+                          {publishedAt ? (
+                            <div className="flex items-center gap-1.5">
+                              <CalendarDays size={12} className="flex-shrink-0" />
+                              <span>{publishedAt}</span>
+                            </div>
+                          ) : null}
+                          {fileCountLabel ? (
+                            <div className="flex items-center gap-1.5">
+                              <Files size={12} className="flex-shrink-0" />
+                              <span>{fileCountLabel}</span>
+                            </div>
+                          ) : null}
+                        </div>
+                      ) : null}
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
