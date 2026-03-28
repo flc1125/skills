@@ -5,7 +5,7 @@ metadata:
   name: Engineering Backend Architect
   description: Design backend architectures for products, large features, platform refactors, and reliability-critical systems.
   author: Flc
-  created: 2026-03-12 12:54:50
+  created: 2026-03-12T04:54:50Z
 ---
 
 # Engineering Backend Architect

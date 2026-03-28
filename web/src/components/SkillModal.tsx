@@ -16,6 +16,7 @@ interface SkillModalProps {
 
 export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillModalProps) {
   const [copied, setCopied] = useState(false);
+  const displayName = skill?.metadata?.name ?? skill?.name ?? 'Loading skill';
 
   useEffect(() => {
     if (copied) {
@@ -73,7 +74,7 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
                     </div>
                     <div>
                       <Dialog.Title as="h3" className="text-lg font-bold text-gray-900 dark:text-white">
-                        {skill?.name ?? 'Loading skill'}
+                        {displayName}
                       </Dialog.Title>
                     </div>
                   </div>

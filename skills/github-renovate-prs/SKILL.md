@@ -5,7 +5,7 @@ metadata:
   name: GitHub Renovate PRs
   description: Inspect, triage, approve, and merge GitHub Renovate pull requests through a confirmation-first workflow.
   author: Flc゛
-  created: 2026-03-22 23:09:39
+  created: 2026-03-22T15:09:39Z
 ---
 
 # GitHub Renovate PRs

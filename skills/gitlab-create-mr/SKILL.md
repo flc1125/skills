@@ -5,7 +5,7 @@ metadata:
   name: GitLab Create MR
   description: Create or update GitLab merge requests from a local branch with host-aware review and writing workflows.
   author: Flc゛
-  created: 2026-03-24 13:52:06
+  created: 2026-03-24T05:52:06Z
 ---
 
 # GitLab Create MR

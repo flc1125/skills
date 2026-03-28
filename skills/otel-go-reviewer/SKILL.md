@@ -5,7 +5,7 @@ metadata:
   name: OTel Go Reviewer
   description: Review opentelemetry-go changes for specification compliance, compatibility, repository rules, and release risk.
   author: Flc゛
-  created: 2026-03-25 22:54:07
+  created: 2026-03-25T14:54:07Z
 ---
 
 # OTel Go Reviewer

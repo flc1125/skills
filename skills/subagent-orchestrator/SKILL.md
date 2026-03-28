@@ -5,7 +5,7 @@ metadata:
   name: Subagent Orchestrator
   description: Assemble and coordinate role-based subagent teams for complex tasks with explicit ownership and execution flow.
   author: Flc゛
-  created: 2026-03-22 19:40:21
+  created: 2026-03-22T11:40:21Z
 ---
 
 # Subagent Orchestrator

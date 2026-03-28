@@ -5,7 +5,7 @@ metadata:
   name: Skill Porting Engineer
   description: Convert external agent or prompt definitions into local skills that match this repository's conventions.
   author: Flc゛
-  created: 2026-03-13 19:07:05
+  created: 2026-03-13T11:07:05Z
 ---
 
 # Skill Porting Engineer

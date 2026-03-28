@@ -5,7 +5,7 @@ metadata:
   name: GitHub Create PR
   description: Create or update GitHub pull requests from a local branch with a reviewable, repository-aware workflow.
   author: Flc゛
-  created: 2026-03-14 11:24:59
+  created: 2026-03-14T03:24:59Z
 ---
 
 # GitHub Create PR

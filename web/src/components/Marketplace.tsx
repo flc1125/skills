@@ -7,6 +7,7 @@ import { SkillCard } from './SkillCard';
 import { SkillModal } from './SkillModal';
 import { Search } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
+import { parseSkillMetadataDate } from '@/lib/utils';
 
 interface MarketplaceProps {
   initialSkills: SkillMetadata[];
@@ -83,13 +84,28 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
 
   const filteredSkills = useMemo(() => {
     return initialSkills.filter((skill) => {
+      const displayName = skill.metadata?.name ?? skill.name;
+      const displayDescription = skill.metadata?.description ?? skill.description;
       const matchesSearch = 
-        skill.name.toLowerCase().includes(search.toLowerCase()) ||
-        skill.description.toLowerCase().includes(search.toLowerCase());
+        displayName.toLowerCase().includes(search.toLowerCase()) ||
+        displayDescription.toLowerCase().includes(search.toLowerCase());
       
       return matchesSearch;
     });
   }, [initialSkills, search]);
+
+  const orderedSkills = useMemo(() => {
+    return [...filteredSkills].sort((left, right) => {
+      const leftTime = parseSkillMetadataDate(left.metadata?.created)?.getTime() ?? 0;
+      const rightTime = parseSkillMetadataDate(right.metadata?.created)?.getTime() ?? 0;
+
+      if (leftTime !== rightTime) {
+        return rightTime - leftTime;
+      }
+
+      return left.name.localeCompare(right.name);
+    });
+  }, [filteredSkills]);
 
   const handleCardClick = (skillMeta: SkillMetadata) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -133,13 +149,13 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <AnimatePresence mode="popLayout">
-          {filteredSkills.map((skill) => (
+          {orderedSkills.map((skill) => (
             <SkillCard key={skill.slug} skill={skill} onClick={handleCardClick} />
           ))}
         </AnimatePresence>
       </div>
 
-      {filteredSkills.length === 0 && (
+      {orderedSkills.length === 0 && (
         <div className="py-24 text-center">
           <div className="inline-flex p-8 bg-gray-50 dark:bg-gray-900 rounded-full mb-6">
             <Search size={48} className="text-gray-300" />

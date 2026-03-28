@@ -15,6 +15,30 @@ function toSlug(filePath) {
   return path.dirname(filePath).replace(/[/\\]/g, '-');
 }
 
+function normalizeMetadata(metadata) {
+  if (!metadata || typeof metadata !== 'object' || Array.isArray(metadata)) {
+    return null;
+  }
+
+  const normalized = { ...metadata };
+
+  if (metadata.created instanceof Date) {
+    normalized.created = formatMetadataDate(metadata.created);
+  } else if (metadata.created != null) {
+    normalized.created = String(metadata.created);
+  }
+
+  if (metadata.version == null) {
+    normalized.version = null;
+  }
+
+  return normalized;
+}
+
+function formatMetadataDate(date) {
+  return date.toISOString().replace('.000Z', 'Z');
+}
+
 async function main() {
   const files = await glob('**/SKILL.md', { cwd: skillsDir });
 
@@ -27,7 +51,7 @@ async function main() {
       return {
         name: data.name,
         description: data.description,
-        metadata: data.metadata ?? null,
+        metadata: normalizeMetadata(data.metadata),
         path: file,
         slug: toSlug(file),
         installName: data.name,

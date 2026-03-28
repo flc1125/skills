@@ -2,7 +2,8 @@
 
 import { SkillMetadata } from '@/lib/skills';
 import { motion } from 'framer-motion';
-import { Terminal } from 'lucide-react';
+import { CalendarDays, Terminal } from 'lucide-react';
+import { formatSkillPublishedAt } from '@/lib/utils';
 
 interface SkillCardProps {
   skill: SkillMetadata;
@@ -10,6 +11,10 @@ interface SkillCardProps {
 }
 
 export function SkillCard({ skill, onClick }: SkillCardProps) {
+  const displayName = skill.metadata?.name ?? skill.name;
+  const displayDescription = skill.metadata?.description ?? skill.description;
+  const publishedAt = formatSkillPublishedAt(skill.metadata?.created);
+
   return (
     <motion.div
       layout
@@ -26,13 +31,20 @@ export function SkillCard({ skill, onClick }: SkillCardProps) {
           <Terminal size={16} />
         </div>
         <h3 className="text-base font-bold group-hover:text-black dark:group-hover:text-white transition-colors truncate">
-          {skill.name}
+          {displayName}
         </h3>
       </div>
       
       <p className="text-gray-500 dark:text-gray-400 text-sm line-clamp-3 leading-relaxed flex-grow">
-        {skill.description}
+        {displayDescription}
       </p>
+
+      {publishedAt ? (
+        <div className="mt-4 flex items-center gap-1.5 text-xs font-medium text-gray-400 dark:text-gray-500">
+          <CalendarDays size={12} className="flex-shrink-0" />
+          <span>{publishedAt}</span>
+        </div>
+      ) : null}
     </motion.div>
   );
 }

@@ -5,7 +5,7 @@ metadata:
   name: Skill Metadata Maintainer
   description: Initialize or update the metadata object in one target skill's SKILL.md.
   author: Flc
-  created: 2026-03-28 21:15:00
+  created: 2026-03-28T13:15:00Z
 ---
 
 # Skill Metadata Maintainer
@@ -47,7 +47,7 @@ Apply these rules:
 - `metadata.name`: human-readable display name for the target skill, derived from the skill name by default by removing hyphens and capitalizing each word while preserving well-known brand casing and common all-caps acronyms
 - `metadata.description`: purpose statement that describes what the skill is for, not how it works, and should stay under 150 characters
 - `metadata.author`: initialize from the first Git author for the target `SKILL.md`
-- `metadata.created`: initialize from the first Git timestamp for the target `SKILL.md`, formatted as `YYYY-MM-DD HH:mm:ss`
+- `metadata.created`: initialize from the first Git timestamp for the target `SKILL.md`, formatted as UTC `YYYY-MM-DDTHH:mm:ssZ`
 - `metadata.version`: optional; keep unset by default, and only set or update it when the user explicitly asks for versioning
 
 If Git history for the target `SKILL.md` is unavailable or incomplete, report that clearly and ask the user how to proceed. Do not invent `author` or `created` silently when the intended source of truth cannot be verified.

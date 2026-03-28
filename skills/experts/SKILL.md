@@ -5,7 +5,7 @@ metadata:
   name: Experts
   description: Assemble a focused panel of experts to assess a problem, surface tradeoffs, and deliver a chaired recommendation.
   author: Flc゛
-  created: 2026-03-27 18:42:23
+  created: 2026-03-27T10:42:23Z
 ---
 
 # Experts

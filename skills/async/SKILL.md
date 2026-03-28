@@ -5,7 +5,7 @@ metadata:
   name: Async
   description: Launch and manage deferred Codex subagent tasks through stable task references and explicit completion handling.
   author: Flc゛
-  created: 2026-03-25 21:24:22
+  created: 2026-03-25T13:24:22Z
 ---
 
 # Async

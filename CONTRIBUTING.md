@@ -18,7 +18,7 @@ metadata:
   name: Human-readable skill name
   description: One sentence describing what the skill is for.
   author: Flc
-  created: 2026-03-28 21:15:00
+  created: 2026-03-28T13:15:00Z
   version: 1.0.0
 ```
 
@@ -29,7 +29,7 @@ Field requirements:
 | `name` | string | MUST | Human-readable display name derived from the skill name by default |
 | `description` | string | MUST | Purpose statement that describes what the skill does, not how it works internally |
 | `author` | string | MUST | Derived from the first recorded author of the skill |
-| `created` | string | MUST | Derived from the first recorded creation time of the skill, formatted as `YYYY-MM-DD HH:mm:ss` |
+| `created` | string | MUST | Derived from the first recorded creation time of the skill, formatted as UTC `YYYY-MM-DDTHH:mm:ssZ` |
 | `version` | string | OPTIONAL | Metadata version for the skill; leave unset when no versioning policy exists |
 
 Additional rules:
@@ -43,7 +43,7 @@ Additional rules:
 - `description` should remain a single sentence.
 - `description` should stay under 150 characters.
 - `description` should not describe internal steps, call chains, or implementation details.
-- `created` must not include a timezone offset or ISO 8601 suffix.
+- `created` must use a UTC ISO 8601 timestamp with a trailing `Z`.
 - If `version` is present, it should use `MAJOR.MINOR.PATCH` semantic versioning format.
 - `version` represents the current metadata or skill definition version, not a Git commit, date, or branch name.
 - Do not infer or auto-increment `version` unless an explicit versioning policy exists.
@@ -73,6 +73,6 @@ metadata:
   name: Skill Metadata Maintainer
   description: Initialize or update the metadata object in one target skill's SKILL.md.
   author: Flc
-  created: 2026-03-28 21:15:00
+  created: 2026-03-28T13:15:00Z
 ---
 ```

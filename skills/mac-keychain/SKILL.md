@@ -5,7 +5,7 @@ metadata:
   name: Mac Keychain
   description: Use macOS Keychain to store, update, inspect, retrieve, and delete local credentials with explicit safety gates.
   author: Flc゛
-  created: 2026-03-27 15:51:16
+  created: 2026-03-27T07:51:16Z
 ---
 
 # Mac Keychain

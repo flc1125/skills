@@ -5,7 +5,7 @@ metadata:
   name: GLab CLI
   description: Use and explain GitLab CLI workflows across GitLab.com and self-managed instances with context-aware defaults.
   author: Flc゛
-  created: 2026-03-20 11:23:59
+  created: 2026-03-20T03:23:59Z
 ---
 
 # GLab CLI
