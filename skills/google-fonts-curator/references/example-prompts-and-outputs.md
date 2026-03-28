@@ -193,6 +193,104 @@ I need fonts for a design portfolio. I want it to feel intentional and graphic, 
   - Why it works: more restrained, cohesive, and mature if the portfolio already has strong visual work.
   - Risk: less signature if the work itself is visually quiet.
 
+## Example 8: 中文正文为主的内容网站
+
+### 用户请求
+
+我在做一个中文文化内容网站，想要有一点 editorial 感，但正文主要是中文。能帮我推荐 Google Fonts 吗？
+
+### 意图解读
+
+- 真正的问题不是只选一套 Latin pairing
+- 页面主阅读负担在中文正文
+- Google Fonts 可以帮助定义英文层或标题层气质，但不能假装解决整个中文正文系统
+
+### 理想回答形态
+
+- 推荐方向
+  - 英文标题 / 点缀：`Newsreader`
+  - 英文辅助 / UI：`Inter`
+  - 理由：这组能给站点带来文化与 editorial 气质，但它主要解决英文层和品牌气氛，不应被描述成完整的中文排版方案。
+- 关键说明
+  - 你的正文主要是中文，所以真正决定阅读体验的是中文文本层。
+  - 如果坚持只讨论 Google Fonts，我会把这组理解为英文层的品牌方向，而不是整个网站字体系统。
+- 风险
+  - 如果把 `Newsreader` 的审美判断直接外推到中文正文，会高估这套方案的完整度。
+
+## Example 9: 中英混排品牌首页
+
+### 用户请求
+
+首页主标题想用英文，正文和说明大部分是中文。整体希望克制、高级、现代一点，Google Fonts 范围内怎么选？
+
+### 意图解读
+
+- mixed-script 首页
+- 英文标题负责品牌气质
+- 中文正文负责阅读与信息承载
+- 回答必须拆成两层，而不是只给一个 Latin pairing
+
+### 理想回答形态
+
+- 推荐方向
+  - 英文标题：`Cormorant Garamond`
+  - 英文辅助 / UI：`Manrope`
+  - 理由：`Cormorant Garamond` 负责更精致的品牌声音，`Manrope` 负责把英文 UI 和辅助信息拉回现代网页语境。
+- 关键说明
+  - 这套方案主要定义英文层的气质，不等于中文正文也应该沿用同样的表达逻辑。
+  - 中文层应保持更克制和耐读，否则整页会失衡。
+- 风险
+  - 如果英文标题占比很低，而中文才是主视觉主体，这套的收益会被削弱。
+
+## Example 10: Google Fonts 内没有完美解
+
+### User Prompt
+
+I want an ultra-luxury Chinese brand site using only Google Fonts. It should feel as elevated as a top fashion house.
+
+### Intent Read
+
+- the aesthetic target is stronger than what Google Fonts can fully guarantee
+- Chinese script makes the problem harder
+- the right answer needs honesty, not overclaiming
+
+### Strong Answer Shape
+
+- Recommendation
+  - Latin accent direction: `Bodoni Moda` or `Prata`
+  - Supporting Latin UI: `Manrope`
+  - Why it works: this is the sharpest luxury-leaning Latin direction available inside Google Fonts, but it only solves the Latin brand voice.
+- Constraint Note
+  - For a Chinese-first luxury site, Google Fonts alone is a practical compromise, not a perfect luxury typography solution.
+  - I would treat this as the English accent layer, not the whole system.
+- Risk
+  - If you expect full top-tier luxury expression across Chinese body and brand text from Google Fonts alone, the constraint is the limiting factor, not the pairing.
+
+## Example 11: English, denser product surface
+
+### User Prompt
+
+I need Google Fonts for a product site with a lot of UI and feature detail. I still want it to feel more refined than a default SaaS page.
+
+### Intent Read
+
+- denser product surface
+- readability and repeated UI use matter more than hero drama
+- should stay restrained and practical
+
+### Strong Answer Shape
+
+- Recommended Direction
+  - Single family: `Plus Jakarta Sans`
+  - Why it works: it stays cleaner and more scalable across UI than a more expressive pairing, while still feeling more considered than many default product choices.
+  - Weights: regular for body, semibold for hierarchy
+  - Risk: less brand drama than a serif-led marketing system.
+- Alternative
+  - Heading: `Sora`
+  - Body: `Inter`
+  - Why it works: useful when the marketing layer needs a bit more personality without sacrificing body stability.
+  - Risk: weaker than the single-family route if the page is mostly dense product information.
+
 ## Calibration Notes
 
 - The examples are intentionally selective. Do not respond with long font catalogs.

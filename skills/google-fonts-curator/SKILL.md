@@ -23,6 +23,7 @@ This skill is not a general web design skill. It does not own layout, color, spa
 - Recommend a small number of strong options. Curated judgment is better than exhaustive lists.
 - Treat "high-end", "editorial", "luxury", "modern", "minimal", "cultural", "tech", "fashion", and similar words as signals to interpret, not labels to mirror back blindly.
 - If the user's requested aesthetic conflicts with web readability or with the Google Fonts constraint, say so directly and offer the best compromise inside Google Fonts.
+- Do not treat support for Chinese prompts as proof that a Latin-only recommendation is valid for Chinese or mixed-script websites.
 
 ## Resource Map
 
@@ -32,6 +33,8 @@ Read only the files you need:
 - Curated pairings and single-family systems: [references/pairings.md](references/pairings.md)
 - Common failure modes and cheap-looking choices: [references/anti-patterns.md](references/anti-patterns.md)
 - Page-type adjustments: [references/page-types.md](references/page-types.md)
+- Script and language coverage rules: [references/script-and-language-coverage.md](references/script-and-language-coverage.md)
+- Usage rules for weights, readability, and single-family decisions: [references/usage-rules.md](references/usage-rules.md)
 - Bilingual calibration examples: [references/example-prompts-and-outputs.md](references/example-prompts-and-outputs.md)
 
 ## Workflow
@@ -45,11 +48,14 @@ Extract:
 - page type
 - target audience
 - brand tone or emotional direction
+- script and language context: `Latin-only`, `CJK`, or `mixed-script`
 - whether the page needs editorial presence, product clarity, luxury, cultural depth, softness, technical precision, or other signals
 - whether the font system is for hero-heavy marketing, long-form reading, brand storytelling, portfolio presentation, or a more functional product surface
+- whether body copy is short-form, medium-form, or long-form
 - whether the user already has candidate fonts or references
 
 If the user gives vague taste words such as "高级" or "有设计感", translate them into clearer typographic axes before recommending fonts.
+If the script or language context is unclear and it materially affects the answer, clarify it or state the assumption explicitly.
 
 ### 2. Choose a typographic strategy
 
@@ -75,6 +81,7 @@ Check each candidate against these questions:
 - Does the result feel premium, current, and intentional inside the limits of Google Fonts?
 
 Reject pairings that feel loud, sentimental, gimmicky, or fake-luxury unless the user explicitly wants that effect.
+Reject answers that ignore script coverage, reading behavior, or body-text durability when those factors matter to the page.
 
 ### 4. Recommend a small set of options
 
@@ -114,6 +121,7 @@ This skill is about selection and judgment, not implementation. If the user asks
 - the exact Google Fonts names
 - the intended role of each font
 - any weight guidance that matters to the recommendation
+- any subset, script, or language coverage note that materially affects implementation
 
 Do not expand into full design systems unless asked.
 
@@ -160,6 +168,8 @@ If the user wants critique of an existing set, add:
 - Do not confuse ornament, nostalgia, or fragility with sophistication.
 - When a safe font is the right answer, defend it with reasoning rather than apologizing for it.
 - When no perfect Google Fonts answer exists, state that the recommendation is the best web-practical option within the constraint.
+- When the page is Chinese or mixed-script, distinguish Latin voice from CJK readability instead of pretending one Latin pairing solves the whole system.
+- Include at least minimal guidance on weights or reading suitability when body text is substantial.
 
 ## Red Flags
 
@@ -168,5 +178,6 @@ Pause and reassess if:
 - the user is really asking for full visual direction rather than fonts
 - the requested mood is contradictory
 - the page type and reading behavior are unclear
+- the script or language context is unclear
 - the user wants a premium fashion or luxury outcome that Google Fonts can only approximate
 - the user asks for too many fonts in one page system
