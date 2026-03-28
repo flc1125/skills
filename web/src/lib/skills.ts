@@ -15,7 +15,7 @@ export interface Skill extends SkillMetadata {
   content: string;
 }
 
-const SKILLS_DIR = path.join(process.cwd(), 'skills');
+const SKILLS_DIR = path.join(process.cwd(), '..', 'skills');
 
 export async function getSkills(): Promise<SkillMetadata[]> {
   const files = await glob('**/SKILL.md', { cwd: SKILLS_DIR });

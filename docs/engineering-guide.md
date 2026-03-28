@@ -16,6 +16,8 @@ This document provides detailed guidance for developing, debugging, building, an
 After cloning the repository, follow these steps to start the development server:
 
 ```bash
+cd web
+
 # Install dependencies
 npm install
 
@@ -44,15 +46,18 @@ Write the full Markdown documentation for the skill here.
 
 ## 4. Debugging & Common Issues
 *   **Icons not displaying**: Ensure the icon name matches [Lucide Icons](https://lucide.dev/icons) naming conventions.
-*   **Styles not updating**: Verify Tailwind directives are correctly configured in `src/app/globals.css`.
+*   **Styles not updating**: Verify Tailwind directives are correctly configured in `web/src/app/globals.css`.
 *   **Markdown rendering errors**: Check the YAML frontmatter format in `SKILL.md` (wrapped in `---` and free of YAML syntax errors).
 *   **Installation command looks wrong**: Use the frontmatter `name` field as the install identifier. The marketplace deep-link slug is a separate URL concern.
 *   **Lint command fails after a Next upgrade**: On Next.js 16, use the ESLint CLI via `npm run lint`; `next lint` is no longer the supported entrypoint.
+*   **Web app can't find skills after the move**: The marketplace now runs from `web/` and reads content from the repository-root `skills/` directory.
 
 ## 5. Build & Testing
 It's recommended to perform a full build test before production deployment:
 
 ```bash
+cd web
+
 # Run lint checks
 npm run lint
 
@@ -73,7 +78,8 @@ That fallback is mainly useful for constrained local environments; standard depl
 This project is deeply compatible with Vercel; an automated build solution is recommended.
 
 1.  **Link Git Repository**: Import your repository into Vercel.
-2.  **Build Settings**: Vercel automatically recognizes Next.js.
+2.  **Build Settings**: Vercel automatically recognizes Next.js once the project root is set correctly.
+    *   Root Directory: `web`
     *   Framework Preset: `Next.js`
     *   Build Command: `npm run build`
     *   Install Command: `npm install`

@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="public/favicon.svg" width="64" height="64" alt="Flc's Skills Logo" />
+  <img src="web/public/favicon.svg" width="64" height="64" alt="Flc's Skills Logo" />
 
   # Flc's Skills
 
@@ -19,6 +19,8 @@
 An open repository of reusable skills maintained for personal use and public reuse.
 
 This repo contains installable skills that can be added directly from GitHub and used as building blocks for agent workflows, AI assistants, or other compatible tools.
+
+The installable skill content lives in `skills/`. The Next.js marketplace that powers [skills.flc.io](https://skills.flc.io) now lives in `web/`.
 
 ## ✨ Overview
 
@@ -59,6 +61,18 @@ If you install a specific skill directly, use the skill's install name shown on 
 Browse all published skills at [skills.flc.io](https://skills.flc.io).
 
 Once installed, a skill can be used through your local skills setup or any compatible tool that supports this format. Refer to the skill's own `SKILL.md` for its purpose, trigger guidance, and usage details.
+
+## 🛠 Development
+
+The web marketplace is a standalone Next.js app under `web/`.
+
+```bash
+cd web
+npm install
+npm run dev
+```
+
+Use `npm run lint` and `npm run build` inside `web/` to validate marketplace changes.
 
 ## 📝 License
 
