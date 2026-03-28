@@ -94,6 +94,12 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
     });
   }, [initialSkills, search]);
 
+  const totalSkills = initialSkills.length;
+  const totalFiles = useMemo(
+    () => initialSkills.reduce((sum, skill) => sum + skill.fileCount, 0),
+    [initialSkills]
+  );
+
   const orderedSkills = useMemo(() => {
     return [...filteredSkills].sort((left, right) => {
       const leftTime = parseSkillMetadataDate(left.metadata?.created)?.getTime() ?? 0;
@@ -130,6 +136,26 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
         <p className="text-lg text-gray-500 leading-relaxed">
           A curated collection of specialized skills to extend the capabilities of your AI workforce.
         </p>
+      </div>
+
+      <div className="mx-auto mb-10 flex max-w-sm items-center justify-center gap-7 text-center">
+        <div className="flex min-w-0 flex-col items-center">
+          <span className="text-[1.55rem] font-bold leading-none tracking-[-0.04em] text-gray-950 dark:text-gray-50">
+            {totalSkills}
+          </span>
+          <span className="mt-1 text-[10px] font-medium uppercase tracking-[0.22em] text-gray-400 dark:text-gray-500">
+            Skills
+          </span>
+        </div>
+        <span className="text-gray-200 dark:text-gray-800">/</span>
+        <div className="flex min-w-0 flex-col items-center">
+          <span className="text-[1.55rem] font-bold leading-none tracking-[-0.04em] text-gray-950 dark:text-gray-50">
+            {totalFiles}
+          </span>
+          <span className="mt-1 text-[10px] font-medium uppercase tracking-[0.22em] text-gray-400 dark:text-gray-500">
+            Files
+          </span>
+        </div>
       </div>
 
       {/* Controls */}
