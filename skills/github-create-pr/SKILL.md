@@ -1,6 +1,11 @@
 ---
 name: github-create-pr
 description: Create GitHub pull requests from a local branch using a reviewable workflow for branch checks, diff analysis, PR title/body writing, and gh CLI creation. Use when opening a PR, drafting or improving a PR description, preparing a branch for review, or adding reviewers on GitHub.
+metadata:
+  name: GitHub Create PR
+  description: Create or update GitHub pull requests from a local branch with a reviewable, repository-aware workflow.
+  author: Flc゛
+  created: 2026-03-14 11:24:59
 ---
 
 # GitHub Create PR

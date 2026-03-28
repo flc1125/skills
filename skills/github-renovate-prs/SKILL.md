@@ -1,6 +1,11 @@
 ---
 name: github-renovate-prs
 description: Inspect, triage, approve, and merge GitHub Renovate pull requests with gh. When no repository is provided, use the default preset repository set, build a candidate execution plan, and execute only after explicit user confirmation. Use when the user asks to check, batch-handle, approve, or merge Renovate PRs.
+metadata:
+  name: GitHub Renovate PRs
+  description: Inspect, triage, approve, and merge GitHub Renovate pull requests through a confirmation-first workflow.
+  author: Flc゛
+  created: 2026-03-22 23:09:39
 ---
 
 # GitHub Renovate PRs

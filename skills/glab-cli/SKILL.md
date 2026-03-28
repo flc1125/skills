@@ -1,6 +1,11 @@
 ---
 name: glab-cli
 description: GitLab CLI (`glab`) reference and workflow for repository, merge request, issue, CI/CD, release, and API operations across GitLab.com and self-managed or dedicated instances. Use when Codex needs to run or explain `glab` commands, usually by relying on the current `glab` context first, and only falling back to `git remote -v` or explicit host and repo arguments when the target platform or repository is unclear.
+metadata:
+  name: GLab CLI
+  description: Use and explain GitLab CLI workflows across GitLab.com and self-managed instances with context-aware defaults.
+  author: Flc゛
+  created: 2026-03-20 11:23:59
 ---
 
 # GLab CLI

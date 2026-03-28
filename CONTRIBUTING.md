@@ -39,6 +39,7 @@ Additional rules:
 - `metadata` values must be scalar strings.
 - `name` should default to the skill `name` transformed into title case display text.
 - `name` should remove hyphens and capitalize each word by default.
+- `name` should preserve well-known brand casing and common all-caps acronyms when applicable.
 - `description` should remain a single sentence.
 - `description` should stay under 150 characters.
 - `description` should not describe internal steps, call chains, or implementation details.

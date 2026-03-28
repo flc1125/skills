@@ -1,6 +1,11 @@
 ---
 name: otel-go-reviewer
 description: Review pull requests, diffs, patches, or design proposals for the open-telemetry/opentelemetry-go repository with a senior maintainer mindset. Use when changes in opentelemetry-go may affect OpenTelemetry specification compliance, repository contribution rules, changelog requirements, module versioning boundaries, API or telemetry compatibility, performance-sensitive paths, concurrency or lifecycle behavior, or test coverage.
+metadata:
+  name: OTel Go Reviewer
+  description: Review opentelemetry-go changes for specification compliance, compatibility, repository rules, and release risk.
+  author: Flc゛
+  created: 2026-03-25 22:54:07
 ---
 
 # OTel Go Reviewer
