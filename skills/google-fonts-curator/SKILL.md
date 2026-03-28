@@ -17,6 +17,7 @@ This skill is not a general web design skill. It does not own layout, color, spa
 ## Operating Mode
 
 - Use this skill when the user asks for Google Fonts recommendations, font pairing, typography taste, or a better font direction for a website.
+- Accept both English and Chinese aesthetic briefs. Translate vague language into concrete typographic intent before recommending fonts.
 - Keep the recommendation constrained to the Google Fonts ecosystem unless the user explicitly asks for non-Google alternatives.
 - Prioritize taste, restraint, and fit over popularity.
 - Recommend a small number of strong options. Curated judgment is better than exhaustive lists.
@@ -31,6 +32,7 @@ Read only the files you need:
 - Curated pairings and single-family systems: [references/pairings.md](references/pairings.md)
 - Common failure modes and cheap-looking choices: [references/anti-patterns.md](references/anti-patterns.md)
 - Page-type adjustments: [references/page-types.md](references/page-types.md)
+- Bilingual calibration examples: [references/example-prompts-and-outputs.md](references/example-prompts-and-outputs.md)
 
 ## Workflow
 

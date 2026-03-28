@@ -22,6 +22,12 @@ Use these as a curated starting set, not a menu to dump wholesale. Recommend onl
 - Why it works: Fraunces has personality without becoming fragile; Instrument Sans keeps the system current
 - Risk: too expressive for highly restrained B2B product work
 
+### `Literata + Manrope`
+
+- Best for: refined storytelling pages, thoughtful brands, text-led homepages that need gravity without stiffness
+- Why it works: `Literata` feels literary and poised, while `Manrope` keeps the functional layer from turning bookish
+- Risk: too quiet for brands that need sharp visual impact
+
 ## Modern and Refined
 
 ### `DM Sans + Instrument Sans`
@@ -41,6 +47,12 @@ Use these as a curated starting set, not a menu to dump wholesale. Recommend onl
 - Best for: graphic, modern, slightly experimental interfaces and portfolios
 - Why it works: headline texture with a more durable body reading experience
 - Risk: not luxurious; works better for graphic tension than softness
+
+### `Syne + Inter`
+
+- Best for: contemporary creative brands, sharper portfolio pages, more fashion-adjacent digital work
+- Why it works: `Syne` gives a more authored and stylized voice than standard sans choices, and `Inter` prevents the system from becoming self-conscious everywhere
+- Risk: too attention-seeking for understated premium work
 
 ## Quiet Luxury and Cultural
 
@@ -62,6 +74,12 @@ Use these as a curated starting set, not a menu to dump wholesale. Recommend onl
 - Why it works: Newsreader is expressive but still readable; Inter keeps it usable
 - Risk: can feel too soft if the user wants tension or edge
 
+### `Prata + Manrope`
+
+- Best for: elegant hero-led brand pages, premium hospitality, beauty, and selective luxury use
+- Why it works: `Prata` gives stately contrast without some of the overfamiliar template baggage of more common luxury serifs
+- Risk: still needs restraint; if overused, it can drift into stylized beauty-brand territory
+
 ## Single-Family Systems
 
 ### `Plus Jakarta Sans`
@@ -75,6 +93,12 @@ Use these as a curated starting set, not a menu to dump wholesale. Recommend onl
 - Best for: restrained modern brands, premium service sites, minimal marketing pages
 - Why it works: clean, contemporary, and slightly more polished than generic defaults
 - Risk: overuse can flatten the page if there is no other source of character
+
+### `Instrument Sans`
+
+- Best for: restrained design-forward interfaces, cleaner creative brands, minimal systems that want a current tone
+- Why it works: more curated and contemporary than many default sans choices without losing control
+- Risk: too low-drama when the brief really needs typographic presence
 
 ### `Source Serif 4`
 
