@@ -45,13 +45,16 @@ async function main() {
   const skills = await Promise.all(
     files.map(async (file) => {
       const fullPath = path.join(skillsDir, file);
+      const skillDir = path.dirname(fullPath);
       const fileContents = await readFile(fullPath, 'utf8');
       const { data, content } = matter(fileContents);
+      const skillFiles = await glob('**/*', { cwd: skillDir, nodir: true });
 
       return {
         name: data.name,
         description: data.description,
         metadata: normalizeMetadata(data.metadata),
+        fileCount: skillFiles.length,
         path: file,
         slug: toSlug(file),
         installName: data.name,

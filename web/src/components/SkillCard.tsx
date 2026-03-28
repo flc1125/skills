@@ -2,7 +2,7 @@
 
 import { SkillMetadata } from '@/lib/skills';
 import { motion } from 'framer-motion';
-import { CalendarDays, Terminal } from 'lucide-react';
+import { CalendarDays, Files, Terminal } from 'lucide-react';
 import { formatSkillPublishedAt } from '@/lib/utils';
 
 interface SkillCardProps {
@@ -14,6 +14,7 @@ export function SkillCard({ skill, onClick }: SkillCardProps) {
   const displayName = skill.metadata?.name ?? skill.name;
   const displayDescription = skill.metadata?.description ?? skill.description;
   const publishedAt = formatSkillPublishedAt(skill.metadata?.created);
+  const fileCountLabel = `${skill.fileCount} ${skill.fileCount === 1 ? 'file' : 'files'}`;
 
   return (
     <motion.div
@@ -46,10 +47,20 @@ export function SkillCard({ skill, onClick }: SkillCardProps) {
         {displayDescription}
       </p>
 
-      {publishedAt ? (
-        <div className="mt-6 flex items-center gap-2 border-t border-gray-100 pt-3 text-[12px] font-medium text-gray-400/90 dark:border-gray-800 dark:text-gray-500">
-          <CalendarDays size={12} className="flex-shrink-0" />
-          <span>{publishedAt}</span>
+      {(publishedAt || skill.fileCount > 0) ? (
+        <div className="mt-6 flex items-center gap-3 border-t border-gray-100 pt-3 text-[12px] font-medium text-gray-400/90 dark:border-gray-800 dark:text-gray-500">
+          {publishedAt ? (
+            <div className="flex items-center gap-1.5">
+              <CalendarDays size={12} className="flex-shrink-0" />
+              <span>{publishedAt}</span>
+            </div>
+          ) : null}
+          {skill.fileCount > 0 ? (
+            <div className="flex items-center gap-1.5">
+              <Files size={12} className="flex-shrink-0" />
+              <span>{fileCountLabel}</span>
+            </div>
+          ) : null}
         </div>
       ) : null}
     </motion.div>

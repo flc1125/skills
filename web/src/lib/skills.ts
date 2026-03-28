@@ -5,6 +5,7 @@ export interface SkillMetadata {
   metadata: SkillFrontmatterMetadata | null;
   name: string;
   description: string;
+  fileCount: number;
   path: string;
   slug: string;
   installName: string;
@@ -53,6 +54,7 @@ export async function getSkills(): Promise<SkillMetadata[]> {
     metadata: skill.metadata,
     name: skill.name,
     description: skill.description,
+    fileCount: skill.fileCount,
     path: skill.path,
     slug: skill.slug,
     installName: skill.installName,
