@@ -27,6 +27,7 @@ async function main() {
       return {
         name: data.name,
         description: data.description,
+        metadata: data.metadata ?? null,
         path: file,
         slug: toSlug(file),
         installName: data.name,
