@@ -64,11 +64,23 @@ export function formatSkillPublishedAt(value?: string | null, now = new Date()):
     return `${hours} hour${hours === 1 ? '' : 's'} ago`;
   }
 
+  if (isYesterday(date, now)) {
+    return 'Yesterday';
+  }
+
   if (days < 7) {
     return `${days} day${days === 1 ? '' : 's'} ago`;
   }
 
   return formatSkillDate(date);
+}
+
+function isYesterday(date: Date, now: Date): boolean {
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const yesterdayStart = new Date(todayStart);
+  yesterdayStart.setDate(todayStart.getDate() - 1);
+
+  return date >= yesterdayStart && date < todayStart;
 }
 
 function formatSkillDate(date: Date): string {

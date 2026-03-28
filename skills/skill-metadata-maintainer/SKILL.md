@@ -4,8 +4,8 @@ description: Initialize or update the metadata field in one specific skill's SKI
 metadata:
   name: Skill Metadata Maintainer
   description: Initialize or update the metadata object in one target skill's SKILL.md.
-  author: Flc
-  created: 2026-03-28T13:15:00Z
+  author: Flc゛
+  created: 2026-03-28T12:24:13Z
 ---
 
 # Skill Metadata Maintainer
