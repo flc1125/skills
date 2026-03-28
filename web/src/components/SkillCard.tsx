@@ -2,7 +2,7 @@
 
 import { SkillMetadata } from '@/lib/skills';
 import { motion } from 'framer-motion';
-import { CalendarDays, SquareTerminal } from 'lucide-react';
+import { CalendarDays, Terminal } from 'lucide-react';
 import { formatSkillPublishedAt } from '@/lib/utils';
 
 interface SkillCardProps {
@@ -38,7 +38,7 @@ export function SkillCard({ skill, onClick }: SkillCardProps) {
           </div>
         </div>
         <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border border-gray-200 bg-gray-50 text-gray-500 transition-colors group-hover:border-gray-300 group-hover:bg-gray-100 group-hover:text-gray-800 dark:border-gray-800 dark:bg-gray-950 dark:text-gray-400 dark:group-hover:border-gray-700 dark:group-hover:bg-gray-900 dark:group-hover:text-gray-200">
-          <SquareTerminal size={15} strokeWidth={1.75} />
+          <Terminal size={15} strokeWidth={1.75} />
         </div>
       </div>
       
