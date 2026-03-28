@@ -1,11 +1,6 @@
 .idea/
-node_modules/
-.next/
-out/
-build/
 .env*
 !.env.example
 !**/.env.example
 *.log
 .DS_Store
-tsconfig.tsbuildinfo
