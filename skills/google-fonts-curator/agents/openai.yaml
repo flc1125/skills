@@ -1,0 +1,4 @@
+interface:
+  display_name: "Google Fonts Curator"
+  short_description: "Recommend tasteful Google Fonts pairings for the web"
+  default_prompt: "Use $google-fonts-curator to choose high-taste Google Fonts and font pairings for a website based on brand tone, page type, and aesthetic direction."
