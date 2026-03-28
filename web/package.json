@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "generate:skills-data": "node scripts/generate-skills-data.mjs",
+    "predev": "npm run generate:skills-data",
+    "prebuild": "npm run generate:skills-data",
+    "prestart": "npm run generate:skills-data",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

@@ -1,7 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-import matter from 'gray-matter';
-import { glob } from 'glob';
 
 export interface SkillMetadata {
   name: string;
@@ -15,47 +13,44 @@ export interface Skill extends SkillMetadata {
   content: string;
 }
 
-const SKILLS_DIR = path.join(process.cwd(), '..', 'skills');
+interface SkillsDataset {
+  generatedAt: string;
+  skills: Skill[];
+}
+
+const DATASET_PATH = path.join(process.cwd(), 'data', 'skills.json');
+
+let cachedDataset: SkillsDataset | null = null;
+
+function loadSkillsDataset(): SkillsDataset {
+  if (cachedDataset) {
+    return cachedDataset;
+  }
+
+  if (!fs.existsSync(DATASET_PATH)) {
+    throw new Error(
+      `Missing generated skills dataset at ${DATASET_PATH}. Run "npm run generate:skills-data" from web/.`
+    );
+  }
+
+  const fileContents = fs.readFileSync(DATASET_PATH, 'utf8');
+  cachedDataset = JSON.parse(fileContents) as SkillsDataset;
+
+  return cachedDataset;
+}
 
 export async function getSkills(): Promise<SkillMetadata[]> {
-  const files = await glob('**/SKILL.md', { cwd: SKILLS_DIR });
-
-  const skills = files.map((file) => {
-    const fullPath = path.join(SKILLS_DIR, file);
-    const fileContents = fs.readFileSync(fullPath, 'utf8');
-    const { data } = matter(fileContents);
-
-    // Create a slug from the file path
-    const slug = path.dirname(file).replace(/[/\\]/g, '-');
-
-    return {
-      name: data.name,
-      description: data.description,
-      path: file,
-      slug,
-      installName: data.name,
-    };
-  });
-
-  return skills.sort((a, b) => (a.name > b.name ? 1 : -1));
+  return loadSkillsDataset().skills.map((skill) => ({
+    name: skill.name,
+    description: skill.description,
+    path: skill.path,
+    slug: skill.slug,
+    installName: skill.installName,
+  }));
 }
 
 export async function getSkillBySlug(slug: string): Promise<Skill | null> {
-  const skills = await getSkills();
-  const skillMeta = skills.find((s) => s.slug === slug);
+  const skill = loadSkillsDataset().skills.find((entry) => entry.slug === slug);
 
-  if (!skillMeta) return null;
-
-  const fullPath = path.join(SKILLS_DIR, skillMeta.path);
-  const fileContents = fs.readFileSync(fullPath, 'utf8');
-  const { data, content } = matter(fileContents);
-
-  return {
-    name: data.name,
-    description: data.description,
-    path: skillMeta.path,
-    slug: skillMeta.slug,
-    installName: skillMeta.installName,
-    content,
-  };
+  return skill ?? null;
 }

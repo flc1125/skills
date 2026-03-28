@@ -1,3 +1,4 @@
 .next/
+data/skills.json
 node_modules/
 tsconfig.tsbuildinfo
