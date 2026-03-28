@@ -1,6 +1,11 @@
 ---
 name: mac-keychain
 description: Use macOS Keychain to store, update, inspect, retrieve, and delete credentials with explicit confirmation for any plaintext secret access. Use when working on macOS and a user or another skill needs controlled access to local credentials such as API keys, tokens, passwords, or account secrets.
+metadata:
+  name: Mac Keychain
+  description: Use macOS Keychain to store, update, inspect, retrieve, and delete local credentials with explicit safety gates.
+  author: Flc゛
+  created: 2026-03-27 15:51:16
 ---
 
 # Mac Keychain
