@@ -4,8 +4,8 @@ description: Recommend high-taste Google Fonts for websites based on brand tone,
 metadata:
   name: Google Fonts Curator
   description: Curate tasteful Google Fonts pairings for the web with strong aesthetic judgment and practical restraint.
-  author: Flc゛
-  created: 2026-03-28T00:00:00Z
+  author: Flc
+  created: 2026-03-28T14:22:59Z
 ---
 
 # Google Fonts Curator
