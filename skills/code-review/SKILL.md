@@ -1,6 +1,11 @@
 ---
 name: code-review
 description: Request or perform a git-backed code review for a defined diff or SHA range using implementation context and requirements. Use when finishing a task, completing a major feature, preparing to merge, or when you need a fresh review before proceeding.
+metadata:
+  name: Code Review
+  description: Review a defined git-backed change set for bugs, regressions, missing requirements, and test gaps before merge.
+  author: Flc゛
+  created: 2026-03-14 22:54:38
 ---
 
 # Code Review

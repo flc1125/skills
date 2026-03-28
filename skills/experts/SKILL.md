@@ -1,6 +1,11 @@
 ---
 name: experts
 description: Assemble a panel of experts to assess a problem from multiple professional perspectives, surface agreement and disagreement, and deliver a chaired recommendation with clear tradeoffs. Use when the user wants multi-expert judgment, a second opinion, design critique, option comparison, or a recommendation backed by distinct expert viewpoints.
+metadata:
+  name: Experts
+  description: Assemble a focused panel of experts to assess a problem, surface tradeoffs, and deliver a chaired recommendation.
+  author: Flc゛
+  created: 2026-03-27 18:42:23
 ---
 
 # Experts

@@ -44,8 +44,8 @@ When generating or validating metadata, follow [CONTRIBUTING.md](../../CONTRIBUT
 
 Apply these rules:
 
-- `metadata.name`: human-readable display name for the target skill
-- `metadata.description`: purpose statement that describes what the skill is for, not how it works
+- `metadata.name`: human-readable display name for the target skill, derived from the skill name by default by removing hyphens and capitalizing each word
+- `metadata.description`: purpose statement that describes what the skill is for, not how it works, and should stay under 150 characters
 - `metadata.author`: initialize from the first Git author for the target `SKILL.md`
 - `metadata.created`: initialize from the first Git timestamp for the target `SKILL.md`, formatted as `YYYY-MM-DD HH:mm:ss`
 - `metadata.version`: optional; keep unset by default, and only set or update it when the user explicitly asks for versioning

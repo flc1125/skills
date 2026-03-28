@@ -1,6 +1,11 @@
 ---
 name: subagent-orchestrator
 description: Orchestrate subagent workflows for complex tasks that benefit from decomposition, role-based delegation, and parallel execution. Use when Codex should assemble a temporary team of subagents, choose roles from a reusable role library, create a controlled fallback role when no preset role fits, coordinate read-heavy work in parallel, or handle write-heavy work with ownership boundaries, staged execution, and an integrator-led merge path.
+metadata:
+  name: Subagent Orchestrator
+  description: Assemble and coordinate role-based subagent teams for complex tasks with explicit ownership and execution flow.
+  author: Flc゛
+  created: 2026-03-22 19:40:21
 ---
 
 # Subagent Orchestrator

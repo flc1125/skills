@@ -1,6 +1,11 @@
 ---
 name: async
 description: Launch and coordinate Codex subagents as deferred tasks. Use when the user wants to start bounded subagent work now, keep the main thread moving without waiting by default, then later join, collect, or redirect that work through a stable task reference.
+metadata:
+  name: Async
+  description: Launch and manage deferred Codex subagent tasks through stable task references and explicit completion handling.
+  author: Flc゛
+  created: 2026-03-25 21:24:22
 ---
 
 # Async

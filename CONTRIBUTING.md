@@ -26,7 +26,7 @@ Field requirements:
 
 | Key | Type | Requirement | Rule |
 |---|---|---|---|
-| `name` | string | MUST | Human-readable display name that clearly expresses the skill's topic or capability |
+| `name` | string | MUST | Human-readable display name derived from the skill name by default |
 | `description` | string | MUST | Purpose statement that describes what the skill does, not how it works internally |
 | `author` | string | MUST | Derived from the first recorded author of the skill |
 | `created` | string | MUST | Derived from the first recorded creation time of the skill, formatted as `YYYY-MM-DD HH:mm:ss` |
@@ -37,7 +37,10 @@ Additional rules:
 - `metadata` must appear inside the YAML frontmatter.
 - `metadata` keys must use lowercase English field names.
 - `metadata` values must be scalar strings.
+- `name` should default to the skill `name` transformed into title case display text.
+- `name` should remove hyphens and capitalize each word by default.
 - `description` should remain a single sentence.
+- `description` should stay under 150 characters.
 - `description` should not describe internal steps, call chains, or implementation details.
 - `created` must not include a timezone offset or ISO 8601 suffix.
 - If `version` is present, it should use `MAJOR.MINOR.PATCH` semantic versioning format.
