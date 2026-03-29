@@ -26,6 +26,7 @@ Keep the MR body simple, clear, and easy to scan. Prefer short sections, concret
 - Keep the body concise and reviewer-focused.
 - Prefer concrete changes over line-by-line diff summaries.
 - State only the testing that actually happened.
+- Do not include secrets, local environment details, or any other privacy-sensitive information in the MR body.
 - Add `Breaking Changes` only when the change is actually breaking.
 - Add `Notes` only for important reviewer context, limitations, or follow-up items.
 
