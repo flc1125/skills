@@ -4,8 +4,8 @@ description: Post prepared inline comments to exact lines in a GitLab merge requ
 metadata:
   name: GitLab MR Inline Comment
   description: Publish prepared comments as deduplicated line-level discussions on a GitLab merge request.
-  author: Flc゛
-  created: 2026-03-30T03:00:00Z
+  author: Flc
+  created: 2026-03-30T02:46:31Z
 ---
 
 # GitLab MR Inline Comment
