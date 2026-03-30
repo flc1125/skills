@@ -1,0 +1,4 @@
+interface:
+  display_name: "GitLab MR Inline Comment"
+  short_description: "Publish prepared inline comments onto exact GitLab MR lines"
+  default_prompt: "Use $gitlab-mr-inline-comment to take prepared comments with path, line, and body, resolve the GitLab merge request context, deduplicate existing discussions, and post exact line-level MR discussions."
