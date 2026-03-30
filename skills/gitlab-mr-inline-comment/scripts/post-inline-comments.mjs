@@ -12,6 +12,8 @@ function parseArgs(argv) {
   const args = {
     apiBase: '',
     token: '',
+    tokenFile: '',
+    tokenStdin: false,
     input: '',
   };
 
@@ -24,6 +26,12 @@ function parseArgs(argv) {
       case '--token':
         args.token = argv[++i] || '';
         break;
+      case '--token-file':
+        args.tokenFile = argv[++i] || '';
+        break;
+      case '--token-stdin':
+        args.tokenStdin = true;
+        break;
       case '--input':
         args.input = argv[++i] || '';
         break;
@@ -33,11 +41,44 @@ function parseArgs(argv) {
   }
 
   if (!args.apiBase) fail('Missing --api-base.');
-  if (!args.token) fail('Missing --token.');
   if (!args.input) fail('Missing --input.');
+
+  const tokenSources = [Boolean(args.token), Boolean(args.tokenFile), args.tokenStdin].filter(Boolean).length;
+  if (tokenSources === 0) {
+    fail('Missing token input. Use exactly one of --token, --token-file, or --token-stdin.');
+  }
+  if (tokenSources > 1) {
+    fail('Token input is ambiguous. Use exactly one of --token, --token-file, or --token-stdin.');
+  }
 
   args.apiBase = args.apiBase.replace(/\/+$/, '');
   return args;
+}
+
+async function readStdin() {
+  const chunks = [];
+  for await (const chunk of process.stdin) {
+    chunks.push(chunk);
+  }
+  return Buffer.concat(chunks).toString('utf8');
+}
+
+async function resolveToken(args) {
+  if (args.token) {
+    return args.token;
+  }
+  if (args.tokenFile) {
+    const token = await fs.readFile(args.tokenFile, 'utf8');
+    const trimmed = token.trim();
+    if (!trimmed) fail('Token file is empty.');
+    return trimmed;
+  }
+  if (args.tokenStdin) {
+    const token = (await readStdin()).trim();
+    if (!token) fail('No token was provided on stdin.');
+    return token;
+  }
+  fail('Token input is unresolved.');
 }
 
 function assertPayloadShape(payload, index) {
@@ -109,13 +150,14 @@ async function postPayload(apiBase, token, payload) {
 
 async function main() {
   const args = parseArgs(process.argv.slice(2));
+  const token = await resolveToken(args);
   const payloads = await readPayloads(args.input);
 
   let posted = 0;
   let failed = 0;
 
   for (const payload of payloads) {
-    const result = await postPayload(args.apiBase, args.token, payload);
+    const result = await postPayload(args.apiBase, token, payload);
     if (result.ok) {
       posted += 1;
       continue;

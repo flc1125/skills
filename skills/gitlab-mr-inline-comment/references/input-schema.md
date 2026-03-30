@@ -92,6 +92,24 @@ If the task has already resolved GitLab position data and only needs a narrow po
 
 This is the preferred input for the script because it keeps repository discovery, MR discovery, diff mapping, and dedupe outside the transport layer.
 
+## Script invocation note
+
+When invoking the posting script, prefer:
+
+- `--token-stdin` for ephemeral secret handling
+- `--token-file` when a file-based secret handoff is already in use
+
+Use `--token` only as a compatibility path in tightly controlled environments.
+
+Recommended example:
+
+```bash
+printf '%s' "$GITLAB_TOKEN" | node scripts/post-inline-comments.mjs \
+  --api-base https://gitlab.example.com/api/v4 \
+  --token-stdin \
+  --input payloads.json
+```
+
 ## Invalid input examples
 
 Reject or stop on:

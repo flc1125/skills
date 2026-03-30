@@ -33,7 +33,7 @@ Read these only as needed:
 - GitLab position model: [references/gitlab-position.md](references/gitlab-position.md)
 - Dedupe and fallback rules: [references/dedupe.md](references/dedupe.md)
 
-Use [scripts/post-inline-comments.mjs](scripts/post-inline-comments.mjs) only when the task is already reduced to validated GitLab discussion payloads. Treat the script as a narrow posting helper, not as the place where repository or merge request context is discovered.
+Use [scripts/post-inline-comments.mjs](scripts/post-inline-comments.mjs) only when the task is already reduced to validated GitLab discussion payloads. Treat the script as a narrow posting helper, not as the place where repository or merge request context is discovered. Prefer passing auth through stdin or a token file rather than exposing secrets directly on the command line.
 
 ## Workflow
 
