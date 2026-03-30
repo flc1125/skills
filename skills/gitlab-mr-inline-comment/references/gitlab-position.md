@@ -59,15 +59,16 @@ git diff --find-renames <merge_base> <head_sha>
 
 This matters for renamed files. A naive diff without rename detection can produce wrong comment anchors.
 
-## Preferred API transport
+## Posting boundary
 
-Prefer `glab api` when `glab` is installed and the current directory already maps to the target GitLab repository. This lets the script reuse:
+Keep repository discovery, merge request discovery, auth selection, dedupe, and diff mapping outside the posting helper. By the time a script is invoked, prefer having a final payload that already includes:
 
-- the authenticated GitLab host
-- the current repository identity
-- existing `glab` auth state
+- `project`
+- `mr_iid`
+- `body`
+- `position`
 
-Use direct HTTP only as a fallback path when `glab` is unavailable.
+This keeps the transport layer narrow and reduces hidden environment dependencies.
 
 ## Suggestion handling
 

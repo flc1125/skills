@@ -33,7 +33,7 @@ Read these only as needed:
 - GitLab position model: [references/gitlab-position.md](references/gitlab-position.md)
 - Dedupe and fallback rules: [references/dedupe.md](references/dedupe.md)
 
-Use [scripts/post-inline-comments.mjs](scripts/post-inline-comments.mjs) when the task is already reduced to validated GitLab discussion payloads or to comments with enough context for direct posting. The script prefers `glab` for repository context, auth context, and API calls, then falls back to direct HTTP only when `glab` is unavailable.
+Use [scripts/post-inline-comments.mjs](scripts/post-inline-comments.mjs) only when the task is already reduced to validated GitLab discussion payloads. Treat the script as a narrow posting helper, not as the place where repository or merge request context is discovered.
 
 ## Workflow
 
@@ -54,18 +54,6 @@ If the task is really asking for review, use a review-oriented workflow first an
 
 ### 2. Resolve GitLab MR context before writing
 
-Prefer existing GitLab CI context first.
-
-Look for:
-
-- `REVIEWDOG_GITLAB_API_TOKEN` or another explicitly provided GitLab API token
-- `GITLAB_API` or `CI_API_V4_URL`
-- `CI_PROJECT_PATH`
-- `CI_MERGE_REQUEST_IID`
-- `CI_COMMIT_SHA`
-
-If not in CI, infer context from the local repository and prefer `glab`.
-
 Before posting, identify:
 
 - project path
@@ -74,7 +62,7 @@ Before posting, identify:
 - target branch
 - usable GitLab API base URL
 
-If any of these are missing and cannot be derived safely, stop before write operations.
+If any of these are missing and cannot be derived safely, stop before write operations. Gather this context outside the posting script and pass only the final posting inputs into it.
 
 ### 3. Normalize comments
 
@@ -97,7 +85,7 @@ Keep comments explicit and ready to post. Do not add generic review framing.
 
 ### 4. Build diff-backed positions
 
-Use local git history to map comments onto the merge request diff.
+Use local git history and the available GitLab tooling to map comments onto the merge request diff.
 
 Prefer:
 
@@ -129,8 +117,6 @@ Prefer skipping a probable duplicate over posting the same body again on the sam
 
 Create GitLab merge request discussions with a `position` object.
 
-Prefer `glab api` for write operations when `glab` is available in the current repository context. Fall back to direct HTTP only when `glab` is unavailable or clearly unusable.
-
 Use `position_type: "text"` and populate:
 
 - `base_sha`
@@ -140,6 +126,8 @@ Use `position_type: "text"` and populate:
 - `new_line`
 - optional `old_path`
 - optional `old_line`
+
+If you use the script, pass ready-to-post payloads into it rather than asking the script to discover repository state on its own.
 
 If the user provided a suggestion, append it to the body only when the suggestion range is compatible with the anchored line.
 
@@ -156,7 +144,6 @@ If a comment could not be mapped to a valid diff line, say so explicitly instead
 
 ## Decision Rules
 
-- Prefer CI-derived MR context over manual prompts.
 - Do not post inline comments without a stable path and line.
 - Do not fabricate `old_line` or `old_path` if diff mapping does not support them.
 - Do not downgrade to a general MR note unless the user explicitly asks for that fallback.

@@ -68,6 +68,30 @@ Batch input should be a JSON array:
 ]
 ```
 
+## Posting payload shape
+
+If the task has already resolved GitLab position data and only needs a narrow posting helper, use payloads closer to the GitLab discussions API:
+
+```json
+[
+  {
+    "project": "group/project",
+    "mr_iid": 123,
+    "body": "This dereference panics when `user` is nil.",
+    "position": {
+      "position_type": "text",
+      "base_sha": "abc123",
+      "start_sha": "abc123",
+      "head_sha": "def456",
+      "new_path": "internal/user/service.go",
+      "new_line": 42
+    }
+  }
+]
+```
+
+This is the preferred input for the script because it keeps repository discovery, MR discovery, diff mapping, and dedupe outside the transport layer.
+
 ## Invalid input examples
 
 Reject or stop on:
