@@ -32,6 +32,7 @@ Read these references only when needed:
 
 - exact command patterns: [references/verified-commands.md](references/verified-commands.md)
 - payload shape and field semantics: [references/api-shape.md](references/api-shape.md)
+- current MR version and anchor resolution: [references/current-diff-resolution.md](references/current-diff-resolution.md)
 - common failure cases and stop conditions: [references/failure-modes.md](references/failure-modes.md)
 
 ## Required Inputs
@@ -92,6 +93,8 @@ If the current repository is already the target project, prefer repository-conte
 
 Before building the discussion payload, fetch the merge request state needed for inline anchors.
 
+Use [references/current-diff-resolution.md](references/current-diff-resolution.md) when exact field names or version-selection rules matter.
+
 Resolve:
 
 - `base_sha`
@@ -108,6 +111,8 @@ Confirm that:
 
 - `new_path` exists in the current MR diff
 - `new_line` is a valid commentable line on the new side of the diff
+
+Use [references/current-diff-resolution.md](references/current-diff-resolution.md) when deciding whether the target line is safely anchorable.
 
 For v1, support only `new_path` plus `new_line`.
 

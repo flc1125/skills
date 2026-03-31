@@ -9,6 +9,8 @@ Use this file when exact command patterns matter.
 
 The skill should reuse the user's current `glab` authentication whenever possible.
 
+For version-field extraction and anchor validation rules, also read [current-diff-resolution.md](current-diff-resolution.md).
+
 ## Authentication and context
 
 - `glab auth status`
