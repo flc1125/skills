@@ -115,9 +115,12 @@ GITLAB_HOST="$host" glab repo clone "$repo"
 ```bash
 glab mr create --fill --yes
 glab mr create -t "title" -d "description" -b main -s feature-branch
-glab mr view 123
 glab mr list
+glab mr view 123
+glab mr diff 123
 glab mr checkout 123
+glab mr note 123 -m "Looks good to me"
+glab mr update 123 --label needs-review --reviewer alice
 glab mr merge 123
 ```
 
@@ -128,6 +131,8 @@ glab issue list
 glab issue view 123
 glab issue create -t "title" -d "description"
 glab issue create -t "title" -l bug -a alice --web
+glab issue note 123 -m "Can you share repro steps?"
+glab issue update 123 --label triage --assignee alice
 ```
 
 #### CI/CD

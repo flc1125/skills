@@ -52,7 +52,10 @@ Docs:
 - `glab mr create`
 - `glab mr list`
 - `glab mr view <iid>`
+- `glab mr diff [<id> | <branch>]`
 - `glab mr checkout <iid>`
+- `glab mr note [<id> | <branch>]`
+- `glab mr update [<id> | <branch>]`
 - `glab mr merge <iid>`
 
 Checked `create` flags:
@@ -68,15 +71,46 @@ Checked `create` flags:
 - `-w, --web`
 - `-y, --yes`
 
-Doc page:
+Checked `diff` flags:
+
+- `--color`
+- `--raw`
+- `-R, --repo`
+
+Checked `note` flags:
+
+- `-m, --message`
+- `--unique`
+- `-R, --repo`
+
+Checked `update` flags:
+
+- `-t, --title`
+- `-d, --description`
+- `-l, --label`
+- `-u, --unlabel`
+- `-a, --assignee`
+- `--reviewer`
+- `--draft`
+- `-r, --ready`
+- `--target-branch`
+- `-R, --repo`
+- `-y, --yes`
+
+Doc pages:
 
 - `https://docs.gitlab.com/cli/mr/create/`
+- `https://docs.gitlab.com/cli/mr/diff/`
+- `https://docs.gitlab.com/cli/mr/note/`
+- `https://docs.gitlab.com/cli/mr/update/`
 
 ## Issue commands
 
 - `glab issue list`
 - `glab issue view <iid>`
 - `glab issue create`
+- `glab issue note <issue-id>`
+- `glab issue update <id>`
 
 Checked `create` flags:
 
@@ -89,10 +123,31 @@ Checked `create` flags:
 - `--web`
 - `-y, --yes`
 
+Checked `note` flags:
+
+- `-m, --message`
+- `-R, --repo`
+
+Checked `update` flags:
+
+- `-t, --title`
+- `-d, --description`
+- `-l, --label`
+- `-u, --unlabel`
+- `-a, --assignee`
+- `-m, --milestone`
+- `--due-date`
+- `-c, --confidential`
+- `-p, --public`
+- `-R, --repo`
+- `-w, --weight`
+
 Doc pages:
 
 - `https://docs.gitlab.com/cli/issue/`
 - `https://docs.gitlab.com/cli/issue/create/`
+- `https://docs.gitlab.com/cli/issue/note/`
+- `https://docs.gitlab.com/cli/issue/update/`
 
 ## CI/CD commands
 
