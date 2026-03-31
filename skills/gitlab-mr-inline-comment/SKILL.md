@@ -41,8 +41,12 @@ Collect or derive these values before posting:
 
 - `mr_iid`
 - `body`
+- `old_path`
 - `new_path`
-- `new_line`
+- one valid line anchor shape:
+  - added line: `new_line`
+  - removed line: `old_line`
+  - unchanged line: both `old_line` and `new_line`
 
 Resolve one repository context:
 
@@ -109,12 +113,13 @@ If the current MR version cannot be read reliably, stop and report that inline c
 
 Confirm that:
 
-- `new_path` exists in the current MR diff
-- `new_line` is a valid commentable line on the new side of the diff
+- `old_path` and `new_path` match the current MR diff position
+- the line anchor matches one valid text diff case:
+  - added line: `new_line` only
+  - removed line: `old_line` only
+  - unchanged line: both `old_line` and `new_line`
 
 Use [references/current-diff-resolution.md](references/current-diff-resolution.md) when deciding whether the target line is safely anchorable.
-
-For v1, support only `new_path` plus `new_line`.
 
 Do not guess the path or line.
 
@@ -133,7 +138,7 @@ Use the user's existing `glab` authentication and host context whenever possible
 On success, report:
 
 - target project and MR IID
-- anchored file path and line
+- anchored paths and line position
 - short confirmation that the inline comment was posted
 
 On failure, report the concrete blocking reason, such as:
@@ -154,8 +159,10 @@ When the task is to post the comment directly, summarize the execution result li
 ## Target
 - project: <group/subgroup/repo>
 - mr: !<iid>
-- file: <new_path>
-- line: <new_line>
+- old_path: <old_path>
+- new_path: <new_path>
+- old_line: <old_line or omitted>
+- new_line: <new_line or omitted>
 
 ## Result
 - status: <posted | failed>
@@ -168,7 +175,7 @@ When the task is to post the comment directly, summarize the execution result li
 - Use explicit `GITLAB_HOST` only when the target host differs from the current repository context or `glab` resolves incorrectly.
 - Treat inline comment posting as blocked when the current MR diff SHAs are unavailable or ambiguous.
 - Treat invalid anchors as hard failures.
-- Keep v1 limited to one inline comment on the new side of the diff.
+- Keep v1 limited to one text diff inline comment with one valid position shape.
 
 ## Red Flags
 
@@ -178,15 +185,14 @@ Stop and reassess if:
 - the authenticated host and intended host disagree
 - the merge request URL, project, or IID do not resolve to one clear target
 - `base_sha`, `start_sha`, and `head_sha` cannot be read from the current MR state
-- `new_path` is not present in the current diff
-- `new_line` is not a valid new-side diff line
+- `old_path` or `new_path` cannot be reconciled with the current diff position
+- the provided `old_line` / `new_line` combination does not form a valid text diff anchor
 - the only fallback would be posting a non-inline general comment
 
 ## Out Of Scope For V1
 
 Do not add these behaviors in v1:
 
-- old-side line comments
 - multi-line or range comments
 - batch comment publishing
 - draft review or pending review workflows

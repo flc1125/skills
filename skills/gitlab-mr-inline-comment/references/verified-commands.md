@@ -61,7 +61,7 @@ glab api --hostname gitlab.example.com projects/group%2Fproject/merge_requests/2
 
 ## Discussion posting
 
-Minimal posting pattern:
+Added-line pattern:
 
 ```bash
 glab api projects/group%2Fproject/merge_requests/2236/discussions \
@@ -84,3 +84,4 @@ glab api --hostname gitlab.example.com projects/group%2Fproject/merge_requests/2
 - Prefer current repository context before manually encoding project paths.
 - Use encoded project paths only when a raw API path requires them.
 - Read the current MR version immediately before posting when SHA freshness matters.
+- For text diff notes, build the payload with both `old_path` and `new_path`, then choose the line shape that matches the diff.

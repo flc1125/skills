@@ -9,8 +9,8 @@ Treat these as blocking conditions:
 - `glab` is not authenticated for the target GitLab host
 - the target project or MR IID is wrong
 - the current MR version SHAs cannot be read reliably
-- `new_path` is not present in the current MR diff
-- `new_line` is not a valid commentable line on the new side
+- `old_path` and `new_path` do not match one current diff position
+- the provided `old_line` / `new_line` combination does not form a valid commentable text diff anchor
 - the GitLab API rejects the payload as invalid
 
 ## Do Not Downgrade
@@ -46,20 +46,20 @@ Symptoms:
 
 Action:
 
-- inspect the current MR diff path exactly as GitLab reports it
-- for v1, stop if the path cannot be expressed as `new_path`
+- inspect the current MR diff paths exactly as GitLab reports them
+- stop if `old_path` and `new_path` cannot be mapped to one diff position
 
 ### Line mismatch
 
 Symptoms:
 
 - the line number exists in the file but is not commentable in the diff
-- the path is correct but the API still rejects `new_line`
+- the path pair is correct but the API still rejects the requested `old_line` / `new_line` shape
 
 Action:
 
 - verify the line against the current MR diff, not just the repository file
-- for v1, stop if the target is not a new-side commentable line
+- stop if the target is not a valid added-line, removed-line, or unchanged-line diff anchor
 
 ### Host or repo mismatch
 
@@ -80,5 +80,5 @@ When posting fails, report the concrete blocker in one sentence first.
 Good examples:
 
 - `Failed: current MR diff SHAs could not be resolved for !2236.`
-- `Failed: internal/user/service.go is not present in the current MR diff.`
-- `Failed: line 42 is not commentable on the new side of the current diff.`
+- `Failed: old_path and new_path do not match one current diff position.`
+- `Failed: the requested old_line/new_line shape is not commentable in the current diff.`
