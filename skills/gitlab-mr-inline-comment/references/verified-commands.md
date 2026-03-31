@@ -2,7 +2,7 @@
 
 Checked on 2026-03-31 against:
 
-- the MVP design in `.docs/gitlab-mr-inline-comment-mvp.md`
+- local `glab --help` usage patterns
 - existing repository skill conventions
 
 Use this file when exact command patterns matter.
