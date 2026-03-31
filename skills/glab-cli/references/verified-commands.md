@@ -1,9 +1,9 @@
 # Verified `glab` Commands
 
-Checked on 2026-03-20 against:
+Checked on 2026-03-31 against:
 
 - GitLab Docs pages under `https://docs.gitlab.com/cli/`
-- local `glab 1.89.0` `--help` output
+- local `glab 1.90.0` `--help` output
 
 Use this file when you need exact command names or flag spelling.
 
@@ -25,8 +25,8 @@ Confirmed behavior:
 
 Docs:
 
-- `https://docs.gitlab.com/editor_extensions/gitlab_cli/`
-- `https://docs.gitlab.com/cli/`
+- `https://docs.gitlab.com/cli/auth/login/`
+- `https://docs.gitlab.com/cli/auth/status/`
 
 ## Repository commands
 
@@ -41,6 +41,11 @@ glab repo view group/namespace/repo
 glab repo clone gitlab-org/cli
 GITLAB_HOST=salsa.debian.org glab repo clone myrepo
 ```
+
+Docs:
+
+- `https://docs.gitlab.com/cli/repo/view/`
+- `https://docs.gitlab.com/cli/repo/clone/`
 
 ## Merge request commands
 
@@ -98,6 +103,11 @@ Doc pages:
 - `glab ci trace <job-id|job-name>`
 - `glab ci view [branch/tag]`
 
+Confirmed behavior:
+
+- `glab ci get` and `glab ci view` both exist in `glab 1.90.0`; neither appears deprecated in current help or docs.
+- Keep `glab ci view` in the quick command set for interactive inspection, and keep `glab ci get` as the lower-level JSON-oriented variant.
+
 Doc page:
 
 - `https://docs.gitlab.com/cli/ci/`
@@ -131,6 +141,7 @@ Checked flags:
 - `-X, --method`
 - `-F, --field`
 - `-f, --raw-field`
+- `--form`
 - `-H, --header`
 - `--paginate`
 - `--input`
