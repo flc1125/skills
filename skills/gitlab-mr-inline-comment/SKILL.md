@@ -4,8 +4,8 @@ description: Publish a single inline comment on a GitLab merge request by anchor
 metadata:
   name: GitLab MR Inline Comment
   description: Post a single anchored GitLab MR inline comment with host-aware `glab` usage.
-  author: Flc゛
-  created: 2026-03-31T00:00:00Z
+  author: Flc
+  created: 2026-03-30T02:46:31Z
 ---
 
 # GitLab MR Inline Comment
