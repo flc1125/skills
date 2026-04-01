@@ -1,0 +1,4 @@
+interface:
+  display_name: "Programmer Motivator"
+  short_description: "Grounded support for frustrated programmers"
+  default_prompt: "Use $programmer-motivator to give calm, technically grounded encouragement while I work through a programming problem."
