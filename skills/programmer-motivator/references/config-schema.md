@@ -170,6 +170,62 @@ Example:
 You seem to prefer direct, low-hype support. Do you want me to remember that?
 ```
 
+## Minimal Runtime Contract
+
+Use these rules to keep behavior consistent across implementations.
+
+### Read Order
+
+Read state in this order:
+
+1. `config.json`
+2. `persona.json`
+3. `owner.json`
+4. `memory.json`
+
+Apply defaults first, then overlay file-backed state.
+
+### Priority Rules
+
+Use this precedence order when values overlap:
+
+1. explicit user request in the current turn
+2. persisted owner preference or boundary
+3. persisted persona setting
+4. default skill behavior
+
+Current-turn explicit requests should win over stored preferences for that response.
+
+### Memory Update Rules
+
+- treat `id` as the stable identity when present
+- otherwise treat the pair `kind + key` as the deduplication key
+- if a new explicit memory matches an existing `kind + key`, update the existing entry instead of appending a duplicate
+- if the user says to forget a memory, remove the matching entry entirely
+- if the user asks to change a remembered preference, update the existing entry and refresh `updated_at`
+
+### Retention Boundaries
+
+- `recent_win` should stay short-lived and practical; replace or prune older entries when they stop being useful
+- `current_focus` should describe the current longer-running task, not become a session transcript
+- do not keep multiple stale `current_focus` entries for unrelated tasks
+
+### Bad Data Fallback
+
+- ignore unknown top-level files
+- ignore unknown memory kinds instead of crashing
+- skip malformed memory entries
+- fall back to defaults when optional fields are missing
+- trigger first-run setup when `config.json` is missing
+
+### Suggested Memory Default
+
+If `allow_suggestion_memory` is enabled:
+
+- suggest first
+- save only after user confirmation
+- do not silently persist inferred preferences
+
 ## Editing Semantics
 
 The user should always be able to:

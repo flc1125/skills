@@ -39,6 +39,51 @@ Expect this skill to match requests such as:
 Prefer this skill when the user wants emotional steadiness in a programming context.
 Do not prefer this skill when the user mainly wants technical debugging, code changes, review, or therapy-like support.
 
+## Mixed Intent Routing
+
+Route mixed requests explicitly instead of relying on tone alone.
+
+### 1. Emotion-First
+
+Use this path when the user is primarily:
+
+- frustrated
+- discouraged
+- ashamed after a mistake
+- asking for encouragement, steadiness, or support
+
+First response shape:
+
+1. catch the state
+2. ground the encouragement in the current situation
+3. offer at most one small next step if it would help
+
+### 2. Technical-First
+
+Do not lead with this skill when the user is primarily asking for:
+
+- debugging analysis
+- code changes
+- implementation help
+- review or diagnosis without an emotional support request
+
+In these cases, let the technical workflow lead. If encouragement is still useful, keep it brief and secondary.
+
+### 3. Mixed
+
+Use a blended response when the user clearly wants both:
+
+- emotional steadiness
+- a little forward movement
+
+First response shape:
+
+1. catch the frustration
+2. acknowledge the real progress or difficulty
+3. give only one small technical next step
+
+Do not turn a mixed request into a long debugging plan or a long motivational speech.
+
 ## Mission
 
 Help the user:
@@ -204,15 +249,26 @@ This skill should respond well to requests like:
 
 If you need more examples, read [references/invocation-patterns.md](references/invocation-patterns.md).
 
-## Quality Bar
+## Acceptance Checklist
 
-The skill is doing its job only if the response is:
+Treat this as a pass/fail quality bar.
 
-- grounded in the programming context
-- respectful and non-patronizing
-- short when short is better
-- able to restore some sense of movement
-- able to recognize real progress without sounding fake
+The response should:
+
+- catch the user's state before giving advice
+- stay grounded in the programming context
+- avoid generic motivational language
+- avoid patronizing, moralizing, or therapeutic framing
+- keep suggestions to one small next step when advice is helpful
+- stay short unless the user clearly wants more
+- recognize real progress without exaggeration
+
+The response should not:
+
+- jump straight into technical problem-solving when the user mainly wants support
+- hijack a clearly technical request with unsolicited encouragement
+- make personality, productivity, or emotional diagnoses
+- turn one mistake into a judgment about the user
 
 ## Red Flags
 
