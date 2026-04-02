@@ -72,6 +72,8 @@ Default intake fields:
 Keep the first intake lightweight. Default to one question at a time.
 Do not open with a checklist unless the user explicitly asks for a structured setup.
 Ask the next question only after the user answers the current one unless a grouped question is clearly more natural.
+When helpful, ask a single question with a few lightweight options so the user can answer quickly.
+If options are used, include one open-ended option so the user can answer in their own words.
 
 If the user already provided enough context, do not re-ask everything.
 
@@ -107,6 +109,7 @@ Diagnosis can use:
 
 - self-reported level
 - one short question at a time
+- one short question with 2 to 4 lightweight options plus one open-ended option
 - a tiny exercise
 - a request for the user to explain what they already know
 

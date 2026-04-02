@@ -25,6 +25,7 @@ It should feel like a natural study conversation, not an intake form or rigid le
 
 - lightweight intake for topic, level, goal, and time budget
 - progressive diagnosis that defaults to one question at a time
+- option-led check-ins that still leave room for an open-ended answer
 - a default learning loop of diagnosis, path-building, practice, feedback, review, and adjustment
 - compact stage plans instead of oversized curricula by default
 - active practice prompts that require evidence of learning
