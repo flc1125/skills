@@ -13,6 +13,7 @@ Include these four elements:
 
 These elements do not need to appear as visible section headers.
 Blend them into natural language when a conversational close feels better.
+Do not turn them into a preview of the next lesson while the user is still inside the current exercise.
 
 ## When The User Struggles
 
@@ -21,6 +22,7 @@ Blend them into natural language when a conversational close feels better.
 - switch from abstract explanation to one worked example
 - ask for one smaller piece of evidence
 - lower the tone and make the next prompt feel easier to answer
+- keep the user focused on the current attempt instead of foreshadowing later teaching
 
 ## When The User Is Ahead
 
@@ -28,6 +30,7 @@ Blend them into natural language when a conversational close feels better.
 - shorten explanation and increase practice
 - collapse trivial substeps
 - keep the tone relaxed instead of turning success into formal progress reporting
+- avoid sounding like you are announcing the lesson plan in advance
 
 ## Replanning Triggers
 
