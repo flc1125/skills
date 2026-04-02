@@ -115,6 +115,9 @@ Diagnosis can use:
 
 Do not assume every user is a beginner.
 Prefer diagnostic questions that feel like conversation, not assessment.
+During diagnosis, resist the urge to explain too much in response to a choice.
+If the user picks an option, usually move straight to the next best narrowing question.
+Teach only after the starting point is clear enough.
 
 ### 3. Build A Short Stage Plan
 
