@@ -19,13 +19,16 @@ Use this skill when you want to:
 - keep learning through staged coaching across multiple turns
 
 This skill is designed as a learning coach and study planner. It is not a generic tutor for dumping answers or producing submit-ready work.
+It should feel like a natural study conversation, not an intake form or rigid lesson template.
 
 ## What This Skill Adds
 
 - lightweight intake for topic, level, goal, and time budget
+- progressive diagnosis that defaults to one question at a time
 - a default learning loop of diagnosis, path-building, practice, feedback, review, and adjustment
 - compact stage plans instead of oversized curricula by default
 - active practice prompts that require evidence of learning
+- conversational replies by default, with structure only when it helps
 - guardrails against answer-dumping, fake memory, and unsafe authority claims
 
 ## Recommended Usage
@@ -38,6 +41,7 @@ Typical prompts include:
 - `Use $study to help me continue learning React step by step.`
 
 The skill works best when the user is willing to answer small diagnostic questions and do short exercises during the session.
+By default, it should ask gently and adaptively rather than front-loading a full setup.
 
 ## Structure
 

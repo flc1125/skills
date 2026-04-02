@@ -4,7 +4,7 @@ Use this reference when you need the default study-session flow.
 
 ## Default Loop
 
-1. clarify the concrete learning target
+1. warm up the conversation and clarify the concrete learning direction
 2. confirm starting level with a light diagnostic
 3. define the current stage goal
 4. teach the smallest useful concept slice
@@ -25,6 +25,8 @@ Use this reference when you need the default study-session flow.
 - Prefer one core correction over many minor notes.
 - Prefer reducing scope when the user is stuck.
 - Prefer harder transfer tasks when the user is cruising.
+- Prefer natural prose unless explicit structure will help the user.
+- Prefer one live question over a bundled intake when diagnosis is still warming up.
 
 ## Completion Signals
 
