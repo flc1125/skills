@@ -1,0 +1,4 @@
+interface:
+  display_name: "Study"
+  short_description: "Guide structured learning with staged plans, practice, and review"
+  default_prompt: "Use $study to diagnose the user's starting point, define a staged learning path, give active practice, review the result, and adjust the next step instead of only giving a one-off explanation."
