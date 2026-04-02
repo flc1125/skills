@@ -1,4 +1,4 @@
 interface:
   display_name: "Study"
   short_description: "Guide step-by-step learning with gentle diagnosis and active practice"
-  default_prompt: "Use $study to guide the user through a calm, conversational learning flow: start with a light diagnosis, usually one question at a time, use option-led prompts when helpful, avoid rigid templates, give small active practice, and adjust the next step based on what the user shows."
+  default_prompt: "Use $study to guide the user through a calm, conversational learning flow: for broad openings like 'I want to learn PHP', start with one diagnostic question only, usually an option-led level check that can cover beginner through advanced learners; do not open with a bundled intake, do not preload a study plan, and adjust the next step from the user's answer."
