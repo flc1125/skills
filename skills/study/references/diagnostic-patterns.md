@@ -17,6 +17,8 @@ Ask one question at a time unless the user explicitly wants a fast setup.
 Start with the least threatening question that will move the session forward.
 When useful, make that one question easier to answer by offering a few options.
 If you offer options, always include one open-ended option such as "other" or "something else" so the user can answer freely.
+When level matters, make sure the options cover more than beginner states.
+Do not compress the user into "brand new" versus "kind of know it" if advanced or near-fluent states would change the next step.
 
 ## Lightweight Diagnosis Options
 
@@ -43,6 +45,20 @@ Choose one at a time:
 - "What would help most first? A. Big picture B. One concrete example C. Practice question D. Something else"
 - "What feels most stuck? A. Terms and concepts B. How to use it C. Remembering steps D. Something else"
 
+## Coverage Rules
+
+- When asking about level, cover the useful range from beginner to advanced whenever that distinction changes the next move.
+- For broad skills such as languages, coding, or interview prep, include higher-end states like "can use it but still miss nuance" or "mostly comfortable, want refinement" when relevant.
+- For stronger users, shift diagnosis from "do you know the basics" to "where does performance break down" such as speed, nuance, consistency, transfer, or real-world pressure.
+- Do not keep asking beginner-coded questions once the user has signaled they are intermediate or advanced.
+
+## Formatting Rules
+
+- Keep each diagnostic turn visually simple: one question, then the options.
+- Usually do not put a mini-summary before the next question.
+- If a transition is needed, keep it to one short line and leave a blank line before the next question.
+- Make the next question visually stand on its own so it does not read like part of the previous answer.
+
 ## Tone Guidance
 
 - Make the question feel like a continuation of the conversation, not an assessment prompt.
@@ -54,6 +70,7 @@ Choose one at a time:
 - When the user chooses an option, do not launch into a long explanation right away.
 - Usually skip acknowledgement and go straight to the next narrowing question.
 - Keep diagnosis as diagnosis until you have enough signal to start teaching.
+- Keep the wording broad enough that stronger users can still see themselves in the choices.
 
 ## Avoid
 
@@ -62,6 +79,8 @@ Choose one at a time:
 - option lists that are so long they feel like a survey
 - adding filler acknowledgements between diagnostic questions
 - turning the user's choice into an immediate mini-lesson before the diagnosis is complete
+- writing level options that only describe beginner states when the skill also serves intermediate or advanced learners
+- visually blending the next diagnostic question into the previous turn's wrap-up
 - fake precision about mastery from too little evidence
 - assuming beginner status without checking
 - asking for details that do not change the next step

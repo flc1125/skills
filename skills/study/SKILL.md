@@ -96,6 +96,7 @@ Run a light diagnosis before producing a full study path.
 Do not assume every user is a beginner.
 Teach only after the starting point is clear enough.
 For diagnosis patterns, option-led questions, and follow-up behavior, see [references/diagnostic-patterns.md](references/diagnostic-patterns.md).
+Make sure diagnostic options cover the user's likely range, including stronger learners when relevant.
 
 ### 3. Build A Short Stage Plan
 
@@ -159,6 +160,7 @@ Prefer:
 - brief transitions that explain why you are asking something
 - simple language over instructional scaffolding
 - structures only when the user asks for a plan, summary, checklist, or explicit roadmap
+- clear visual separation between one diagnostic question and the next
 
 Avoid:
 
@@ -169,6 +171,7 @@ Avoid:
 - explaining the interaction strategy instead of simply using it
 - meta phrases like "we do not need to over-plan this yet" or other lines that call attention to the flow itself
 - previewing the next teaching step while the user is still working on the current exercise
+- making the next diagnostic question look like part of the previous wrap-up
 
 ## Boundaries
 
