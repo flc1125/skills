@@ -5,7 +5,7 @@ metadata:
   name: Study
   description: Guide users through structured learning with staged plans, practice, and review loops.
   author: Flc
-  created: 2026-04-02T13:14:14Z
+  created: 2026-04-02T13:20:59Z
 ---
 
 # Study
