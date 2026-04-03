@@ -2,7 +2,7 @@
 
 Use this file when the `otel-changelog-pr-verifier` skill needs concrete commands, decision rules, or response formatting.
 
-The default repository example is `open-telemetry/opentelemetry-go`, but the same workflow applies to similar OpenTelemetry Go repositories. When the local checkout is ambiguous, make the repository explicit with `-R <owner/repo>`.
+The default repository example is `open-telemetry/opentelemetry-go`, but the same workflow applies to similar OpenTelemetry Go repositories once the task is anchored to a concrete repository and PR. Prefer the current repository by default. Use `-R <owner/repo>` only when the local checkout is ambiguous or not yet in the target repository.
 
 ## Command Set
 
@@ -10,16 +10,21 @@ The default repository example is `open-telemetry/opentelemetry-go`, but the sam
 
 ```bash
 gh pr checkout <pr-number>
-gh pr checkout <pr-number> -R <owner/repo>
 git status --short --branch
-git remote -v
 gh pr view <pr-number> --json baseRefName
-gh pr view <pr-number> -R <owner/repo> --json baseRefName
 git diff --stat origin/<base-branch>...HEAD -- CHANGELOG.md
 git diff origin/<base-branch>...HEAD -- CHANGELOG.md
 ```
 
 Prefer auto-detecting the base branch from PR metadata instead of assuming `main`.
+
+Fallback when the repository context is not already established:
+
+```bash
+gh pr checkout <pr-number> -R <owner/repo>
+git remote -v
+gh pr view <pr-number> -R <owner/repo> --json baseRefName
+```
 
 ### Release section extraction
 
@@ -47,7 +52,6 @@ Single PR:
 
 ```bash
 gh pr view <number> --json number,title,url,state,mergedAt
-gh pr view <number> -R <owner/repo> --json number,title,url,state,mergedAt
 ```
 
 Batch:
@@ -55,6 +59,16 @@ Batch:
 ```bash
 for n in <numbers>; do
   gh pr view "$n" --json number,title,url,state,mergedAt
+done
+```
+
+Fallback when the repository context is not already established:
+
+```bash
+gh pr view <number> -R <owner/repo> --json number,title,url,state,mergedAt
+
+for n in <numbers>; do
+  gh pr view "$n" -R <owner/repo> --json number,title,url,state,mergedAt
 done
 ```
 

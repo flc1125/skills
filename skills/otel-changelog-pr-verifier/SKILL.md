@@ -23,16 +23,11 @@ Prioritize:
 
 Do not flood the user with entries that are already correct.
 
-## Scope
+## Execution Assumption
 
-Use this skill when the user asks to:
+Assume the user has provided a concrete target PR, usually as a PR number or PR URL in the current repository.
 
-- check whether changelog PR numbers are correct
-- verify whether a release PR contains correct PR links in `CHANGELOG.md`
-- inspect one release section such as `## [1.x.y]`
-- return only the problematic changelog items
-
-The default example repository is `open-telemetry/opentelemetry-go`, but the workflow also applies to similar repositories such as `open-telemetry/opentelemetry-go-contrib`.
+The default example repository is `open-telemetry/opentelemetry-go`, but the same workflow applies to similar OpenTelemetry Go repositories when the task is already anchored to a specific repository and PR.
 
 ## Workflow
 
@@ -46,7 +41,7 @@ git status --short --branch
 gh pr view <pr-number> --json baseRefName
 ```
 
-If the active checkout is not already the target repository, use an explicit repo selector:
+If the local checkout is not already anchored to the target repository, use an explicit repo selector:
 
 ```bash
 gh pr checkout <pr-number> -R <owner/repo>
@@ -94,7 +89,7 @@ Prefer:
 gh pr view <number> --json number,title,url,state,mergedAt
 ```
 
-If needed, make the repository explicit:
+If the current repository context is not already clear, make the repository explicit:
 
 ```bash
 gh pr view <number> -R <owner/repo> --json number,title,url,state,mergedAt
