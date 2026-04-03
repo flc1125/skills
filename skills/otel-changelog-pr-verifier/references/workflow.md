@@ -99,7 +99,7 @@ Do not flag these by themselves:
 ### No issues
 
 ```markdown
-未发现错误项。
+No incorrect entries found.
 ```
 
 ### Issues found

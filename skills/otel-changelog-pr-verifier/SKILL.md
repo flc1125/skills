@@ -120,7 +120,7 @@ When deciding whether wording is "close enough", use the matching heuristics in 
 Default output:
 
 ```markdown
-未发现错误项。
+No incorrect entries found.
 ```
 
 If mismatches exist, return a compact list:
