@@ -1,0 +1,4 @@
+interface:
+  display_name: "OTel Changelog PR Verifier"
+  short_description: "Verify OpenTelemetry Go CHANGELOG entries against referenced GitHub PRs"
+  default_prompt: "Use $otel-changelog-pr-verifier to check a release PR in an OpenTelemetry Go repository such as open-telemetry/opentelemetry-go, extract the target CHANGELOG release section, verify each referenced `(#NNNN)` against the real GitHub PR metadata, and return only mismatched changelog entries."
