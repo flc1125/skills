@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import * as Icons from "lucide-react";
+import Script from 'next/script';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import "./globals.css";
+
+const GA_MEASUREMENT_ID = 'G-GYPECK2498';
 
 export const metadata: Metadata = {
   title: "Flc's Skills",
@@ -36,6 +39,20 @@ export default function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_MEASUREMENT_ID}');
+          `}
+        </Script>
+      </head>
       <body className="antialiased">
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <header className="border-b border-gray-100 dark:border-gray-800 bg-white/80 dark:bg-black/80 backdrop-blur-md sticky top-0 z-40">
