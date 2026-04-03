@@ -16,3 +16,11 @@ export function trackEvent(eventName: string, params: GtagParams = {}) {
 
   window.gtag('event', eventName, params);
 }
+
+export function trackPageView(path: string) {
+  trackEvent('page_view', {
+    page_path: path,
+    page_location: typeof window === 'undefined' ? path : window.location.href,
+    page_title: typeof document === 'undefined' ? undefined : document.title,
+  });
+}

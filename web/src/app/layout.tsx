@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
-import * as Icons from "lucide-react";
+import { Suspense } from 'react';
 import Script from 'next/script';
+import { GaPageViewTracker } from '@/components/GaPageViewTracker';
+import { GithubNavLink } from '@/components/GithubNavLink';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import "./globals.css";
 
@@ -49,12 +51,16 @@ export default function RootLayout({
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', '${GA_MEASUREMENT_ID}');
+            window.gtag = gtag;
+            gtag('config', '${GA_MEASUREMENT_ID}', { send_page_view: false });
           `}
         </Script>
       </head>
       <body className="antialiased">
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <Suspense fallback={null}>
+          <GaPageViewTracker />
+        </Suspense>
         <header className="border-b border-gray-100 dark:border-gray-800 bg-white/80 dark:bg-black/80 backdrop-blur-md sticky top-0 z-40">
           <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -70,16 +76,7 @@ export default function RootLayout({
                   aria-hidden="true"
                   className="h-4 w-px bg-gray-200 dark:bg-gray-700"
                 />
-                <a 
-                  href="https://github.com/flc1125/skills" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  aria-label="View project on GitHub"
-                  className="inline-flex h-9 items-center gap-2 rounded-full px-3 text-sm text-gray-600 transition-colors hover:bg-white hover:text-black dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
-                >
-                  <Icons.Github size={15} />
-                  <span className="hidden sm:inline">Github</span>
-                </a>
+                <GithubNavLink />
               </div>
             </nav>
           </div>
