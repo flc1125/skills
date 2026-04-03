@@ -2,10 +2,11 @@
 
 import { Skill } from '@/lib/skills';
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useState, useEffect } from 'react';
+import { Fragment, useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { X, Terminal, Copy, Check, ExternalLink, CalendarDays, Files } from 'lucide-react';
 import { formatSkillPublishedAt } from '@/lib/utils';
+import { trackEvent } from '@/lib/gtag';
 
 interface SkillModalProps {
   skill: Skill | null;
@@ -61,6 +62,7 @@ function resolveSkillContentLink(skill: Skill, href?: string) {
 
 export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillModalProps) {
   const [copied, setCopied] = useState(false);
+  const trackedViewSlug = useRef<string | null>(null);
   const displayName = skill?.metadata?.name ?? skill?.name ?? 'Loading skill';
   const publishedAt = formatSkillPublishedAt(skill?.metadata?.created);
   const fileCountLabel = skill ? `${skill.fileCount} ${skill.fileCount === 1 ? 'file' : 'files'}` : null;
@@ -71,6 +73,24 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
       return () => clearTimeout(timeout);
     }
   }, [copied]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      trackedViewSlug.current = null;
+      return;
+    }
+
+    if (!skill || trackedViewSlug.current === skill.slug) {
+      return;
+    }
+
+    trackEvent('skill_detail_view', {
+      skill_slug: skill.slug,
+      skill_name: displayName,
+      install_name: skill.installName,
+    });
+    trackedViewSlug.current = skill.slug;
+  }, [displayName, isOpen, skill]);
 
   if (!isOpen) return null;
 
@@ -84,6 +104,13 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
   const copyToClipboard = () => {
     if (!command) return;
     navigator.clipboard.writeText(command);
+    if (skill) {
+      trackEvent('skill_install_copy', {
+        skill_slug: skill.slug,
+        skill_name: displayName,
+        install_name: skill.installName,
+      });
+    }
     setCopied(true);
   };
 
@@ -144,6 +171,13 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
                             href={sourceUrl}
                             target="_blank"
                             rel="noopener noreferrer"
+                            onClick={() => {
+                              trackEvent('skill_source_click', {
+                                skill_slug: skill.slug,
+                                skill_name: displayName,
+                                target: 'github_skill_source',
+                              });
+                            }}
                             className="inline-flex items-center gap-1.5 text-gray-400 transition-colors hover:text-black dark:text-gray-500 dark:hover:text-white"
                             title="View source file on GitHub"
                           >

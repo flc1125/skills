@@ -1,30 +1,78 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import { SkillMetadata } from '@/lib/skills';
 import { motion } from 'framer-motion';
 import { CalendarDays, Files, Terminal } from 'lucide-react';
 import { formatSkillPublishedAt } from '@/lib/utils';
+import { trackEvent } from '@/lib/gtag';
 
 interface SkillCardProps {
   skill: SkillMetadata;
+  position: number;
   onClick: (skill: SkillMetadata) => void;
 }
 
-export function SkillCard({ skill, onClick }: SkillCardProps) {
+export function SkillCard({ skill, position, onClick }: SkillCardProps) {
+  const cardRef = useRef<HTMLDivElement | null>(null);
+  const hasTrackedImpression = useRef(false);
   const displayName = skill.metadata?.name ?? skill.name;
   const displayDescription = skill.metadata?.description ?? skill.description;
   const publishedAt = formatSkillPublishedAt(skill.metadata?.created);
   const fileCountLabel = `${skill.fileCount} ${skill.fileCount === 1 ? 'file' : 'files'}`;
 
+  useEffect(() => {
+    const element = cardRef.current;
+
+    if (!element || hasTrackedImpression.current) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting || hasTrackedImpression.current) {
+            return;
+          }
+
+          hasTrackedImpression.current = true;
+          trackEvent('skill_list_impression', {
+            skill_slug: skill.slug,
+            skill_name: displayName,
+            position,
+            list_type: 'marketplace_grid',
+          });
+          observer.disconnect();
+        });
+      },
+      { threshold: 0.5 }
+    );
+
+    observer.observe(element);
+
+    return () => observer.disconnect();
+  }, [displayName, position, skill.slug]);
+
+  const handleClick = () => {
+    trackEvent('skill_card_click', {
+      skill_slug: skill.slug,
+      skill_name: displayName,
+      position,
+      source: 'marketplace_grid',
+    });
+    onClick(skill);
+  };
+
   return (
     <motion.div
+      ref={cardRef}
       layout
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
       whileHover={{ y: -2 }}
       transition={{ duration: 0.2 }}
-      onClick={() => onClick(skill)}
+      onClick={handleClick}
       className="group flex h-full cursor-pointer flex-col rounded-[1.35rem] border border-gray-200/70 bg-white p-5 shadow-[0_18px_40px_-28px_rgba(15,23,42,0.45)] transition-all hover:-translate-y-0.5 hover:border-gray-300/80 hover:shadow-[0_28px_60px_-34px_rgba(15,23,42,0.5)] dark:border-gray-800 dark:bg-gray-900 dark:hover:border-gray-700"
     >
       <div className="mb-3 flex items-start justify-between gap-4">

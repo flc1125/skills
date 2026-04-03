@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { useSearchParams, usePathname } from 'next/navigation';
 import { SkillMetadata, Skill } from '@/lib/skills';
 import { SkillCard } from './SkillCard';
@@ -8,6 +8,7 @@ import { SkillModal } from './SkillModal';
 import { Search } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
 import { parseSkillMetadataDate } from '@/lib/utils';
+import { trackEvent } from '@/lib/gtag';
 
 interface MarketplaceProps {
   initialSkills: SkillMetadata[];
@@ -23,6 +24,7 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
   const [isLoadingSkill, setIsLoadingSkill] = useState(false);
   const [skillLoadError, setSkillLoadError] = useState<string | null>(null);
   const [hasMounted, setHasMounted] = useState(false);
+  const lastTrackedSearch = useRef<string | null>(null);
   const activeSelectedSkill =
     selectedSkillSlug && selectedSkill?.slug === selectedSkillSlug ? selectedSkill : null;
   const isModalOpen = hasMounted && selectedSkillSlug !== null;
@@ -113,6 +115,31 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
     });
   }, [filteredSkills]);
 
+  useEffect(() => {
+    const query = search.trim();
+
+    if (!query) {
+      lastTrackedSearch.current = null;
+      return;
+    }
+
+    const fingerprint = `${query.toLowerCase()}::${orderedSkills.length}`;
+
+    if (lastTrackedSearch.current === fingerprint) {
+      return;
+    }
+
+    const timeout = window.setTimeout(() => {
+      trackEvent('skill_search', {
+        query,
+        result_count: orderedSkills.length,
+      });
+      lastTrackedSearch.current = fingerprint;
+    }, 500);
+
+    return () => window.clearTimeout(timeout);
+  }, [orderedSkills.length, search]);
+
   const handleCardClick = (skillMeta: SkillMetadata) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set('skill', skillMeta.slug);
@@ -175,8 +202,13 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <AnimatePresence mode="popLayout">
-          {orderedSkills.map((skill) => (
-            <SkillCard key={skill.slug} skill={skill} onClick={handleCardClick} />
+          {orderedSkills.map((skill, index) => (
+            <SkillCard
+              key={skill.slug}
+              skill={skill}
+              position={index + 1}
+              onClick={handleCardClick}
+            />
           ))}
         </AnimatePresence>
       </div>
