@@ -4,8 +4,8 @@ description: Verify whether CHANGELOG entries in an OpenTelemetry Go repository 
 metadata:
   name: OTel Changelog PR Verifier
   description: Verify changelog PR numbers in OpenTelemetry Go release work.
-  author: Flc゛
-  created: 2026-04-03T00:00:00Z
+  author: Flc
+  created: 2026-04-03T04:32:49Z
 ---
 
 # OTel Changelog PR Verifier
