@@ -105,7 +105,7 @@ No incorrect entries found.
 ### Issues found
 
 ```markdown
-- [CHANGELOG.md:<line>](/absolute/path/to/CHANGELOG.md#L<line>) `<entry text>`
+- `CHANGELOG.md:<line>` `<entry text>`
   uses `#<number>`, but the referenced PR is `<title>`.
   PR URL: <url>
 ```
