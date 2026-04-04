@@ -1,14 +1,14 @@
 ---
-name: skill-porting-engineer
+name: skill-converter
 description: Convert an upstream agent spec, prompt file, markdown role definition, or similar source document into a local skill that matches the target repository's conventions. Use when porting an external agent or prompt into this repository's skill format, adapting an existing role definition into reusable local instructions, or auditing whether an imported skill matches local structure, triggering, and packaging rules.
 metadata:
-  name: Skill Porting Engineer
+  name: Skill Converter
   description: Convert external agent or prompt definitions into local skills that match this repository's conventions.
   author: Flc゛
   created: 2026-03-13T11:07:05Z
 ---
 
-# Skill Porting Engineer
+# Skill Converter
 
 Convert an external or upstream agent definition into a local skill that fits the target repository.
 
