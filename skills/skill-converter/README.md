@@ -6,6 +6,7 @@
 
 - `SKILL.md`: executable skill instructions for converting and packaging the source material
 - `agents/openai.yaml`: OpenAI-facing metadata and default prompt
+- `README.md`: human-facing summary of the skill's purpose, file set, and scope boundaries
 
 ## Usage
 

@@ -1,4 +1,4 @@
 interface:
   display_name: "Skill Converter"
-  short_description: "Port external agent specs into local skills"
-  default_prompt: "Use $skill-converter to adapt an upstream agent spec, prompt file, or role document into a local skill while keeping the core workflow neutral and the repository-specific packaging minimal."
+  short_description: "Convert and audit imported skills against local conventions"
+  default_prompt: "Use $skill-converter to adapt an upstream agent spec, prompt file, or role document into a local skill, or audit an imported skill for naming, structure, metadata, and packaging alignment."

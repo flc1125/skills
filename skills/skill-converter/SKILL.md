@@ -75,7 +75,7 @@ Decide:
 - whether `SKILL.md`, `agents/openai.yaml`, and `README.md` are sufficient
 - whether scripts, references, or assets are actually justified
 
-Default to a minimal skill. Include `README.md` as the human-facing companion document. Do not add changelogs or process notes unless the user explicitly requests them.
+Default to a minimal skill. Keep `README.md` only when the target repository or user expects a human-facing companion document, and do not add extra process files unless explicitly requested.
 
 If the source references tools, files, or workflows that do not exist locally, translate them into local equivalents or omit them.
 
@@ -110,7 +110,7 @@ Treat metadata as an interface adapter for this repository, not as the core defi
 
 ### 7. Add README and attribution notes
 
-Create a concise `README.md` for human readers.
+Create a concise `README.md` for human readers when the target repository or user expects one.
 
 Include:
 
@@ -166,11 +166,11 @@ Confirm:
 
 ## Required Output Structure
 
-When asked to generate a new skill from a source document, produce these artifacts unless the user requests otherwise:
+When asked to generate a new skill from a source document, produce these artifacts unless the target repository or user requests a leaner file set:
 
 - `SKILL.md`
 - `agents/openai.yaml`
-- `README.md`
+- `README.md` when the target repository keeps human-facing companion docs
 
 Optionally add:
 
@@ -212,7 +212,7 @@ Stop and reassess if:
 - the chosen skill name does not clearly describe the capability
 - the description only describes what the skill is, but not when to use it
 - the rewritten skill depends on the upstream file to make sense
-- the output includes extra documents that are not required
+- the output includes extra documents that are not required by the target repository or user
 - the generated workflow is generic enough to fit any role
 - metadata and SKILL.md describe different scopes
 - `README.md` is missing, misleading, or inconsistent with the actual skill contents
