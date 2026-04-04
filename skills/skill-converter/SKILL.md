@@ -1,6 +1,11 @@
 ---
 name: skill-converter
 description: Convert an upstream agent spec, prompt file, markdown role definition, or similar source document into a local skill that matches the target repository's conventions. Use when porting an external agent or prompt into this repository's skill format, adapting an existing role definition into reusable local instructions, or auditing whether an imported skill matches local structure, triggering, and packaging rules.
+metadata:
+  name: Skill Converter
+  description: Adapt upstream agent and prompt definitions into local skills that fit repository conventions.
+  author: Flc゛
+  created: 2026-03-13T11:07:05Z
 ---
 
 # Skill Converter
@@ -122,7 +127,7 @@ Treat attribution as a respect requirement for upstream authors, even when the s
 
 Check:
 
-- frontmatter contains only `name` and `description`
+- frontmatter includes `name`, `description`, and repository-required `metadata`
 - description clearly states what the skill does and when to use it
 - file set is minimal
 - naming matches local conventions
