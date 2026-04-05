@@ -25,6 +25,7 @@ Route requests by intent first, then by model support.
 - If the request is `text-to-image`, a text-only model may be sufficient.
 - If the request uses a reference image, choose a model that explicitly supports image-conditioned input.
 - If the request needs more than one reference image, treat it as advanced and verify current official docs before proceeding.
+- If the request can only be satisfied by switching away from the default Ark image generation surface, stop and surface that boundary explicitly.
 
 ## Working Matrix For This Skill
 
@@ -71,6 +72,12 @@ Route requests by intent first, then by model support.
   - backward compatibility matters more than upgrading
 
 ## Parameter Handling Rules
+
+This skill uses a closed payload philosophy:
+
+- only include fields from the verified working set
+- do not include "disable" flags for advanced features
+- do not copy extra fields from nearby examples unless they are required on the exact Ark page you are using
 
 ### `model`
 
@@ -121,6 +128,7 @@ Route requests by intent first, then by model support.
 
 - Hide or reject provider-specific fields that are not clearly supported by the chosen model.
 - If a field appears on one model family but not another, do not generalize it across all Seedream variants.
+- Do not add fields such as `sequential_image_generation` to disable advanced behavior; just omit unsupported advanced fields entirely.
 
 ## Routing Examples
 
@@ -165,5 +173,12 @@ Before returning a payload, confirm all of these:
 2. the request does not use fields forbidden by that model
 3. every requested advanced field is documented for the exact model family
 4. the skill is not silently broadening scope beyond `text-to-image` or single-reference generation
+5. the request stays on the default Ark image generation surface unless the user explicitly asks otherwise
 
 If any check fails, reject the request with the exact field and the smallest supported correction.
+
+## Refuse These Moves
+
+- do not satisfy a blocked request by switching to another Volcengine product endpoint
+- do not accept more than one reference image in this skill's default path
+- do not introduce unverified fields just because they appear in another page or code example

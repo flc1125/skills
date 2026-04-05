@@ -47,6 +47,7 @@ Rules:
 - write generated files outside the intended workspace
 - echo signed URLs, full auth-bearing responses, or sensitive request logs
 - upload local images without making that data transfer explicit
+- switch to another product endpoint because it seems to unlock more features without making that boundary explicit
 
 ## URL Rules
 
@@ -104,3 +105,4 @@ Keep examples short. The skill should teach model choice and parameter safety, n
 - "download the image automatically to whatever path looks convenient"
 - "inline the API key for a quick demo"
 - "fetch this arbitrary URL and upload it to Ark" without an explicit safe path
+- "switch to a neighboring API surface and pretend it is the same workflow"

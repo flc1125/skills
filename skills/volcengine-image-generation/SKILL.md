@@ -33,6 +33,7 @@ Default scope for this skill:
 - request planning
 - request validation
 - guarded execution guidance
+- Ark default image generation surface only
 
 Default non-goals for this skill:
 
@@ -42,6 +43,7 @@ Default non-goals for this skill:
 - prompt artistry as a standalone deliverable
 - generic image model comparisons
 - custom SDK abstraction layers
+- switching to adjacent Volcengine products or non-default endpoints without explicit user instruction
 
 ## Resource Map
 
@@ -119,6 +121,7 @@ Sequence:
    - one reference image only
    - no implicit multi-image composition
    - no undocumented parameter guessing
+   - no adjacent-product endpoint switching
 5. Build a prompt that explains what to preserve and what to change.
 6. Return either:
    - a validated request payload, or
@@ -141,6 +144,83 @@ Treat these as unsupported advanced requests unless current official documentati
 - parameter combinations that are only documented on one partially inconsistent page
 
 When a request falls into the third category, do not guess. State that the request exceeds this skill's default support and explain which documented capability must be verified first.
+
+## Request Surface Rules
+
+Stay on the default Ark image generation surface unless the user explicitly asks for another Volcengine product surface.
+
+- Do not switch to LAS, operator endpoints, or other adjacent product APIs just because they appear to support broader features.
+- Do not infer that a neighboring product page expands this skill's default support.
+- If a request can only be satisfied by changing API surface, stop and say so explicitly.
+
+## Parameter Whitelist
+
+Only include parameters that are both:
+
+1. requested by the user or required for the workflow, and
+2. clearly documented for the chosen model on the current Ark image generation surface
+
+Safe default field set for this skill:
+
+- `model`
+- `prompt`
+- `image` for single-reference workflows only
+- `size`
+- `response_format`
+- `output_format` when clearly supported
+- `watermark`
+- `stream` only after explicit verification
+
+Do not invent or pass through extra fields such as:
+
+- `sequential_image_generation`
+- undocumented sequencing flags
+- grouped-generation controls
+- adjacent-product-only options
+- fields copied from examples that are not verified for the chosen Ark model
+
+If a field is not clearly supported, omit it and explain why.
+
+## Canonical Payload Templates
+
+When you output a request payload, stay inside these templates unless the current official Ark page clearly requires something else.
+
+### Text-to-Image Template
+
+```json
+{
+  "model": "<model>",
+  "prompt": "<prompt>",
+  "size": "<size>",
+  "response_format": "<response_format>",
+  "watermark": <true_or_false>
+}
+```
+
+Optional only when clearly supported by the chosen Ark model:
+
+- `output_format`
+- `stream`
+
+### Single-Reference Image Generation Template
+
+```json
+{
+  "model": "<model>",
+  "prompt": "<prompt>",
+  "image": "<single_reference_image>",
+  "size": "<size>",
+  "response_format": "<response_format>",
+  "watermark": <true_or_false>
+}
+```
+
+Optional only when clearly supported by the chosen Ark model:
+
+- `output_format`
+- `stream`
+
+Do not add any extra toggles just to make the request feel safer or more explicit. If the template cannot express the request cleanly, the request is outside this skill's default support.
 
 ## Model Selection Rules
 
@@ -249,6 +329,8 @@ Required response:
 - do not guess
 - classify it as an advanced request outside this skill's default support
 - list the exact capabilities that require current official verification first
+- do not switch to another Volcengine product surface to satisfy the request
+- do not fabricate extra request fields
 
 ## Output Structure
 
@@ -295,6 +377,8 @@ If the request is invalid, replace `Next Step` with:
 - Keep secrets in environment variables or a local secret store only.
 - Never hardcode API keys, signed URLs, or tenant-specific endpoints in examples.
 - If official pages are inconsistent, choose the narrower documented path and say that broader support needs verification.
+- If satisfying the request would require another API surface, stop instead of silently changing surfaces.
+- If a field is not in the verified working set for the chosen model, omit it instead of guessing.
 
 ## Red Flags
 
