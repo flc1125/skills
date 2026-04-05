@@ -55,6 +55,6 @@ All scripts accept `--service` and `--account`. Use `--keychain` only for a non-
 
 ## Output
 
-- Expect structured JSON from every script except `scripts/keychain-read-secret.sh --value-only`.
+- Expect structured JSON on stdout for success and on stderr for failures, except `scripts/keychain-read-secret.sh --value-only`.
 - Treat `read-secret` output as sensitive even when the caller does not print it.
 - Keep normal user-facing status non-disclosing unless the requested action is `reveal-secret`.

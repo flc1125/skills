@@ -1,6 +1,6 @@
 interface:
   display_name: "Mac Keychain"
-  short_description: "Read and write macOS Keychain items"
+  short_description: "Read and write macOS Keychain generic password items"
   default_prompt: "Use $mac-keychain to work with macOS Keychain generic password items by service and account."
 
 policy:
