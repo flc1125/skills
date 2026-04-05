@@ -244,12 +244,66 @@ function resolveOutputPath(outputPath) {
   return resolved;
 }
 
-async function writeOutput(resultUrl, resultB64, outputPath, apiKey) {
-  const destination = resolveOutputPath(outputPath);
+function extensionFromMimeType(mimeType) {
+  if (!mimeType) {
+    return null;
+  }
+
+  const normalized = mimeType.split(';', 1)[0].trim().toLowerCase();
+  const mapping = {
+    'image/jpeg': '.jpg',
+    'image/jpg': '.jpg',
+    'image/png': '.png',
+    'image/webp': '.webp',
+    'image/gif': '.gif',
+  };
+
+  return mapping[normalized] || null;
+}
+
+function extensionFromUrl(url) {
+  try {
+    const pathname = new URL(url).pathname;
+    const ext = path.extname(pathname).toLowerCase();
+    return ext || null;
+  } catch {
+    return null;
+  }
+}
+
+function alignOutputPath(outputPath, preferredExtension) {
+  const resolved = resolveOutputPath(outputPath);
+
+  if (!preferredExtension) {
+    return resolved;
+  }
+
+  const currentExtension = path.extname(resolved).toLowerCase();
+  if (!currentExtension) {
+    return `${resolved}${preferredExtension}`;
+  }
+
+  if (currentExtension === preferredExtension) {
+    return resolved;
+  }
+
+  return `${resolved.slice(0, -currentExtension.length)}${preferredExtension}`;
+}
+
+async function writeOutput(resultUrl, resultB64, outputPath, apiKey, payload) {
+  const requestedPath = resolveOutputPath(outputPath);
 
   if (resultB64) {
+    const preferredExtension =
+      extensionFromMimeType(
+        payload.output_format === 'png' ? 'image/png' : payload.output_format === 'jpeg' ? 'image/jpeg' : '',
+      ) || '.jpg';
+    const destination = alignOutputPath(outputPath, preferredExtension);
     fs.writeFileSync(destination, Buffer.from(resultB64, 'base64'));
-    return destination;
+    return {
+      requestedPath,
+      writtenPath: destination,
+    };
   }
 
   if (resultUrl) {
@@ -258,8 +312,14 @@ async function writeOutput(resultUrl, resultB64, outputPath, apiKey) {
     });
     const arrayBuffer = await response.arrayBuffer();
     ensureOk(response, `download failed from ${resultUrl}`);
+    const preferredExtension =
+      extensionFromMimeType(response.headers.get('content-type')) || extensionFromUrl(resultUrl) || '.jpg';
+    const destination = alignOutputPath(outputPath, preferredExtension);
     fs.writeFileSync(destination, Buffer.from(arrayBuffer));
-    return destination;
+    return {
+      requestedPath,
+      writtenPath: destination,
+    };
   }
 
   throw new Error('No image data available to write.');
@@ -299,9 +359,12 @@ async function execute(baseUrl, apiKey, payload, outputPath) {
   const resultUrl = item && typeof item === 'object' ? item.url || null : null;
   const resultB64 = item && typeof item === 'object' ? item.b64_json || null : null;
   let writtenPath = null;
+  let requestedPath = null;
 
   if (outputPath) {
-    writtenPath = await writeOutput(resultUrl, resultB64, outputPath, apiKey);
+    const outputInfo = await writeOutput(resultUrl, resultB64, outputPath, apiKey, payload);
+    requestedPath = outputInfo.requestedPath;
+    writtenPath = outputInfo.writtenPath;
   }
 
   console.log(
@@ -311,7 +374,9 @@ async function execute(baseUrl, apiKey, payload, outputPath) {
         model: payload.model,
         response_format: payload.response_format || null,
         url: resultUrl,
+        requested_output_path: requestedPath,
         output_path: writtenPath,
+        output_path_adjusted: Boolean(requestedPath && writtenPath && requestedPath !== writtenPath),
         has_b64_json: Boolean(resultB64),
       },
       null,
