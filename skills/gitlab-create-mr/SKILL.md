@@ -98,13 +98,16 @@ glab mr create --title "<title>" --description "<description>" --target-branch "
 
 Use `--draft` when the branch is intentionally not ready for full review.
 
+If the target repository or GitLab host is not the current context, complete step 6 first and then run the step-5 commands with `-R "$repo"` and/or `GITLAB_HOST="$host"` as needed.
+
 Before creating a new merge request, check whether the source branch already has one:
 
 ```bash
 glab mr list --source-branch "$branch"
+GITLAB_HOST="$host" glab mr list --source-branch "$branch" -R "$repo"
 ```
 
-If an existing merge request is already associated with the branch, inspect it with `glab mr view <iid>` and update it instead of creating another one.
+If an existing merge request is already associated with the branch, inspect it with `glab mr view <iid>` and update it with `glab mr update <iid> --title "<title>" --description "<description>"` instead of creating another one.
 
 ### 6. Resolve GitLab context only when needed
 

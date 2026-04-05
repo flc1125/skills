@@ -1,6 +1,6 @@
 # Verified `glab` Commands For Merge Request Creation
 
-Checked on 2026-03-24 against:
+Checked on 2026-04-05 against:
 
 - local `glab --help` output
 - the existing repository skill conventions
@@ -35,6 +35,7 @@ GITLAB_HOST=<host> glab repo view <group/repo>
 
 - `glab mr create`
 - `glab mr list`
+- `glab mr update [<id> | <branch>]`
 - `glab mr view <iid>`
 
 Checked branch-scoped listing:
@@ -54,6 +55,18 @@ Checked `glab mr create` flags:
 - `-w, --web`
 - `-y, --yes`
 
+Checked `glab mr update` flags:
+
+- `-t, --title`
+- `-d, --description`
+- `--target-branch`
+- `--draft`
+- `-r, --ready`
+- `-R, --repo`
+- `-f, --fill`
+- `--fill-commit-body`
+- `-y, --yes`
+
 Checked examples:
 
 ```bash
@@ -61,4 +74,6 @@ glab mr create --fill --yes
 glab mr create --title "feat(api): add token refresh" --description "..." --target-branch main --source-branch feature/token-refresh --yes
 glab mr create --draft --title "wip: replace legacy auth" --description "..." --target-branch main --source-branch auth-refactor --yes
 GITLAB_HOST=gitlab.example.com glab mr create -R group/project --title "fix(ui): handle null state" --description "..." --target-branch main --source-branch fix/null-state --yes
+glab mr update 23 --title "fix(ui): handle null state" --description "..." --yes
+GITLAB_HOST=gitlab.example.com glab mr update 23 -R group/project --title "fix(ui): handle null state" --description "..." --yes
 ```
