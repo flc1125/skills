@@ -41,6 +41,10 @@ const MODEL_CAPABILITIES = {
     outputFormat: false,
   },
 };
+const MODEL_ALIASES = {
+  'doubao-seedream-5.0-lite': 'doubao-seedream-5-0-lite-260128',
+  'doubao-seededit-3.0-i2i': 'doubao-seededit-3-0-i2i-250628',
+};
 
 function printUsage() {
   console.log(
@@ -48,22 +52,26 @@ function printUsage() {
       'Generate images with Volcengine Ark using a local auth.json config.',
       '',
       'Usage:',
-      '  node generate-image.mjs --prompt "..." [options]',
+      '  node skills/volcengine-ark-image-generator/scripts/generate-image.mjs --prompt "..." [options]',
       '',
       'Options:',
       '  --prompt <text>           Prompt text for image generation',
       '  --image <value>           Optional single reference image: URL, data URI, or local path',
-      '  --model <id>              Model override',
+      '  --model <id>              Model override: exact version ID or a supported family alias',
       '  --size <value>            Optional size override',
       '  --response-format <fmt>   url | b64_json (default: url)',
       '  --output-format <fmt>     jpeg | png',
       '  --watermark <bool>        true | false',
-      '  --output <path>           Save the first returned image to a local path',
+      '  --output <path>           Save the first returned image inside the current workspace',
       `  --base-url <url>          Override base URL (default: ${DEFAULT_BASE_URL})`,
       `  --auth-file <path>        Override auth file (default: ${DEFAULT_AUTH_PATH})`,
       '  --api-key <key>           Override auth.json api_key for this invocation only',
       '  --execute                 Actually send the request',
       '  --help                    Show this help',
+      '',
+      'Supported family aliases:',
+      `  doubao-seedream-5.0-lite -> ${MODEL_ALIASES['doubao-seedream-5.0-lite']}`,
+      `  doubao-seededit-3.0-i2i  -> ${MODEL_ALIASES['doubao-seededit-3.0-i2i']}`,
       '',
       'The script defaults to preview mode.',
     ].join('\n'),
@@ -124,9 +132,13 @@ function parseBool(value) {
   throw new Error(`Expected a boolean-like value, got: ${value}`);
 }
 
+function normalizeModelId(model) {
+  return MODEL_ALIASES[model] || model;
+}
+
 function chooseModel(args) {
   if (typeof args.model === 'string' && args.model.trim()) {
-    return args.model.trim();
+    return normalizeModelId(args.model.trim());
   }
   if (args.image) {
     return DEFAULT_I2I_MODEL;
@@ -186,7 +198,11 @@ function validateArgs(args, model) {
   const capabilities = MODEL_CAPABILITIES[model];
 
   if (!capabilities) {
-    throw new Error(`Unsupported or unverified model override: ${model}`);
+    throw new Error(
+      `Unsupported or unverified model override: ${model}. Supported executable models: ${Object.keys(
+        MODEL_CAPABILITIES,
+      ).join(', ')}`,
+    );
   }
 
   if (args.image && !capabilities.image) {

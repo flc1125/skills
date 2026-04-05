@@ -31,10 +31,22 @@ Route requests by intent first, then by model support.
 
 ## Working Matrix For This Skill
 
+The bundled script only executes against a narrow working set. Prefer these exact version IDs:
+
+- `doubao-seedream-5-0-lite-260128`
+- `doubao-seededit-3-0-i2i-250628`
+- `doubao-seedream-3.0-t2i`
+
+The bundled script also accepts these family aliases and normalizes them to the exact version IDs above:
+
+- `doubao-seedream-5.0-lite` -> `doubao-seedream-5-0-lite-260128`
+- `doubao-seededit-3.0-i2i` -> `doubao-seededit-3-0-i2i-250628`
+
 ### `doubao-seededit-3-0-i2i-250628`
 
 - safest interpretation: single-reference image-conditioned generation on the default Ark surface
 - image input: required
+- bundled script alias: `doubao-seededit-3.0-i2i`
 - use when:
   - the user supplies one reference image
   - the goal is to preserve subject structure or material while changing scene, style, or presentation
@@ -56,32 +68,37 @@ Route requests by intent first, then by model support.
 
 ### `doubao-seedream-5.0-lite`
 
-- safest interpretation: general-purpose current model for `text-to-image` and single-reference image generation
-- image input: do not rely on it for the bundled script's default path; prefer SeedEdit 3.0 unless the user explicitly forces this model
+- safest interpretation for this skill: general-purpose current model for `text-to-image`
+- bundled script exact model: `doubao-seedream-5-0-lite-260128`
+- bundled script alias: `doubao-seedream-5.0-lite`
+- image input: do not rely on it for the bundled script's default path
 - `output_format`: treat as supported
 - `stream`: do not enable by default; verify current official page first
 - use when:
   - the user wants the current Ark image generation surface
   - the request is `text-to-image`
-  - the user explicitly chooses this model
+  - the user explicitly chooses this model family for prompt-to-image work
   - the user needs explicit control over response and output shape
 - reject when:
+  - the user supplies `image` input on the bundled script's default path
   - the user asks for a capability that is not clearly documented for the exact model version
 
 ### `doubao-seedream-4.5`
 
-- safest interpretation: supports `text-to-image` and image-conditioned workflows
+- safest interpretation: supports `text-to-image` and image-conditioned workflows in planning discussions
 - image input: supported
 - `stream`: verify before use
+- bundled script execution: not in the current executable working set
 - use when:
   - the project already targets Seedream 4.5
-  - the request needs image-conditioned generation and the environment does not require 5.0-lite-specific fields
+  - the request needs planning guidance for an environment that already uses this family
 
 ### `doubao-seedream-4.0`
 
-- safest interpretation: supports `text-to-image` and image-conditioned workflows
+- safest interpretation: supports `text-to-image` and image-conditioned workflows in planning discussions
 - image input: supported
 - `stream`: verify before use
+- bundled script execution: not in the current executable working set
 - use when:
   - the environment already uses Seedream 4.0
   - backward compatibility matters more than upgrading
@@ -167,7 +184,7 @@ Request:
 Route:
 
 - intent: `single-reference image generation`
-- preferred model: a model with explicit image input support such as `doubao-seedream-5.0-lite`
+- preferred model: `doubao-seededit-3-0-i2i-250628`
 
 ### Example 3
 
