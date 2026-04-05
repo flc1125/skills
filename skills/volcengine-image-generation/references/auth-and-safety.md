@@ -12,10 +12,15 @@ Default assumptions:
 
 - API key environment variable: `ARK_API_KEY`
 - common base URL pattern: `https://ark.cn-beijing.volces.com/api/v3`
+- bundled script: `scripts/generate-image.py`
 
 Verify current auth details against the official page before changing either assumption:
 
 - `https://www.volcengine.com/docs/82379/1298459?lang=zh`
+- official SDK installation: `https://www.volcengine.com/docs/82379/1541595`
+
+The bundled script auto-loads `skills/volcengine-image-generation/.env` when it exists.
+Values from `.env` only fill missing environment variables and do not override variables already set in the shell.
 
 Rules:
 
@@ -32,6 +37,7 @@ Rules:
 - validate model compatibility
 - normalize prompt and parameter values
 - explain which fields are required
+- execute the bundled script with explicit user intent
 - provide a minimal code example without embedded secrets
 
 ### Guarded
@@ -69,6 +75,17 @@ If the user wants to download a provider-returned image URL:
 - if writing output is necessary, use a clear user-intended path
 - do not assume overwriting is safe
 - do not invent a filename from untrusted input without normalization
+- the bundled script may write a downloaded image only when `--output` is explicit
+
+## Script Defaults
+
+The bundled script is intentionally narrow:
+
+- one prompt per invocation
+- at most one reference image
+- preview mode unless `--execute` is passed
+- output download only when `--output` is passed
+- official Ark SDK only; no custom HTTP signing logic in this skill
 
 ## Minimal Example Shape
 

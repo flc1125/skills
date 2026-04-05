@@ -29,6 +29,18 @@ Route requests by intent first, then by model support.
 
 ## Working Matrix For This Skill
 
+### `doubao-seededit-3-0-i2i-250628`
+
+- safest interpretation: single-reference image-conditioned generation on the default Ark surface
+- image input: required
+- use when:
+  - the user supplies one reference image
+  - the goal is to preserve subject structure or material while changing scene, style, or presentation
+  - the bundled script is executing a single-reference request without an explicit model override
+- reject when:
+  - the request uses more than one reference image
+  - the user asks for grouped generation or streaming behavior without a separately verified path
+
 ### `doubao-seedream-3.0-t2i`
 
 - safest interpretation: `text-to-image` only
@@ -43,12 +55,13 @@ Route requests by intent first, then by model support.
 ### `doubao-seedream-5.0-lite`
 
 - safest interpretation: general-purpose current model for `text-to-image` and single-reference image generation
-- image input: supported
+- image input: do not rely on it for the bundled script's default path; prefer SeedEdit 3.0 unless the user explicitly forces this model
 - `output_format`: treat as supported
 - `stream`: do not enable by default; verify current official page first
 - use when:
   - the user wants the current Ark image generation surface
-  - the request needs one reference image
+  - the request is `text-to-image`
+  - the user explicitly chooses this model
   - the user needs explicit control over response and output shape
 - reject when:
   - the user asks for a capability that is not clearly documented for the exact model version

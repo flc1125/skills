@@ -1,6 +1,6 @@
 ---
 name: volcengine-image-generation
-description: Plan and validate Volcengine Ark image generation requests for text-to-image and single-reference image workflows. Use when Codex needs to choose a Seedream-compatible model, shape prompts, explain Ark images.generate options, guard against invalid parameter combinations, or prepare a Volcengine-specific image generation request.
+description: Generate or validate Volcengine Ark image requests for text-to-image and single-reference image workflows. Use when Codex needs to choose a Seedream or SeedEdit model, shape prompts, execute image generation through the bundled script, explain Ark images.generate options, or guard against invalid parameter combinations.
 metadata:
   name: Volcengine Image Generation
   description: Plan and validate Volcengine Ark image generation workflows with model-aware parameter guidance.
@@ -10,9 +10,9 @@ metadata:
 
 # Volcengine Image Generation
 
-Plan and validate Volcengine Ark image generation workflows with model-aware defaults, explicit compatibility checks, and conservative safety rules.
+Generate images with Volcengine Ark using an executable default path, with model-aware defaults, explicit compatibility checks, and conservative safety rules.
 
-This skill is a provider-specific adapter. It is not a general image design skill, not a generic prompt beautifier, and not a full SDK wrapper.
+This skill is a provider-specific image generation operator. It is not a general image design skill, not a generic prompt beautifier, and not a full SDK wrapper.
 
 ## Operating Mode
 
@@ -20,8 +20,9 @@ Act as a Volcengine Ark image generation operator.
 
 Prioritize:
 
+- successful image generation through the default execution path
 - correct model and parameter selection before prompt polish
-- explicit capability checks before request construction
+- explicit capability checks before request execution
 - narrow, reliable workflows over broad but ambiguous support
 - safe handling of secrets, URLs, and local files
 - provider-specific accuracy over generic OpenAI-shaped assumptions
@@ -30,9 +31,8 @@ Default scope for this skill:
 
 - `text-to-image`
 - `single-reference image generation`
-- request planning
-- request validation
-- guarded execution guidance
+- guarded execution through the bundled script
+- request planning and validation
 - Ark default image generation surface only
 
 Default non-goals for this skill:
@@ -52,6 +52,26 @@ Read only the files you need:
 - capability limits and routing rules: [references/capability-matrix.md](references/capability-matrix.md)
 - authentication, execution boundaries, and file/URL safety: [references/auth-and-safety.md](references/auth-and-safety.md)
 - compact request mappings and example prompts: [references/request-examples.md](references/request-examples.md)
+
+## Prepare
+
+Before executing the bundled script:
+
+1. Install the official Python SDK:
+
+```bash
+pip install 'volcengine-python-sdk[ark]'
+```
+
+2. Copy the local environment template:
+
+```bash
+cp skills/volcengine-image-generation/.env.example skills/volcengine-image-generation/.env
+```
+
+3. Fill in `ARK_API_KEY` locally and keep `.env` uncommitted.
+
+The script auto-loads `skills/volcengine-image-generation/.env` when it exists.
 
 ## Trigger Examples
 
@@ -97,7 +117,8 @@ Sequence:
 4. Normalize the prompt into a compact instruction set instead of adding decorative wording.
 5. Validate requested parameters such as `size`, `response_format`, `output_format`, `watermark`, and `stream`.
 6. Return either:
-   - a validated request payload, or
+   - an executable command using the bundled script, or
+   - a validated request payload when the user only wants planning, or
    - a rejection with the exact incompatible fields and the shortest fix.
 
 ### Single-Reference Image Generation
@@ -124,7 +145,8 @@ Sequence:
    - no adjacent-product endpoint switching
 5. Build a prompt that explains what to preserve and what to change.
 6. Return either:
-   - a validated request payload, or
+   - an executable command using the bundled script, or
+   - a validated request payload when the user only wants planning, or
    - a rejection with a model or parameter correction.
 
 ## Intent Classification
@@ -257,23 +279,55 @@ Do not translate a vague user brief into a longer prompt if the added words are 
 
 ## Execution Guidance
 
-This skill may help prepare or run a request when the surrounding environment supports live API access.
+This skill should execute image generation by default when the user is clearly asking to generate an image and the environment can run the bundled script.
 
 Prefer this execution order:
 
 1. plan the request
 2. validate model compatibility
 3. confirm auth and safety assumptions
-4. execute with the smallest viable payload
+4. execute through `scripts/generate-image.py`
 5. summarize the result shape without leaking secrets or signed URLs
 
-When code examples are needed:
-
-- prefer an OpenAI-compatible client shape when the user already uses that ecosystem
-- prefer the official Ark SDK only when the existing project already uses it or asks for it explicitly
-- keep examples minimal and parameter-focused
+When the user does not ask for a plan-only answer, prefer the bundled script over ad hoc one-off code samples.
 
 Read [references/auth-and-safety.md](references/auth-and-safety.md) before execution.
+
+## Scripts
+
+Use the bundled script for actual generation:
+
+- `scripts/generate-image.py`: generate images through the official Ark Python SDK
+
+Default script behavior:
+
+- preview mode by default
+- pass `--execute` to send the request
+- use `ARK_API_KEY` from the environment or local `.env`
+- default to `doubao-seedream-5-0-lite-260128` for text-to-image
+- default to `doubao-seededit-3-0-i2i-250628` when `--image` is provided
+- support optional result download with `--output`
+
+Example text-to-image execution:
+
+```bash
+python3 skills/volcengine-image-generation/scripts/generate-image.py \
+  --prompt "一只戴墨镜的橘猫坐在海边，日落，超写实" \
+  --watermark false \
+  --output output/cat.png \
+  --execute
+```
+
+Example single-reference execution:
+
+```bash
+python3 skills/volcengine-image-generation/scripts/generate-image.py \
+  --prompt "以参考图作为产品主体参考，保留主体造型和金属质感，改成深色高端广告图" \
+  --image path/to/reference.png \
+  --watermark false \
+  --output output/ad.jpg \
+  --execute
+```
 
 ## Worked Examples
 
@@ -357,7 +411,7 @@ Use this structure by default:
 - notes: <unsupported combinations or warnings>
 
 ## Next Step
-- <payload, code example, or execution note>
+- <command to run, payload, or execution note>
 ```
 
 If the request is invalid, replace `Next Step` with:
@@ -370,6 +424,7 @@ If the request is invalid, replace `Next Step` with:
 
 ## Decision Rules
 
+- Prefer running the bundled script over inventing one-off execution code.
 - Prefer explicit rejection over silent fallback when a parameter or model combination is unsupported.
 - Prefer one well-supported reference image over partially documented multi-image behavior.
 - Prefer URL-only output handling by default; do not assume the image should be downloaded locally.
@@ -379,6 +434,7 @@ If the request is invalid, replace `Next Step` with:
 - If official pages are inconsistent, choose the narrower documented path and say that broader support needs verification.
 - If satisfying the request would require another API surface, stop instead of silently changing surfaces.
 - If a field is not in the verified working set for the chosen model, omit it instead of guessing.
+- When `--image` is present and the user did not force a model, prefer the bundled script's SeedEdit default because it is explicitly documented on Ark.
 
 ## Red Flags
 
