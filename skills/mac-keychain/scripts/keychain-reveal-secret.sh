@@ -13,7 +13,6 @@ while [ "$#" -gt 0 ]; do
     --service) service="$2"; shift 2 ;;
     --account) account="$2"; shift 2 ;;
     --keychain) keychain="$2"; shift 2 ;;
-    --requesting-actor|--purpose) shift 2 ;;
     --confirmed) confirmed=1; shift ;;
     *) fail_json "usage_error" "Unknown argument" "argument" "$1"; exit "$ERR_USAGE" ;;
   esac

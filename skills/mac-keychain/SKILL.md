@@ -25,6 +25,7 @@ Use this skill to operate on macOS Keychain generic password items.
 - Default to the current user's `login` keychain.
 - Pass `--keychain` only when the target is not the default login keychain.
 - Keep caller attribution, approval prompts, and workflow policy in the caller. Do not model them inside this skill.
+- Keep the script interface narrow. Do not pass legacy caller-attribution or purpose flags.
 - Keep this skill thin. It should expose local Keychain operations, not orchestrate a larger secret-management workflow.
 
 ## Safety Model
