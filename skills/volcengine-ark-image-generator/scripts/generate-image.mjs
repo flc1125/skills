@@ -1,19 +1,15 @@
 #!/usr/bin/env node
 
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 
 const DEFAULT_BASE_URL = 'https://ark.cn-beijing.volces.com/api/v3';
 const DEFAULT_T2I_MODEL = 'doubao-seedream-5-0-lite-260128';
 const DEFAULT_I2I_MODEL = 'doubao-seededit-3-0-i2i-250628';
-const DEFAULT_CONFIG_ROOT = path.join(
-  process.env.HOME || '',
-  '.config',
-  'flc1125',
-  'skills',
-  'volcengine-ark-image-generator',
-);
+const DEFAULT_CONFIG_ROOT = path.join('~', '.config', 'flc1125', 'skills', 'volcengine-ark-image-generator');
 const DEFAULT_AUTH_PATH = path.join(DEFAULT_CONFIG_ROOT, 'auth.json');
+const WORKSPACE_ROOT = fs.realpathSync.native(process.cwd());
 const VALUE_REQUIRED_KEYS = new Set([
   'prompt',
   'image',
@@ -60,7 +56,7 @@ function printUsage() {
       '  --size <value>            Optional size override',
       '  --response-format <fmt>   url | b64_json (default: url)',
       '  --output-format <fmt>     jpeg | png',
-      '  --output <path>           Save the first returned image inside the current workspace',
+      '  --output <path>           Save the first returned image inside the current workspace without overwriting',
       `  --base-url <url>          Override base URL (default: ${DEFAULT_BASE_URL})`,
       `  --auth-file <path>        Override auth file (default: ${DEFAULT_AUTH_PATH})`,
       '  --api-key <key>           Override auth.json api_key for this invocation only',
@@ -93,6 +89,10 @@ function parseArgs(argv) {
 
     const key = token.slice(2);
     const next = argv[i + 1];
+
+    if (key === 'execute' && next && !next.startsWith('--')) {
+      throw new Error('--execute does not take a value');
+    }
 
     if (!next || next.startsWith('--')) {
       if (VALUE_REQUIRED_KEYS.has(key)) {
@@ -130,8 +130,13 @@ function chooseModel(args) {
 }
 
 function resolvePathMaybeRelative(inputPath) {
+  const homeDir = os.homedir();
   const expanded = inputPath.startsWith('~/')
-    ? path.join(process.env.HOME || '', inputPath.slice(2))
+    ? homeDir
+      ? path.join(homeDir, inputPath.slice(2))
+      : (() => {
+          throw new Error('Could not determine the user home directory for ~/ path expansion');
+        })()
     : inputPath;
 
   if (path.isAbsolute(expanded)) {
@@ -225,6 +230,10 @@ function buildPayload(args, model) {
 function redactImageValue(value) {
   if (typeof value !== 'string') {
     return value;
+  }
+
+  if (value.startsWith('http://') || value.startsWith('https://')) {
+    return redactUrl(value);
   }
 
   if (value.startsWith('data:')) {
@@ -321,29 +330,47 @@ function ensureOk(response, bodyText) {
   throw new Error(`Ark request failed with ${response.status}: ${bodyText}`);
 }
 
-function resolveOutputPath(outputPath) {
+function resolveOutputTarget(outputPath) {
   const resolved = resolvePathMaybeRelative(outputPath);
-  const workspaceRoot = process.cwd();
-  const relative = path.relative(workspaceRoot, resolved);
+  let existingParent = path.dirname(resolved);
 
-  if (relative.startsWith('..') || path.isAbsolute(relative)) {
-    throw new Error(`Output path must stay inside the current workspace: ${workspaceRoot}`);
+  while (!fs.existsSync(existingParent)) {
+    const nextParent = path.dirname(existingParent);
+    if (nextParent === existingParent) {
+      throw new Error(`Could not resolve an existing parent directory for output path: ${resolved}`);
+    }
+    existingParent = nextParent;
   }
 
-  fs.mkdirSync(path.dirname(resolved), { recursive: true });
-  return resolved;
+  const realParent = fs.realpathSync.native(existingParent);
+  const relativeFromParent = path.relative(existingParent, resolved);
+  const realTarget = path.resolve(realParent, relativeFromParent);
+  const relativeToWorkspace = path.relative(WORKSPACE_ROOT, realTarget);
+
+  if (relativeToWorkspace.startsWith('..') || path.isAbsolute(relativeToWorkspace)) {
+    throw new Error(`Output path must stay inside the current workspace: ${WORKSPACE_ROOT}`);
+  }
+
+  return {
+    requestedPath: resolved,
+    realTarget,
+  };
+}
+
+function resolveOutputPath(outputPath) {
+  const { realTarget } = resolveOutputTarget(outputPath);
+  fs.mkdirSync(path.dirname(realTarget), { recursive: true });
+  return realTarget;
 }
 
 function validateOutputPath(outputPath) {
-  const resolved = resolvePathMaybeRelative(outputPath);
-  const workspaceRoot = process.cwd();
-  const relative = path.relative(workspaceRoot, resolved);
+  return resolveOutputTarget(outputPath).realTarget;
+}
 
-  if (relative.startsWith('..') || path.isAbsolute(relative)) {
-    throw new Error(`Output path must stay inside the current workspace: ${workspaceRoot}`);
+function ensureOutputDoesNotExist(outputPath) {
+  if (fs.existsSync(outputPath)) {
+    throw new Error(`Refusing to overwrite existing file: ${outputPath}`);
   }
-
-  return resolved;
 }
 
 function extensionFromMimeType(mimeType) {
@@ -392,7 +419,7 @@ function alignOutputPath(outputPath, preferredExtension) {
   return `${resolved.slice(0, -currentExtension.length)}${preferredExtension}`;
 }
 
-async function writeOutput(resultUrl, resultB64, outputPath, apiKey, payload) {
+async function writeOutput(resultUrl, resultB64, outputPath, payload) {
   const requestedPath = resolveOutputPath(outputPath);
 
   if (resultB64) {
@@ -401,6 +428,7 @@ async function writeOutput(resultUrl, resultB64, outputPath, apiKey, payload) {
         payload.output_format === 'png' ? 'image/png' : payload.output_format === 'jpeg' ? 'image/jpeg' : '',
       ) || '.jpg';
     const destination = alignOutputPath(outputPath, preferredExtension);
+    ensureOutputDoesNotExist(destination);
     fs.writeFileSync(destination, Buffer.from(resultB64, 'base64'));
     return {
       requestedPath,
@@ -410,11 +438,14 @@ async function writeOutput(resultUrl, resultB64, outputPath, apiKey, payload) {
 
   if (resultUrl) {
     const response = await fetch(resultUrl);
+    if (!response.ok) {
+      throw new Error(`Image download failed with ${response.status}`);
+    }
     const arrayBuffer = await response.arrayBuffer();
-    ensureOk(response, `download failed from ${resultUrl}`);
     const preferredExtension =
       extensionFromMimeType(response.headers.get('content-type')) || extensionFromUrl(resultUrl) || '.jpg';
     const destination = alignOutputPath(outputPath, preferredExtension);
+    ensureOutputDoesNotExist(destination);
     fs.writeFileSync(destination, Buffer.from(arrayBuffer));
     return {
       requestedPath,
@@ -462,7 +493,7 @@ async function execute(baseUrl, apiKey, payload, outputPath) {
   let requestedPath = null;
 
   if (outputPath) {
-    const outputInfo = await writeOutput(resultUrl, resultB64, outputPath, apiKey, payload);
+    const outputInfo = await writeOutput(resultUrl, resultB64, outputPath, payload);
     requestedPath = outputInfo.requestedPath;
     writtenPath = outputInfo.writtenPath;
   }
@@ -507,7 +538,7 @@ async function main() {
     validateOutputPath(args.output);
   }
 
-  if (!args.execute) {
+  if (args.execute !== true) {
     preview(baseUrl, payload, args.output);
     return;
   }

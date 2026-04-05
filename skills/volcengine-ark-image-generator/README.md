@@ -75,6 +75,7 @@ node skills/volcengine-ark-image-generator/scripts/generate-image.mjs \
 - The default single-reference model is `doubao-seededit-3-0-i2i-250628`.
 - The bundled script always sends `watermark: false`.
 - `--output` must stay inside the current workspace.
+- The bundled script refuses to overwrite an existing output file.
 - The script redacts local image bytes and signed URLs from console output.
 
 ## Notes

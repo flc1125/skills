@@ -209,6 +209,7 @@ Default script behavior:
 - accept clear family aliases for the executable working set and normalize them to exact version IDs
 - support optional result download with `--output`
 - keep `--output` inside the current workspace
+- refuse to overwrite an existing output file
 - redact local image bytes and signed result URLs from console output
 
 If the user passes `--model`, prefer the exact executable model IDs. Family aliases such as `doubao-seedream-5.0-lite` and `doubao-seededit-3.0-i2i` are acceptable only when they map unambiguously to the script's current working set.
