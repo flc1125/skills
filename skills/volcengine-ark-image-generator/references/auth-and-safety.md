@@ -13,7 +13,7 @@ Default assumptions:
 - auth file: `~/.config/flc1125/skills/volcengine-ark-image-generator/auth.json`
 - auth keys: `api_key`, optional `base_url`
 - common base URL default: `https://ark.cn-beijing.volces.com/api/v3`
-- bundled script: `scripts/generate-image.py`
+- bundled script: `scripts/generate-image.mjs`
 
 Verify current auth details against the official page before changing either assumption:
 
@@ -85,32 +85,26 @@ The bundled script is intentionally narrow:
 - preview mode unless `--execute` is passed
 - output download only when `--output` is passed
 - local auth file first; explicit CLI overrides second
+- no third-party runtime dependencies
 
 ## Minimal Example Shape
 
 Use a minimal HTTP example when the user needs code and already works outside the bundled script:
 
-```python
-import json
-import urllib.request
+```js
+const response = await fetch('https://ark.cn-beijing.volces.com/api/v3/images/generations', {
+  method: 'POST',
+  headers: {
+    Authorization: 'Bearer <api_key>',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    model: 'doubao-seedream-5-0-lite-260128',
+    prompt: 'A clean studio product shot of a ceramic mug on white background',
+  }),
+});
 
-payload = {
-    "model": "doubao-seedream-5-0-lite-260128",
-    "prompt": "A clean studio product shot of a ceramic mug on white background"
-}
-
-request = urllib.request.Request(
-    "https://ark.cn-beijing.volces.com/api/v3/images/generations",
-    data=json.dumps(payload).encode("utf-8"),
-    headers={
-        "Authorization": "Bearer <api_key>",
-        "Content-Type": "application/json"
-    },
-    method="POST",
-)
-
-with urllib.request.urlopen(request) as response:
-    print(response.read().decode("utf-8"))
+console.log(await response.text());
 ```
 
 Keep examples short. The skill should teach model choice and parameter safety, not deliver a full client library.

@@ -295,7 +295,7 @@ Prefer this execution order:
 1. plan the request
 2. validate model compatibility
 3. confirm auth and safety assumptions
-4. execute through `scripts/generate-image.py`
+4. execute through `scripts/generate-image.mjs`
 5. summarize the result shape without leaking secrets or signed URLs
 
 When the user does not ask for a plan-only answer, prefer the bundled script over ad hoc one-off code samples.
@@ -306,7 +306,7 @@ Read [references/auth-and-safety.md](references/auth-and-safety.md) before execu
 
 Use the bundled script for actual generation:
 
-- `scripts/generate-image.py`: generate images through the official Ark Python SDK
+- `scripts/generate-image.mjs`: generate images through the default Ark HTTP surface with no third-party dependencies
 
 Default script behavior:
 
@@ -320,7 +320,7 @@ Default script behavior:
 Example text-to-image execution:
 
 ```bash
-python3 skills/volcengine-ark-image-generator/scripts/generate-image.py \
+node skills/volcengine-ark-image-generator/scripts/generate-image.mjs \
   --prompt "一只戴墨镜的橘猫坐在海边，日落，超写实" \
   --watermark false \
   --output output/cat.png \
@@ -330,7 +330,7 @@ python3 skills/volcengine-ark-image-generator/scripts/generate-image.py \
 Example single-reference execution:
 
 ```bash
-python3 skills/volcengine-ark-image-generator/scripts/generate-image.py \
+node skills/volcengine-ark-image-generator/scripts/generate-image.mjs \
   --prompt "以参考图作为产品主体参考，保留主体造型和金属质感，改成深色高端广告图" \
   --image path/to/reference.png \
   --watermark false \

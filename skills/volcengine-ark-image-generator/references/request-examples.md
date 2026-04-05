@@ -2,7 +2,7 @@
 
 Use this file when the skill needs compact examples of how to map user intent into a validated Volcengine Ark image generation request.
 
-When the user clearly wants the image to be generated rather than only planned, prefer returning a concrete `python3 skills/volcengine-ark-image-generator/scripts/generate-image.py ... --execute` command.
+When the user clearly wants the image to be generated rather than only planned, prefer returning a concrete `node skills/volcengine-ark-image-generator/scripts/generate-image.mjs ... --execute` command.
 
 ## Text-to-Image Example
 
