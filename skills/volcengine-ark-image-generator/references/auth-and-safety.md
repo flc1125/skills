@@ -27,6 +27,7 @@ Rules:
 - never print auth headers or secret-bearing request objects
 - prefer the local auth file over command-line secrets
 - allow command-line overrides only for one-off execution when the user explicitly wants them
+- do not forward the Ark API key when downloading a provider-returned asset URL
 
 ## Safe Execution Classes
 
@@ -75,6 +76,7 @@ If the user wants to download a provider-returned image URL:
 - do not assume overwriting is safe
 - do not invent a filename from untrusted input without normalization
 - the bundled script may write a downloaded image only when `--output` is explicit
+- the bundled script should keep `--output` inside the current workspace
 
 ## Script Defaults
 
@@ -86,6 +88,7 @@ The bundled script is intentionally narrow:
 - output download only when `--output` is passed
 - local auth file first; explicit CLI overrides second
 - no third-party runtime dependencies
+- preview output should redact local image bytes instead of printing full `data:` URIs
 
 ## Minimal Example Shape
 
@@ -115,6 +118,7 @@ Keep examples short. The skill should teach model choice and parameter safety, n
 - surface the incompatible field before suggesting retries
 - if the provider rejects a request, summarize the likely mismatch between model and parameters
 - when the docs are ambiguous, stop and point to the capability verification step instead of retrying with guessed fields
+- reject unsupported model and parameter combinations before sending the request when the skill already knows they are invalid
 
 ## Refuse These Patterns
 

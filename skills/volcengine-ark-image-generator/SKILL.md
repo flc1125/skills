@@ -316,6 +316,8 @@ Default script behavior:
 - default to `doubao-seedream-5-0-lite-260128` for text-to-image
 - default to `doubao-seededit-3-0-i2i-250628` when `--image` is provided
 - support optional result download with `--output`
+- keep `--output` inside the current workspace
+- redact local image bytes and signed result URLs from console output
 
 Example text-to-image execution:
 

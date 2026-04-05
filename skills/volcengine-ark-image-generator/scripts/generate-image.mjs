@@ -14,6 +14,33 @@ const DEFAULT_CONFIG_ROOT = path.join(
   'volcengine-ark-image-generator',
 );
 const DEFAULT_AUTH_PATH = path.join(DEFAULT_CONFIG_ROOT, 'auth.json');
+const VALUE_REQUIRED_KEYS = new Set([
+  'prompt',
+  'image',
+  'model',
+  'size',
+  'response-format',
+  'output-format',
+  'watermark',
+  'output',
+  'base-url',
+  'auth-file',
+  'api-key',
+]);
+const MODEL_CAPABILITIES = {
+  'doubao-seedream-3.0-t2i': {
+    image: false,
+    outputFormat: false,
+  },
+  'doubao-seedream-5-0-lite-260128': {
+    image: false,
+    outputFormat: true,
+  },
+  'doubao-seededit-3-0-i2i-250628': {
+    image: true,
+    outputFormat: false,
+  },
+};
 
 function printUsage() {
   console.log(
@@ -62,6 +89,9 @@ function parseArgs(argv) {
     const next = argv[i + 1];
 
     if (!next || next.startsWith('--')) {
+      if (VALUE_REQUIRED_KEYS.has(key)) {
+        throw new Error(`Expected a value after --${key}`);
+      }
       args[key] = true;
       continue;
     }
@@ -117,6 +147,10 @@ function resolvePathMaybeRelative(inputPath) {
 }
 
 function imageToPayloadValue(imageValue) {
+  if (typeof imageValue !== 'string') {
+    throw new Error('Expected --image to have a string value');
+  }
+
   if (
     imageValue.startsWith('http://') ||
     imageValue.startsWith('https://') ||
@@ -148,6 +182,22 @@ function imageToPayloadValue(imageValue) {
   return `data:${mimeType};base64,${encoded}`;
 }
 
+function validateArgs(args, model) {
+  const capabilities = MODEL_CAPABILITIES[model];
+
+  if (!capabilities) {
+    throw new Error(`Unsupported or unverified model override: ${model}`);
+  }
+
+  if (args.image && !capabilities.image) {
+    throw new Error(`Model ${model} does not support --image on this skill's default Ark path`);
+  }
+
+  if (args['output-format'] && !capabilities.outputFormat) {
+    throw new Error(`Model ${model} does not support --output-format on this skill's default Ark path`);
+  }
+}
+
 function buildPayload(args, model) {
   const payload = {
     model,
@@ -176,13 +226,50 @@ function buildPayload(args, model) {
   return payload;
 }
 
+function redactImageValue(value) {
+  if (typeof value !== 'string') {
+    return value;
+  }
+
+  if (value.startsWith('data:')) {
+    const commaIndex = value.indexOf(',');
+    const prefix = commaIndex >= 0 ? value.slice(0, commaIndex) : 'data:<unknown>';
+    return `${prefix},<redacted>`;
+  }
+
+  return value;
+}
+
+function redactUrl(url) {
+  if (!url) {
+    return null;
+  }
+
+  try {
+    const parsed = new URL(url);
+    return `${parsed.origin}${parsed.pathname}`;
+  } catch {
+    return '<redacted>';
+  }
+}
+
+function redactedPayload(payload) {
+  const cloned = { ...payload };
+
+  if (cloned.image !== undefined) {
+    cloned.image = redactImageValue(cloned.image);
+  }
+
+  return cloned;
+}
+
 function preview(baseUrl, payload, outputPath) {
   console.log(
     JSON.stringify(
       {
         mode: 'preview',
         base_url: baseUrl,
-        payload,
+        payload: redactedPayload(payload),
         output_path: outputPath || null,
       },
       null,
@@ -240,7 +327,26 @@ function ensureOk(response, bodyText) {
 
 function resolveOutputPath(outputPath) {
   const resolved = resolvePathMaybeRelative(outputPath);
+  const workspaceRoot = process.cwd();
+  const relative = path.relative(workspaceRoot, resolved);
+
+  if (relative.startsWith('..') || path.isAbsolute(relative)) {
+    throw new Error(`Output path must stay inside the current workspace: ${workspaceRoot}`);
+  }
+
   fs.mkdirSync(path.dirname(resolved), { recursive: true });
+  return resolved;
+}
+
+function validateOutputPath(outputPath) {
+  const resolved = resolvePathMaybeRelative(outputPath);
+  const workspaceRoot = process.cwd();
+  const relative = path.relative(workspaceRoot, resolved);
+
+  if (relative.startsWith('..') || path.isAbsolute(relative)) {
+    throw new Error(`Output path must stay inside the current workspace: ${workspaceRoot}`);
+  }
+
   return resolved;
 }
 
@@ -307,9 +413,7 @@ async function writeOutput(resultUrl, resultB64, outputPath, apiKey, payload) {
   }
 
   if (resultUrl) {
-    const response = await fetch(resultUrl, {
-      headers: apiKey ? { Authorization: `Bearer ${apiKey}` } : undefined,
-    });
+    const response = await fetch(resultUrl);
     const arrayBuffer = await response.arrayBuffer();
     ensureOk(response, `download failed from ${resultUrl}`);
     const preferredExtension =
@@ -373,7 +477,7 @@ async function execute(baseUrl, apiKey, payload, outputPath) {
         mode: 'execute',
         model: payload.model,
         response_format: payload.response_format || null,
-        url: resultUrl,
+        url: redactUrl(resultUrl),
         requested_output_path: requestedPath,
         output_path: writtenPath,
         output_path_adjusted: Boolean(requestedPath && writtenPath && requestedPath !== writtenPath),
@@ -395,20 +499,30 @@ async function main() {
 
   requirePrompt(args);
   const model = chooseModel(args);
+  validateArgs(args, model);
   const payload = buildPayload(args, model);
-  const baseUrl = args['base-url'] || DEFAULT_BASE_URL;
+  const authPath = args['auth-file']
+    ? resolvePathMaybeRelative(args['auth-file'])
+    : DEFAULT_AUTH_PATH;
+  const auth = fs.existsSync(authPath) ? loadAuthFile(authPath) : null;
+  const baseUrl = args['base-url'] || auth?.base_url || DEFAULT_BASE_URL;
+
+  if (args.output) {
+    validateOutputPath(args.output);
+  }
 
   if (!args.execute) {
     preview(baseUrl, payload, args.output);
     return;
   }
 
-  const authPath = args['auth-file']
-    ? resolvePathMaybeRelative(args['auth-file'])
-    : DEFAULT_AUTH_PATH;
-  const auth = loadAuthFile(authPath);
-  const apiKey = args['api-key'] || auth.api_key || '';
-  const executeBaseUrl = args['base-url'] || auth.base_url || DEFAULT_BASE_URL;
+  if (!auth) {
+    loadAuthFile(authPath);
+  }
+
+  const requiredAuth = auth || loadAuthFile(authPath);
+  const apiKey = args['api-key'] || requiredAuth.api_key || '';
+  const executeBaseUrl = args['base-url'] || requiredAuth.base_url || DEFAULT_BASE_URL;
 
   await execute(executeBaseUrl, apiKey, payload, args.output);
 }
