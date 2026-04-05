@@ -18,6 +18,12 @@ Keep the storage model intentionally small. For v1, this skill only needs one au
 
 Use this file for local Ark authentication defaults.
 
+Setup path:
+
+```text
+~/.config/flc1125/skills/volcengine-ark-image-generator/auth.json
+```
+
 Example:
 
 ```json
@@ -40,6 +46,16 @@ Rules:
 - `api_key` is required
 - `base_url` is optional; when omitted, the script should fall back to the default Ark base URL
 - do not store extra prompt defaults or behavior flags in `auth.json`
+
+## First-Run Setup
+
+Create the parent directory if it does not exist:
+
+```bash
+mkdir -p ~/.config/flc1125/skills/volcengine-ark-image-generator
+```
+
+Then save the JSON object above to `auth.json`.
 
 ## Runtime Contract
 

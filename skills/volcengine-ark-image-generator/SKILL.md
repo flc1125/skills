@@ -54,51 +54,7 @@ Read only the files you need:
 - local auth config schema: [references/config-schema.md](references/config-schema.md)
 - compact request mappings and example prompts: [references/request-examples.md](references/request-examples.md)
 
-## Prepare
-
-Before executing the bundled script:
-
-1. Create the local auth directory:
-
-```bash
-mkdir -p ~/.config/flc1125/skills/volcengine-ark-image-generator
-```
-
-2. Create `auth.json`:
-
-```json
-{
-  "version": 1,
-  "api_key": "replace_with_your_ark_api_key",
-  "base_url": "https://ark.cn-beijing.volces.com/api/v3"
-}
-```
-
-3. Save it at:
-
-```text
-~/.config/flc1125/skills/volcengine-ark-image-generator/auth.json
-```
-
-The bundled script assumes this file exists and is valid unless the user overrides auth through explicit CLI flags.
-
-## Trigger Examples
-
-Expect this skill to match requests such as:
-
-- "用火山引擎生成一张产品海报图"
-- "帮我写一个 Volcengine Ark 图片生成请求"
-- "用 Seedream 5.0 lite 生成一张写实封面图"
-- "参考这张图片生成一个新版本，但保留主体"
-- "这个 Ark images.generate 参数组合对不对"
-- "帮我检查为什么这个 Volcengine 图片请求会报错"
-
-Do not prefer this skill when the user is mainly asking for:
-
-- general image aesthetics without any Volcengine or Ark execution context
-- provider comparison across OpenAI, Midjourney, Replicate, and others
-- Photoshop-style editing steps that are not clearly mapped to Ark image generation
-- broad SDK integration work that is mostly about application architecture rather than image request design
+Before the first live run, read [references/config-schema.md](references/config-schema.md) for the local auth file contract. Use [references/request-examples.md](references/request-examples.md) when you need a ready-to-run command or a compact output pattern.
 
 ## Core Workflows
 
@@ -184,85 +140,19 @@ Stay on the default Ark image generation surface unless the user explicitly asks
 - Do not infer that a neighboring product page expands this skill's default support.
 - If a request can only be satisfied by changing API surface, stop and say so explicitly.
 
-## Parameter Whitelist
+## Working Set Rules
 
-Only include parameters that are both:
+Read [references/capability-matrix.md](references/capability-matrix.md) before finalizing any payload or command.
 
-1. requested by the user or required for the workflow, and
-2. clearly documented for the chosen model on the current Ark image generation surface
+Keep the working set narrow:
 
-Safe default field set for this skill:
+- only use fields that are requested or required and explicitly supported by the chosen model
+- keep payloads inside the verified Ark image generation surface
+- reject `image` input for text-only models
+- treat `size`, `output_format`, and `stream` as model-specific rather than pass-through fields
+- omit undocumented toggles such as sequencing or grouped-generation flags instead of guessing
 
-- `model`
-- `prompt`
-- `image` for single-reference workflows only
-- `size`
-- `response_format`
-- `output_format` when clearly supported
-- `watermark`
-- `stream` only after explicit verification
-
-Do not invent or pass through extra fields such as:
-
-- `sequential_image_generation`
-- undocumented sequencing flags
-- grouped-generation controls
-- adjacent-product-only options
-- fields copied from examples that are not verified for the chosen Ark model
-
-If a field is not clearly supported, omit it and explain why.
-
-## Canonical Payload Templates
-
-When you output a request payload, stay inside these templates unless the current official Ark page clearly requires something else.
-
-### Text-to-Image Template
-
-```json
-{
-  "model": "<model>",
-  "prompt": "<prompt>",
-  "size": "<size>",
-  "response_format": "<response_format>",
-  "watermark": <true_or_false>
-}
-```
-
-Optional only when clearly supported by the chosen Ark model:
-
-- `output_format`
-- `stream`
-
-### Single-Reference Image Generation Template
-
-```json
-{
-  "model": "<model>",
-  "prompt": "<prompt>",
-  "image": "<single_reference_image>",
-  "size": "<size>",
-  "response_format": "<response_format>",
-  "watermark": <true_or_false>
-}
-```
-
-Optional only when clearly supported by the chosen Ark model:
-
-- `output_format`
-- `stream`
-
-Do not add any extra toggles just to make the request feel safer or more explicit. If the template cannot express the request cleanly, the request is outside this skill's default support.
-
-## Model Selection Rules
-
-- Prefer the current Volcengine Ark image generation surface, not older or adjacent product surfaces, unless the user explicitly targets another API.
-- Prefer a newer general-purpose Seedream model when the request needs both quality and flexible parameter support.
-- Use a text-only model only when the request is clearly `text-to-image` and there is no need for image input.
-- Refuse to send `image` input to a text-only model.
-- Do not expose provider-specific parameters unless the capability matrix says the chosen model supports them.
-- Treat `size` as a constrained model-specific field, not a free-form string to pass through blindly.
-
-Read [references/capability-matrix.md](references/capability-matrix.md) before finalizing any payload.
+If a request cannot be expressed with the verified working set, reject it and point to the exact unsupported capability.
 
 ## Prompt Construction Rules
 
@@ -322,119 +212,7 @@ Default script behavior:
 
 If the user passes `--model`, prefer the exact executable model IDs. Family aliases such as `doubao-seedream-5.0-lite` and `doubao-seededit-3.0-i2i` are acceptable only when they map unambiguously to the script's current working set.
 
-Example text-to-image execution:
-
-```bash
-node skills/volcengine-ark-image-generator/scripts/generate-image.mjs \
-  --prompt "一只戴墨镜的橘猫坐在海边，日落，超写实" \
-  --watermark false \
-  --output output/cat.png \
-  --execute
-```
-
-Example single-reference execution:
-
-```bash
-node skills/volcengine-ark-image-generator/scripts/generate-image.mjs \
-  --prompt "以参考图作为产品主体参考，保留主体造型和金属质感，改成深色高端广告图" \
-  --image path/to/reference.png \
-  --watermark false \
-  --output output/ad.jpg \
-  --execute
-```
-
-## Worked Examples
-
-Use these patterns to keep the skill's behavior concrete.
-
-### Valid Example: Text-to-Image
-
-User request:
-
-- "用火山引擎生成一张北欧风客厅场景图，午后自然光，适合家居品牌落地页"
-
-Good output shape:
-
-- intent: `text-to-image`
-- model: a current general-purpose Seedream model
-- prompt: compact, concrete, and visual
-- parameters: only fields supported by the chosen model
-- validation: compatible
-
-### Valid Example: Single-Reference Image Generation
-
-User request:
-
-- "参考这张鞋子的产品图，保留鞋型和主配色，改成高级感棚拍海报"
-
-Good output shape:
-
-- intent: `single-reference image generation`
-- model: a model with explicit image input support
-- prompt: preserve shoe shape and palette; change scene and presentation style
-- validation: compatible if only one reference image is used
-
-### Invalid Example: Text-Only Model With Image Input
-
-User request:
-
-- "用 `doubao-seedream-3.0-t2i` 参考这张图生成一个新版本"
-
-Required response:
-
-- reject the request
-- explain that the selected model is treated as `text-to-image` only
-- suggest a model with image-conditioned support
-
-### Invalid Example: Unsupported Advanced Request
-
-User request:
-
-- "把这四张图混合后再开流式输出返回"
-
-Required response:
-
-- do not guess
-- classify it as an advanced request outside this skill's default support
-- list the exact capabilities that require current official verification first
-- do not switch to another Volcengine product surface to satisfy the request
-- do not fabricate extra request fields
-
-## Output Structure
-
-Use this structure by default:
-
-```markdown
-# Volcengine Ark Image Generation Plan
-
-## Intent
-- <text-to-image | single-reference image generation>
-
-## Model Choice
-- model: <chosen model>
-- why: <short justification>
-
-## Prompt
-- <final prompt>
-
-## Parameters
-- <parameter>: <value>
-
-## Validation
-- compatible: <yes | no>
-- notes: <unsupported combinations or warnings>
-
-## Next Step
-- <command to run, payload, or execution note>
-```
-
-If the request is invalid, replace `Next Step` with:
-
-```markdown
-## Fix Required
-- <field>: <why it is invalid>
-- <field>: <shortest supported correction>
-```
+See [references/request-examples.md](references/request-examples.md) for executable command examples, valid and invalid request patterns, and the default response shape.
 
 ## Decision Rules
 

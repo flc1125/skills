@@ -1,7 +1,7 @@
 interface:
   display_name: "Volcengine Ark Image Generator"
-  short_description: "Volcengine Ark image generation workflows"
-  default_prompt: "Use $volcengine-ark-image-generator to choose the right Ark image model, validate parameters, and generate an image through the bundled execution path."
+  short_description: "Generate images with Volcengine Ark"
+  default_prompt: "Use $volcengine-ark-image-generator to choose a verified Ark image model, validate parameters, and execute image generation through the bundled script when the user wants an actual image."
 
 policy:
   allow_implicit_invocation: true
