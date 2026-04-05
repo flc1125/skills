@@ -77,10 +77,10 @@ Sequence:
    - style
    - composition
    - scene or background
-   - constraints such as aspect ratio, text avoidance, realism, branding, or watermark
+   - constraints such as aspect ratio, text avoidance, realism, or branding
 3. Choose a compatible model using [references/capability-matrix.md](references/capability-matrix.md).
 4. Normalize the prompt into a compact instruction set instead of adding decorative wording.
-5. Validate requested parameters such as `size`, `response_format`, `output_format`, `watermark`, and `stream`.
+5. Validate requested parameters such as `size`, `response_format`, `output_format`, and `stream`.
 6. Return either:
    - an executable command using the bundled script, or
    - a validated request payload when the user only wants planning, or
@@ -205,6 +205,7 @@ Default script behavior:
 - read auth from `~/.config/flc1125/skills/volcengine-ark-image-generator/auth.json`
 - default to `doubao-seedream-5-0-lite-260128` for text-to-image
 - default to `doubao-seededit-3-0-i2i-250628` when `--image` is provided
+- always send `watermark: false`
 - accept clear family aliases for the executable working set and normalize them to exact version IDs
 - support optional result download with `--output`
 - keep `--output` inside the current workspace

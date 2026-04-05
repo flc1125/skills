@@ -53,7 +53,6 @@ Text-to-image example:
 ```bash
 node skills/volcengine-ark-image-generator/scripts/generate-image.mjs \
   --prompt "一只戴墨镜的橘猫坐在海边，日落，超写实" \
-  --watermark false \
   --output output/cat.png \
   --execute
 ```
@@ -64,7 +63,6 @@ Single-reference example:
 node skills/volcengine-ark-image-generator/scripts/generate-image.mjs \
   --prompt "以参考图作为产品主体参考，保留主体造型和金属质感，改成深色高端广告图" \
   --image path/to/reference.png \
-  --watermark false \
   --output output/ad.jpg \
   --execute
 ```
@@ -75,6 +73,7 @@ node skills/volcengine-ark-image-generator/scripts/generate-image.mjs \
 - Add `--execute` to send the live request.
 - The default text-to-image model is `doubao-seedream-5-0-lite-260128`.
 - The default single-reference model is `doubao-seededit-3-0-i2i-250628`.
+- The bundled script always sends `watermark: false`.
 - `--output` must stay inside the current workspace.
 - The script redacts local image bytes and signed URLs from console output.
 

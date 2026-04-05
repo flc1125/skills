@@ -21,7 +21,6 @@ const VALUE_REQUIRED_KEYS = new Set([
   'size',
   'response-format',
   'output-format',
-  'watermark',
   'output',
   'base-url',
   'auth-file',
@@ -61,7 +60,6 @@ function printUsage() {
       '  --size <value>            Optional size override',
       '  --response-format <fmt>   url | b64_json (default: url)',
       '  --output-format <fmt>     jpeg | png',
-      '  --watermark <bool>        true | false',
       '  --output <path>           Save the first returned image inside the current workspace',
       `  --base-url <url>          Override base URL (default: ${DEFAULT_BASE_URL})`,
       `  --auth-file <path>        Override auth file (default: ${DEFAULT_AUTH_PATH})`,
@@ -115,21 +113,6 @@ function requirePrompt(args) {
   if (typeof args.prompt !== 'string' || !args.prompt.trim()) {
     throw new Error('Missing required argument: --prompt');
   }
-}
-
-function parseBool(value) {
-  if (typeof value === 'boolean') {
-    return value;
-  }
-
-  const normalized = String(value).trim().toLowerCase();
-  if (['1', 'true', 'yes', 'y'].includes(normalized)) {
-    return true;
-  }
-  if (['0', 'false', 'no', 'n'].includes(normalized)) {
-    return false;
-  }
-  throw new Error(`Expected a boolean-like value, got: ${value}`);
 }
 
 function normalizeModelId(model) {
@@ -219,6 +202,7 @@ function buildPayload(args, model) {
     model,
     prompt: args.prompt,
     response_format: args['response-format'] || 'url',
+    watermark: false,
   };
 
   if (args.image) {
@@ -233,10 +217,6 @@ function buildPayload(args, model) {
 
   if (args['output-format']) {
     payload.output_format = args['output-format'];
-  }
-
-  if (args.watermark !== undefined) {
-    payload.watermark = parseBool(args.watermark);
   }
 
   return payload;

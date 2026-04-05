@@ -11,7 +11,6 @@ Text-to-image:
 ```bash
 node skills/volcengine-ark-image-generator/scripts/generate-image.mjs \
   --prompt "一只戴墨镜的橘猫坐在海边，日落，超写实" \
-  --watermark false \
   --output output/cat.png \
   --execute
 ```
@@ -22,7 +21,6 @@ Single-reference image generation:
 node skills/volcengine-ark-image-generator/scripts/generate-image.mjs \
   --prompt "以参考图作为产品主体参考，保留主体造型和金属质感，改成深色高端广告图" \
   --image path/to/reference.png \
-  --watermark false \
   --output output/ad.jpg \
   --execute
 ```
