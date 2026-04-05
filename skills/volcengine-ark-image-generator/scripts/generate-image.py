@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate images with Volcengine Ark using the official Python SDK.
+"""Generate images with Volcengine Ark using a local auth.json config.
 
 Supports:
 - text-to-image via Seedream 5.0 lite by default
@@ -14,7 +14,6 @@ import argparse
 import base64
 import json
 import mimetypes
-import os
 import sys
 import urllib.request
 from pathlib import Path
@@ -23,34 +22,8 @@ from typing import Any
 DEFAULT_BASE_URL = "https://ark.cn-beijing.volces.com/api/v3"
 DEFAULT_T2I_MODEL = "doubao-seedream-5-0-lite-260128"
 DEFAULT_I2I_MODEL = "doubao-seededit-3-0-i2i-250628"
-SKILL_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_ENV_PATH = SKILL_ROOT / ".env"
-
-
-def load_env_file(env_path: Path) -> None:
-    if not env_path.exists():
-        return
-
-    for raw_line in env_path.read_text(encoding="utf-8").splitlines():
-        line = raw_line.strip()
-        if not line or line.startswith("#"):
-            continue
-
-        separator_index = line.find("=")
-        if separator_index <= 0:
-            continue
-
-        key = line[:separator_index].strip()
-        value = line[separator_index + 1 :].strip()
-        if not key or key in os.environ:
-            continue
-
-        if (value.startswith('"') and value.endswith('"')) or (
-            value.startswith("'") and value.endswith("'")
-        ):
-            value = value[1:-1]
-
-        os.environ[key] = value
+CONFIG_ROOT = Path.home() / ".config" / "flc1125" / "skills" / "volcengine-ark-image-generator"
+DEFAULT_AUTH_PATH = CONFIG_ROOT / "auth.json"
 
 
 def parse_bool(value: str) -> bool:
@@ -111,7 +84,11 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--api-key",
-        help="Override ARK_API_KEY for this invocation only.",
+        help="Override auth.json api_key for this invocation only.",
+    )
+    parser.add_argument(
+        "--auth-file",
+        help=f"Override auth file path. Defaults to {DEFAULT_AUTH_PATH}.",
     )
     parser.add_argument(
         "--execute",
@@ -186,15 +163,29 @@ def preview(base_url: str, payload: dict[str, Any], output_path: str | None) -> 
     )
 
 
-def require_sdk() -> Any:
-    try:
-        from volcenginesdkarkruntime import Ark
-    except ImportError as exc:  # pragma: no cover - import availability is env-dependent
+def load_auth_file(auth_path: Path) -> dict[str, Any]:
+    if not auth_path.exists():
+        example = {
+            "version": 1,
+            "api_key": "replace_with_your_ark_api_key",
+            "base_url": DEFAULT_BASE_URL,
+        }
         raise RuntimeError(
-            "Missing dependency 'volcenginesdkarkruntime'. Install the official SDK with "
-            "`pip install 'volcengine-python-sdk[ark]'`."
-        ) from exc
-    return Ark
+            "Missing auth config.\n"
+            f"Expected: {auth_path}\n"
+            "Create it with:\n"
+            f"{json.dumps(example, ensure_ascii=False, indent=2)}"
+        )
+
+    try:
+        raw = json.loads(auth_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(f"Invalid JSON in auth config: {auth_path}: {exc}") from exc
+
+    if not isinstance(raw, dict):
+        raise RuntimeError(f"Auth config must be a JSON object: {auth_path}")
+
+    return raw
 
 
 def first_data_item(response: Any) -> Any:
@@ -238,13 +229,35 @@ def write_output(result_url: str | None, result_b64: str | None, output_path: st
     raise RuntimeError("No image data available to write.")
 
 
+def build_url(base_url: str) -> str:
+    return f"{base_url.rstrip('/')}/images/generations"
+
+
+def post_json(url: str, api_key: str, payload: dict[str, Any]) -> dict[str, Any]:
+    request = urllib.request.Request(
+        url,
+        data=json.dumps(payload).encode("utf-8"),
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+        },
+        method="POST",
+    )
+
+    with urllib.request.urlopen(request) as response:
+        raw = response.read().decode("utf-8")
+
+    try:
+        return json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(f"Expected JSON response from Ark, got: {raw}") from exc
+
+
 def execute(base_url: str, api_key: str, payload: dict[str, Any], output_path: str | None) -> None:
     if not api_key:
-        raise RuntimeError("Missing ARK_API_KEY. Set it in the environment, .env, or pass --api-key.")
+        raise RuntimeError("Missing api_key. Set it in auth.json or pass --api-key.")
 
-    Ark = require_sdk()
-    client = Ark(base_url=base_url, api_key=api_key)
-    response = client.images.generate(**payload)
+    response = post_json(build_url(base_url), api_key, payload)
 
     item = first_data_item(response)
     result_url = get_field(item, "url")
@@ -267,17 +280,19 @@ def execute(base_url: str, api_key: str, payload: dict[str, Any], output_path: s
 
 
 def main() -> int:
-    load_env_file(DEFAULT_ENV_PATH)
     args = parse_args()
     model = choose_model(args)
-    base_url = args.base_url or os.getenv("ARK_BASE_URL") or DEFAULT_BASE_URL
-    api_key = args.api_key or os.getenv("ARK_API_KEY", "")
     payload = build_payload(args, model)
+    base_url = args.base_url or DEFAULT_BASE_URL
 
     if not args.execute:
         preview(base_url, payload, args.output)
         return 0
 
+    auth_path = Path(args.auth_file).expanduser() if args.auth_file else DEFAULT_AUTH_PATH
+    auth = load_auth_file(auth_path)
+    api_key = args.api_key or auth.get("api_key", "")
+    base_url = args.base_url or auth.get("base_url") or DEFAULT_BASE_URL
     execute(base_url, api_key, payload, args.output)
     return 0
 

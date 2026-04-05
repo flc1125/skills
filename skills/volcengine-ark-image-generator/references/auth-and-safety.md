@@ -6,28 +6,27 @@ This skill is safe-by-default. Treat secrets, remote URLs, and local file writes
 
 ## Authentication
 
-Prefer environment variables for authentication.
+Prefer the local auth file for authentication.
 
 Default assumptions:
 
-- API key environment variable: `ARK_API_KEY`
-- common base URL pattern: `https://ark.cn-beijing.volces.com/api/v3`
+- auth file: `~/.config/flc1125/skills/volcengine-ark-image-generator/auth.json`
+- auth keys: `api_key`, optional `base_url`
+- common base URL default: `https://ark.cn-beijing.volces.com/api/v3`
 - bundled script: `scripts/generate-image.py`
 
 Verify current auth details against the official page before changing either assumption:
 
 - `https://www.volcengine.com/docs/82379/1298459?lang=zh`
-- official SDK installation: `https://www.volcengine.com/docs/82379/1541595`
 
-The bundled script auto-loads `skills/volcengine-image-generation/.env` when it exists.
-Values from `.env` only fill missing environment variables and do not override variables already set in the shell.
+Read [config-schema.md](config-schema.md) when the local auth file is missing or malformed.
 
 Rules:
 
 - never hardcode a real API key in `SKILL.md`, `references/`, examples, or scripts
 - never print auth headers or secret-bearing request objects
-- prefer a local secret store or local environment configuration over command-line secrets
-- if a project already uses another safe secret-loading mechanism, follow the project pattern instead of inventing a new one
+- prefer the local auth file over command-line secrets
+- allow command-line overrides only for one-off execution when the user explicitly wants them
 
 ## Safe Execution Classes
 
@@ -85,25 +84,33 @@ The bundled script is intentionally narrow:
 - at most one reference image
 - preview mode unless `--execute` is passed
 - output download only when `--output` is passed
-- official Ark SDK only; no custom HTTP signing logic in this skill
+- local auth file first; explicit CLI overrides second
 
 ## Minimal Example Shape
 
-Use a minimal OpenAI-compatible client example when the user needs code and already works in that style:
+Use a minimal HTTP example when the user needs code and already works outside the bundled script:
 
 ```python
-from openai import OpenAI
-import os
+import json
+import urllib.request
 
-client = OpenAI(
-    base_url='https://ark.cn-beijing.volces.com/api/v3',
-    api_key=os.getenv('ARK_API_KEY'),
+payload = {
+    "model": "doubao-seedream-5-0-lite-260128",
+    "prompt": "A clean studio product shot of a ceramic mug on white background"
+}
+
+request = urllib.request.Request(
+    "https://ark.cn-beijing.volces.com/api/v3/images/generations",
+    data=json.dumps(payload).encode("utf-8"),
+    headers={
+        "Authorization": "Bearer <api_key>",
+        "Content-Type": "application/json"
+    },
+    method="POST",
 )
 
-result = client.images.generate(
-    model='doubao-seedream-5.0-lite',
-    prompt='A clean studio product shot of a ceramic mug on white background',
-)
+with urllib.request.urlopen(request) as response:
+    print(response.read().decode("utf-8"))
 ```
 
 Keep examples short. The skill should teach model choice and parameter safety, not deliver a full client library.

@@ -1,7 +1,0 @@
-interface:
-  display_name: "Volcengine Image Generation"
-  short_description: "Volcengine Ark image generation workflows"
-  default_prompt: "Use $volcengine-image-generation to choose the right Ark image model, validate parameters, and prepare a safe generation request."
-
-policy:
-  allow_implicit_invocation: true

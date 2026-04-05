@@ -18,6 +18,8 @@ Observed recency from the official pages used while creating this skill:
 - image generation API page showed `2026-04-02`
 - Base URL and authentication page showed `2026-03-13`
 
+This skill is bound to the default Ark image generation surface. If a request only works on another Volcengine product surface, stop and say so explicitly instead of silently changing surfaces.
+
 ## Core Rule
 
 Route requests by intent first, then by model support.

@@ -1,14 +1,14 @@
 ---
-name: volcengine-image-generation
+name: volcengine-ark-image-generator
 description: Generate or validate Volcengine Ark image requests for text-to-image and single-reference image workflows. Use when Codex needs to choose a Seedream or SeedEdit model, shape prompts, execute image generation through the bundled script, explain Ark images.generate options, or guard against invalid parameter combinations.
 metadata:
-  name: Volcengine Image Generation
+  name: Volcengine Ark Image Generator
   description: Plan and validate Volcengine Ark image generation workflows with model-aware parameter guidance.
   author: Flc
   created: 2026-04-05T14:06:13Z
 ---
 
-# Volcengine Image Generation
+# Volcengine Ark Image Generator
 
 Generate images with Volcengine Ark using an executable default path, with model-aware defaults, explicit compatibility checks, and conservative safety rules.
 
@@ -51,27 +51,36 @@ Read only the files you need:
 
 - capability limits and routing rules: [references/capability-matrix.md](references/capability-matrix.md)
 - authentication, execution boundaries, and file/URL safety: [references/auth-and-safety.md](references/auth-and-safety.md)
+- local auth config schema: [references/config-schema.md](references/config-schema.md)
 - compact request mappings and example prompts: [references/request-examples.md](references/request-examples.md)
 
 ## Prepare
 
 Before executing the bundled script:
 
-1. Install the official Python SDK:
+1. Create the local auth directory:
 
 ```bash
-pip install 'volcengine-python-sdk[ark]'
+mkdir -p ~/.config/flc1125/skills/volcengine-ark-image-generator
 ```
 
-2. Copy the local environment template:
+2. Create `auth.json`:
 
-```bash
-cp skills/volcengine-image-generation/.env.example skills/volcengine-image-generation/.env
+```json
+{
+  "version": 1,
+  "api_key": "replace_with_your_ark_api_key",
+  "base_url": "https://ark.cn-beijing.volces.com/api/v3"
+}
 ```
 
-3. Fill in `ARK_API_KEY` locally and keep `.env` uncommitted.
+3. Save it at:
 
-The script auto-loads `skills/volcengine-image-generation/.env` when it exists.
+```text
+~/.config/flc1125/skills/volcengine-ark-image-generator/auth.json
+```
+
+The bundled script assumes this file exists and is valid unless the user overrides auth through explicit CLI flags.
 
 ## Trigger Examples
 
@@ -303,7 +312,7 @@ Default script behavior:
 
 - preview mode by default
 - pass `--execute` to send the request
-- use `ARK_API_KEY` from the environment or local `.env`
+- read auth from `~/.config/flc1125/skills/volcengine-ark-image-generator/auth.json`
 - default to `doubao-seedream-5-0-lite-260128` for text-to-image
 - default to `doubao-seededit-3-0-i2i-250628` when `--image` is provided
 - support optional result download with `--output`
@@ -311,7 +320,7 @@ Default script behavior:
 Example text-to-image execution:
 
 ```bash
-python3 skills/volcengine-image-generation/scripts/generate-image.py \
+python3 skills/volcengine-ark-image-generator/scripts/generate-image.py \
   --prompt "一只戴墨镜的橘猫坐在海边，日落，超写实" \
   --watermark false \
   --output output/cat.png \
@@ -321,7 +330,7 @@ python3 skills/volcengine-image-generation/scripts/generate-image.py \
 Example single-reference execution:
 
 ```bash
-python3 skills/volcengine-image-generation/scripts/generate-image.py \
+python3 skills/volcengine-ark-image-generator/scripts/generate-image.py \
   --prompt "以参考图作为产品主体参考，保留主体造型和金属质感，改成深色高端广告图" \
   --image path/to/reference.png \
   --watermark false \
@@ -391,7 +400,7 @@ Required response:
 Use this structure by default:
 
 ```markdown
-# Volcengine Image Generation Plan
+# Volcengine Ark Image Generation Plan
 
 ## Intent
 - <text-to-image | single-reference image generation>
@@ -445,4 +454,4 @@ Pause and reassess if:
 - the request depends on undocumented streaming or tool behavior
 - the model capability is ambiguous across official pages
 - the user wants local file download or remote URL fetching without explicit approval
-- the surrounding project does not yet have a safe way to provide `ARK_API_KEY`
+- the local auth file is missing or invalid
