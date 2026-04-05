@@ -14,12 +14,13 @@ Default assumptions:
 - auth keys: `api_key`, optional `base_url`
 - common base URL default: `https://ark.cn-beijing.volces.com/api/v3`
 - bundled script: `scripts/generate-image.mjs`
+- treat the local auth file as already configured unless execution proves otherwise
 
 Verify current auth details against the official page before changing either assumption:
 
 - `https://www.volcengine.com/docs/82379/1298459?lang=zh`
 
-Read [config-schema.md](config-schema.md) when the local auth file is missing or malformed.
+Read [config-schema.md](config-schema.md) only when live execution fails because the local auth file is missing or malformed.
 
 Rules:
 
@@ -39,6 +40,7 @@ Rules:
 - explain which fields are required
 - execute the bundled script with explicit user intent
 - provide a minimal code example without embedded secrets
+- assume auth is ready unless the execution path reports an auth problem
 
 ### Guarded
 

@@ -1,6 +1,6 @@
 # Config Schema
 
-Use this file when local authentication details matter.
+Use this file only when execution is blocked by local authentication setup.
 
 Persistent auth state should live under:
 
@@ -47,7 +47,7 @@ Rules:
 - `base_url` is optional; when omitted, the script should fall back to the default Ark base URL
 - do not store extra prompt defaults or behavior flags in `auth.json`
 
-## First-Run Setup
+## Setup When Execution Fails For Auth
 
 Create the parent directory if it does not exist:
 
@@ -70,9 +70,11 @@ If `auth.json` is missing:
 - stop execution
 - print the expected file path
 - print a minimal valid JSON example
+- guide the user to create the file only after the execution path reports the failure
 
 If `auth.json` is malformed:
 
 - stop execution
 - report that the JSON is invalid
 - do not guess or partially recover missing auth values
+- guide the user to fix the file only after the execution path reports the failure

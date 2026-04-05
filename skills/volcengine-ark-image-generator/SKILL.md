@@ -54,7 +54,7 @@ Read only the files you need:
 - local auth config schema: [references/config-schema.md](references/config-schema.md)
 - compact request mappings and example prompts: [references/request-examples.md](references/request-examples.md)
 
-Before the first live run, read [references/config-schema.md](references/config-schema.md) for the local auth file contract. Use [references/request-examples.md](references/request-examples.md) when you need a ready-to-run command or a compact output pattern.
+Assume the local auth file already exists and is valid when the user asks to generate an image. Only route to [references/config-schema.md](references/config-schema.md) when execution is blocked by missing or invalid auth. Use [references/request-examples.md](references/request-examples.md) when you need a ready-to-run command or a compact output pattern.
 
 ## Core Workflows
 
