@@ -6,8 +6,6 @@ source "$SCRIPT_DIR/common.sh"
 service=''
 account=''
 keychain=''
-requesting_actor=''
-purpose=''
 confirmed=0
 
 while [ "$#" -gt 0 ]; do
@@ -15,8 +13,7 @@ while [ "$#" -gt 0 ]; do
     --service) service="$2"; shift 2 ;;
     --account) account="$2"; shift 2 ;;
     --keychain) keychain="$2"; shift 2 ;;
-    --requesting-actor) requesting_actor="$2"; shift 2 ;;
-    --purpose) purpose="$2"; shift 2 ;;
+    --requesting-actor|--purpose) shift 2 ;;
     --confirmed) confirmed=1; shift ;;
     *) fail_json "usage_error" "Unknown argument" "argument" "$1"; exit "$ERR_USAGE" ;;
   esac
@@ -42,6 +39,5 @@ elif [ "$rc" -ne 0 ]; then
   exit "$ERR_SECURITY"
 fi
 
-printf '{"ok":true,"action":"reveal-secret","service":"%s","account":"%s","keychain":"%s","requesting_actor":"%s","purpose":"%s","secret":"%s","secret_exposed_to_user":true}\n' \
-  "$(json_escape "$service")" "$(json_escape "$account")" "$(json_escape "$keychain")" \
-  "$(json_escape "$requesting_actor")" "$(json_escape "$purpose")" "$(json_escape "$secret")"
+printf '{"ok":true,"action":"reveal-secret","service":"%s","account":"%s","keychain":"%s","secret":"%s","secret_exposed_to_user":true}\n' \
+  "$(json_escape "$service")" "$(json_escape "$account")" "$(json_escape "$keychain")" "$(json_escape "$secret")"

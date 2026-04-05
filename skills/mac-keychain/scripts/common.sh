@@ -8,6 +8,19 @@ readonly ERR_ALREADY_EXISTS=66
 readonly ERR_NOT_FOUND=44
 readonly ERR_SECURITY=70
 
+require_runtime() {
+  local platform
+  platform=$(uname -s 2>/dev/null || printf 'unknown')
+  if [ "$platform" != "Darwin" ]; then
+    fail_json "unsupported_platform" "This skill requires macOS" "platform" "$platform"
+    exit "$ERR_SECURITY"
+  fi
+  if [ ! -x "$SECURITY_BIN" ]; then
+    fail_json "missing_dependency" "Required binary is unavailable" "path" "$SECURITY_BIN"
+    exit "$ERR_SECURITY"
+  fi
+}
+
 json_escape() {
   local value="${1-}"
   value=${value//\\/\\\\}
@@ -22,12 +35,14 @@ fail_json() {
   local code="$1"
   local message="$2"
   shift 2
-  printf '{"ok":false,"code":"%s","message":"%s"' "$(json_escape "$code")" "$(json_escape "$message")"
-  while [ "$#" -gt 1 ]; do
-    printf ',"%s":"%s"' "$(json_escape "$1")" "$(json_escape "$2")"
-    shift 2
-  done
-  printf '}\n' >&2
+  {
+    printf '{"ok":false,"code":"%s","message":"%s"' "$(json_escape "$code")" "$(json_escape "$message")"
+    while [ "$#" -gt 1 ]; do
+      printf ',"%s":"%s"' "$(json_escape "$1")" "$(json_escape "$2")"
+      shift 2
+    done
+    printf '}\n'
+  } >&2
 }
 
 require_arg() {
@@ -97,3 +112,5 @@ require_confirmed() {
     exit "$ERR_CONFIRMATION_REQUIRED"
   fi
 }
+
+require_runtime
