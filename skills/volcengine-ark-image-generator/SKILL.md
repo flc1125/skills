@@ -5,7 +5,7 @@ metadata:
   name: Volcengine Ark Image Generator
   description: Plan and validate Volcengine Ark image generation workflows with model-aware parameter guidance.
   author: Flc
-  created: 2026-04-05T14:06:13Z
+  created: 2026-04-05T14:38:53Z
 ---
 
 # Volcengine Ark Image Generator
