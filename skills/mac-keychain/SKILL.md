@@ -1,6 +1,11 @@
 ---
 name: mac-keychain
 description: Work with macOS Keychain generic password items through bundled scripts. Use when Codex needs to check, read metadata, create, update, retrieve, reveal, or delete local credentials by `service + account` on macOS, especially as a thin credential-store wrapper inside another workflow.
+metadata:
+  name: Mac Keychain
+  description: Work with macOS Keychain generic password items for local credential checks, updates, retrieval, reveal, and deletion.
+  author: Flc゛
+  created: 2026-03-27T07:51:16Z
 ---
 
 # Mac Keychain
