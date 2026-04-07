@@ -72,7 +72,7 @@ Rules:
 The bundled scripts are intentionally narrow:
 
 - preview mode unless `--execute` is passed
-- auth file first, then env, then explicit CLI overrides
+- explicit CLI overrides first, then auth file, then env
 - one command per invocation
 - safe JSON parsing for Get笔记 int64 identifiers
 - no third-party runtime dependencies

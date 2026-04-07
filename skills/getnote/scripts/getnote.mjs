@@ -76,6 +76,12 @@ function executeFlag(args) {
   return args.execute === true;
 }
 
+function requireNonEmptyStringArg(args, key, label = key) {
+  if (typeof args[key] !== 'string' || !args[key].trim()) {
+    throw new Error(`Provide --${label} with a value`);
+  }
+}
+
 function maybeTags(args) {
   const tags = csvToArray(args.tags);
   return tags.length > 0 ? tags : undefined;
@@ -271,6 +277,7 @@ async function handleSaveText(args) {
 
 async function handleSaveLink(args) {
   requireKeys(args, ['url']);
+  requireNonEmptyStringArg(args, 'url');
 
   const content = await readOptionalText(args, 'content', 'content-file');
   const body = {
@@ -339,6 +346,14 @@ async function handleSaveImage(args) {
   const localImage = args.image;
   const remoteImageUrl = args['image-url'];
 
+  if (localImage !== undefined && typeof localImage !== 'string') {
+    throw new Error('Provide --image with a local file path');
+  }
+
+  if (remoteImageUrl !== undefined && typeof remoteImageUrl !== 'string') {
+    throw new Error('Provide --image-url with a value');
+  }
+
   if (!localImage && !remoteImageUrl) {
     throw new Error('Provide --image with a local file');
   }
@@ -398,9 +413,9 @@ async function handleSaveImage(args) {
     context: 'Get笔记 image save request',
   });
 
-    if (args.poll !== true) {
-      printJson({
-        workflow: 'save-image',
+  if (args.poll !== true) {
+    printJson({
+      workflow: 'save-image',
       upload: summarizeUpload(upload),
       initial,
     });
@@ -412,7 +427,7 @@ async function handleSaveImage(args) {
   if (!taskId) {
     printJson({
       workflow: 'save-image',
-      upload,
+      upload: summarizeUpload(upload),
       initial,
     });
     return;

@@ -1,8 +1,12 @@
 #!/usr/bin/env node
 
+import fs from 'node:fs/promises';
+import path from 'node:path';
+
 import {
   DEFAULT_BASE_URL,
   parseArgs,
+  parseGetnoteJson,
   buildUrl,
   delay,
   ensureSuccessfulResult,
@@ -81,39 +85,45 @@ async function main() {
     });
 
     const text = await response.text();
-    const parsed = text && text.trim().startsWith('{') ? JSON.parse(text) : { raw: text };
+    let parsed;
+    if (text && text.trim().startsWith('{')) {
+      try {
+        parsed = parseGetnoteJson(text);
+      } catch {
+        parsed = { raw: text };
+      }
+    } else {
+      parsed = { raw: text };
+    }
     const message = parsed?.data?.msg;
 
     if (response.ok && parsed?.success && parsed?.data?.api_key) {
       if (typeof args['write-auth-file'] === 'string') {
         const outputPath = resolvePathMaybeRelative(args['write-auth-file']);
-        const outputDir = outputPath.replace(/\/[^/]+$/, '');
+        const outputDir = path.dirname(outputPath);
+        const exists = await fs
+          .stat(outputPath)
+          .then(() => true)
+          .catch(() => false);
 
-        await import('node:fs/promises').then(async (fs) => {
-          const exists = await fs
-            .stat(outputPath)
-            .then(() => true)
-            .catch(() => false);
+        if (exists) {
+          throw new Error(`Refusing to overwrite existing auth file: ${outputPath}`);
+        }
 
-          if (exists) {
-            throw new Error(`Refusing to overwrite existing auth file: ${outputPath}`);
-          }
-
-          await fs.mkdir(outputDir, { recursive: true });
-          await fs.writeFile(
-            outputPath,
-            JSON.stringify(
-              {
-                version: 1,
-                api_key: parsed.data.api_key,
-                client_id: parsed.data.client_id || clientId,
-                base_url: baseUrl,
-              },
-              null,
-              2,
-            ),
-          );
-        });
+        await fs.mkdir(outputDir, { recursive: true });
+        await fs.writeFile(
+          outputPath,
+          JSON.stringify(
+            {
+              version: 1,
+              api_key: parsed.data.api_key,
+              client_id: parsed.data.client_id || clientId,
+              base_url: baseUrl,
+            },
+            null,
+            2,
+          ),
+        );
       }
 
       printJson({

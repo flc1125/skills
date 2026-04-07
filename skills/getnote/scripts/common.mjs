@@ -10,7 +10,7 @@ export const DEFAULT_CONFIG_ROOT = path.join('~', '.config', 'flc1125', 'skills'
 export const DEFAULT_AUTH_PATH = path.join(DEFAULT_CONFIG_ROOT, 'auth.json');
 
 const BIG_INT_FIELDS_PATTERN =
-  /"(id|note_id|next_cursor|parent_id|follow_id|live_id)"\s*:\s*(-?\d+)/g;
+  /"(id|note_id|tag_id|post_id|next_cursor|parent_id|follow_id|live_id)"\s*:\s*(-?\d+)/g;
 
 export function printJson(value) {
   console.log(JSON.stringify(value, null, 2));
@@ -182,6 +182,10 @@ function readAuthFile(authFile, { tolerateInvalid = false } = {}) {
   }
 
   if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+    if (tolerateInvalid) {
+      return {};
+    }
+
     throw new Error(`Get笔记 auth file must be a JSON object: ${authFile}`);
   }
 
@@ -193,15 +197,7 @@ export function resolveAuth(
   { execute = false, requireApiKey = true, bestEffortAuthFile = false } = {},
 ) {
   const authFile = resolvePathMaybeRelative(args['auth-file'] || DEFAULT_AUTH_PATH);
-  const canResolveWithoutAuthFile =
-    (!requireApiKey || typeof args['api-key'] === 'string' || typeof process.env.GETNOTE_API_KEY === 'string') &&
-    (typeof args['client-id'] === 'string' ||
-      typeof process.env.GETNOTE_CLIENT_ID === 'string' ||
-      DEFAULT_CLIENT_ID.length > 0) &&
-    (typeof args['base-url'] === 'string' ||
-      typeof process.env.GETNOTE_BASE_URL === 'string' ||
-      DEFAULT_BASE_URL.length > 0);
-  const shouldReadAuthFile = bestEffortAuthFile || (execute && !canResolveWithoutAuthFile);
+  const shouldReadAuthFile = bestEffortAuthFile || execute;
   const authConfig = shouldReadAuthFile
     ? readAuthFile(authFile, { tolerateInvalid: bestEffortAuthFile })
     : {};
@@ -236,13 +232,16 @@ export function missingAuthMessage(authFile) {
   );
 }
 
-function buildHeaders(auth, { hasJsonBody = false, includeClientId = true, extraHeaders = {} } = {}) {
+function buildHeaders(
+  auth,
+  { hasJsonBody = false, includeAuthHeader = true, includeClientId = true, extraHeaders = {} } = {},
+) {
   const headers = {
     Accept: 'application/json',
     ...extraHeaders,
   };
 
-  if (auth.apiKey) {
+  if (includeAuthHeader && auth.apiKey) {
     headers.Authorization = auth.apiKey;
   }
 
@@ -362,6 +361,7 @@ export async function requestJson({
 }) {
   const headers = buildHeaders(auth, {
     hasJsonBody: body !== undefined,
+    includeAuthHeader: requiresAuth,
     includeClientId,
     extraHeaders,
   });
