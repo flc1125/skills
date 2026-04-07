@@ -95,6 +95,7 @@ Rules:
 - treat returned signed form fields as secrets
 - preserve field order for multipart upload:
   `key -> OSSAccessKeyId -> policy -> signature -> callback -> Content-Type -> file`
+- the bundled script only supports local-file upload for image notes; it does not accept arbitrary remote image URLs
 
 ## Practical Script Mapping
 

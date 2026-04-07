@@ -2,23 +2,66 @@
 
 import {
   DEFAULT_BASE_URL,
+  parseArgs,
   buildUrl,
   delay,
   ensureSuccessfulResult,
   printJson,
+  resolvePathMaybeRelative,
   toPositiveInt,
   DEFAULT_CLIENT_ID,
 } from './common.mjs';
 
+function splitArgs(argv) {
+  const positionals = [];
+  const flags = [];
+
+  for (let index = 0; index < argv.length; index += 1) {
+    const token = argv[index];
+
+    if (!token.startsWith('--')) {
+      positionals.push(token);
+      continue;
+    }
+
+    flags.push(token);
+    const next = argv[index + 1];
+    if (next && !next.startsWith('--')) {
+      flags.push(next);
+      index += 1;
+    }
+  }
+
+  return {
+    positionals,
+    args: parseArgs(flags),
+  };
+}
+
+function redactTokenData(data) {
+  if (!data || typeof data !== 'object') {
+    return data;
+  }
+
+  return {
+    ...data,
+    api_key: data.api_key ? '<redacted>' : undefined,
+    has_api_key: Boolean(data.api_key),
+  };
+}
+
 async function main() {
-  const code = process.argv[2];
+  const { positionals, args } = splitArgs(process.argv.slice(2));
+  const code = positionals[0];
 
   if (!code) {
-    throw new Error('Usage: node skills/getnote/scripts/oauth-poll.mjs <code> [client_id]');
+    throw new Error(
+      'Usage: node skills/getnote/scripts/oauth-poll.mjs <code> [client_id] [--write-auth-file <path>]',
+    );
   }
 
   const baseUrl = process.env.GETNOTE_BASE_URL || DEFAULT_BASE_URL;
-  const clientId = process.argv[3] || process.env.GETNOTE_CLIENT_ID || DEFAULT_CLIENT_ID;
+  const clientId = positionals[1] || process.env.GETNOTE_CLIENT_ID || DEFAULT_CLIENT_ID;
   const intervalMs = toPositiveInt(process.env.GETNOTE_OAUTH_INTERVAL_MS, 'GETNOTE_OAUTH_INTERVAL_MS', 5000);
   const maxAttempts = toPositiveInt(process.env.GETNOTE_OAUTH_MAX_ATTEMPTS, 'GETNOTE_OAUTH_MAX_ATTEMPTS', 120);
   const url = buildUrl(baseUrl, '/open/api/v1/oauth/token');
@@ -42,10 +85,44 @@ async function main() {
     const message = parsed?.data?.msg;
 
     if (response.ok && parsed?.success && parsed?.data?.api_key) {
+      if (typeof args['write-auth-file'] === 'string') {
+        const outputPath = resolvePathMaybeRelative(args['write-auth-file']);
+        const outputDir = outputPath.replace(/\/[^/]+$/, '');
+
+        await import('node:fs/promises').then(async (fs) => {
+          const exists = await fs
+            .stat(outputPath)
+            .then(() => true)
+            .catch(() => false);
+
+          if (exists) {
+            throw new Error(`Refusing to overwrite existing auth file: ${outputPath}`);
+          }
+
+          await fs.mkdir(outputDir, { recursive: true });
+          await fs.writeFile(
+            outputPath,
+            JSON.stringify(
+              {
+                version: 1,
+                api_key: parsed.data.api_key,
+                client_id: parsed.data.client_id || clientId,
+                base_url: baseUrl,
+              },
+              null,
+              2,
+            ),
+          );
+        });
+      }
+
       printJson({
         ok: true,
         attempts: attempt,
-        data: parsed.data,
+        data: redactTokenData(parsed.data),
+        wrote_auth_file: args['write-auth-file']
+          ? resolvePathMaybeRelative(args['write-auth-file'])
+          : null,
       });
       return;
     }

@@ -107,7 +107,10 @@ function extractTaskStatus(payload) {
 }
 
 async function apiRequest(args, options) {
-  const auth = resolveAuth(args);
+  const auth = resolveAuth(args, {
+    execute: executeFlag(args),
+    requireApiKey: options.requiresAuth ?? true,
+  });
   const url = buildUrl(auth.baseUrl, options.routePath, options.query);
 
   return requestJson({
@@ -125,6 +128,17 @@ async function executeApiRequest(args, options) {
   const result = await apiRequest(args, options);
   ensureSuccessfulResult(result, options.context || options.routePath);
   return result;
+}
+
+function summarizeUpload(upload) {
+  if (!upload) {
+    return null;
+  }
+
+  return {
+    accessUrl: upload.accessUrl,
+    localPath: upload.localPath,
+  };
 }
 
 function normalizeUploadShape(data) {
@@ -193,7 +207,6 @@ async function uploadImage(authArgs, imagePath) {
   }
 
   return {
-    uploadToken,
     accessUrl: token.access_url,
     localPath: resolvedPath,
   };
@@ -247,7 +260,7 @@ async function handleSaveText(args) {
     parent_id: firstDefined(args['parent-id'], undefined),
   };
 
-  const result = await apiRequest(args, {
+  const result = await executeApiRequest(args, {
     method: 'POST',
     routePath: '/open/api/v1/resource/note/save',
     body,
@@ -327,11 +340,17 @@ async function handleSaveImage(args) {
   const remoteImageUrl = args['image-url'];
 
   if (!localImage && !remoteImageUrl) {
-    throw new Error('Provide --image for a local file or --image-url for a hosted image');
+    throw new Error('Provide --image with a local file');
   }
 
   if (localImage && remoteImageUrl) {
     throw new Error('Use either --image or --image-url, not both');
+  }
+
+  if (remoteImageUrl) {
+    throw new Error(
+      'Direct --image-url input is not supported by this script. Provide --image with a local file so the signed upload flow stays inside the trusted path.',
+    );
   }
 
   const content = await readOptionalText(args, 'content', 'content-file');
@@ -358,7 +377,7 @@ async function handleSaveImage(args) {
         routePath: '/open/api/v1/resource/note/save',
         body: {
           ...baseBody,
-          image_urls: [remoteImageUrl || '<uploaded_access_url>'],
+          image_urls: ['<uploaded_access_url>'],
         },
       }),
       polling: args.poll === true ? { mode: 'preview', until: 'success|failed' } : null,
@@ -367,7 +386,7 @@ async function handleSaveImage(args) {
   }
 
   const upload = localImage ? await uploadImage(args, localImage) : null;
-  const imageUrl = remoteImageUrl || upload?.accessUrl;
+  const imageUrl = upload?.accessUrl;
 
   const initial = await executeApiRequest(args, {
     method: 'POST',
@@ -379,10 +398,10 @@ async function handleSaveImage(args) {
     context: 'Getnote image save request',
   });
 
-  if (args.poll !== true) {
-    printJson({
-      workflow: 'save-image',
-      upload,
+    if (args.poll !== true) {
+      printJson({
+        workflow: 'save-image',
+      upload: summarizeUpload(upload),
       initial,
     });
     return;
@@ -414,7 +433,7 @@ async function handleSaveImage(args) {
 
   printJson({
     workflow: 'save-image',
-    upload,
+    upload: summarizeUpload(upload),
     initial,
     poll: progress,
     detail,
@@ -425,7 +444,7 @@ async function handleTaskProgress(args) {
   requireKeys(args, ['task-id']);
 
   if (args['until-done'] !== true || !executeFlag(args)) {
-    const result = await apiRequest(args, {
+    const result = await executeApiRequest(args, {
       method: 'POST',
       routePath: '/open/api/v1/resource/note/task/progress',
       body: { task_id: args['task-id'] },
@@ -440,7 +459,7 @@ async function handleTaskProgress(args) {
 async function handleSearch(args) {
   requireKeys(args, ['query']);
 
-  const result = await apiRequest(args, {
+  const result = await executeApiRequest(args, {
     method: 'POST',
     routePath: '/open/api/v1/resource/recall',
     body: {
@@ -455,7 +474,7 @@ async function handleSearch(args) {
 async function handleSearchKnowledge(args) {
   requireKeys(args, ['topic-id', 'query']);
 
-  const result = await apiRequest(args, {
+  const result = await executeApiRequest(args, {
     method: 'POST',
     routePath: '/open/api/v1/resource/recall/knowledge',
     body: {
@@ -469,7 +488,7 @@ async function handleSearchKnowledge(args) {
 }
 
 async function handleListNotes(args) {
-  const result = await apiRequest(args, {
+  const result = await executeApiRequest(args, {
     method: 'GET',
     routePath: '/open/api/v1/resource/note/list',
     query: {
@@ -483,7 +502,7 @@ async function handleListNotes(args) {
 async function handleNoteDetail(args) {
   requireKeys(args, ['note-id']);
 
-  const result = await apiRequest(args, {
+  const result = await executeApiRequest(args, {
     method: 'GET',
     routePath: '/open/api/v1/resource/note/detail',
     query: {
@@ -505,7 +524,7 @@ async function handleUpdateNote(args) {
     throw new Error('Provide at least one of --title, --content, --content-file, or --tags');
   }
 
-  const result = await apiRequest(args, {
+  const result = await executeApiRequest(args, {
     method: 'POST',
     routePath: '/open/api/v1/resource/note/update',
     body: {
@@ -522,7 +541,7 @@ async function handleUpdateNote(args) {
 async function handleDeleteNote(args) {
   requireKeys(args, ['note-id']);
 
-  const result = await apiRequest(args, {
+  const result = await executeApiRequest(args, {
     method: 'POST',
     routePath: '/open/api/v1/resource/note/delete',
     body: {
@@ -534,7 +553,7 @@ async function handleDeleteNote(args) {
 }
 
 async function handleListKnowledge(args) {
-  const result = await apiRequest(args, {
+  const result = await executeApiRequest(args, {
     method: 'GET',
     routePath: '/open/api/v1/resource/knowledge/list',
     query: {
@@ -546,7 +565,7 @@ async function handleListKnowledge(args) {
 }
 
 async function handleListSubscribedKnowledge(args) {
-  const result = await apiRequest(args, {
+  const result = await executeApiRequest(args, {
     method: 'GET',
     routePath: '/open/api/v1/resource/knowledge/subscribe/list',
     query: {
@@ -560,7 +579,7 @@ async function handleListSubscribedKnowledge(args) {
 async function handleCreateKnowledge(args) {
   requireKeys(args, ['name']);
 
-  const result = await apiRequest(args, {
+  const result = await executeApiRequest(args, {
     method: 'POST',
     routePath: '/open/api/v1/resource/knowledge/create',
     body: {
@@ -576,7 +595,7 @@ async function handleCreateKnowledge(args) {
 async function handleKnowledgeNotes(args) {
   requireKeys(args, ['topic-id']);
 
-  const result = await apiRequest(args, {
+  const result = await executeApiRequest(args, {
     method: 'GET',
     routePath: '/open/api/v1/resource/knowledge/notes',
     query: {
@@ -596,7 +615,7 @@ async function handleKnowledgeAdd(args) {
     throw new Error('Expected --note-ids to contain at least one note ID');
   }
 
-  const result = await apiRequest(args, {
+  const result = await executeApiRequest(args, {
     method: 'POST',
     routePath: '/open/api/v1/resource/knowledge/note/batch-add',
     body: {
@@ -616,7 +635,7 @@ async function handleKnowledgeRemove(args) {
     throw new Error('Expected --note-ids to contain at least one note ID');
   }
 
-  const result = await apiRequest(args, {
+  const result = await executeApiRequest(args, {
     method: 'POST',
     routePath: '/open/api/v1/resource/knowledge/note/remove',
     body: {
@@ -631,7 +650,7 @@ async function handleKnowledgeRemove(args) {
 async function handleKnowledgeBloggers(args) {
   requireKeys(args, ['topic-id']);
 
-  const result = await apiRequest(args, {
+  const result = await executeApiRequest(args, {
     method: 'GET',
     routePath: '/open/api/v1/resource/knowledge/bloggers',
     query: {
@@ -646,7 +665,7 @@ async function handleKnowledgeBloggers(args) {
 async function handleKnowledgeBloggerContents(args) {
   requireKeys(args, ['topic-id', 'follow-id']);
 
-  const result = await apiRequest(args, {
+  const result = await executeApiRequest(args, {
     method: 'GET',
     routePath: '/open/api/v1/resource/knowledge/blogger/contents',
     query: {
@@ -662,7 +681,7 @@ async function handleKnowledgeBloggerContents(args) {
 async function handleKnowledgeBloggerDetail(args) {
   requireKeys(args, ['topic-id', 'post-id']);
 
-  const result = await apiRequest(args, {
+  const result = await executeApiRequest(args, {
     method: 'GET',
     routePath: '/open/api/v1/resource/knowledge/blogger/content/detail',
     query: {
@@ -677,7 +696,7 @@ async function handleKnowledgeBloggerDetail(args) {
 async function handleKnowledgeLives(args) {
   requireKeys(args, ['topic-id']);
 
-  const result = await apiRequest(args, {
+  const result = await executeApiRequest(args, {
     method: 'GET',
     routePath: '/open/api/v1/resource/knowledge/lives',
     query: {
@@ -692,7 +711,7 @@ async function handleKnowledgeLives(args) {
 async function handleKnowledgeLiveDetail(args) {
   requireKeys(args, ['topic-id', 'live-id']);
 
-  const result = await apiRequest(args, {
+  const result = await executeApiRequest(args, {
     method: 'GET',
     routePath: '/open/api/v1/resource/knowledge/live/detail',
     query: {
@@ -712,7 +731,7 @@ async function handleAddTags(args) {
     throw new Error('Expected --tags to contain at least one tag');
   }
 
-  const result = await apiRequest(args, {
+  const result = await executeApiRequest(args, {
     method: 'POST',
     routePath: '/open/api/v1/resource/note/tags/add',
     body: {
@@ -727,7 +746,7 @@ async function handleAddTags(args) {
 async function handleDeleteTag(args) {
   requireKeys(args, ['note-id', 'tag-id']);
 
-  const result = await apiRequest(args, {
+  const result = await executeApiRequest(args, {
     method: 'POST',
     routePath: '/open/api/v1/resource/note/tags/delete',
     body: {
@@ -740,12 +759,11 @@ async function handleDeleteTag(args) {
 }
 
 async function handleOAuthDeviceCode(args) {
-  const auth = {
-    apiKey: null,
-    authFile: null,
-    baseUrl: args['base-url'] || process.env.GETNOTE_BASE_URL || DEFAULT_BASE_URL,
-    clientId: args['client-id'] || process.env.GETNOTE_CLIENT_ID || DEFAULT_CLIENT_ID,
-  };
+  const auth = resolveAuth(args, {
+    execute: false,
+    requireApiKey: false,
+    bestEffortAuthFile: true,
+  });
   const result = await requestJson({
     method: 'POST',
     url: buildUrl(auth.baseUrl, '/open/api/v1/oauth/device/code'),
@@ -758,6 +776,7 @@ async function handleOAuthDeviceCode(args) {
     includeClientId: false,
   });
 
+  ensureSuccessfulResult(result, 'Getnote OAuth device code request');
   printJson(result);
 }
 

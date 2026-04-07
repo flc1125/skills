@@ -21,6 +21,8 @@ Rules:
 - the default client ID can be used when no custom client ID is configured
 - show both `verification_uri` and `user_code`
 - after the device code is created, use `scripts/oauth-poll.mjs <code>` to poll for completion
+- the polling script redacts `api_key` in stdout by default
+- when the user explicitly wants local persistence, use `--write-auth-file ~/.config/flc1125/skills/getnote/auth.json`
 
 ## Device Token Poll
 

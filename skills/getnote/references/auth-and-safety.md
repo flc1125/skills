@@ -77,6 +77,8 @@ The bundled scripts are intentionally narrow:
 - safe JSON parsing for Getnote int64 identifiers
 - no third-party runtime dependencies
 - polling helpers return structured JSON instead of conversational text
+- polling helpers redact issued API keys by default
+- image upload output must never include signed OSS form fields
 
 ## Error Handling Posture
 

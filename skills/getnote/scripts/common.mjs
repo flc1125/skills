@@ -157,7 +157,7 @@ function tryParseResponseText(text) {
   return text;
 }
 
-function readAuthFile(authFile) {
+function readAuthFile(authFile, { tolerateInvalid = false } = {}) {
   if (!fs.existsSync(authFile)) {
     return {};
   }
@@ -165,7 +165,11 @@ function readAuthFile(authFile) {
   let parsed;
   try {
     parsed = JSON.parse(fs.readFileSync(authFile, 'utf8'));
-  } catch (error) {
+  } catch {
+    if (tolerateInvalid) {
+      return {};
+    }
+
     throw new Error(
       `Getnote auth file is invalid JSON: ${authFile}\n` +
         'Create or fix it with:\n' +
@@ -184,9 +188,23 @@ function readAuthFile(authFile) {
   return parsed;
 }
 
-export function resolveAuth(args = {}) {
+export function resolveAuth(
+  args = {},
+  { execute = false, requireApiKey = true, bestEffortAuthFile = false } = {},
+) {
   const authFile = resolvePathMaybeRelative(args['auth-file'] || DEFAULT_AUTH_PATH);
-  const authConfig = readAuthFile(authFile);
+  const canResolveWithoutAuthFile =
+    (!requireApiKey || typeof args['api-key'] === 'string' || typeof process.env.GETNOTE_API_KEY === 'string') &&
+    (typeof args['client-id'] === 'string' ||
+      typeof process.env.GETNOTE_CLIENT_ID === 'string' ||
+      DEFAULT_CLIENT_ID.length > 0) &&
+    (typeof args['base-url'] === 'string' ||
+      typeof process.env.GETNOTE_BASE_URL === 'string' ||
+      DEFAULT_BASE_URL.length > 0);
+  const shouldReadAuthFile = bestEffortAuthFile || (execute && !canResolveWithoutAuthFile);
+  const authConfig = shouldReadAuthFile
+    ? readAuthFile(authFile, { tolerateInvalid: bestEffortAuthFile })
+    : {};
 
   return {
     authFile,
@@ -272,6 +290,14 @@ export function buildUrl(baseUrl, routePath, query = {}) {
 
 export function isSuccessfulResult(result) {
   if (!result) {
+    return true;
+  }
+
+  if (result.mode === 'preview') {
+    return true;
+  }
+
+  if (typeof result.ok !== 'boolean') {
     return true;
   }
 

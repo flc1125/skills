@@ -68,9 +68,14 @@ Then save the JSON object above to `auth.json`.
 Read auth in this order:
 
 1. explicit CLI flags
-2. local `auth.json`
+2. local `auth.json` when the command still needs missing values
 3. environment variables
 4. fail with a short setup message
+
+Rules:
+
+- explicit CLI overrides must still work even if the local auth file is malformed
+- preview-only commands should not be blocked just because a local auth file is broken
 
 If `auth.json` is missing:
 
