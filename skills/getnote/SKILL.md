@@ -1,6 +1,6 @@
 ---
 name: getnote
-description: Save, search, list, and organize Get笔记 notes, images, tags, and knowledge resources through the Get笔记 OpenAPI. Use when Codex needs to store text or links as notes, upload an image into a note workflow, recall prior notes, inspect note details, manage tags or knowledge bases, or recover from Get笔记 authentication failures with the local auth.json setup.
+description: Save, search, list, and organize Get笔记 notes, images, tags, and knowledge resources through the Get笔记 OpenAPI. Use when storing text or links as notes, uploading an image into a note workflow, recalling prior notes, inspecting note details, managing tags or knowledge bases, or recovering from Get笔记 authentication failures with the local auth.json setup.
 metadata:
   name: Get笔记
   description: Operate on Get笔记 notes, search, tags, and knowledge resources through the Get笔记 OpenAPI.

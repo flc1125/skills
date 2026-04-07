@@ -1,6 +1,6 @@
 # Get笔记 Skill
 
-`getnote` is a Codex skill for working with the Get笔记 OpenAPI.
+`getnote` is a skill for working with the Get笔记 OpenAPI.
 
 It covers:
 
