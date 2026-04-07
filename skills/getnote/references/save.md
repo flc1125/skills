@@ -2,6 +2,16 @@
 
 Use this file when the user wants to save content into Getnote.
 
+## Contents
+
+1. Supported Save Modes
+2. Create A Note
+3. Async Task Polling
+4. Link Save Workflow
+5. Image Save Workflow
+6. Image Upload Token
+7. Practical Script Mapping
+
 ## Supported Save Modes
 
 - `plain_text`: synchronous text note creation

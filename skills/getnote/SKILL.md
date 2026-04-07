@@ -24,7 +24,7 @@ Default scope for this skill:
 
 - save text notes
 - save link notes with async task polling
-- save image notes from a local file or pre-hosted image URL
+- save image notes from a local file through the signed upload flow
 - list, inspect, update, and delete notes
 - semantic recall across notes and knowledge bases
 - add and delete note tags
@@ -73,7 +73,7 @@ Sequence:
 3. Use `scripts/getnote.mjs`.
 4. For image notes:
    - if the user provides a local image, let the script upload it first
-   - if the user provides an already hosted Getnote image URL, pass it directly
+   - do not route arbitrary or pre-hosted image URLs through the bundled script
 5. For link and image notes, treat creation as async:
    - return or inspect `task_id`
    - poll until `success` or `failed` when the user wants the full result now
