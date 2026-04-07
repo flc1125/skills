@@ -1,0 +1,7 @@
+interface:
+  display_name: "Getnote"
+  short_description: "Operate on Getnote notes and knowledge"
+  default_prompt: "Use $getnote to save notes, links, and images, search prior notes, inspect details, and manage Getnote knowledge resources through the bundled scripts."
+
+policy:
+  allow_implicit_invocation: true
