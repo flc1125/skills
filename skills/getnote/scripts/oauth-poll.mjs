@@ -168,7 +168,7 @@ async function main() {
       data: parsed,
     };
 
-    ensureSuccessfulResult(result, 'Getnote OAuth token poll');
+    ensureSuccessfulResult(result, 'Get笔记 OAuth token poll');
 
     printJson({
       ok: false,

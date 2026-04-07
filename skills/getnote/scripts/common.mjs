@@ -171,7 +171,7 @@ function readAuthFile(authFile, { tolerateInvalid = false } = {}) {
     }
 
     throw new Error(
-      `Getnote auth file is invalid JSON: ${authFile}\n` +
+      `Get笔记 auth file is invalid JSON: ${authFile}\n` +
         'Create or fix it with:\n' +
         '{\n' +
         '  "version": 1,\n' +
@@ -182,7 +182,7 @@ function readAuthFile(authFile, { tolerateInvalid = false } = {}) {
   }
 
   if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
-    throw new Error(`Getnote auth file must be a JSON object: ${authFile}`);
+    throw new Error(`Get笔记 auth file must be a JSON object: ${authFile}`);
   }
 
   return parsed;
@@ -225,7 +225,7 @@ export function resolveAuth(
 
 export function missingAuthMessage(authFile) {
   return (
-    `Missing Getnote auth. Expected a local auth file at ${authFile}\n` +
+    `Missing Get笔记 auth. Expected a local auth file at ${authFile}\n` +
     'Minimal auth.json example:\n' +
     '{\n' +
     '  "version": 1,\n' +
@@ -339,10 +339,10 @@ function summarizeApiFailure(result) {
     return `HTTP ${result.status}`;
   }
 
-  return 'unknown Getnote failure';
+  return 'unknown Get笔记 failure';
 }
 
-export function ensureSuccessfulResult(result, context = 'Getnote request') {
+export function ensureSuccessfulResult(result, context = 'Get笔记 request') {
   if (!isSuccessfulResult(result)) {
     throw new Error(`${context} failed: ${summarizeApiFailure(result)}`);
   }

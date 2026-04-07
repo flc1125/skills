@@ -16,7 +16,7 @@ Keep the storage model intentionally small. For v1, this skill only needs one au
 
 ## `auth.json`
 
-Use this file for local Getnote authentication defaults.
+Use this file for local Get笔记 authentication defaults.
 
 Setup path:
 
