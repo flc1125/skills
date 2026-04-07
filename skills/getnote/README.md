@@ -1,6 +1,6 @@
-# Get笔记 Skill
+# Get 笔记 Skill
 
-`getnote` is a skill for working with the Get笔记 OpenAPI.
+`getnote` is a skill for working with the Get 笔记 OpenAPI.
 
 It covers:
 

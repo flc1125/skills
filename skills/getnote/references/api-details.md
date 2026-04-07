@@ -32,7 +32,7 @@ In JavaScript, treat them as strings before JSON parsing or immediately after pa
 
 | Reason | Meaning |
 | --- | --- |
-| `not_member` | the account needs a qualifying Get笔记 membership |
+| `not_member` | the account needs a qualifying Get 笔记 membership |
 | `qps_global` | global QPS limit exceeded |
 | `qps_bucket` | bucket-level QPS limit exceeded |
 | `quota_day` | daily quota exhausted |

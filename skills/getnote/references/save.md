@@ -1,6 +1,6 @@
 # Save Notes
 
-Use this file when the user wants to save content into Get笔记.
+Use this file when the user wants to save content into Get 笔记.
 
 ## Contents
 
@@ -88,7 +88,7 @@ Rules:
 ## Image Save Workflow
 
 1. if the user provides a local file, request an upload token
-2. upload to OSS with the exact field order required by Get笔记
+2. upload to OSS with the exact field order required by Get 笔记
 3. save the note with `note_type=img_text`
 4. capture `task_id`
 5. poll if the user wants completion now

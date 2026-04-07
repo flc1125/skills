@@ -1,20 +1,20 @@
 ---
 name: getnote
-description: Save, search, list, and organize Get笔记 notes, images, tags, and knowledge resources through the Get笔记 OpenAPI. Use when storing text or links as notes, uploading an image into a note workflow, recalling prior notes, inspecting note details, managing tags or knowledge bases, or recovering from Get笔记 authentication failures with the local auth.json setup.
+description: Save, search, list, and organize Get 笔记 notes, images, tags, and knowledge resources through the Get 笔记 OpenAPI. Use when storing text or links as notes, uploading an image into a note workflow, recalling prior notes, inspecting note details, managing tags or knowledge bases, or recovering from Get 笔记 authentication failures with the local auth.json setup.
 metadata:
-  name: Get笔记
-  description: Operate on Get笔记 notes, search, tags, and knowledge resources through the Get笔记 OpenAPI.
+  name: Get 笔记
+  description: Operate on Get 笔记 notes, search, tags, and knowledge resources through the Get 笔记 OpenAPI.
   author: Flc
   created: 2026-04-07T11:38:06Z
 ---
 
-# Get笔记
+# Get 笔记
 
-Operate on Get笔记 through its OpenAPI with a default execution path, local auth-file assumptions, and explicit handling for async note creation.
+Operate on Get 笔记 through its OpenAPI with a default execution path, local auth-file assumptions, and explicit handling for async note creation.
 
 ## Operating Mode
 
-Act as a Get笔记 operator, not as a generic REST client.
+Act as a Get 笔记 operator, not as a generic REST client.
 
 Prioritize:
 
@@ -34,14 +34,14 @@ Default scope for this skill:
 - semantic recall across notes and knowledge bases
 - add and delete note tags
 - list, create, and manage knowledge bases and their note membership
-- start OAuth device flow only when auth is missing or when the user explicitly asks to configure Get笔记
+- start OAuth device flow only when auth is missing or when the user explicitly asks to configure Get 笔记
 
 Default non-goals:
 
 - maintaining a full SDK abstraction layer
 - background retries without user intent
 - auto-writing secrets before an auth failure occurs
-- broad scraping or arbitrary remote file fetching outside Get笔记's intended upload flow
+- broad scraping or arbitrary remote file fetching outside Get 笔记's intended upload flow
 
 ## Resource Map
 
@@ -57,7 +57,7 @@ Read only the files you need:
 - OAuth device flow details: [references/oauth.md](references/oauth.md)
 - error codes, rate limits, and ID handling: [references/api-details.md](references/api-details.md)
 
-Assume the local auth file already exists and is valid when the user asks to perform a Get笔记 action. Only read [references/config-schema.md](references/config-schema.md) after execution fails because auth is missing or malformed.
+Assume the local auth file already exists and is valid when the user asks to perform a Get 笔记 action. Only read [references/config-schema.md](references/config-schema.md) after execution fails because auth is missing or malformed.
 
 ## Core Routing
 
@@ -69,7 +69,7 @@ Use for requests such as:
 
 - "记一下这段话"
 - "把这个链接存到笔记"
-- "把这张图保存到 Get笔记"
+- "把这张图保存到 Get 笔记"
 
 Sequence:
 
@@ -132,7 +132,7 @@ Sequence:
 
 Use only when:
 
-- the user explicitly asks to configure Get笔记
+- the user explicitly asks to configure Get 笔记
 - a live request fails because auth is missing, invalid, or malformed
 
 Sequence:

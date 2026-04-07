@@ -171,7 +171,7 @@ function readAuthFile(authFile, { tolerateInvalid = false } = {}) {
     }
 
     throw new Error(
-      `Get笔记 auth file is invalid JSON: ${authFile}\n` +
+      `Get 笔记 auth file is invalid JSON: ${authFile}\n` +
         'Create or fix it with:\n' +
         '{\n' +
         '  "version": 1,\n' +
@@ -186,7 +186,7 @@ function readAuthFile(authFile, { tolerateInvalid = false } = {}) {
       return {};
     }
 
-    throw new Error(`Get笔记 auth file must be a JSON object: ${authFile}`);
+    throw new Error(`Get 笔记 auth file must be a JSON object: ${authFile}`);
   }
 
   return parsed;
@@ -221,7 +221,7 @@ export function resolveAuth(
 
 export function missingAuthMessage(authFile) {
   return (
-    `Missing Get笔记 auth. Expected a local auth file at ${authFile}\n` +
+    `Missing Get 笔记 auth. Expected a local auth file at ${authFile}\n` +
     'Minimal auth.json example:\n' +
     '{\n' +
     '  "version": 1,\n' +
@@ -338,10 +338,10 @@ function summarizeApiFailure(result) {
     return `HTTP ${result.status}`;
   }
 
-  return 'unknown Get笔记 failure';
+  return 'unknown Get 笔记 failure';
 }
 
-export function ensureSuccessfulResult(result, context = 'Get笔记 request') {
+export function ensureSuccessfulResult(result, context = 'Get 笔记 request') {
   if (!isSuccessfulResult(result)) {
     throw new Error(`${context} failed: ${summarizeApiFailure(result)}`);
   }

@@ -1,6 +1,6 @@
 # OAuth Device Flow
 
-Use this file only when the user explicitly asks to configure Get笔记 or when a live request has already failed for missing auth.
+Use this file only when the user explicitly asks to configure Get 笔记 or when a live request has already failed for missing auth.
 
 ## Device Code Request
 

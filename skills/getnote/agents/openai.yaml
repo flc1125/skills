@@ -1,7 +1,7 @@
 interface:
-  display_name: "Get笔记"
-  short_description: "Operate on Get笔记 notes and knowledge"
-  default_prompt: "Use $getnote to save notes, links, and images, search prior notes, inspect details, and manage Get笔记 knowledge resources through the bundled scripts."
+  display_name: "Get 笔记"
+  short_description: "Operate on Get 笔记 notes and knowledge"
+  default_prompt: "Use $getnote to save notes, links, and images, search prior notes, inspect details, and manage Get 笔记 knowledge resources through the bundled scripts."
 
 policy:
   allow_implicit_invocation: true

@@ -178,7 +178,7 @@ async function main() {
       data: parsed,
     };
 
-    ensureSuccessfulResult(result, 'Get笔记 OAuth token poll');
+    ensureSuccessfulResult(result, 'Get 笔记 OAuth token poll');
 
     printJson({
       ok: false,

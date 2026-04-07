@@ -1,6 +1,6 @@
 # Authentication And Safety
 
-Use this file when preparing or executing a Get笔记 request.
+Use this file when preparing or executing a Get 笔记 request.
 
 This skill is safe-by-default. Treat secrets, note content, image uploads, and local config writes as explicit trust boundaries.
 
@@ -32,7 +32,7 @@ Rules:
 ### Safe
 
 - classify a request into text, link, image, search, list, tag, or knowledge flow
-- shape a Get笔记 payload
+- shape a Get 笔记 payload
 - validate IDs and tags as strings
 - preview a request without sending it
 - explain required fields or polling behavior
@@ -40,9 +40,9 @@ Rules:
 
 ### Guarded
 
-- execute a live Get笔记 API call with clear user intent
-- upload a local image to Get笔记 OSS for an image-note workflow
-- poll a Get笔记 task until it succeeds or fails
+- execute a live Get 笔记 API call with clear user intent
+- upload a local image to Get 笔记 OSS for an image-note workflow
+- poll a Get 笔记 task until it succeeds or fails
 - start OAuth device flow when the user explicitly requests config or auth has already failed
 
 ### Dangerous
@@ -55,7 +55,7 @@ Rules:
 
 ## URL Rules
 
-- treat Get笔记 and OSS URLs as temporary operational artifacts when they contain signed fields
+- treat Get 笔记 and OSS URLs as temporary operational artifacts when they contain signed fields
 - do not log signed query strings or raw upload credentials
 - do not fetch third-party remote URLs in the background just to help a save-image flow
 - prefer local file upload or an already trusted image URL supplied by the user
@@ -74,7 +74,7 @@ The bundled scripts are intentionally narrow:
 - preview mode unless `--execute` is passed
 - explicit CLI overrides first, then auth file, then env
 - one command per invocation
-- safe JSON parsing for Get笔记 int64 identifiers
+- safe JSON parsing for Get 笔记 int64 identifiers
 - no third-party runtime dependencies
 - polling helpers return structured JSON instead of conversational text
 - polling helpers redact issued API keys by default

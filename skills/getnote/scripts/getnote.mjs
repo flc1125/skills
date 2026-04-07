@@ -30,7 +30,7 @@ const MIME_TYPE_BY_EXT = {
 
 function usage() {
   printUsage([
-    'Operate on Get笔记 through the bundled skill script.',
+    'Operate on Get 笔记 through the bundled skill script.',
     '',
     'Usage:',
     '  node skills/getnote/scripts/getnote.mjs <command> [options]',
@@ -156,7 +156,7 @@ function normalizeUploadShape(data) {
     return data.data;
   }
 
-  throw new Error('Get笔记 upload token response did not contain upload credentials');
+  throw new Error('Get 笔记 upload token response did not contain upload credentials');
 }
 
 function inferImageInfo(imagePath) {
@@ -185,7 +185,7 @@ async function uploadImage(authArgs, imagePath) {
       mime_type: info.uploadType,
       count: 1,
     },
-    context: 'Get笔记 image upload token request',
+    context: 'Get 笔记 image upload token request',
   });
 
   const token = normalizeUploadShape(uploadToken.data);
@@ -209,7 +209,7 @@ async function uploadImage(authArgs, imagePath) {
   });
 
   if (response.status !== 200 && response.status !== 204) {
-    throw new Error(`Get笔记 OSS upload failed: HTTP ${response.status}`);
+    throw new Error(`Get 笔记 OSS upload failed: HTTP ${response.status}`);
   }
 
   return {
@@ -231,7 +231,7 @@ async function pollTask(args, taskId) {
       method: 'POST',
       routePath: '/open/api/v1/resource/note/task/progress',
       body: { task_id: taskId },
-      context: 'Get笔记 task progress request',
+      context: 'Get 笔记 task progress request',
     });
 
     const status = extractTaskStatus(progress.data);
@@ -306,7 +306,7 @@ async function handleSaveLink(args) {
     method: 'POST',
     routePath: '/open/api/v1/resource/note/save',
     body,
-    context: 'Get笔记 link save request',
+    context: 'Get 笔记 link save request',
   });
 
   if (args.poll !== true) {
@@ -330,7 +330,7 @@ async function handleSaveLink(args) {
       method: 'GET',
       routePath: '/open/api/v1/resource/note/detail',
       query: { id: noteId },
-      context: 'Get笔记 note detail request',
+      context: 'Get 笔记 note detail request',
     });
   }
 
@@ -410,7 +410,7 @@ async function handleSaveImage(args) {
       ...baseBody,
       image_urls: [imageUrl],
     },
-    context: 'Get笔记 image save request',
+    context: 'Get 笔记 image save request',
   });
 
   if (args.poll !== true) {
@@ -442,7 +442,7 @@ async function handleSaveImage(args) {
       method: 'GET',
       routePath: '/open/api/v1/resource/note/detail',
       query: { id: noteId },
-      context: 'Get笔记 note detail request',
+      context: 'Get 笔记 note detail request',
     });
   }
 
@@ -791,7 +791,7 @@ async function handleOAuthDeviceCode(args) {
     includeClientId: false,
   });
 
-  ensureSuccessfulResult(result, 'Get笔记 OAuth device code request');
+  ensureSuccessfulResult(result, 'Get 笔记 OAuth device code request');
   printJson(result);
 }
 
