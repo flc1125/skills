@@ -1,0 +1,4 @@
+interface:
+  display_name: "OpenTelemetry Go Reviewer"
+  short_description: "High-bar maintainer review for opentelemetry-go changes"
+  default_prompt: "Use $opentelemetry-go-reviewer to review a diff, patch, or design change in open-telemetry/opentelemetry-go with strict attention to correctness, compatibility, lifecycle safety, repository rules, and evidence-backed performance claims."
