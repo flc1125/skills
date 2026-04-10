@@ -1,6 +1,11 @@
 ---
 name: opentelemetry-go-reviewer
 description: High-bar review for changes in open-telemetry/opentelemetry-go. Use when reviewing a diff, pull request, commit range, patch, generated-code change, exporter or SDK change, API or compatibility-sensitive change, lifecycle or concurrency behavior, performance-sensitive path, semconv update, release or changelog work, or design proposal for this repository. Apply strict standards for correctness, repository policy, compatibility, maintainability, testing, and evidence-backed performance.
+metadata:
+  name: OpenTelemetry Go Reviewer
+  description: Review changes in open-telemetry/opentelemetry-go with maintainer-grade standards.
+  author: Flc
+  created: 2026-04-10T09:46:01Z
 ---
 
 # Review Opentelemetry Go
