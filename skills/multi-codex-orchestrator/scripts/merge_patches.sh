@@ -12,7 +12,7 @@ AGENTS_DIR="$RUN_DIR/agents"
 
 get_result_status() {
   local result_file="$1"
-  sed -n 's/^[[:space:]]*"status"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "$result_file" | head -n 1
+  sed -n 's/.*"status"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "$result_file" | head -n 1
 }
 
 collect_patch_files() {
@@ -84,8 +84,11 @@ done
 
 for patch_file in "${patch_files[@]}"; do
   echo "applying: $patch_file"
-  git -C "$TARGET_REPO" apply --3way "$patch_file"
+  if ! git -C "$TARGET_REPO" apply --3way "$patch_file"; then
+    echo "failed to apply patch: $patch_file" >&2
+    exit 1
+  fi
 done
 
 echo "patches applied to: $TARGET_REPO"
-echo "next: review staged changes, resolve conflicts if any, then run validation"
+echo "next: review working tree changes, resolve conflicts if any, then run validation"

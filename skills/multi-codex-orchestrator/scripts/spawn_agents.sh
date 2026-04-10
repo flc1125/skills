@@ -38,6 +38,9 @@ normalize_path() {
   value="$(trim "$1")"
   value="${value#./}"
   value="${value%/}"
+  if [[ "$value" == "." ]]; then
+    value=""
+  fi
   printf '%s' "$value"
 }
 
@@ -68,8 +71,13 @@ array_contains() {
 strip_quotes() {
   local value
   value="$(trim "$1")"
-  value="${value%\"}"
-  value="${value#\"}"
+  if [[ "$value" == \"*\" && "$value" == *\" ]]; then
+    value="${value#\"}"
+    value="${value%\"}"
+  elif [[ "$value" == \'*\' && "$value" == *\' ]]; then
+    value="${value#\'}"
+    value="${value%\'}"
+  fi
   printf '%s' "$value"
 }
 
@@ -196,7 +204,7 @@ for i in "${!agent_ids[@]}"; do
   IFS=',' read -r -a left_paths <<< "$owned_paths"
   for raw_left_path in "${left_paths[@]}"; do
     left_path="$(normalize_path "$raw_left_path")"
-    if [[ -z "$left_path" ]]; then
+    if [[ -z "$left_path" && "$(trim "$raw_left_path")" != "." ]]; then
       echo "agent $agent_id contains an empty path entry" >&2
       exit 1
     fi
@@ -210,8 +218,13 @@ for i in "${!agent_ids[@]}"; do
       IFS=',' read -r -a right_paths <<< "${agent_paths[$j]}"
       for raw_right_path in "${right_paths[@]}"; do
         right_path="$(normalize_path "$raw_right_path")"
-        if [[ -z "$right_path" ]]; then
+        if [[ -z "$right_path" && "$(trim "$raw_right_path")" != "." ]]; then
           echo "agent $other_agent_id contains an empty path entry" >&2
+          exit 1
+        fi
+
+        if [[ -z "$left_path" || -z "$right_path" ]]; then
+          echo "path overlap between $agent_id:$(trim "$raw_left_path") and $other_agent_id:$(trim "$raw_right_path")" >&2
           exit 1
         fi
 

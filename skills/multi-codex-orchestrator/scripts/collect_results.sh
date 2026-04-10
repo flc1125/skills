@@ -22,6 +22,18 @@ for agent_dir in "$AGENTS_DIR"/*; do
   patch_file="$agent_dir/diff.patch"
 
   if [[ -d "$worktree_dir" ]]; then
+    if ! git -C "$worktree_dir" diff --cached --quiet; then
+      echo "error: staged changes detected in $worktree_dir that would be omitted from $patch_file" >&2
+      echo "action: run 'git -C \"$worktree_dir\" diff --cached' and export staged changes before collecting results" >&2
+      exit 1
+    fi
+
+    if [[ -n "$(git -C "$worktree_dir" ls-files --others --exclude-standard)" ]]; then
+      echo "error: untracked files detected in $worktree_dir that would be omitted from $patch_file" >&2
+      echo "action: track new files or include them in a commit before collecting results" >&2
+      exit 1
+    fi
+
     git -C "$worktree_dir" diff > "$patch_file"
   fi
 

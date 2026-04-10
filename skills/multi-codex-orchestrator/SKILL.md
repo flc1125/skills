@@ -1,6 +1,11 @@
 ---
 name: multi-codex-orchestrator
 description: Orchestrate multiple standalone Codex workers for parallel repository tasks. Use when the user wants task decomposition, isolated worktrees, structured worker outputs, patch collection, and final integration by a single coordinator.
+metadata:
+  name: Multi Codex Orchestrator
+  description: Coordinate parallel Codex workers for isolated repository task execution.
+  author: Flc
+  created: 2026-04-10T15:40:40Z
 ---
 
 # Multi Codex Orchestrator
