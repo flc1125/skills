@@ -25,6 +25,8 @@ Use for issues that should normally be fixed before merge:
 - missing tests for risky behavior
 - improper boundary choice that is likely to create maintenance or correctness problems
 
+Escalate to **Critical** when the issue creates immediate correctness, safety, or compatibility risk.
+
 ### Minor
 
 Use for issues worth fixing but not normally merge-blocking:

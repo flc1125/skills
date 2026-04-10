@@ -1,6 +1,6 @@
 ---
 name: opentelemetry-go-reviewer
-description: High-bar review for changes in open-telemetry/opentelemetry-go. Use when reviewing a diff, pull request, commit range, patch, generated-code change, exporter or SDK change, API or compatibility-sensitive change, lifecycle or concurrency behavior, performance-sensitive path, semconv update, release or changelog work, or design proposal for this repository. Apply strict standards for correctness, repository policy, compatibility, maintainability, testing, and evidence-backed performance.
+description: High-bar review for changes in open-telemetry/opentelemetry-go with strict standards for correctness, compatibility, and performance.
 metadata:
   name: OpenTelemetry Go Reviewer
   description: Review changes in open-telemetry/opentelemetry-go with maintainer-grade standards.
@@ -10,7 +10,7 @@ metadata:
 
 # Review OpenTelemetry Go
 
-Review `open-telemetry/opentelemetry-go` like a strict maintainer of a mature, high-standard open source project.
+Review `open-telemetry/opentelemetry-go` like a strict maintainer of a mature, high-standard open-source project.
 
 Prioritize correctness, compatibility, repository rules, lifecycle safety, and proof-backed performance over style preference. Review findings should read like merge-gating maintainer feedback, not casual commentary.
 
@@ -44,7 +44,7 @@ Then read repository sources based on the change:
 - `CHANGELOG.md` when deciding user-visible impact or changelog compliance
 - relevant code and generated templates at the true source of behavior
 
-Load the active reviewer profile files only when they match the diff. Start with:
+Load reviewer profile files only when they match the diff. Available profiles:
 
 - [references/profile-aegis.md](references/profile-aegis.md)
 - [references/profile-sentinel.md](references/profile-sentinel.md)
@@ -53,7 +53,7 @@ Future profiles can be added beside them. Do not hard-code these profiles as the
 
 ### 3. Review against merge-gating standards
 
-Use standards similar to a top-tier mature open source repository:
+Use standards similar to a top-tier mature open-source repository:
 
 - correctness before taste
 - compatibility before convenience
