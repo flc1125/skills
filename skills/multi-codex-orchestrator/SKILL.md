@@ -23,7 +23,7 @@ Use this skill when the user explicitly wants multiple Codex workers running as 
 
 1. Create a plan file from `assets/templates/plan.yaml`.
 2. Give each worker a clear `id`, `role`, `paths`, and `goal`.
-3. Use `scripts/spawn_agents.sh` to create one git worktree per worker under `/tmp/`.
+3. Use `scripts/spawn_agents.sh` to validate the plan and create one git worktree per worker under `/tmp/`.
 4. Run each worker with `codex exec` in its own worktree.
 5. Require each worker to write `result.json` in its run directory.
 6. Use `scripts/collect_results.sh` to gather artifacts and diffs.
@@ -42,7 +42,7 @@ Use this skill when the user explicitly wants multiple Codex workers running as 
 - `scripts/plan_tasks.sh`: copy a starter plan into a target project folder.
 - `scripts/spawn_agents.sh`: parse the plan, create worktrees, and launch workers.
 - `scripts/collect_results.sh`: summarize each worker run.
-- `scripts/merge_patches.sh`: apply worker commits or diffs into the integration branch.
+- `scripts/merge_patches.sh`: verify worker status and apply non-conflicting diffs into the integration branch.
 - `references/task-schema.md`: the supported plan shape.
 - `references/output-schema.md`: required worker outputs.
 - `references/conflict-policy.md`: what to do when scopes collide.
@@ -93,11 +93,13 @@ Each worker should:
 - leave code changes in its worktree
 - avoid rebasing, merging, or force-pushing
 
+Before launch, the coordinator should reject any plan where two workers own overlapping paths.
+
 ## Validation
 
 - Use `scripts/collect_results.sh` first.
 - Review `result.json`, `last-message.txt`, and `diff.patch` for each worker.
-- Only then apply `scripts/merge_patches.sh`.
+- Only then apply `scripts/merge_patches.sh`, which will refuse blocked or conflicting worker outputs.
 
 ## Notes
 

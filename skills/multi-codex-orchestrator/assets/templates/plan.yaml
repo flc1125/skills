@@ -11,7 +11,3 @@ agents:
     role: implement
     paths: src/auth,src/api
     goal: Implement the approved changes in the owned paths
-  - id: reviewer
-    role: review
-    paths: src/auth,src/api
-    goal: Review the implementation for correctness and missing tests

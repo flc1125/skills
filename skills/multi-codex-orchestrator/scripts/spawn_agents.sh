@@ -25,6 +25,46 @@ trim() {
   printf '%s' "$value"
 }
 
+escape_sed_replacement() {
+  local value="$1"
+  value="${value//\\/\\\\}"
+  value="${value//&/\\&}"
+  value="${value//|/\\|}"
+  printf '%s' "$value"
+}
+
+normalize_path() {
+  local value
+  value="$(trim "$1")"
+  value="${value#./}"
+  value="${value%/}"
+  printf '%s' "$value"
+}
+
+paths_overlap() {
+  local left="$1"
+  local right="$2"
+
+  [[ -z "$left" || -z "$right" ]] && return 1
+  [[ "$left" == "$right" ]] && return 0
+  [[ "$left" == "$right/"* ]] && return 0
+  [[ "$right" == "$left/"* ]] && return 0
+  return 1
+}
+
+array_contains() {
+  local needle="$1"
+  shift
+
+  local item
+  for item in "$@"; do
+    if [[ "$item" == "$needle" ]]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
 strip_quotes() {
   local value
   value="$(trim "$1")"
@@ -114,8 +154,18 @@ if [[ -z "$goal" || -z "$repo_path" || -z "$base_branch" || -z "$run_root" ]]; t
   exit 1
 fi
 
+if [[ "$run_root" != /tmp/* ]]; then
+  echo "run_root must be under /tmp/: $run_root" >&2
+  exit 1
+fi
+
 if [[ ! -d "$repo_path" ]]; then
   echo "repo_path does not exist: $repo_path" >&2
+  exit 1
+fi
+
+if [[ ! -d "$repo_path/.git" ]]; then
+  echo "repo_path is not a git repository: $repo_path" >&2
   exit 1
 fi
 
@@ -123,6 +173,56 @@ if [[ ${#agent_ids[@]} -eq 0 ]]; then
   echo "plan contains no agents" >&2
   exit 1
 fi
+
+declare -a seen_agent_ids=()
+
+for i in "${!agent_ids[@]}"; do
+  agent_id="${agent_ids[$i]}"
+  agent_role="${agent_roles[$i]}"
+  owned_paths="${agent_paths[$i]}"
+  agent_goal="${agent_goals[$i]}"
+
+  if [[ -z "$agent_id" || -z "$agent_role" || -z "$owned_paths" || -z "$agent_goal" ]]; then
+    echo "agent entry $((i + 1)) is incomplete" >&2
+    exit 1
+  fi
+
+  if (( ${#seen_agent_ids[@]} > 0 )) && array_contains "$agent_id" "${seen_agent_ids[@]}"; then
+    echo "duplicate agent id: $agent_id" >&2
+    exit 1
+  fi
+  seen_agent_ids+=("$agent_id")
+
+  IFS=',' read -r -a left_paths <<< "$owned_paths"
+  for raw_left_path in "${left_paths[@]}"; do
+    left_path="$(normalize_path "$raw_left_path")"
+    if [[ -z "$left_path" ]]; then
+      echo "agent $agent_id contains an empty path entry" >&2
+      exit 1
+    fi
+
+    for j in "${!agent_ids[@]}"; do
+      if (( j <= i )); then
+        continue
+      fi
+
+      other_agent_id="${agent_ids[$j]}"
+      IFS=',' read -r -a right_paths <<< "${agent_paths[$j]}"
+      for raw_right_path in "${right_paths[@]}"; do
+        right_path="$(normalize_path "$raw_right_path")"
+        if [[ -z "$right_path" ]]; then
+          echo "agent $other_agent_id contains an empty path entry" >&2
+          exit 1
+        fi
+
+        if paths_overlap "$left_path" "$right_path"; then
+          echo "path overlap between $agent_id:$left_path and $other_agent_id:$right_path" >&2
+          exit 1
+        fi
+      done
+    done
+  done
+done
 
 timestamp="$(date +%Y%m%d-%H%M%S)"
 run_dir="$run_root/run-$timestamp"
@@ -138,11 +238,6 @@ for i in "${!agent_ids[@]}"; do
   owned_paths="${agent_paths[$i]}"
   agent_goal="${agent_goals[$i]}"
 
-  if [[ -z "$agent_id" || -z "$agent_role" || -z "$owned_paths" || -z "$agent_goal" ]]; then
-    echo "agent entry $((i + 1)) is incomplete" >&2
-    exit 1
-  fi
-
   worktree_dir="$worktrees_dir/$agent_id"
   agent_run_dir="$runs_dir/$agent_id"
   task_file="$agent_run_dir/task.md"
@@ -154,12 +249,12 @@ for i in "${!agent_ids[@]}"; do
   git -C "$repo_path" worktree add --detach "$worktree_dir" "$base_branch" >/dev/null
 
   sed \
-    -e "s|{{GLOBAL_GOAL}}|$goal|g" \
-    -e "s|{{AGENT_ID}}|$agent_id|g" \
-    -e "s|{{AGENT_ROLE}}|$agent_role|g" \
-    -e "s|{{OWNED_PATHS}}|$owned_paths|g" \
-    -e "s|{{AGENT_GOAL}}|$agent_goal|g" \
-    -e "s|{{RUN_DIR}}|$agent_run_dir|g" \
+    -e "s|{{GLOBAL_GOAL}}|$(escape_sed_replacement "$goal")|g" \
+    -e "s|{{AGENT_ID}}|$(escape_sed_replacement "$agent_id")|g" \
+    -e "s|{{AGENT_ROLE}}|$(escape_sed_replacement "$agent_role")|g" \
+    -e "s|{{OWNED_PATHS}}|$(escape_sed_replacement "$owned_paths")|g" \
+    -e "s|{{AGENT_GOAL}}|$(escape_sed_replacement "$agent_goal")|g" \
+    -e "s|{{RUN_DIR}}|$(escape_sed_replacement "$agent_run_dir")|g" \
     "$TASK_TEMPLATE" > "$task_file"
 
   if [[ "$MODE" == "--run" ]]; then

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Multi Codex Orchestrator"
+  short_description: "Coordinate isolated Codex workers for parallel repo tasks"
+  default_prompt: "Use $multi-codex-orchestrator to split a repository task into isolated worker scopes, launch worktrees safely, and collect structured results for central integration."
