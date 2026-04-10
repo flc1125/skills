@@ -8,7 +8,7 @@ metadata:
   created: 2026-04-10T09:46:01Z
 ---
 
-# Review Opentelemetry Go
+# Review OpenTelemetry Go
 
 Review `open-telemetry/opentelemetry-go` like a strict maintainer of a mature, high-standard open source project.
 
@@ -49,7 +49,7 @@ Load the active reviewer profile files only when they match the diff. Start with
 - [references/profile-aegis.md](references/profile-aegis.md)
 - [references/profile-sentinel.md](references/profile-sentinel.md)
 
-Future profiles can be added beside it. Do not hard-code this single profile as the whole skill identity.
+Future profiles can be added beside them. Do not hard-code these profiles as the whole skill identity.
 
 ### 3. Review against merge-gating standards
 
