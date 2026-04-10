@@ -1,0 +1,17 @@
+goal: Replace this with the overall objective
+repo_path: /absolute/path/to/repository
+base_branch: main
+run_root: /tmp/multi-codex-orchestrator
+agents:
+  - id: analyst
+    role: analyze
+    paths: src/auth,src/models
+    goal: Inspect the current design and describe the required changes
+  - id: implementer
+    role: implement
+    paths: src/auth,src/api
+    goal: Implement the approved changes in the owned paths
+  - id: reviewer
+    role: review
+    paths: src/auth,src/api
+    goal: Review the implementation for correctness and missing tests

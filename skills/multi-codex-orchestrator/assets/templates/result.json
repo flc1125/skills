@@ -1,0 +1,15 @@
+{
+  "agent_id": "replace-me",
+  "status": "done",
+  "summary": "Replace this with the actual outcome",
+  "owned_paths": [
+    "src/example"
+  ],
+  "tests": {
+    "ran": false,
+    "passed": false,
+    "command": ""
+  },
+  "risks": [],
+  "next_action": "ready for coordinator review"
+}
