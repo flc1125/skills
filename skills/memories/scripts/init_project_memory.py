@@ -33,9 +33,10 @@ def template_files(memory_dir: str) -> dict[str, str]:
 
             1. Read `index.md` before non-trivial work.
             2. Open only the memory files relevant to the current task.
-            3. Update memories when reusable project knowledge is discovered or corrected.
-            4. Keep entries concise, actionable, and easy to review in git.
-            5. Update `index.md` when adding, removing, renaming, or materially changing memory files.
+            3. Update memories when the user requests memory maintenance or when reusable project knowledge is a natural part of the current task.
+            4. Recommend a memory update instead of editing memory files when memory maintenance is outside the current task scope.
+            5. Keep entries concise, actionable, and easy to review in git.
+            6. Update `index.md` when adding, removing, renaming, or materially changing memory files.
 
             ## Default Files
 
@@ -123,7 +124,7 @@ def project_memory_section(memory_dir: str) -> str:
 
         Before non-trivial work, read `{memory_dir}/index.md` and then open only the memory files relevant to the task.
 
-        Update memories when you discover reusable project-specific knowledge that would help future agents. Do not store one-off task notes, temporary debugging details, raw chat logs, secrets, credentials, or conversation-specific context.
+        Update memories when the user requests memory maintenance or when reusable project-specific knowledge is a natural part of the current task. If memory maintenance is outside the current task scope, recommend the update instead of editing memory files. Do not store one-off task notes, temporary debugging details, raw chat logs, secrets, credentials, or conversation-specific context.
 
         When changing memories, keep entries concise and actionable. Update `{memory_dir}/index.md` when adding, removing, renaming, or materially changing memory files.
         {END_MARKER}
@@ -132,6 +133,11 @@ def project_memory_section(memory_dir: str) -> str:
 
 
 def resolve_inside(root: Path, relative_path: str, option_name: str) -> Path:
+    if not relative_path or not relative_path.strip():
+        raise SystemExit(f"{option_name} must not be empty")
+    if any(char in relative_path for char in ("\0", "\n", "\r")):
+        raise SystemExit(f"{option_name} must not contain control characters")
+
     candidate = Path(relative_path)
     if candidate.is_absolute():
         raise SystemExit(f"{option_name} must be relative to the project root")
@@ -144,13 +150,30 @@ def resolve_inside(root: Path, relative_path: str, option_name: str) -> Path:
     return resolved
 
 
+def ensure_regular_output_file(root: Path, path: Path) -> None:
+    try:
+        path.parent.resolve().relative_to(root)
+    except ValueError as exc:
+        raise SystemExit(f"Output path must stay inside the project root: {path}") from exc
+
+    if path.is_symlink():
+        raise SystemExit(f"Refusing to write through symlink: {path.relative_to(root)}")
+    if path.exists() and not path.is_file():
+        raise SystemExit(f"Output path is not a regular file: {path.relative_to(root)}")
+
+
 def write_missing_memory_files(root: Path, memory_dir: str) -> list[str]:
     target = resolve_inside(root, memory_dir, "--memory-dir")
+    if target == root:
+        raise SystemExit("--memory-dir must not be the project root")
+    if target.exists() and not target.is_dir():
+        raise SystemExit(f"--memory-dir exists but is not a directory: {target.relative_to(root)}")
     target.mkdir(parents=True, exist_ok=True)
 
     actions: list[str] = []
     for name, content in template_files(memory_dir).items():
         path = target / name
+        ensure_regular_output_file(root, path)
         if path.exists():
             actions.append(f"kept {path.relative_to(root)}")
             continue
@@ -163,6 +186,11 @@ def upsert_agent_section(root: Path, agent_file: str, memory_dir: str) -> list[s
     path = resolve_inside(root, agent_file, "--agent-file")
     section = project_memory_section(memory_dir)
 
+    if path.exists() and not path.is_file():
+        raise SystemExit(f"--agent-file exists but is not a file: {path.relative_to(root)}")
+    if path.is_symlink():
+        raise SystemExit(f"Refusing to write through symlink: {path.relative_to(root)}")
+
     if not path.exists():
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text("# Agent Instructions\n\n" + section, encoding="utf-8")
@@ -173,8 +201,10 @@ def upsert_agent_section(root: Path, agent_file: str, memory_dir: str) -> list[s
         rf"{re.escape(START_MARKER)}.*?{re.escape(END_MARKER)}\n?",
         re.DOTALL,
     )
-    if marker_pattern.search(original):
-        updated = marker_pattern.sub(section, original)
+    marker_match = marker_pattern.search(original)
+    if marker_match:
+        trailing = marker_pattern.sub("", original[marker_match.end() :])
+        updated = original[: marker_match.start()] + section + trailing
         path.write_text(updated, encoding="utf-8")
         return [f"updated managed Project Memory block in {path.relative_to(root)}"]
 
@@ -183,9 +213,9 @@ def upsert_agent_section(root: Path, agent_file: str, memory_dir: str) -> list[s
         re.DOTALL | re.MULTILINE,
     )
     if heading_pattern.search(original):
-        updated = heading_pattern.sub(section, original)
-        path.write_text(updated, encoding="utf-8")
-        return [f"replaced existing Project Memory section in {path.relative_to(root)}"]
+        separator = "" if original.endswith("\n\n") else "\n" if original.endswith("\n") else "\n\n"
+        path.write_text(original + separator + section, encoding="utf-8")
+        return [f"appended managed Project Memory block to preserve existing section in {path.relative_to(root)}"]
 
     separator = "" if original.endswith("\n\n") else "\n" if original.endswith("\n") else "\n\n"
     path.write_text(original + separator + section, encoding="utf-8")

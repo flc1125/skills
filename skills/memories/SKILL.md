@@ -1,6 +1,6 @@
 ---
 name: memories
-description: Scaffold a project-local memory directory and AGENTS.md guidance for reusable agent knowledge. Use when a user wants to initialize or refresh `.agents/memories/` or another project memory path so future agents can read and maintain durable project context.
+description: Scaffold a project-local memory directory and AGENTS.md guidance for reusable agent knowledge. Use when a user wants to initialize `.agents/memories/` or another project memory path so future agents can read and maintain durable project context.
 metadata:
   name: Memories
   description: Scaffold project-local memory files and AGENTS.md guidance for future agents.
@@ -17,10 +17,11 @@ Use this skill to initialize durable project knowledge, not to store one-off tas
 ## Workflow
 
 1. Confirm the target project root.
-2. Use `.agents/memories/` unless the user specifies another memory directory.
-3. Run `scripts/init_project_memory.py`.
-4. Review the generated or changed files.
-5. Report the memory directory and whether `AGENTS.md` was created or updated.
+2. Inspect whether the target memory directory and agent instruction file already exist.
+3. Use `.agents/memories/` unless the user specifies another memory directory.
+4. Run `scripts/init_project_memory.py`.
+5. Review the generated or changed files.
+6. Report the memory directory and whether the agent instruction file was created or updated.
 
 ## Command
 
@@ -42,6 +43,12 @@ To create memory files without touching the agent instruction file:
 python3 <skill-dir>/scripts/init_project_memory.py /path/to/project --skip-agent
 ```
 
+With an alternate agent instruction file:
+
+```bash
+python3 <skill-dir>/scripts/init_project_memory.py /path/to/project --agent-file CLAUDE.md
+```
+
 ## Generated Files
 
 The scaffold creates missing files only. Existing memory files are preserved.
@@ -58,11 +65,12 @@ By default, the script creates or updates `AGENTS.md` in the project root. It in
 
 - read `index.md` before non-trivial work;
 - open only task-relevant memory files;
-- update memories when reusable, project-specific knowledge is discovered;
+- update memories when the user requests memory maintenance or when reusable project knowledge is a natural part of the current task;
+- recommend a memory update instead of editing memory files when memory maintenance is outside the current task scope;
 - avoid one-off task notes, temporary debugging details, secrets, credentials, and conversation-specific context;
 - keep `index.md` aligned when memory files are added, removed, renamed, or materially changed.
 
-If an existing managed block or `## Project Memory` / `## Project Memories` section is present, update it instead of appending a duplicate.
+If an existing managed block is present, update it instead of appending a duplicate. If only an unmarked `## Project Memory` / `## Project Memories` section exists, preserve the user-authored section and append a managed block.
 
 ## Memory Standard
 
