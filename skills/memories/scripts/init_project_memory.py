@@ -141,6 +141,7 @@ def resolve_inside(root: Path, relative_path: str, option_name: str) -> Path:
     candidate = Path(relative_path)
     if candidate.is_absolute():
         raise SystemExit(f"{option_name} must be relative to the project root")
+    reject_symlink_components(root, candidate, option_name)
 
     resolved = (root / candidate).resolve()
     try:
@@ -148,6 +149,31 @@ def resolve_inside(root: Path, relative_path: str, option_name: str) -> Path:
     except ValueError as exc:
         raise SystemExit(f"{option_name} must stay inside the project root") from exc
     return resolved
+
+
+def reject_symlink_components(root: Path, relative_path: Path, option_name: str) -> None:
+    current = root
+    for part in relative_path.parts:
+        if part in ("", "."):
+            continue
+        if part == "..":
+            current = current.parent
+            try:
+                current.relative_to(root)
+            except ValueError:
+                return
+            continue
+
+        current = current / part
+        try:
+            display_path = current.relative_to(root)
+        except ValueError:
+            return
+
+        if current.is_symlink():
+            raise SystemExit(f"{option_name} must not contain symlinks: {display_path}")
+        if not current.exists():
+            return
 
 
 def ensure_regular_output_file(root: Path, path: Path) -> None:
@@ -197,6 +223,10 @@ def upsert_agent_section(root: Path, agent_file: str, memory_dir: str) -> list[s
         return [f"created {path.relative_to(root)}"]
 
     original = path.read_text(encoding="utf-8")
+    if not original:
+        path.write_text(section, encoding="utf-8")
+        return [f"appended Project Memory section to {path.relative_to(root)}"]
+
     marker_pattern = re.compile(
         rf"{re.escape(START_MARKER)}.*?{re.escape(END_MARKER)}\n?",
         re.DOTALL,
@@ -209,7 +239,7 @@ def upsert_agent_section(root: Path, agent_file: str, memory_dir: str) -> list[s
         return [f"updated managed Project Memory block in {path.relative_to(root)}"]
 
     heading_pattern = re.compile(
-        r"^## Project Memor(?:y|ies)\n.*?(?=^## |\Z)",
+        r"^## Project Memor(?:y|ies)(?:\n|\Z).*?(?=^## |\Z)",
         re.DOTALL | re.MULTILINE,
     )
     if heading_pattern.search(original):
