@@ -1,11 +1,11 @@
-# memories
+# memory-init
 
 Local skill for initializing project-local memory files and agent guidance.
 
 ## Install
 
 ```bash
-npx skills add https://github.com/flc1125/skills --skill memories
+npx skills add https://github.com/flc1125/skills --skill memory-init
 ```
 
 ## Scope
@@ -19,7 +19,7 @@ npx skills add https://github.com/flc1125/skills --skill memories
 ## Structure
 
 ```text
-memories/
+memory-init/
 ├── SKILL.md
 ├── README.md
 ├── agents/

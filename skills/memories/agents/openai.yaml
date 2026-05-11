@@ -1,4 +1,0 @@
-interface:
-  display_name: "Memories"
-  short_description: "Scaffold reusable project memory files"
-  default_prompt: "Use $memories to initialize project memory files and add AGENTS.md guidance for future agents."

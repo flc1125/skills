@@ -38,7 +38,7 @@ def template_files(memory_dir: str) -> dict[str, str]:
 
             1. Read `index.md` before non-trivial work.
             2. Open only the memory files relevant to the current task.
-            3. Update memories when the user requests memory maintenance or when reusable project knowledge is a natural part of the current task.
+            3. Update memories when the user requests memory maintenance or when the current task explicitly includes maintaining reusable project knowledge.
             4. Recommend a memory update instead of editing memory files when memory maintenance is outside the current task scope.
             5. Keep entries concise, actionable, and easy to review in git.
             6. Update `index.md` when adding, removing, renaming, or materially changing memory files.

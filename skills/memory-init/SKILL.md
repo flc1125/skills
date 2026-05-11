@@ -1,14 +1,14 @@
 ---
-name: memories
+name: memory-init
 description: Scaffold a project-local memory directory and AGENTS.md guidance for reusable agent knowledge. Use when a user wants to initialize `.agents/memories/` or another project memory path so future agents can read and maintain durable project context.
 metadata:
-  name: Memories
+  name: Memory Init
   description: Scaffold project-local memory files and AGENTS.md guidance for future agents.
   author: Flc゛
   created: 2026-05-10T12:35:25Z
 ---
 
-# Memories
+# Memory Init
 
 Scaffold lightweight, project-local memory files that future agents can read and maintain.
 
