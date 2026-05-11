@@ -19,7 +19,12 @@ def clean_multiline(value: str) -> str:
     return textwrap.dedent(value).strip() + "\n"
 
 
+def display_memory_dir(memory_dir: str) -> str:
+    return memory_dir.strip().rstrip("/")
+
+
 def template_files(memory_dir: str) -> dict[str, str]:
+    memory_dir = display_memory_dir(memory_dir)
     return {
         "README.md": clean_multiline(
             f"""
@@ -115,6 +120,7 @@ def template_files(memory_dir: str) -> dict[str, str]:
 
 
 def project_memory_section(memory_dir: str) -> str:
+    memory_dir = display_memory_dir(memory_dir)
     return clean_multiline(
         f"""
         {START_MARKER}
@@ -124,7 +130,7 @@ def project_memory_section(memory_dir: str) -> str:
 
         Before non-trivial work, read `{memory_dir}/index.md` and then open only the memory files relevant to the task.
 
-        Update memories when the user requests memory maintenance or when reusable project-specific knowledge is a natural part of the current task. If memory maintenance is outside the current task scope, recommend the update instead of editing memory files. Do not store one-off task notes, temporary debugging details, raw chat logs, secrets, credentials, or conversation-specific context.
+        Update memories when the user requests memory maintenance or when the current task explicitly includes maintaining reusable project knowledge. If memory maintenance is outside the current task scope, recommend the update instead of editing memory files. Do not store one-off task notes, temporary debugging details, raw chat logs, secrets, credentials, or conversation-specific context.
 
         When changing memories, keep entries concise and actionable. Update `{memory_dir}/index.md` when adding, removing, renaming, or materially changing memory files.
         {END_MARKER}

@@ -65,7 +65,7 @@ By default, the script creates or updates `AGENTS.md` in the project root. It in
 
 - read `index.md` before non-trivial work;
 - open only task-relevant memory files;
-- update memories when the user requests memory maintenance or when reusable project knowledge is a natural part of the current task;
+- update memories when the user requests memory maintenance or when the current task explicitly includes maintaining reusable project knowledge;
 - recommend a memory update instead of editing memory files when memory maintenance is outside the current task scope;
 - avoid one-off task notes, temporary debugging details, secrets, credentials, and conversation-specific context;
 - keep `index.md` aligned when memory files are added, removed, renamed, or materially changed.
@@ -74,7 +74,7 @@ If an existing managed block is present, update it instead of appending a duplic
 
 ## Memory Standard
 
-Treat memory as durable project knowledge. Add or update entries only when the information is likely to help future agents across tasks.
+Treat memory as durable project knowledge. Add or update entries when the user asks for memory maintenance or the task explicitly includes maintaining reusable project context.
 
 Good memory candidates:
 
