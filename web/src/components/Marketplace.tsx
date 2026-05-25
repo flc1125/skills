@@ -153,8 +153,6 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
     window.history.pushState(null, '', pathname);
   };
 
-  const featuredSkills = orderedSkills.slice(0, 3);
-
   return (
     <div className="relative mx-auto max-w-7xl px-4 pb-20 pt-10 sm:px-6 lg:px-8">
       <section className="relative overflow-hidden rounded-[2rem] border border-black/5 bg-white/70 px-5 py-12 shadow-[0_40px_120px_-80px_rgba(15,23,42,0.35)] backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.04] sm:px-10 sm:py-16">
@@ -168,61 +166,42 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
           </p>
         </div>
 
-        <div className="relative mx-auto mt-12 max-w-5xl rounded-[1.75rem] border border-black/10 bg-[#f7f9fb] p-3 shadow-[0_28px_90px_-54px_rgba(15,23,42,0.5)] dark:border-white/10 dark:bg-[#151821]">
-          <div className="grid min-h-[21rem] gap-3 rounded-[1.35rem] bg-[linear-gradient(135deg,#f9fbff_0%,#eefcf7_48%,#f4f1ff_100%)] p-3 dark:bg-[linear-gradient(135deg,#191d27_0%,#10241f_48%,#1c182b_100%)] lg:grid-cols-[17rem_minmax(0,1fr)]">
-            <aside className="rounded-[1.1rem] border border-white/70 bg-white/65 p-4 shadow-sm backdrop-blur dark:border-white/10 dark:bg-black/20">
-              <div className="mb-5 flex items-center gap-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-black text-white dark:bg-white dark:text-black">
-                  <Terminal size={15} />
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-[#15171c] dark:text-white">Skills Library</p>
-                  <p className="text-xs text-[#7a8493] dark:text-[#9fa8b8]">{orderedSkills.length} shown</p>
-                </div>
-              </div>
-              <div className="space-y-2">
-                <div className="rounded-2xl bg-[#e7fbf4] p-3 dark:bg-emerald-400/10">
-                  <Layers3 className="mb-7 text-[#209a7a]" size={18} />
-                  <span className="block text-3xl font-black text-[#111318] dark:text-white">{totalSkills}</span>
-                  <span className="text-xs font-semibold text-[#687586] dark:text-[#b8c0cc]">published skills</span>
-                </div>
-                <div className="rounded-2xl bg-[#eef2ff] p-3 dark:bg-indigo-400/10">
-                  <Files className="mb-7 text-[#6473d8]" size={18} />
-                  <span className="block text-3xl font-black text-[#111318] dark:text-white">{totalFiles}</span>
-                  <span className="text-xs font-semibold text-[#687586] dark:text-[#b8c0cc]">source files</span>
-                </div>
-              </div>
-            </aside>
+        <div className="relative mx-auto mt-12 max-w-4xl rounded-[1.75rem] bg-[#f7f9fb]/74 p-3 shadow-[0_28px_90px_-58px_rgba(15,23,42,0.46)] backdrop-blur dark:bg-[#151821]/72">
+          <div className="rounded-[1.35rem] bg-[linear-gradient(135deg,rgba(249,251,255,0.84)_0%,rgba(238,252,247,0.82)_48%,rgba(244,241,255,0.84)_100%)] p-4 dark:bg-[linear-gradient(135deg,rgba(25,29,39,0.86)_0%,rgba(16,36,31,0.78)_48%,rgba(28,24,43,0.86)_100%)] sm:p-5">
+            <div className="relative min-h-32 overflow-hidden rounded-[1.4rem] bg-white/42 px-5 py-5 shadow-[0_16px_52px_-44px_rgba(15,23,42,0.5)] backdrop-blur dark:bg-white/[0.045] sm:min-h-36 sm:px-7">
+              <div className="pointer-events-none absolute -left-10 bottom-0 h-32 w-56 rounded-full bg-[#8ddfc9]/18 blur-2xl" />
+              <div className="pointer-events-none absolute -right-8 top-0 h-32 w-56 rounded-full bg-[#c6d8ff]/28 blur-2xl" />
 
-            <div className="rounded-[1.1rem] border border-white/70 bg-white/72 p-4 shadow-sm backdrop-blur dark:border-white/10 dark:bg-black/20">
-              <div className="relative mb-4">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#7f8a9a]" size={18} />
-                <input
-                  type="text"
-                  placeholder="Search skills..."
-                  className="h-12 w-full rounded-2xl border border-black/5 bg-white pl-11 pr-4 text-sm font-medium text-[#15171c] outline-none transition focus:border-[#8ddfc9] focus:ring-4 focus:ring-[#8ddfc9]/25 dark:border-white/10 dark:bg-white/[0.08] dark:text-white"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
-              </div>
-              <div className="grid gap-3 md:grid-cols-3">
-                {featuredSkills.map((skill) => (
-                  <div
-                    key={skill.slug}
-                    className="min-h-40 rounded-[1.15rem] border border-black/5 bg-white/80 p-4 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.65)] dark:border-white/10 dark:bg-white/[0.08]"
-                  >
-                    <span className="mb-10 inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#dff8f1] text-[#178a70] dark:bg-emerald-300/15">
-                      <Terminal size={13} />
-                    </span>
-                    <h2 className="line-clamp-2 text-sm font-bold leading-5 text-[#16181d] dark:text-white">
-                      {skill.metadata?.name ?? skill.name}
-                    </h2>
-                    <p className="mt-2 line-clamp-2 text-xs leading-5 text-[#6f7887] dark:text-[#aeb7c6]">
-                      {skill.metadata?.description ?? skill.description}
-                    </p>
+              <div className="relative flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+                <div className="max-w-sm">
+                  <div className="mb-8 inline-flex h-9 w-9 items-center justify-center rounded-2xl bg-[#e7fbf4] text-[#209a7a] dark:bg-emerald-300/10">
+                    <Layers3 size={18} />
                   </div>
-                ))}
+                  <div className="flex items-baseline gap-3">
+                    <span className="text-6xl font-black leading-none text-[#111318] dark:text-white">{totalSkills}</span>
+                    <span className="text-sm font-semibold text-[#687586] dark:text-[#b8c0cc]">published skills</span>
+                  </div>
+                </div>
+
+                <div className="self-start rounded-[1.3rem] bg-white/72 px-5 py-4 shadow-[0_18px_48px_-38px_rgba(15,23,42,0.6)] backdrop-blur dark:bg-white/[0.075] sm:mr-3 sm:mt-2">
+                  <Files className="mb-5 text-[#6473d8]" size={18} />
+                  <div className="flex items-end gap-2">
+                    <span className="text-4xl font-black leading-none text-[#111318] dark:text-white">{totalFiles}</span>
+                    <span className="pb-1 text-xs font-semibold text-[#687586] dark:text-[#b8c0cc]">source files</span>
+                  </div>
+                </div>
               </div>
+            </div>
+
+            <div className="relative mt-5">
+              <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-[#7f8a9a]" size={19} />
+              <input
+                type="text"
+                placeholder="Search skills..."
+                className="h-14 w-full rounded-2xl bg-white/86 pl-13 pr-5 text-sm font-medium text-[#15171c] outline-none shadow-[0_14px_38px_-32px_rgba(15,23,42,0.55)] transition focus:ring-4 focus:ring-[#8ddfc9]/25 dark:bg-white/[0.08] dark:text-white"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
             </div>
           </div>
         </div>
