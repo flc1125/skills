@@ -154,7 +154,7 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
   };
 
   return (
-    <div className="relative mx-auto max-w-7xl px-4 pb-20 pt-10 sm:px-6 lg:px-8">
+    <div className="relative mx-auto max-w-7xl px-4 pb-20 pt-0 sm:px-6 lg:px-8">
       <section className="relative overflow-hidden px-2 py-14 sm:px-6 sm:py-20">
         <div className="pointer-events-none absolute left-1/2 top-2 h-72 w-[52rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_45%_45%,rgba(141,223,201,0.32),rgba(198,216,255,0.24)_42%,rgba(199,185,255,0.16)_58%,transparent_74%)] blur-3xl dark:opacity-50" />
         <div className="pointer-events-none absolute left-[12%] top-32 h-28 w-28 rounded-full bg-[#8ddfc9]/18 blur-2xl" />
@@ -200,7 +200,17 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
         </div>
       </section>
 
-      <section className="mt-14">
+      <div className="relative mx-auto -mt-8 mb-12 h-16 max-w-5xl" aria-hidden="true">
+        <div className="absolute inset-x-8 top-1/2 h-px bg-gradient-to-r from-transparent via-[#91dcca]/50 to-transparent dark:via-white/18" />
+        <div className="absolute left-1/2 top-1/2 h-12 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[linear-gradient(90deg,rgba(141,223,201,0.26),rgba(198,216,255,0.3),rgba(199,185,255,0.22))] blur-2xl" />
+        <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 rounded-full bg-white/56 px-3 py-2 shadow-[0_18px_60px_-42px_rgba(15,23,42,0.6)] backdrop-blur dark:bg-white/[0.07]">
+          <span className="h-1.5 w-8 rounded-full bg-[#8ddfc9]/85 shadow-[0_0_18px_rgba(141,223,201,0.45)]" />
+          <span className="h-1.5 w-14 rounded-full bg-[#c6d8ff]/90 shadow-[0_0_18px_rgba(198,216,255,0.45)]" />
+          <span className="h-1.5 w-8 rounded-full bg-[#c7b9ff]/85 shadow-[0_0_18px_rgba(199,185,255,0.42)]" />
+        </div>
+      </div>
+
+      <section className="mt-0">
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h2 className="text-3xl font-black text-[#111318] dark:text-white">Explore skills</h2>
