@@ -91,10 +91,10 @@ export function ThemeToggle() {
 
   return (
     <Menu as="div" className="relative">
-      <Menu.Button className="inline-flex h-9 items-center gap-2 rounded-full px-3 text-sm text-gray-600 transition-colors hover:bg-white hover:text-black dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white">
+      <Menu.Button className="inline-flex h-9 items-center gap-2 rounded-full px-3 text-sm font-medium text-[#5f6673] transition-colors hover:bg-[#eef8f5] hover:text-black dark:text-[#c6ccd8] dark:hover:bg-white/10 dark:hover:text-white">
         <ActiveIcon size={15} />
         <span className="hidden sm:inline">{activeOption.label}</span>
-        <ChevronDown size={14} className="text-gray-400" />
+        <ChevronDown size={14} className="text-[#9aa4b2]" />
       </Menu.Button>
 
       <Transition
@@ -106,7 +106,7 @@ export function ThemeToggle() {
         leaveFrom="opacity-100 translate-y-0"
         leaveTo="opacity-0 -translate-y-1"
       >
-        <Menu.Items className="absolute right-0 mt-2 w-44 origin-top-right rounded-2xl border border-gray-200 bg-white/95 p-1.5 shadow-lg backdrop-blur-md focus:outline-none dark:border-gray-700 dark:bg-gray-900/95">
+        <Menu.Items className="absolute right-0 mt-2 w-44 origin-top-right rounded-2xl border border-black/5 bg-white/95 p-1.5 shadow-[0_20px_70px_-48px_rgba(15,23,42,0.8)] backdrop-blur-md focus:outline-none dark:border-white/10 dark:bg-[#151821]/95">
           {OPTIONS.map((option) => {
             const Icon = option.icon;
             const isActive = option.value === theme;
@@ -117,10 +117,10 @@ export function ThemeToggle() {
                   <button
                     type="button"
                     onClick={() => handleThemeChange(option.value)}
-                    className={`flex w-full items-center justify-between rounded-xl px-3 py-2 text-sm transition-colors ${
+                    className={`flex w-full items-center justify-between rounded-xl px-3 py-2 text-sm font-medium transition-colors ${
                       active
-                        ? 'bg-gray-100 text-black dark:bg-gray-800 dark:text-white'
-                        : 'text-gray-600 dark:text-gray-300'
+                        ? 'bg-[#eef8f5] text-black dark:bg-white/10 dark:text-white'
+                        : 'text-[#5f6673] dark:text-[#c6ccd8]'
                     }`}
                   >
                     <span className="flex items-center gap-2">
