@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from 'react';
+import Link from 'next/link';
 import Script from 'next/script';
 import { GaPageViewTracker } from '@/components/GaPageViewTracker';
 import { GithubNavLink } from '@/components/GithubNavLink';
@@ -63,12 +64,16 @@ export default function RootLayout({
         </Suspense>
         <header className="sticky top-0 z-40 border-b border-black/5 bg-white/80 backdrop-blur-xl dark:border-white/10 dark:bg-[#0f1218]/78">
           <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-            <div className="flex items-center gap-2">
+            <Link
+              href="/"
+              className="flex items-center gap-2 rounded-2xl outline-none transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-[#8ddfc9]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-[#0f1218]"
+              aria-label="Go to homepage"
+            >
               <div className="w-8 h-8 bg-black dark:bg-white rounded-xl flex items-center justify-center">
                 <span className="text-white dark:text-black font-bold text-lg">S</span>
               </div>
               <span className="font-bold text-xl text-[#111318] dark:text-white">Flc&apos;s Skills</span>
-            </div>
+            </Link>
             <nav className="rounded-full border border-black/5 bg-white/80 p-1 shadow-[0_16px_50px_-36px_rgba(15,23,42,0.65)] backdrop-blur-md dark:border-white/10 dark:bg-white/[0.08]">
               <div className="flex items-center gap-1">
                 <ThemeToggle />
