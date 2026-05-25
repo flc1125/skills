@@ -5,7 +5,7 @@ import { useSearchParams, usePathname } from 'next/navigation';
 import { SkillMetadata, Skill } from '@/lib/skills';
 import { SkillCard } from './SkillCard';
 import { SkillModal } from './SkillModal';
-import { Files, Layers3, Search, Terminal } from 'lucide-react';
+import { Files, Layers3, Search } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
 import { parseSkillMetadataDate } from '@/lib/utils';
 import { trackEvent } from '@/lib/gtag';
@@ -155,50 +155,43 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
 
   return (
     <div className="relative mx-auto max-w-7xl px-4 pb-20 pt-10 sm:px-6 lg:px-8">
-      <section className="relative overflow-hidden rounded-[2rem] border border-black/5 bg-white/70 px-5 py-12 shadow-[0_40px_120px_-80px_rgba(15,23,42,0.35)] backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.04] sm:px-10 sm:py-16">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-48 bg-[radial-gradient(circle_at_50%_0%,rgba(153,246,228,0.42),transparent_58%),radial-gradient(circle_at_72%_18%,rgba(196,181,253,0.32),transparent_42%)]" />
-        <div className="relative mx-auto max-w-4xl text-center">
-          <h1 className="text-balance text-[clamp(2.5rem,7vw,6.5rem)] font-black leading-[0.95] text-[#101114] dark:text-white">
-            AI agent skills, composed into a calm workspace.
-          </h1>
-          <p className="mx-auto mt-7 max-w-2xl text-base leading-7 text-[#5f6673] dark:text-[#c6ccd8] sm:text-lg">
-            Browse reusable workflows through a light, product-like interface built for quick discovery and precise installation.
-          </p>
-        </div>
+      <section className="relative overflow-hidden px-2 py-14 sm:px-6 sm:py-20">
+        <div className="pointer-events-none absolute left-1/2 top-2 h-72 w-[52rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_45%_45%,rgba(141,223,201,0.32),rgba(198,216,255,0.24)_42%,rgba(199,185,255,0.16)_58%,transparent_74%)] blur-3xl dark:opacity-50" />
+        <div className="pointer-events-none absolute left-[12%] top-32 h-28 w-28 rounded-full bg-[#8ddfc9]/18 blur-2xl" />
+        <div className="pointer-events-none absolute right-[14%] top-44 h-32 w-32 rounded-full bg-[#c6d8ff]/22 blur-2xl" />
 
-        <div className="relative mx-auto mt-12 max-w-4xl rounded-[1.75rem] bg-[#f7f9fb]/74 p-3 shadow-[0_28px_90px_-58px_rgba(15,23,42,0.46)] backdrop-blur dark:bg-[#151821]/72">
-          <div className="rounded-[1.35rem] bg-[linear-gradient(135deg,rgba(249,251,255,0.84)_0%,rgba(238,252,247,0.82)_48%,rgba(244,241,255,0.84)_100%)] p-4 dark:bg-[linear-gradient(135deg,rgba(25,29,39,0.86)_0%,rgba(16,36,31,0.78)_48%,rgba(28,24,43,0.86)_100%)] sm:p-5">
-            <div className="relative min-h-32 overflow-hidden rounded-[1.4rem] bg-white/42 px-5 py-5 shadow-[0_16px_52px_-44px_rgba(15,23,42,0.5)] backdrop-blur dark:bg-white/[0.045] sm:min-h-36 sm:px-7">
-              <div className="pointer-events-none absolute -left-10 bottom-0 h-32 w-56 rounded-full bg-[#8ddfc9]/18 blur-2xl" />
-              <div className="pointer-events-none absolute -right-8 top-0 h-32 w-56 rounded-full bg-[#c6d8ff]/28 blur-2xl" />
+        <div className="relative mx-auto max-w-5xl">
+          <div className="mx-auto max-w-3xl text-center">
+            <h1 className="text-balance text-[clamp(2.75rem,6vw,5.5rem)] font-black leading-[1.02] text-[#101114] dark:text-white">
+              A quieter way to discover agent skills.
+            </h1>
+            <p className="mx-auto mt-6 max-w-xl text-base leading-7 text-[#5f6673] dark:text-[#c6ccd8] sm:text-lg">
+              Find reusable workflows, inspect their instructions, and copy the exact install command without leaving the workspace.
+            </p>
+          </div>
 
-              <div className="relative flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-                <div className="max-w-sm">
-                  <div className="mb-8 inline-flex h-9 w-9 items-center justify-center rounded-2xl bg-[#e7fbf4] text-[#209a7a] dark:bg-emerald-300/10">
-                    <Layers3 size={18} />
-                  </div>
-                  <div className="flex items-baseline gap-3">
-                    <span className="text-6xl font-black leading-none text-[#111318] dark:text-white">{totalSkills}</span>
-                    <span className="text-sm font-semibold text-[#687586] dark:text-[#b8c0cc]">published skills</span>
-                  </div>
-                </div>
+          <div className="mx-auto mt-11 max-w-3xl">
+            <div className="mb-5 flex flex-wrap items-center justify-center gap-3 text-sm">
+              <div className="inline-flex items-center gap-2 rounded-full bg-white/60 px-4 py-2 shadow-[0_16px_48px_-40px_rgba(15,23,42,0.55)] backdrop-blur dark:bg-white/[0.07]">
+                <Layers3 size={15} className="text-[#209a7a]" />
+                <span className="font-black text-[#111318] dark:text-white">{totalSkills}</span>
+                <span className="font-medium text-[#687586] dark:text-[#b8c0cc]">published skills</span>
+              </div>
 
-                <div className="self-start rounded-[1.3rem] bg-white/72 px-5 py-4 shadow-[0_18px_48px_-38px_rgba(15,23,42,0.6)] backdrop-blur dark:bg-white/[0.075] sm:mr-3 sm:mt-2">
-                  <Files className="mb-5 text-[#6473d8]" size={18} />
-                  <div className="flex items-end gap-2">
-                    <span className="text-4xl font-black leading-none text-[#111318] dark:text-white">{totalFiles}</span>
-                    <span className="pb-1 text-xs font-semibold text-[#687586] dark:text-[#b8c0cc]">source files</span>
-                  </div>
-                </div>
+              <div className="inline-flex items-center gap-2 rounded-full bg-white/60 px-4 py-2 shadow-[0_16px_48px_-40px_rgba(15,23,42,0.55)] backdrop-blur dark:bg-white/[0.07]">
+                <Files size={15} className="text-[#6473d8]" />
+                <span className="font-black text-[#111318] dark:text-white">{totalFiles}</span>
+                <span className="font-medium text-[#687586] dark:text-[#b8c0cc]">source files</span>
               </div>
             </div>
 
-            <div className="relative mt-5">
-              <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-[#7f8a9a]" size={19} />
+            <div className="relative">
+              <div className="pointer-events-none absolute inset-x-8 -top-5 h-16 rounded-full bg-[#8ddfc9]/20 blur-2xl dark:bg-[#8ddfc9]/12" />
+              <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-[#7f8a9a]" size={20} />
               <input
                 type="text"
                 placeholder="Search skills..."
-                className="h-14 w-full rounded-2xl bg-white/86 pl-13 pr-5 text-sm font-medium text-[#15171c] outline-none shadow-[0_14px_38px_-32px_rgba(15,23,42,0.55)] transition focus:ring-4 focus:ring-[#8ddfc9]/25 dark:bg-white/[0.08] dark:text-white"
+                className="relative h-16 w-full rounded-[1.35rem] bg-white/82 pl-14 pr-5 text-base font-medium text-[#15171c] outline-none shadow-[0_30px_90px_-58px_rgba(15,23,42,0.55)] backdrop-blur transition placeholder:text-[#8a94a3] focus:ring-4 focus:ring-[#8ddfc9]/25 dark:bg-white/[0.08] dark:text-white"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
