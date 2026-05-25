@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { SkillMetadata } from '@/lib/skills';
 import { motion } from 'framer-motion';
-import { CalendarDays, Files, Terminal } from 'lucide-react';
+import { CalendarDays, Files } from 'lucide-react';
 import { formatSkillPublishedAt } from '@/lib/utils';
 import { trackEvent } from '@/lib/gtag';
 
@@ -73,9 +73,11 @@ export function SkillCard({ skill, position, onClick }: SkillCardProps) {
       whileHover={{ y: -3 }}
       transition={{ duration: 0.22 }}
       onClick={handleClick}
-      className="group flex h-full cursor-pointer flex-col rounded-[1.5rem] border border-black/5 bg-white/80 p-5 shadow-[0_24px_70px_-52px_rgba(15,23,42,0.55)] backdrop-blur transition-all hover:border-[#9ce6d2] hover:bg-white dark:border-white/10 dark:bg-white/[0.055] dark:hover:border-[#8ddfc9]/50 dark:hover:bg-white/[0.075]"
+      className="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-[1.5rem] border border-black/5 bg-white/80 p-5 shadow-[0_24px_70px_-52px_rgba(15,23,42,0.55)] backdrop-blur transition-all hover:border-[#9ce6d2] hover:bg-white dark:border-white/10 dark:bg-white/[0.055] dark:hover:border-[#8ddfc9]/50 dark:hover:bg-white/[0.075]"
     >
-      <div className="mb-3 flex items-start justify-between gap-4">
+      <div className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-[radial-gradient(circle_at_center,rgba(141,223,201,0.26),rgba(198,216,255,0.16)_45%,transparent_72%)] blur-2xl opacity-70 transition-opacity group-hover:opacity-100 dark:bg-[radial-gradient(circle_at_center,rgba(141,223,201,0.2),rgba(198,216,255,0.12)_45%,transparent_72%)]" />
+
+      <div className="mb-3">
         <div className="min-w-0">
           <h3 className="text-[1.05rem] font-bold leading-tight text-[#14161b] transition-colors group-hover:text-black dark:text-white">
             {displayName}
@@ -85,9 +87,6 @@ export function SkillCard({ skill, position, onClick }: SkillCardProps) {
               {skill.name}
             </span>
           </div>
-        </div>
-        <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border border-black/5 bg-[#f4f8fb] text-[#5e6b7d] transition-colors group-hover:bg-black group-hover:text-white dark:border-white/10 dark:bg-white/[0.08] dark:text-[#aeb7c6] dark:group-hover:bg-white dark:group-hover:text-black">
-          <Terminal size={15} strokeWidth={1.75} />
         </div>
       </div>
       
