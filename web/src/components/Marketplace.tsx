@@ -187,11 +187,11 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
 
             <div className="relative">
               <div className="pointer-events-none absolute inset-x-8 -top-5 h-16 rounded-full bg-[#8ddfc9]/20 blur-2xl dark:bg-[#8ddfc9]/12" />
-              <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-[#7f8a9a]" size={20} />
+              <Search className="pointer-events-none absolute left-5 top-1/2 z-10 -translate-y-1/2 text-[#7f8a9a]" size={20} />
               <input
                 type="text"
                 placeholder="Search skills..."
-                className="relative h-16 w-full rounded-[1.35rem] bg-white/82 pl-14 pr-5 text-base font-medium text-[#15171c] outline-none shadow-[0_30px_90px_-58px_rgba(15,23,42,0.55)] backdrop-blur transition placeholder:text-[#8a94a3] focus:ring-4 focus:ring-[#8ddfc9]/25 dark:bg-white/[0.08] dark:text-white"
+                className="relative z-0 h-16 w-full rounded-[1.35rem] bg-white/82 pl-14 pr-5 text-base font-medium text-[#15171c] outline-none shadow-[0_30px_90px_-58px_rgba(15,23,42,0.55)] backdrop-blur transition placeholder:text-[#8a94a3] focus:ring-4 focus:ring-[#8ddfc9]/25 dark:bg-white/[0.08] dark:text-white"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
