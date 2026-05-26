@@ -18,7 +18,7 @@ export function GithubNavLink() {
           location: 'header',
         });
       }}
-      className="inline-flex h-9 items-center gap-2 rounded-full px-3 text-sm font-medium text-[#5f6673] transition-colors hover:bg-black hover:text-white dark:text-[#c6ccd8] dark:hover:bg-white dark:hover:text-black"
+      className="inline-flex h-9 items-center gap-2 rounded-full px-3 text-sm font-medium text-[#5f6673] transition-colors hover:bg-[#eef8f5] hover:text-black dark:text-[#c6ccd8] dark:hover:bg-white/10 dark:hover:text-white"
     >
       <Icons.Github size={15} />
       <span className="hidden sm:inline">GitHub</span>
