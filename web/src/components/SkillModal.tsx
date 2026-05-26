@@ -142,17 +142,19 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
             >
               <Dialog.Panel className="w-full max-w-4xl transform overflow-hidden rounded-[2rem] border border-black/10 bg-[#fbfcfd] p-0 shadow-[0_42px_120px_-52px_rgba(15,23,42,0.75)] transition-all dark:border-white/10 dark:bg-[#151821]">
                 <div className="h-2 bg-[linear-gradient(90deg,#8ddfc9,#d7f6a7,#c6d8ff,#d8ccff)]" />
-                <div className="flex items-center justify-between gap-5 border-b border-black/5 bg-white/70 px-5 py-5 backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.04] sm:px-7">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#e7fbf4] text-[#178a70] dark:bg-emerald-300/10 dark:text-[#8ddfc9]">
-                      <Terminal size={20} />
-                    </div>
-                    <div className="min-w-0">
-                      <Dialog.Title as="h3" className="text-xl font-black leading-tight text-[#111318] dark:text-white">
+                <div className="flex items-start justify-between gap-3 border-b border-black/5 bg-white/70 px-5 py-5 backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.04] sm:items-center sm:gap-5 sm:px-7">
+                  <div className="min-w-0">
+                    <div className="flex min-w-0 items-center gap-3">
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#e7fbf4] text-[#178a70] dark:bg-emerald-300/10 dark:text-[#8ddfc9]">
+                        <Terminal size={20} />
+                      </div>
+                      <Dialog.Title as="h3" className="min-w-0 text-xl font-black leading-tight text-[#111318] dark:text-white">
                         {displayName}
                       </Dialog.Title>
+                    </div>
+                    <div className="min-w-0 pl-14">
                       {skill ? (
-                        <div className="mt-2 flex flex-wrap items-center gap-2 text-[12px] font-semibold text-[#7a8493] dark:text-[#aeb7c6]">
+                        <div className="mt-2 flex min-w-0 flex-wrap items-center gap-2 text-[12px] font-semibold text-[#7a8493] dark:text-[#aeb7c6]">
                           <span className="inline-flex items-center rounded-full bg-[#edf7f4] px-2.5 py-1 text-[10px] lowercase text-[#2d8c75] dark:bg-emerald-300/10 dark:text-[#8ddfc9]">
                             {skill.name}
                           </span>
@@ -179,7 +181,7 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
                                 target: 'github_skill_source',
                               });
                             }}
-                            className="inline-flex items-center gap-1.5 rounded-full bg-black px-2.5 py-1 text-white transition-colors hover:bg-[#27302d] dark:bg-white dark:text-black dark:hover:bg-[#dbe5e1]"
+                            className="inline-flex shrink-0 basis-full items-center justify-center gap-1.5 rounded-full bg-black px-2.5 py-1 text-white transition-colors hover:bg-[#27302d] dark:bg-white dark:text-black dark:hover:bg-[#dbe5e1] sm:basis-auto"
                             title="View source file on GitHub"
                           >
                             <ExternalLink size={12} className="flex-shrink-0" />
@@ -189,7 +191,7 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
                       ) : null}
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex shrink-0 items-center gap-2">
                     <button
                       onClick={onClose}
                       className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-[#687586] shadow-sm ring-1 ring-black/5 transition hover:bg-[#eef8f5] hover:text-black focus:outline-none focus:ring-2 focus:ring-[#8ddfc9]/60 dark:bg-white/[0.08] dark:text-[#aeb7c6] dark:ring-white/10 dark:hover:bg-white/[0.14] dark:hover:text-white"
