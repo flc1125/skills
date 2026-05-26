@@ -91,6 +91,14 @@ export default function RootLayout({
           <div className="max-w-7xl mx-auto px-4 text-center">
             <p className="text-[#111318] dark:text-white font-bold mb-2">Flc&apos;s Skills</p>
             <p className="text-[#687586] dark:text-[#aeb7c6] text-sm">Reusable agent workflows in a calm interface.</p>
+            <a
+              href="https://flc.io"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex rounded-full px-3 py-1.5 text-sm font-semibold text-[#178a70] transition-colors hover:bg-[#eef8f5] hover:text-[#111318] dark:text-[#8ddfc9] dark:hover:bg-white/10 dark:hover:text-white"
+            >
+              Creator homepage
+            </a>
             <p className="text-[#9aa4b2] dark:text-[#6f7887] text-xs mt-4">© 2026 Flc&apos;s Skills. All rights reserved.</p>
           </div>
         </footer>
