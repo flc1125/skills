@@ -203,11 +203,6 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
       <div className="relative mx-auto -mt-8 mb-12 h-16 max-w-5xl" aria-hidden="true">
         <div className="absolute inset-x-8 top-1/2 h-px bg-gradient-to-r from-transparent via-[#91dcca]/50 to-transparent dark:via-white/18" />
         <div className="absolute left-1/2 top-1/2 h-12 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[linear-gradient(90deg,rgba(141,223,201,0.26),rgba(198,216,255,0.3),rgba(199,185,255,0.22))] blur-2xl" />
-        <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 rounded-full bg-white/56 px-3 py-2 shadow-[0_18px_60px_-42px_rgba(15,23,42,0.6)] backdrop-blur dark:bg-white/[0.07]">
-          <span className="h-1.5 w-8 rounded-full bg-[#8ddfc9]/85 shadow-[0_0_18px_rgba(141,223,201,0.45)]" />
-          <span className="h-1.5 w-14 rounded-full bg-[#c6d8ff]/90 shadow-[0_0_18px_rgba(198,216,255,0.45)]" />
-          <span className="h-1.5 w-8 rounded-full bg-[#c7b9ff]/85 shadow-[0_0_18px_rgba(199,185,255,0.42)]" />
-        </div>
       </div>
 
       <section className="mt-0">
