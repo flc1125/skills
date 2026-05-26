@@ -79,7 +79,7 @@ export function SkillCard({ skill, position, onClick }: SkillCardProps) {
 
       <div className="mb-3">
         <div className="min-w-0">
-          <h3 className="text-[1.05rem] font-bold leading-tight text-[#14161b] transition-colors group-hover:text-black dark:text-white">
+          <h3 className="text-[1.05rem] font-bold leading-tight text-[#14161b] transition-colors group-hover:text-black dark:text-white dark:group-hover:text-white">
             {displayName}
           </h3>
           <div className="mt-1">
