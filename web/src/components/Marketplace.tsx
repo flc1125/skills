@@ -155,7 +155,7 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
 
   return (
     <div className="relative mx-auto max-w-7xl px-4 pb-20 pt-0 sm:px-6 lg:px-8">
-      <section className="relative overflow-hidden px-2 py-14 sm:px-6 sm:py-20">
+      <section className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden px-6 py-14 sm:px-6 sm:py-20">
         <div className="pointer-events-none absolute left-1/2 top-2 h-72 w-[52rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_45%_45%,rgba(141,223,201,0.32),rgba(198,216,255,0.24)_42%,rgba(199,185,255,0.16)_58%,transparent_74%)] blur-3xl dark:opacity-50" />
         <div className="pointer-events-none absolute left-[12%] top-32 h-28 w-28 rounded-full bg-[#8ddfc9]/18 blur-2xl" />
         <div className="pointer-events-none absolute right-[14%] top-44 h-32 w-32 rounded-full bg-[#c6d8ff]/22 blur-2xl" />
