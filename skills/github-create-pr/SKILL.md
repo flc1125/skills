@@ -88,7 +88,19 @@ If no convention is visible, use a plain imperative summary.
 
 Use the default PR body conventions in [references/pr-body-conventions.md](references/pr-body-conventions.md) unless the user explicitly asks for another format.
 
-### 5. Create or update the PR
+### 5. Sanitize public PR content
+
+Before creating or updating a PR, review the title, body, and any public notes for local execution details that should not be published.
+
+Remove or generalize:
+
+- absolute local paths such as `/Users/...`, `/tmp/...`, workspace checkout paths, cache directories, or generated artifact paths
+- machine-specific environment details, local ports, usernames, tokens, hostnames, and shell history
+- pasted debug output that is useful locally but not needed for review
+
+Repository-relative paths are fine when they identify changed source files. For testing, summarize the command and result instead of pasting local filesystem output.
+
+### 6. Create or update the PR
 
 For a new PR, prefer `gh pr create` with explicit title and body. Build the body from [references/pr-body-conventions.md](references/pr-body-conventions.md):
 
@@ -103,7 +115,7 @@ Use `--draft` when the branch is intentionally not ready for full review.
 
 For an existing PR, use `gh pr edit` to update the title, body, or reviewers.
 
-### 6. Add reviewers deliberately
+### 7. Add reviewers deliberately
 
 Keep reviewer count focused. Prefer the smallest set of relevant reviewers.
 
@@ -140,6 +152,7 @@ If the user asks to open the PR directly, still summarize the final title, body,
 - Prefer draft PRs when work is incomplete, risky, or waiting on feedback.
 - Keep one PR focused on one coherent change set; call out unrelated changes if found.
 - Explain behavior changes, migrations, and follow-up work only when they materially affect review.
+- Treat PR titles, bodies, comments, and notes as public. Strip local debugging details and machine-specific paths before publishing.
 - Use issue-closing syntax only when the linkage is clear and intended.
 
 ## Red Flags
