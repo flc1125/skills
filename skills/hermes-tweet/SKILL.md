@@ -5,7 +5,7 @@ metadata:
   name: Hermes Tweet
   description: Route X/Twitter research, monitoring, and controlled actions through the Hermes Tweet plugin.
   author: Burak Bayir
-  created: "2026-06-22T01:53:44Z"
+  created: 2026-06-22T01:53:44Z
 ---
 
 # Hermes Tweet
