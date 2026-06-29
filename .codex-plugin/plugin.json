@@ -1,0 +1,40 @@
+{
+  "name": "skills",
+  "version": "0.6.0",
+  "description": "A curated collection of reusable Codex skills maintained by Flc.",
+  "author": {
+    "name": "Flc",
+    "url": "https://github.com/flc1125"
+  },
+  "homepage": "https://skills.flc.io",
+  "repository": "https://github.com/flc1125/skills",
+  "license": "MIT",
+  "keywords": [
+    "codex",
+    "skills",
+    "agents",
+    "workflows"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Flc's Skills",
+    "shortDescription": "Reusable Codex skills for agent workflows.",
+    "longDescription": "Flc's Skills packages reusable Codex workflows, review helpers, GitHub and GitLab operations, knowledge tools, and orchestration patterns from this repository.",
+    "developerName": "Flc",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills",
+      "Workflow Automation",
+      "Code Review"
+    ],
+    "websiteURL": "https://skills.flc.io",
+    "composerIcon": "./web/public/favicon.svg",
+    "logo": "./web/public/favicon.svg",
+    "defaultPrompt": [
+      "Use a skill from Flc's Skills.",
+      "Find the right workflow skill for this task.",
+      "Help me operate this repository with a reusable skill."
+    ],
+    "brandColor": "#111318"
+  }
+}
