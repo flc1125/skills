@@ -18,35 +18,45 @@
 
 An open repository of reusable skills maintained for personal use and public reuse.
 
-This repo contains installable skills that can be added directly from GitHub and used as building blocks for agent workflows, AI assistants, or other compatible tools.
+This repo contains a Codex plugin and installable skills that can be added directly from GitHub and used as building blocks for agent workflows, AI assistants, or other compatible tools.
 
 The installable skill content lives in `skills/`. The Next.js marketplace that powers [skills.flc.io](https://skills.flc.io) now lives in `web/`.
 
 ## ✨ Overview
 
+- Install the full skill collection as a Codex plugin
 - Install individual skills directly from this repository
 - Browse available skills on the visual marketplace at [skills.flc.io](https://skills.flc.io)
 - Reuse the repository as a lightweight source of portable skills
 
 ## 📦 Installation
 
-Quick start:
+### Install as a Codex plugin
 
-**1. Interactive selection**
+Add this repository as a Codex plugin marketplace, then install the bundled `skills` plugin:
+
+```bash
+codex plugin marketplace add flc1125/skills
+codex plugin add skills@flc-skills
+```
+
+Use this path when you want the full collection available in Codex.
+
+### Install an individual skill
+
+Use `npx skills add` when you only want one skill, want to choose from an interactive prompt, or are using a compatible skill installer outside the Codex plugin system.
+
+Choose a skill interactively:
 
 ```bash
 npx skills add https://github.com/flc1125/skills
 ```
 
-Use this if you want to browse available skills first and choose what to install interactively.
-
-**2. Install a specific skill directly**
+Install a specific skill directly:
 
 ```bash
 npx skills add https://github.com/flc1125/skills --skill <skill-name>
 ```
-
-Use this when you already know the exact skill name you want.
 
 For example:
 
@@ -60,7 +70,9 @@ If you install a specific skill directly, use the skill's install name shown on 
 
 Browse all published skills at [skills.flc.io](https://skills.flc.io).
 
-Once installed, a skill can be used through your local skills setup or any compatible tool that supports this format. Refer to the skill's own `SKILL.md` for its purpose, trigger guidance, and usage details.
+After installing the Codex plugin, start a new Codex thread and ask Codex to use the relevant workflow, or invoke a bundled skill explicitly. If you install an individual skill directly, use it through your local skills setup or any compatible tool that supports this format.
+
+Refer to each skill's `SKILL.md` for its purpose, trigger guidance, and usage details.
 
 ## 🛠 Development
 
