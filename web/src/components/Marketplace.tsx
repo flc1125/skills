@@ -6,7 +6,7 @@ import { SkillMetadata, Skill } from '@/lib/skills';
 import { SkillCard } from './SkillCard';
 import { SkillModal } from './SkillModal';
 import { RepositoryInstallPanel } from './RepositoryInstallPanel';
-import { Files, Github, Layers3, Search, Star } from 'lucide-react';
+import { Files, Github, Layers3, Search, Sparkles, Star } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
 import { parseSkillMetadataDate } from '@/lib/utils';
 import { trackEvent } from '@/lib/gtag';
@@ -162,13 +162,26 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
         <div className="pointer-events-none absolute right-[14%] top-44 h-32 w-32 rounded-full bg-[#c6d8ff]/22 blur-2xl" />
 
         <div className="relative mx-auto max-w-5xl">
-          <div className="mx-auto max-w-3xl text-center">
+          <div className="relative mx-auto max-w-3xl text-center">
             <h1 className="text-balance text-[clamp(2.75rem,6vw,5.5rem)] font-black leading-[1.02] text-[#101114] dark:text-white">
-              Build better agent workflows with reusable skills.
+              Build better agent workflows with{' '}
+              <span className="relative inline-flex translate-y-1 flex-wrap items-center justify-center gap-2 align-baseline">
+                <span className="inline-block -rotate-2 rounded-xl border-2 border-[#101114] bg-[#d7f6a7] px-3 py-1 text-[#101114] shadow-[7px_7px_0_rgba(20,22,27,0.14)] dark:border-white dark:bg-[#8ddfc9] dark:text-[#101114] dark:shadow-[7px_7px_0_rgba(255,255,255,0.12)]">
+                  reusable
+                </span>
+                <span className="relative inline-block rotate-1 rounded-xl border-2 border-[#101114] bg-white px-3 py-1 text-[#101114] shadow-[7px_7px_0_rgba(141,223,201,0.42)] dark:border-white dark:bg-[#d7f6a7] dark:text-[#101114] dark:shadow-[7px_7px_0_rgba(141,223,201,0.2)]">
+                  skills
+                </span>
+                <Sparkles className="absolute -right-5 -top-4 hidden text-[#d49a16] sm:block" size={23} aria-hidden="true" />
+              </span>
+              .
             </h1>
-            <p className="mx-auto mt-6 max-w-xl text-base leading-7 text-[#5f6673] dark:text-[#c6ccd8] sm:text-lg">
-              A curated skill library for repeatable agent work, cleaner handoffs, and faster starts across your assistant tools.
-            </p>
+            <div className="relative mx-auto mt-6 max-w-xl">
+              <div className="pointer-events-none absolute -left-5 top-2 hidden h-2.5 w-2.5 rounded-full bg-[#8ddfc9] shadow-[16px_18px_0_#d7f6a7] md:block" />
+              <p className="relative px-3 text-base leading-7 text-[#5f6673] dark:text-[#c6ccd8] sm:text-lg">
+                A curated skill library for repeatable agent work, cleaner handoffs, and faster starts across your assistant tools.
+              </p>
+            </div>
           </div>
 
           <div className="mx-auto mt-10 flex max-w-3xl flex-wrap items-center justify-center gap-3 text-sm">
