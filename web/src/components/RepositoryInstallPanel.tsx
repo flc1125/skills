@@ -49,13 +49,13 @@ export function RepositoryInstallPanel() {
               <PackagePlus size={21} />
             </div>
             <p className="text-xs font-bold uppercase tracking-widest text-[#7a8493] dark:text-[#aeb7c6]">
-              Repository install
+              Plugin install
             </p>
             <h2 className="mt-2 text-2xl font-black leading-tight text-[#111318] dark:text-white">
-              Install the full collection
+              Add Flc's Skills to your assistant
             </h2>
             <p className="mt-3 text-sm leading-6 text-[#687586] dark:text-[#aeb7c6]">
-              Choose your assistant, copy the commands, and add every skill from this collection in one setup. You can still install individual skills from their cards.
+              Install the repository as a plugin so your assistant can load the full skill set. Prefer a single skill instead? Open any card and copy its individual install command.
             </p>
           </div>
 
