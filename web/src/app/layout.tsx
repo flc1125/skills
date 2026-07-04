@@ -87,7 +87,7 @@ export default function RootLayout({
           </div>
         </header>
         <main>{children}</main>
-        <footer className="border-t border-black/5 py-12 mt-10 dark:border-white/10">
+        <footer className="border-t border-black/5 bg-white/42 py-12 dark:border-white/10 dark:bg-black/[0.08]">
           <div className="max-w-7xl mx-auto px-4 text-center">
             <p className="text-[#111318] dark:text-white font-bold mb-2">Flc&apos;s Skills</p>
             <p className="text-[#687586] dark:text-[#aeb7c6] text-sm">Reusable agent workflows in a calm interface.</p>

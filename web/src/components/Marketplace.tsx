@@ -155,7 +155,7 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
   };
 
   return (
-    <div className="relative mx-auto max-w-7xl px-4 pb-8 pt-0 sm:px-6 lg:px-8">
+    <div className="relative mx-auto max-w-7xl px-4 pb-0 pt-0 sm:px-6 lg:px-8">
       <section className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden border-b border-black/5 bg-white/25 px-6 py-14 dark:border-white/10 dark:bg-white/[0.025] sm:px-6 sm:py-20">
         <div className="pointer-events-none absolute left-1/2 top-2 h-72 w-[52rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_45%_45%,rgba(141,223,201,0.32),rgba(198,216,255,0.24)_42%,rgba(199,185,255,0.16)_58%,transparent_74%)] blur-3xl dark:opacity-50" />
         <div className="pointer-events-none absolute left-[12%] top-32 h-28 w-28 rounded-full bg-[#8ddfc9]/18 blur-2xl" />
@@ -191,7 +191,7 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
         <RepositoryInstallPanel />
       </section>
 
-      <section className="relative left-1/2 w-screen -translate-x-1/2 bg-white/42 px-4 py-12 dark:bg-black/[0.08] sm:px-6 lg:px-8">
+      <section className="relative left-1/2 w-screen -translate-x-1/2 bg-white/42 px-4 py-12 dark:bg-black/[0.08] sm:px-6 sm:pb-16 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
