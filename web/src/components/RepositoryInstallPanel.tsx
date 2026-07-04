@@ -57,11 +57,11 @@ export function RepositoryInstallPanel() {
               Install the full collection
             </h2>
             <p className="mt-3 text-sm leading-6 text-[#687586] dark:text-[#aeb7c6]">
-              Use a plugin marketplace when you want every skill in this repository available as one managed install. Individual skill installs remain available from each skill card.
+              Choose your assistant, copy the commands, and add every skill from this collection in one setup. You can still install individual skills from their cards.
             </p>
           </div>
 
-          <div className="px-5 py-5 sm:px-6">
+          <div className="px-5 py-7 sm:px-6 sm:py-8">
             <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 {methods.length > 1 ? (

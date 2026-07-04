@@ -187,7 +187,7 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
         </div>
       </section>
 
-      <section className="relative left-1/2 w-screen -translate-x-1/2 border-b border-black/5 bg-[#f3fbf8]/65 px-4 py-12 dark:border-white/10 dark:bg-white/[0.035] sm:px-6 lg:px-8">
+      <section className="relative left-1/2 w-screen -translate-x-1/2 border-b border-black/5 bg-[#f3fbf8]/65 px-4 py-16 dark:border-white/10 dark:bg-white/[0.035] sm:px-6 sm:py-20 lg:px-8">
         <RepositoryInstallPanel />
       </section>
 
