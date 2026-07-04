@@ -90,7 +90,7 @@ export default function RootLayout({
         <footer className="border-t border-black/5 bg-white/42 py-12 dark:border-white/10 dark:bg-black/[0.08]">
           <div className="max-w-7xl mx-auto px-4 text-center">
             <p className="text-[#111318] dark:text-white font-bold mb-2">Flc&apos;s Skills</p>
-            <p className="text-[#687586] dark:text-[#aeb7c6] text-sm">Reusable agent workflows in a calm interface.</p>
+            <p className="text-[#687586] dark:text-[#aeb7c6] text-sm">Practical skills for agents that need clearer workflows and repeatable outcomes.</p>
             <p className="text-[#9aa4b2] dark:text-[#6f7887] text-xs mt-4">
               © 2026 Flc&apos;s Skills. Created by{' '}
               <a

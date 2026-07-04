@@ -197,7 +197,7 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
             <div>
               <h2 className="text-3xl font-black text-[#111318] dark:text-white">Explore skills</h2>
               <p className="mt-2 text-sm leading-6 text-[#687586] dark:text-[#aeb7c6]">
-                Newer skill definitions appear first. Select any entry to read the full instruction file.
+                Curated agent skills for sharper workflows, faster handoffs, and repeatable results.
               </p>
             </div>
             <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center lg:w-auto lg:justify-end">
