@@ -193,29 +193,27 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
 
       <section className="relative left-1/2 w-screen -translate-x-1/2 bg-white/42 px-4 py-12 dark:bg-black/[0.08] sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <h2 className="text-3xl font-black text-[#111318] dark:text-white">Explore skills</h2>
               <p className="mt-2 text-sm leading-6 text-[#687586] dark:text-[#aeb7c6]">
                 Newer skill definitions appear first. Select any entry to read the full instruction file.
               </p>
             </div>
-            <div className="flex rounded-full bg-black px-4 py-2 text-xs font-bold text-white dark:bg-white dark:text-black">
-              {orderedSkills.length} available
-            </div>
-          </div>
-
-          <div className="mb-8 max-w-3xl">
-            <div className="relative">
-              <div className="pointer-events-none absolute inset-x-8 -top-5 h-16 rounded-full bg-[#8ddfc9]/20 blur-2xl dark:bg-[#8ddfc9]/12" />
-              <Search className="pointer-events-none absolute left-5 top-1/2 z-10 -translate-y-1/2 text-[#7f8a9a]" size={20} />
-              <input
-                type="text"
-                placeholder="Search skills..."
-                className="relative z-0 h-16 w-full rounded-[1.35rem] bg-white/82 pl-14 pr-5 text-base font-medium text-[#15171c] outline-none shadow-[0_30px_90px_-58px_rgba(15,23,42,0.55)] backdrop-blur transition placeholder:text-[#8a94a3] focus:ring-4 focus:ring-[#8ddfc9]/25 dark:bg-white/[0.08] dark:text-white"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
+            <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center lg:w-auto lg:justify-end">
+              <div className="relative w-full sm:w-80 lg:w-96">
+                <Search className="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-[#7f8a9a]" size={18} />
+                <input
+                  type="text"
+                  placeholder="Search skills..."
+                  className="relative h-11 w-full rounded-2xl border border-black/5 bg-white/74 pl-11 pr-4 text-sm font-medium text-[#15171c] outline-none shadow-sm backdrop-blur transition placeholder:text-[#8a94a3] focus:border-[#8ddfc9] focus:ring-4 focus:ring-[#8ddfc9]/18 dark:border-white/10 dark:bg-white/[0.07] dark:text-white"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
+              <div className="inline-flex shrink-0 justify-center rounded-full bg-black px-4 py-2 text-xs font-bold text-white dark:bg-white dark:text-black">
+                {orderedSkills.length} available
+              </div>
             </div>
           </div>
 

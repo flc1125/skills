@@ -33,39 +33,13 @@ export const repositoryInstallMethods: InstallMethod[] = [
   {
     id: 'claude',
     label: 'Claude',
-    description: 'Mock install flow for upcoming Claude plugin support. Commands are placeholders until the real Claude plugin distribution is available.',
+    description: 'Claude plugin support is planned, but it is not available yet.',
     scope: 'repository',
-    status: 'available',
-    commands: [
-      {
-        label: 'Mock add marketplace',
-        command: 'claude plugin marketplace add flc1125/skills',
-      },
-      {
-        label: 'Mock install plugin',
-        command: 'claude plugin add skills@flc-skills',
-      },
-    ],
-  },
-  {
-    id: 'gemini',
-    label: 'Gemini',
-    description: 'Mock install flow for upcoming Gemini plugin support. Commands are placeholders until the real Gemini plugin distribution is available.',
-    scope: 'repository',
-    status: 'available',
-    commands: [
-      {
-        label: 'Mock add marketplace',
-        command: 'gemini plugin marketplace add flc1125/skills',
-      },
-      {
-        label: 'Mock install plugin',
-        command: 'gemini plugin add skills@flc-skills',
-      },
-    ],
+    status: 'planned',
+    commands: [],
   },
 ];
 
-export const availableRepositoryInstallMethods = repositoryInstallMethods.filter(
-  (method) => method.scope === 'repository' && method.status === 'available'
+export const visibleRepositoryInstallMethods = repositoryInstallMethods.filter(
+  (method) => method.scope === 'repository'
 );

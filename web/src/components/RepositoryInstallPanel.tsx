@@ -2,13 +2,13 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { Check, Copy, PackagePlus, Terminal } from 'lucide-react';
-import { availableRepositoryInstallMethods } from '@/lib/install-methods';
+import { visibleRepositoryInstallMethods } from '@/lib/install-methods';
 import { trackEvent } from '@/lib/gtag';
 
 const copiedResetDelay = 2000;
 
 export function RepositoryInstallPanel() {
-  const methods = availableRepositoryInstallMethods;
+  const methods = visibleRepositoryInstallMethods;
   const [activeMethodId, setActiveMethodId] = useState(methods[0]?.id ?? '');
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
@@ -40,8 +40,6 @@ export function RepositoryInstallPanel() {
     setCopiedKey(copyKey);
   };
 
-  const allCommands = activeMethod.commands.map((entry) => entry.command).join('\n');
-
   return (
     <div className="mx-auto max-w-5xl">
       <div className="overflow-hidden rounded-[1.5rem] border border-black/5 bg-white/78 shadow-[0_28px_86px_-60px_rgba(15,23,42,0.65)] backdrop-blur dark:border-white/10 dark:bg-white/[0.055]">
@@ -62,7 +60,7 @@ export function RepositoryInstallPanel() {
           </div>
 
           <div className="px-5 py-7 sm:px-6 sm:py-8">
-            <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="mb-4">
               <div>
                 {methods.length > 1 ? (
                   <div className="inline-flex flex-wrap rounded-full bg-black/5 p-1 dark:bg-white/10" aria-label="Install provider">
@@ -92,57 +90,56 @@ export function RepositoryInstallPanel() {
                   {activeMethod.description}
                 </p>
               </div>
-              <button
-                type="button"
-                onClick={() => copyCommands('all', allCommands, 'all')}
-                className={`inline-flex shrink-0 items-center justify-center gap-1.5 rounded-full px-4 py-2 text-xs font-bold transition ${
-                  copiedKey === 'all'
-                    ? 'bg-[#178a70] text-white'
-                    : 'bg-black text-white hover:bg-[#27302d] dark:bg-white dark:text-black dark:hover:bg-[#dbe5e1]'
-                }`}
-              >
-                {copiedKey === 'all' ? <Check size={14} /> : <Copy size={14} />}
-                <span>{copiedKey === 'all' ? 'Copied' : 'Copy all'}</span>
-              </button>
             </div>
 
-            <div className="space-y-3">
-              {activeMethod.commands.map((entry, index) => {
-                const copyKey = `${activeMethod.id}-${index}`;
-                const isCopied = copiedKey === copyKey;
+            {activeMethod.status === 'planned' ? (
+              <div className="rounded-2xl border border-black/5 bg-white px-4 py-5 text-sm leading-6 text-[#687586] shadow-sm dark:border-white/10 dark:bg-black/20 dark:text-[#aeb7c6]">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-[#7a8493] dark:text-[#aeb7c6]">
+                  Coming soon
+                </p>
+                <p className="mt-2">
+                  Claude support is not available yet. Please use Codex for now.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {activeMethod.commands.map((entry, index) => {
+                  const copyKey = `${activeMethod.id}-${index}`;
+                  const isCopied = copiedKey === copyKey;
 
-                return (
-                  <div
-                    key={entry.command}
-                    className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-2xl border border-black/5 bg-white px-4 py-3 shadow-sm dark:border-white/10 dark:bg-black/20"
-                  >
-                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#eef2ff] text-xs font-black text-[#5867c8] dark:bg-indigo-300/10 dark:text-[#b7c4ff]">
-                      {index + 1}
-                    </span>
-                    <div className="min-w-0">
-                      <p className="mb-1 text-[10px] font-bold uppercase tracking-widest text-[#7a8493] dark:text-[#aeb7c6]">
-                        {entry.label}
-                      </p>
-                      <code className="block min-w-0 select-all truncate font-mono text-xs text-[#3f4754] dark:text-[#d9e1ea]">
-                        {entry.command}
-                      </code>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => copyCommands(copyKey, entry.command, entry.label)}
-                      className={`flex h-9 w-9 items-center justify-center rounded-full transition ${
-                        isCopied
-                          ? 'bg-[#178a70] text-white'
-                          : 'bg-black text-white hover:bg-[#27302d] dark:bg-white dark:text-black dark:hover:bg-[#dbe5e1]'
-                      }`}
-                      aria-label={`Copy ${entry.label} command`}
+                  return (
+                    <div
+                      key={entry.command}
+                      className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-2xl border border-black/5 bg-white px-4 py-3 shadow-sm dark:border-white/10 dark:bg-black/20"
                     >
-                      {isCopied ? <Check size={15} /> : <Copy size={15} />}
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
+                      <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#eef2ff] text-xs font-black text-[#5867c8] dark:bg-indigo-300/10 dark:text-[#b7c4ff]">
+                        {index + 1}
+                      </span>
+                      <div className="min-w-0">
+                        <p className="mb-1 text-[10px] font-bold uppercase tracking-widest text-[#7a8493] dark:text-[#aeb7c6]">
+                          {entry.label}
+                        </p>
+                        <code className="block min-w-0 select-all truncate font-mono text-xs text-[#3f4754] dark:text-[#d9e1ea]">
+                          {entry.command}
+                        </code>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => copyCommands(copyKey, entry.command, entry.label)}
+                        className={`flex h-9 w-9 items-center justify-center rounded-full transition ${
+                          isCopied
+                            ? 'bg-[#178a70] text-white'
+                            : 'bg-black text-white hover:bg-[#27302d] dark:bg-white dark:text-black dark:hover:bg-[#dbe5e1]'
+                        }`}
+                        aria-label={`Copy ${entry.label} command`}
+                      >
+                        {isCopied ? <Check size={15} /> : <Copy size={15} />}
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
       </div>
