@@ -5,6 +5,7 @@ import { useSearchParams, usePathname } from 'next/navigation';
 import { SkillMetadata, Skill } from '@/lib/skills';
 import { SkillCard } from './SkillCard';
 import { SkillModal } from './SkillModal';
+import { RepositoryInstallPanel } from './RepositoryInstallPanel';
 import { Files, Layers3, Search } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
 import { parseSkillMetadataDate } from '@/lib/utils';
@@ -155,7 +156,7 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
 
   return (
     <div className="relative mx-auto max-w-7xl px-4 pb-8 pt-0 sm:px-6 lg:px-8">
-      <section className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden px-6 py-14 sm:px-6 sm:py-20">
+      <section className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden border-b border-black/5 bg-white/25 px-6 py-14 dark:border-white/10 dark:bg-white/[0.025] sm:px-6 sm:py-20">
         <div className="pointer-events-none absolute left-1/2 top-2 h-72 w-[52rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_45%_45%,rgba(141,223,201,0.32),rgba(198,216,255,0.24)_42%,rgba(199,185,255,0.16)_58%,transparent_74%)] blur-3xl dark:opacity-50" />
         <div className="pointer-events-none absolute left-[12%] top-32 h-28 w-28 rounded-full bg-[#8ddfc9]/18 blur-2xl" />
         <div className="pointer-events-none absolute right-[14%] top-44 h-32 w-32 rounded-full bg-[#c6d8ff]/22 blur-2xl" />
@@ -170,21 +171,41 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
             </p>
           </div>
 
-          <div className="mx-auto mt-11 max-w-3xl">
-            <div className="mb-5 flex flex-wrap items-center justify-center gap-3 text-sm">
-              <div className="inline-flex items-center gap-2 rounded-full bg-white/60 px-4 py-2 shadow-[0_16px_48px_-40px_rgba(15,23,42,0.55)] backdrop-blur dark:bg-white/[0.07]">
-                <Layers3 size={15} className="text-[#209a7a]" />
-                <span className="font-black text-[#111318] dark:text-white">{totalSkills}</span>
-                <span className="font-medium text-[#687586] dark:text-[#b8c0cc]">published skills</span>
-              </div>
-
-              <div className="inline-flex items-center gap-2 rounded-full bg-white/60 px-4 py-2 shadow-[0_16px_48px_-40px_rgba(15,23,42,0.55)] backdrop-blur dark:bg-white/[0.07]">
-                <Files size={15} className="text-[#6473d8]" />
-                <span className="font-black text-[#111318] dark:text-white">{totalFiles}</span>
-                <span className="font-medium text-[#687586] dark:text-[#b8c0cc]">source files</span>
-              </div>
+          <div className="mx-auto mt-10 flex max-w-3xl flex-wrap items-center justify-center gap-3 text-sm">
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/60 px-4 py-2 shadow-[0_16px_48px_-40px_rgba(15,23,42,0.55)] backdrop-blur dark:bg-white/[0.07]">
+              <Layers3 size={15} className="text-[#209a7a]" />
+              <span className="font-black text-[#111318] dark:text-white">{totalSkills}</span>
+              <span className="font-medium text-[#687586] dark:text-[#b8c0cc]">published skills</span>
             </div>
 
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/60 px-4 py-2 shadow-[0_16px_48px_-40px_rgba(15,23,42,0.55)] backdrop-blur dark:bg-white/[0.07]">
+              <Files size={15} className="text-[#6473d8]" />
+              <span className="font-black text-[#111318] dark:text-white">{totalFiles}</span>
+              <span className="font-medium text-[#687586] dark:text-[#b8c0cc]">source files</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="relative left-1/2 w-screen -translate-x-1/2 border-b border-black/5 bg-[#f3fbf8]/65 px-4 py-12 dark:border-white/10 dark:bg-white/[0.035] sm:px-6 lg:px-8">
+        <RepositoryInstallPanel />
+      </section>
+
+      <section className="relative left-1/2 w-screen -translate-x-1/2 bg-white/42 px-4 py-12 dark:bg-black/[0.08] sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <h2 className="text-3xl font-black text-[#111318] dark:text-white">Explore skills</h2>
+              <p className="mt-2 text-sm leading-6 text-[#687586] dark:text-[#aeb7c6]">
+                Newer skill definitions appear first. Select any entry to read the full instruction file.
+              </p>
+            </div>
+            <div className="flex rounded-full bg-black px-4 py-2 text-xs font-bold text-white dark:bg-white dark:text-black">
+              {orderedSkills.length} available
+            </div>
+          </div>
+
+          <div className="mb-8 max-w-3xl">
             <div className="relative">
               <div className="pointer-events-none absolute inset-x-8 -top-5 h-16 rounded-full bg-[#8ddfc9]/20 blur-2xl dark:bg-[#8ddfc9]/12" />
               <Search className="pointer-events-none absolute left-5 top-1/2 z-10 -translate-y-1/2 text-[#7f8a9a]" size={20} />
@@ -197,49 +218,30 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
               />
             </div>
           </div>
-        </div>
-      </section>
 
-      <div className="relative mx-auto -mt-8 mb-12 h-16 max-w-5xl" aria-hidden="true">
-        <div className="absolute inset-x-8 top-1/2 h-px bg-gradient-to-r from-transparent via-[#91dcca]/50 to-transparent dark:via-white/18" />
-        <div className="absolute left-1/2 top-1/2 h-12 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[linear-gradient(90deg,rgba(141,223,201,0.26),rgba(198,216,255,0.3),rgba(199,185,255,0.22))] blur-2xl" />
-      </div>
-
-      <section className="mt-0">
-        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <h2 className="text-3xl font-black text-[#111318] dark:text-white">Explore skills</h2>
-            <p className="mt-2 text-sm leading-6 text-[#687586] dark:text-[#aeb7c6]">
-              Newer skill definitions appear first. Select any entry to read the full instruction file.
-            </p>
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+            <AnimatePresence mode="popLayout">
+              {orderedSkills.map((skill, index) => (
+                <SkillCard
+                  key={skill.slug}
+                  skill={skill}
+                  position={index + 1}
+                  onClick={handleCardClick}
+                />
+              ))}
+            </AnimatePresence>
           </div>
-          <div className="flex rounded-full bg-black px-4 py-2 text-xs font-bold text-white dark:bg-white dark:text-black">
-            {orderedSkills.length} available
-          </div>
-        </div>
 
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-          <AnimatePresence mode="popLayout">
-            {orderedSkills.map((skill, index) => (
-              <SkillCard
-                key={skill.slug}
-                skill={skill}
-                position={index + 1}
-                onClick={handleCardClick}
-              />
-            ))}
-          </AnimatePresence>
-        </div>
-
-        {orderedSkills.length === 0 && (
-          <div className="rounded-[2rem] border border-black/5 bg-white/70 py-24 text-center shadow-sm dark:border-white/10 dark:bg-white/[0.04]">
-            <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-[#e7fbf4]">
-              <Search size={30} className="text-[#209a7a]" />
+          {orderedSkills.length === 0 && (
+            <div className="rounded-[2rem] border border-black/5 bg-white/70 py-24 text-center shadow-sm dark:border-white/10 dark:bg-white/[0.04]">
+              <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-[#e7fbf4]">
+                <Search size={30} className="text-[#209a7a]" />
+              </div>
+              <h3 className="text-2xl font-black text-[#111318] dark:text-white">No results found</h3>
+              <p className="mt-2 text-[#687586] dark:text-[#aeb7c6]">Try adjusting your search terms.</p>
             </div>
-            <h3 className="text-2xl font-black text-[#111318] dark:text-white">No results found</h3>
-            <p className="mt-2 text-[#687586] dark:text-[#aeb7c6]">Try adjusting your search terms.</p>
-          </div>
-        )}
+          )}
+        </div>
       </section>
 
       <SkillModal

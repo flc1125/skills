@@ -266,7 +266,7 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
                 {skill ? (
                   <div className="border-t border-black/5 bg-[linear-gradient(90deg,#f4fbf8,#f8f9ff)] px-5 py-5 dark:border-white/10 dark:bg-[linear-gradient(90deg,rgba(141,223,201,0.08),rgba(198,216,255,0.08))] sm:px-7">
                   <p className="text-[10px] font-bold text-[#7a8493] uppercase tracking-widest mb-2.5 ml-1 dark:text-[#aeb7c6]">
-                    Install this Skill
+                    Install this individual skill
                   </p>
                   <div className="group">
                     <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-2xl border border-black/5 bg-white px-4 py-3 shadow-sm transition-all group-hover:border-[#8ddfc9] dark:border-white/10 dark:bg-black/20">
