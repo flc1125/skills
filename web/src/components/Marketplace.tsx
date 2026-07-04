@@ -174,7 +174,6 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
                 </span>
                 <Sparkles className="absolute -right-5 -top-4 hidden text-[#d49a16] sm:block" size={23} aria-hidden="true" />
               </span>
-              .
             </h1>
             <div className="relative mx-auto mt-6 max-w-xl">
               <div className="pointer-events-none absolute -left-5 top-2 hidden h-2.5 w-2.5 rounded-full bg-[#8ddfc9] shadow-[16px_18px_0_#d7f6a7] md:block" />
