@@ -52,7 +52,7 @@ export function RepositoryInstallPanel() {
               Plugin install
             </p>
             <h2 className="mt-2 text-2xl font-black leading-tight text-[#111318] dark:text-white">
-              Add Flc's Skills to your assistant
+              Add Flc&apos;s Skills to your assistant
             </h2>
             <p className="mt-3 text-sm leading-6 text-[#687586] dark:text-[#aeb7c6]">
               Install the repository as a plugin so your assistant can load the full skill set. Prefer a single skill instead? Open any card and copy its individual install command.
