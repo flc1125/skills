@@ -6,7 +6,7 @@ import { SkillMetadata, Skill } from '@/lib/skills';
 import { SkillCard } from './SkillCard';
 import { SkillModal } from './SkillModal';
 import { RepositoryInstallPanel } from './RepositoryInstallPanel';
-import { Files, Layers3, Search } from 'lucide-react';
+import { Files, Github, Layers3, Search, Star } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
 import { parseSkillMetadataDate } from '@/lib/utils';
 import { trackEvent } from '@/lib/gtag';
@@ -164,10 +164,10 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
         <div className="relative mx-auto max-w-5xl">
           <div className="mx-auto max-w-3xl text-center">
             <h1 className="text-balance text-[clamp(2.75rem,6vw,5.5rem)] font-black leading-[1.02] text-[#101114] dark:text-white">
-              A quieter way to discover agent skills.
+              Build better agent workflows with reusable skills.
             </h1>
             <p className="mx-auto mt-6 max-w-xl text-base leading-7 text-[#5f6673] dark:text-[#c6ccd8] sm:text-lg">
-              Find reusable workflows, inspect their instructions, and copy the exact install command without leaving the workspace.
+              A curated skill library for repeatable agent work, cleaner handoffs, and faster starts across your assistant tools.
             </p>
           </div>
 
@@ -183,6 +183,25 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
               <span className="font-black text-[#111318] dark:text-white">{totalFiles}</span>
               <span className="font-medium text-[#687586] dark:text-[#b8c0cc]">source files</span>
             </div>
+          </div>
+
+          <div className="mt-5 flex justify-center">
+            <a
+              href="https://github.com/flc1125/skills"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => {
+                trackEvent('github_star_prompt_click', {
+                  target: 'github_repository',
+                  source: 'hero_star_prompt',
+                });
+              }}
+              className="inline-flex items-center gap-2 rounded-full border border-black/5 bg-white/54 px-4 py-2 text-sm font-semibold text-[#5f6673] shadow-sm backdrop-blur transition hover:border-[#8ddfc9]/60 hover:bg-white hover:text-[#111318] focus:outline-none focus:ring-4 focus:ring-[#8ddfc9]/20 dark:border-white/10 dark:bg-white/[0.06] dark:text-[#c6ccd8] dark:hover:bg-white/[0.1] dark:hover:text-white"
+            >
+              <Star size={15} className="text-[#d49a16]" />
+              <span>Useful for your workflow? Star it on GitHub</span>
+              <Github size={15} className="text-[#7f8a9a]" />
+            </a>
           </div>
         </div>
       </section>
