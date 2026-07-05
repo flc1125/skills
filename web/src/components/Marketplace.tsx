@@ -6,13 +6,24 @@ import { SkillMetadata, Skill } from '@/lib/skills';
 import { SkillCard } from './SkillCard';
 import { SkillModal } from './SkillModal';
 import { RepositoryInstallPanel } from './RepositoryInstallPanel';
-import { Files, Github, Layers3, Search, Sparkles, Star } from 'lucide-react';
-import { AnimatePresence } from 'framer-motion';
+import { Files, Search, TerminalSquare } from 'lucide-react';
+import { AnimatePresence, MotionConfig } from 'framer-motion';
 import { parseSkillMetadataDate } from '@/lib/utils';
 import { trackEvent } from '@/lib/gtag';
 
 interface MarketplaceProps {
   initialSkills: SkillMetadata[];
+}
+
+function compareSkillsByCreated(left: SkillMetadata, right: SkillMetadata) {
+  const leftTime = parseSkillMetadataDate(left.metadata?.created)?.getTime() ?? 0;
+  const rightTime = parseSkillMetadataDate(right.metadata?.created)?.getTime() ?? 0;
+
+  if (leftTime !== rightTime) {
+    return rightTime - leftTime;
+  }
+
+  return left.name.localeCompare(right.name);
 }
 
 export function Marketplace({ initialSkills }: MarketplaceProps) {
@@ -104,17 +115,12 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
   );
 
   const orderedSkills = useMemo(() => {
-    return [...filteredSkills].sort((left, right) => {
-      const leftTime = parseSkillMetadataDate(left.metadata?.created)?.getTime() ?? 0;
-      const rightTime = parseSkillMetadataDate(right.metadata?.created)?.getTime() ?? 0;
-
-      if (leftTime !== rightTime) {
-        return rightTime - leftTime;
-      }
-
-      return left.name.localeCompare(right.name);
-    });
+    return [...filteredSkills].sort(compareSkillsByCreated);
   }, [filteredSkills]);
+
+  const recentSkills = useMemo(() => {
+    return [...initialSkills].sort(compareSkillsByCreated).slice(0, 4);
+  }, [initialSkills]);
 
   useEffect(() => {
     const query = search.trim();
@@ -155,119 +161,139 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
   };
 
   return (
-    <div className="relative mx-auto max-w-7xl px-4 pb-0 pt-0 sm:px-6 lg:px-8">
-      <section className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden border-b border-black/5 bg-white/25 px-6 py-14 dark:border-white/10 dark:bg-white/[0.025] sm:px-6 sm:py-20">
-        <div className="pointer-events-none absolute left-1/2 top-2 h-72 w-[52rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_45%_45%,rgba(141,223,201,0.32),rgba(198,216,255,0.24)_42%,rgba(199,185,255,0.16)_58%,transparent_74%)] blur-3xl dark:opacity-50" />
-        <div className="pointer-events-none absolute left-[12%] top-32 h-28 w-28 rounded-full bg-[#8ddfc9]/18 blur-2xl" />
-        <div className="pointer-events-none absolute right-[14%] top-44 h-32 w-32 rounded-full bg-[#c6d8ff]/22 blur-2xl" />
-
-        <div className="relative mx-auto max-w-5xl">
-          <div className="relative mx-auto max-w-3xl text-center">
-            <h1 className="text-balance text-[clamp(2.75rem,6vw,5.5rem)] font-black leading-[1.02] text-[#101114] dark:text-white">
-              Build better agent workflows with{' '}
-              <span className="relative inline-flex translate-y-1 flex-wrap items-center justify-center gap-2 align-baseline">
-                <span className="inline-block -rotate-2 rounded-xl border-2 border-[#101114] bg-[#d7f6a7] px-3 py-1 text-[#101114] shadow-[7px_7px_0_rgba(20,22,27,0.14)] dark:border-white dark:bg-[#8ddfc9] dark:text-[#101114] dark:shadow-[7px_7px_0_rgba(255,255,255,0.12)]">
-                  reusable
-                </span>
-                <span className="relative inline-block rotate-1 rounded-xl border-2 border-[#101114] bg-white px-3 py-1 text-[#101114] shadow-[7px_7px_0_rgba(141,223,201,0.42)] dark:border-white dark:bg-[#d7f6a7] dark:text-[#101114] dark:shadow-[7px_7px_0_rgba(141,223,201,0.2)]">
-                  skills
-                </span>
-                <Sparkles className="absolute -right-5 -top-4 hidden text-[#d49a16] sm:block" size={23} aria-hidden="true" />
-              </span>
-            </h1>
-            <div className="relative mx-auto mt-6 max-w-xl">
-              <div className="pointer-events-none absolute -left-5 top-2 hidden h-2.5 w-2.5 rounded-full bg-[#8ddfc9] shadow-[16px_18px_0_#d7f6a7] md:block" />
-              <p className="relative px-3 text-base leading-7 text-[#5f6673] dark:text-[#c6ccd8] sm:text-lg">
-                A curated skill library for repeatable agent work, cleaner handoffs, and faster starts across your assistant tools.
-              </p>
+    <div className="relative mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
+      <section className="grid min-w-0 min-h-[calc(100dvh-4rem)] gap-8 border-b border-[var(--rule)] py-12 md:grid-cols-[minmax(0,0.8fr)_minmax(18rem,0.62fr)] md:items-center lg:py-16">
+        <div className="min-w-0 max-w-3xl">
+          <h1 className="max-w-4xl text-balance text-[clamp(3rem,8vw,7.5rem)] font-black leading-[0.9] tracking-[-0.075em] text-[var(--foreground)]">
+            Agent skills, indexed for repeatable work.
+          </h1>
+          <p className="mt-7 max-w-2xl text-base leading-8 text-[var(--muted)] sm:text-lg">
+            Browse the skill set, inspect the source instructions, and copy exact install commands without breaking out of the catalog.
+          </p>
+          <div className="mt-9">
+            <div className="grid grid-cols-2 border border-[var(--rule)] bg-[var(--surface)] text-sm shadow-[var(--shadow-register)] sm:min-w-72">
+              <div className="border-r border-[var(--rule)] px-4 py-3">
+                <p className="font-mono text-xl font-semibold text-[var(--foreground)]">{totalSkills}</p>
+                <p className="mt-1 text-xs text-[var(--muted)]">published skills</p>
+              </div>
+              <div className="px-4 py-3">
+                <p className="font-mono text-xl font-semibold text-[var(--foreground)]">{totalFiles}</p>
+                <p className="mt-1 text-xs text-[var(--muted)]">source files</p>
+              </div>
             </div>
-          </div>
-
-          <div className="mx-auto mt-10 flex max-w-3xl flex-wrap items-center justify-center gap-3 text-sm">
-            <div className="inline-flex items-center gap-2 rounded-full bg-white/60 px-4 py-2 shadow-[0_16px_48px_-40px_rgba(15,23,42,0.55)] backdrop-blur dark:bg-white/[0.07]">
-              <Layers3 size={15} className="text-[#209a7a]" />
-              <span className="font-black text-[#111318] dark:text-white">{totalSkills}</span>
-              <span className="font-medium text-[#687586] dark:text-[#b8c0cc]">published skills</span>
-            </div>
-
-            <div className="inline-flex items-center gap-2 rounded-full bg-white/60 px-4 py-2 shadow-[0_16px_48px_-40px_rgba(15,23,42,0.55)] backdrop-blur dark:bg-white/[0.07]">
-              <Files size={15} className="text-[#6473d8]" />
-              <span className="font-black text-[#111318] dark:text-white">{totalFiles}</span>
-              <span className="font-medium text-[#687586] dark:text-[#b8c0cc]">source files</span>
-            </div>
-          </div>
-
-          <div className="mt-5 flex justify-center">
-            <a
-              href="https://github.com/flc1125/skills"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => {
-                trackEvent('github_star_prompt_click', {
-                  target: 'github_repository',
-                  source: 'hero_star_prompt',
-                });
-              }}
-              className="inline-flex items-center gap-2 rounded-full border border-black/5 bg-white/54 px-4 py-2 text-sm font-semibold text-[#5f6673] shadow-sm backdrop-blur transition hover:border-[#8ddfc9]/60 hover:bg-white hover:text-[#111318] focus:outline-none focus:ring-4 focus:ring-[#8ddfc9]/20 dark:border-white/10 dark:bg-white/[0.06] dark:text-[#c6ccd8] dark:hover:bg-white/[0.1] dark:hover:text-white"
-            >
-              <Star size={15} className="text-[#d49a16]" />
-              <span>Useful for your workflow? Star it on GitHub</span>
-              <Github size={15} className="text-[#7f8a9a]" />
-            </a>
           </div>
         </div>
+
+        <aside className="min-w-0 border border-[var(--rule)] bg-[var(--surface)] shadow-[var(--shadow-register)]">
+          <div className="flex items-center justify-between border-b border-[var(--rule)] px-5 py-4">
+            <div>
+              <p className="font-mono text-xs uppercase tracking-[0.18em] text-[var(--muted)]">live index</p>
+              <p className="mt-1 text-sm font-semibold text-[var(--foreground)]">Newest records in this dataset</p>
+            </div>
+            <TerminalSquare className="text-[var(--accent)]" size={20} />
+          </div>
+          <div className="divide-y divide-[var(--rule)]">
+            {recentSkills.map((skill, index) => (
+              <button
+                key={skill.slug}
+                type="button"
+                onClick={() => handleCardClick(skill)}
+                className="grid w-full grid-cols-[auto_1fr] gap-4 px-5 py-4 text-left transition hover:bg-[var(--surface-muted)]"
+              >
+                <span className="font-mono text-xs text-[var(--accent)]">{String(index + 1).padStart(2, '0')}</span>
+                <span className="min-w-0">
+                  <span className="block truncate text-sm font-semibold text-[var(--foreground)]">
+                    {skill.metadata?.name ?? skill.name}
+                  </span>
+                  <span className="mt-1 block truncate font-mono text-xs text-[var(--muted)]">
+                    {skill.installName}
+                  </span>
+                </span>
+              </button>
+            ))}
+          </div>
+        </aside>
       </section>
 
-      <section className="relative left-1/2 w-screen -translate-x-1/2 border-b border-black/5 bg-[#f3fbf8]/65 px-4 py-16 dark:border-white/10 dark:bg-white/[0.035] sm:px-6 sm:py-20 lg:px-8">
+      <section className="border-b border-[var(--rule)] py-12 sm:py-16">
         <RepositoryInstallPanel />
       </section>
 
-      <section className="relative left-1/2 w-screen -translate-x-1/2 bg-white/42 px-4 py-12 dark:bg-black/[0.08] sm:px-6 sm:pb-16 lg:px-8">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <h2 className="text-3xl font-black text-[#111318] dark:text-white">Explore skills</h2>
-              <p className="mt-2 text-sm leading-6 text-[#687586] dark:text-[#aeb7c6]">
-                Curated agent skills for sharper workflows, faster handoffs, and repeatable results.
-              </p>
+      <section className="grid min-w-0 gap-8 py-12 sm:py-16 lg:grid-cols-[18rem_minmax(0,1fr)] lg:items-start">
+        <aside className="lg:sticky lg:top-24 lg:self-start">
+          <div className="border border-[var(--rule)] bg-[var(--surface)] p-4 shadow-[var(--shadow-register)]">
+            <div className="mb-4 flex items-center gap-3">
+              <Search className="text-[var(--accent)]" size={18} />
+              <div>
+                <h2 className="text-lg font-bold tracking-[-0.03em] text-[var(--foreground)]">Skill index</h2>
+                <p className="mt-1 text-xs leading-5 text-[var(--muted)]">
+                  Search display names and descriptions.
+                </p>
+              </div>
             </div>
-            <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center lg:w-auto lg:justify-end">
-              <div className="relative w-full sm:w-80 lg:w-96">
-                <Search className="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-[#7f8a9a]" size={18} />
-                <input
-                  type="text"
-                  placeholder="Search skills..."
-                  className="relative h-11 w-full rounded-2xl border border-black/5 bg-white/74 pl-11 pr-4 text-sm font-medium text-[#15171c] outline-none shadow-sm backdrop-blur transition placeholder:text-[#8a94a3] focus:border-[#8ddfc9] focus:ring-4 focus:ring-[#8ddfc9]/18 dark:border-white/10 dark:bg-white/[0.07] dark:text-white"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
+            <label className="block text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]" htmlFor="skill-search">
+              Search catalog
+            </label>
+            <div className="relative mt-2">
+              <Search className="pointer-events-none absolute left-3 top-1/2 z-10 -translate-y-1/2 text-[var(--muted)]" size={16} />
+              <input
+                id="skill-search"
+                type="text"
+                placeholder="Search skills"
+                className="relative h-12 w-full border border-[var(--rule)] bg-[var(--background)] pl-10 pr-3 text-sm font-medium text-[var(--foreground)] outline-none transition placeholder:text-[var(--muted)] focus:border-[var(--accent)]"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+            <div className="mt-5 grid grid-cols-2 border border-[var(--rule)] font-mono text-xs">
+              <div className="border-r border-[var(--rule)] p-3">
+                <p className="text-lg font-semibold text-[var(--foreground)]">{orderedSkills.length}</p>
+                <p className="mt-1 text-[var(--muted)]">visible</p>
               </div>
-              <div className="inline-flex shrink-0 justify-center rounded-full bg-black px-4 py-2 text-xs font-bold text-white dark:bg-white dark:text-black">
-                {orderedSkills.length} available
+              <div className="p-3">
+                <p className="text-lg font-semibold text-[var(--foreground)]">{totalSkills}</p>
+                <p className="mt-1 text-[var(--muted)]">total</p>
               </div>
+            </div>
+          </div>
+        </aside>
+
+        <div className="min-w-0">
+          <div className="mb-5 flex flex-col gap-3 border-b border-[var(--rule)] pb-5 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="font-mono text-xs uppercase tracking-[0.18em] text-[var(--accent)]">catalog records</p>
+              <h2 className="mt-2 text-3xl font-black tracking-[-0.055em] text-[var(--foreground)] sm:text-4xl">
+                Browse the working set
+              </h2>
+            </div>
+            <div className="inline-flex items-center gap-2 text-sm text-[var(--muted)]">
+              <Files size={16} />
+              <span>{totalFiles} files indexed</span>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-            <AnimatePresence mode="popLayout">
-              {orderedSkills.map((skill, index) => (
-                <SkillCard
-                  key={skill.slug}
-                  skill={skill}
-                  position={index + 1}
-                  onClick={handleCardClick}
-                />
-              ))}
-            </AnimatePresence>
-          </div>
+          <MotionConfig reducedMotion="user">
+            <div className="grid min-w-0 grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-[1.08fr_0.92fr]">
+              <AnimatePresence mode="popLayout">
+                {orderedSkills.map((skill, index) => (
+                  <SkillCard
+                    key={skill.slug}
+                    skill={skill}
+                    position={index + 1}
+                    onClick={handleCardClick}
+                  />
+                ))}
+              </AnimatePresence>
+            </div>
+          </MotionConfig>
 
           {orderedSkills.length === 0 && (
-            <div className="rounded-[2rem] border border-black/5 bg-white/70 py-24 text-center shadow-sm dark:border-white/10 dark:bg-white/[0.04]">
-              <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-[#e7fbf4]">
-                <Search size={30} className="text-[#209a7a]" />
-              </div>
-              <h3 className="text-2xl font-black text-[#111318] dark:text-white">No results found</h3>
-              <p className="mt-2 text-[#687586] dark:text-[#aeb7c6]">Try adjusting your search terms.</p>
+            <div className="border border-[var(--rule)] bg-[var(--surface)] px-6 py-20 shadow-[var(--shadow-register)]">
+              <div className="mb-5 h-1 w-24 bg-[var(--accent)]" />
+              <h3 className="text-2xl font-black tracking-[-0.04em] text-[var(--foreground)]">No matching records</h3>
+              <p className="mt-3 max-w-md text-sm leading-6 text-[var(--muted)]">
+                The current search does not match any skill name or description. Clear or narrow the query to restore the catalog.
+              </p>
             </div>
           )}
         </div>

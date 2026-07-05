@@ -10,9 +10,9 @@ export default async function Home() {
       <Suspense fallback={
         <div className="max-w-7xl mx-auto px-4 py-24 text-center">
           <div className="animate-pulse flex flex-col items-center">
-            <div className="w-12 h-12 bg-gray-200 dark:bg-gray-800 rounded-full mb-4"></div>
-            <div className="h-4 w-48 bg-gray-200 dark:bg-gray-800 rounded mb-2"></div>
-            <div className="h-4 w-32 bg-gray-200 dark:bg-gray-800 rounded"></div>
+            <div className="mb-4 h-12 w-12 bg-[var(--surface-muted)]"></div>
+            <div className="mb-2 h-4 w-48 bg-[var(--surface-muted)]"></div>
+            <div className="h-4 w-32 bg-[var(--surface-muted)]"></div>
           </div>
         </div>
       }>

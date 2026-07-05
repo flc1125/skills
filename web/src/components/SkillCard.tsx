@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { SkillMetadata } from '@/lib/skills';
 import { motion } from 'framer-motion';
-import { CalendarDays, Files } from 'lucide-react';
+import { ArrowUpRight, CalendarDays, Files } from 'lucide-react';
 import { formatSkillPublishedAt } from '@/lib/utils';
 import { trackEvent } from '@/lib/gtag';
 
@@ -14,12 +14,13 @@ interface SkillCardProps {
 }
 
 export function SkillCard({ skill, position, onClick }: SkillCardProps) {
-  const cardRef = useRef<HTMLDivElement | null>(null);
+  const cardRef = useRef<HTMLButtonElement | null>(null);
   const hasTrackedImpression = useRef(false);
   const displayName = skill.metadata?.name ?? skill.name;
   const displayDescription = skill.metadata?.description ?? skill.description;
   const publishedAt = formatSkillPublishedAt(skill.metadata?.created);
   const fileCountLabel = `${skill.fileCount} ${skill.fileCount === 1 ? 'file' : 'files'}`;
+  const indexLabel = String(position).padStart(2, '0');
 
   useEffect(() => {
     const element = cardRef.current;
@@ -64,52 +65,50 @@ export function SkillCard({ skill, position, onClick }: SkillCardProps) {
   };
 
   return (
-    <motion.div
+    <motion.button
       ref={cardRef}
+      type="button"
       layout
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      whileHover={{ y: -3 }}
-      transition={{ duration: 0.22 }}
+      whileHover={{ y: -2 }}
+      transition={{ type: 'spring', stiffness: 100, damping: 20 }}
       onClick={handleClick}
-      className="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-[1.5rem] border border-black/5 bg-white/80 p-5 shadow-[0_24px_70px_-52px_rgba(15,23,42,0.55)] backdrop-blur transition-all hover:border-[#9ce6d2] hover:bg-white dark:border-white/10 dark:bg-white/[0.055] dark:hover:border-[#8ddfc9]/50 dark:hover:bg-white/[0.075]"
+      className="group relative flex h-full min-h-[17rem] cursor-pointer flex-col overflow-hidden border border-[var(--rule)] bg-[var(--surface)] text-left shadow-[var(--shadow-register)] transition-colors hover:bg-[color-mix(in_srgb,var(--surface)_78%,var(--surface-muted))]"
     >
-      <div className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-[radial-gradient(circle_at_center,rgba(141,223,201,0.26),rgba(198,216,255,0.16)_45%,transparent_72%)] blur-2xl opacity-70 transition-opacity group-hover:opacity-100 dark:bg-[radial-gradient(circle_at_center,rgba(141,223,201,0.2),rgba(198,216,255,0.12)_45%,transparent_72%)]" />
-
-      <div className="mb-3">
-        <div className="min-w-0">
-          <h3 className="text-[1.05rem] font-bold leading-tight text-[#14161b] transition-colors group-hover:text-black dark:text-white dark:group-hover:text-white">
-            {displayName}
-          </h3>
-          <div className="mt-1">
-            <span className="inline-flex items-center rounded-full bg-[#edf7f4] px-2.5 py-1 text-[10px] font-semibold lowercase text-[#2d8c75] dark:bg-emerald-300/10 dark:text-[#8ddfc9]">
-              {skill.name}
-            </span>
-          </div>
-        </div>
+      <div className="flex items-start justify-between gap-4 border-b border-[var(--rule)] px-5 py-4">
+        <span className="font-mono text-xs font-semibold text-[var(--accent)]">{indexLabel}</span>
+        <ArrowUpRight className="shrink-0 text-[var(--muted)] transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[var(--accent)]" size={16} />
       </div>
-      
-      <p className="flex-grow text-sm leading-relaxed text-[#687586] dark:text-[#aeb7c6]">
-        {displayDescription}
-      </p>
+      <div className="flex flex-1 flex-col p-5">
+        <h3 className="text-xl font-black leading-tight tracking-[-0.045em] text-[var(--foreground)]">
+          {displayName}
+        </h3>
+        <span className="mt-3 inline-flex w-fit max-w-full items-center border border-[var(--rule)] bg-[var(--background)] px-2.5 py-1 font-mono text-[11px] font-semibold lowercase text-[var(--accent)]">
+          <span className="truncate">{skill.name}</span>
+        </span>
+        <p className="mt-5 flex-grow text-sm leading-7 text-[var(--muted)]">
+          {displayDescription}
+        </p>
 
-      {(publishedAt || skill.fileCount > 0) ? (
-        <div className="mt-6 flex items-center gap-3 border-t border-black/5 pt-3 text-[12px] font-medium text-[#8792a2] dark:border-white/10 dark:text-[#8f99aa]">
-          {publishedAt ? (
-            <div className="flex items-center gap-1.5">
-              <CalendarDays size={12} className="flex-shrink-0" />
-              <span>{publishedAt}</span>
-            </div>
-          ) : null}
-          {skill.fileCount > 0 ? (
-            <div className="flex items-center gap-1.5">
-              <Files size={12} className="flex-shrink-0" />
-              <span>{fileCountLabel}</span>
-            </div>
-          ) : null}
-        </div>
-      ) : null}
-    </motion.div>
+        {(publishedAt || skill.fileCount > 0) ? (
+          <div className="mt-6 grid grid-cols-1 gap-2 border-t border-[var(--rule)] pt-4 font-mono text-[11px] font-medium text-[var(--muted)] sm:grid-cols-2">
+            {publishedAt ? (
+              <div className="flex items-center gap-1.5">
+                <CalendarDays size={12} className="flex-shrink-0" />
+                <span>{publishedAt}</span>
+              </div>
+            ) : null}
+            {skill.fileCount > 0 ? (
+              <div className="flex items-center gap-1.5 sm:justify-end">
+                <Files size={12} className="flex-shrink-0" />
+                <span>{fileCountLabel}</span>
+              </div>
+            ) : null}
+          </div>
+        ) : null}
+      </div>
+    </motion.button>
   );
 }
