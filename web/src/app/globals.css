@@ -8,39 +8,73 @@
 }
 
 :root {
-  --background: #f8faf9;
-  --foreground: #111318;
+  --background: #f4f1ea;
+  --foreground: #1d1c19;
+  --surface: #fbfaf6;
+  --surface-muted: #e8e1d4;
+  --muted: #6d6961;
+  --rule: rgba(29, 28, 25, 0.12);
+  --accent: #3e8f78;
+  --accent-strong: #2e735f;
+  --shadow-register: 0 24px 70px -58px rgba(29, 28, 25, 0.42);
 }
 
 .dark {
-  --background: #0f1218;
-  --foreground: #f7faf9;
+  --background: #151512;
+  --foreground: #f4f1ea;
+  --surface: #201f1b;
+  --surface-muted: #2b2923;
+  --muted: #b5ad9e;
+  --rule: rgba(244, 241, 234, 0.14);
+  --accent: #6bb39e;
+  --accent-strong: #8ccab8;
+  --shadow-register: 0 24px 70px -58px rgba(0, 0, 0, 0.7);
 }
 
 body {
   color: var(--foreground);
   background:
-    radial-gradient(circle at 50% 0%, rgba(141, 223, 201, 0.26), transparent 28rem),
-    radial-gradient(circle at 78% 18%, rgba(198, 216, 255, 0.34), transparent 24rem),
-    radial-gradient(circle at 22% 72%, rgba(216, 204, 255, 0.22), transparent 24rem),
+    linear-gradient(90deg, rgba(29, 28, 25, 0.045) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(29, 28, 25, 0.035) 1px, transparent 1px),
     var(--background);
-  background-attachment: fixed;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-size: 72px 72px;
+  font-family: Satoshi, Geist, "Avenir Next", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   min-height: 100vh;
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
 }
 
 .dark body {
   background:
-    radial-gradient(circle at 50% 0%, rgba(141, 223, 201, 0.12), transparent 28rem),
-    radial-gradient(circle at 78% 18%, rgba(198, 216, 255, 0.12), transparent 24rem),
-    radial-gradient(circle at 22% 72%, rgba(216, 204, 255, 0.1), transparent 24rem),
+    linear-gradient(90deg, rgba(244, 241, 234, 0.055) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(244, 241, 234, 0.04) 1px, transparent 1px),
     var(--background);
-  background-attachment: fixed;
 }
 
 ::selection {
-  background: #c8f4e8;
-  color: #111318;
+  background: rgba(62, 143, 120, 0.28);
+  color: var(--foreground);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button:active,
+a:active {
+  transform: translateY(1px);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.font-mono,
+code,
+pre {
+  font-family: "JetBrains Mono", "SFMono-Regular", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 /* Custom scrollbar for modal */
@@ -51,9 +85,27 @@ body {
   background: transparent;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #c8d0da;
+  background: rgba(109, 105, 97, 0.38);
   border-radius: 10px;
 }
 .dark .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #4b5565;
+  background: rgba(181, 173, 158, 0.38);
+}
+
+@keyframes ledger-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes quiet-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
 }
