@@ -14,7 +14,7 @@ interface SkillCardProps {
 }
 
 export function SkillCard({ skill, position, onClick }: SkillCardProps) {
-  const cardRef = useRef<HTMLDivElement | null>(null);
+  const cardRef = useRef<HTMLButtonElement | null>(null);
   const hasTrackedImpression = useRef(false);
   const displayName = skill.metadata?.name ?? skill.name;
   const displayDescription = skill.metadata?.description ?? skill.description;
@@ -65,8 +65,9 @@ export function SkillCard({ skill, position, onClick }: SkillCardProps) {
   };
 
   return (
-    <motion.div
+    <motion.button
       ref={cardRef}
+      type="button"
       layout
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -74,7 +75,7 @@ export function SkillCard({ skill, position, onClick }: SkillCardProps) {
       whileHover={{ y: -2 }}
       transition={{ type: 'spring', stiffness: 100, damping: 20 }}
       onClick={handleClick}
-      className="group relative flex h-full min-h-[17rem] cursor-pointer flex-col overflow-hidden border border-[var(--rule)] bg-[var(--surface)] shadow-[var(--shadow-register)] transition-colors hover:bg-[color-mix(in_srgb,var(--surface)_78%,var(--surface-muted))]"
+      className="group relative flex h-full min-h-[17rem] cursor-pointer flex-col overflow-hidden border border-[var(--rule)] bg-[var(--surface)] text-left shadow-[var(--shadow-register)] transition-colors hover:bg-[color-mix(in_srgb,var(--surface)_78%,var(--surface-muted))]"
     >
       <div className="flex items-start justify-between gap-4 border-b border-[var(--rule)] px-5 py-4">
         <span className="font-mono text-xs font-semibold text-[var(--accent)]">{indexLabel}</span>
@@ -108,6 +109,6 @@ export function SkillCard({ skill, position, onClick }: SkillCardProps) {
           </div>
         ) : null}
       </div>
-    </motion.div>
+    </motion.button>
   );
 }

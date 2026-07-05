@@ -7,12 +7,23 @@ import { SkillCard } from './SkillCard';
 import { SkillModal } from './SkillModal';
 import { RepositoryInstallPanel } from './RepositoryInstallPanel';
 import { Files, Search, TerminalSquare } from 'lucide-react';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, MotionConfig } from 'framer-motion';
 import { parseSkillMetadataDate } from '@/lib/utils';
 import { trackEvent } from '@/lib/gtag';
 
 interface MarketplaceProps {
   initialSkills: SkillMetadata[];
+}
+
+function compareSkillsByCreated(left: SkillMetadata, right: SkillMetadata) {
+  const leftTime = parseSkillMetadataDate(left.metadata?.created)?.getTime() ?? 0;
+  const rightTime = parseSkillMetadataDate(right.metadata?.created)?.getTime() ?? 0;
+
+  if (leftTime !== rightTime) {
+    return rightTime - leftTime;
+  }
+
+  return left.name.localeCompare(right.name);
 }
 
 export function Marketplace({ initialSkills }: MarketplaceProps) {
@@ -104,19 +115,12 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
   );
 
   const orderedSkills = useMemo(() => {
-    return [...filteredSkills].sort((left, right) => {
-      const leftTime = parseSkillMetadataDate(left.metadata?.created)?.getTime() ?? 0;
-      const rightTime = parseSkillMetadataDate(right.metadata?.created)?.getTime() ?? 0;
-
-      if (leftTime !== rightTime) {
-        return rightTime - leftTime;
-      }
-
-      return left.name.localeCompare(right.name);
-    });
+    return [...filteredSkills].sort(compareSkillsByCreated);
   }, [filteredSkills]);
 
-  const recentSkills = orderedSkills.slice(0, 4);
+  const recentSkills = useMemo(() => {
+    return [...initialSkills].sort(compareSkillsByCreated).slice(0, 4);
+  }, [initialSkills]);
 
   useEffect(() => {
     const query = search.trim();
@@ -268,18 +272,20 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
             </div>
           </div>
 
-          <div className="grid min-w-0 grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-[1.08fr_0.92fr]">
-            <AnimatePresence mode="popLayout">
-              {orderedSkills.map((skill, index) => (
-                <SkillCard
-                  key={skill.slug}
-                  skill={skill}
-                  position={index + 1}
-                  onClick={handleCardClick}
-                />
-              ))}
-            </AnimatePresence>
-          </div>
+          <MotionConfig reducedMotion="user">
+            <div className="grid min-w-0 grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-[1.08fr_0.92fr]">
+              <AnimatePresence mode="popLayout">
+                {orderedSkills.map((skill, index) => (
+                  <SkillCard
+                    key={skill.slug}
+                    skill={skill}
+                    position={index + 1}
+                    onClick={handleCardClick}
+                  />
+                ))}
+              </AnimatePresence>
+            </div>
+          </MotionConfig>
 
           {orderedSkills.length === 0 && (
             <div className="border border-[var(--rule)] bg-[var(--surface)] px-6 py-20 shadow-[var(--shadow-register)]">

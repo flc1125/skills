@@ -228,8 +228,12 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
                             )
                           },
                           code(props) {
-                            const {children, className, ...rest} = props
-                            const match = /language-(\w+)/.exec(className || '')
+                            const { children, className, ...codeProps } = props;
+                            const { node: _node, inline: _inline, ...rest } = codeProps as typeof codeProps & {
+                              inline?: boolean;
+                              node?: unknown;
+                            };
+                            const match = /language-(\w+)/.exec(className || '');
                             return match ? (
                               <code className={className} {...rest}>
                                 {children}
@@ -277,7 +281,7 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
                       <button
                         onClick={copyToClipboard}
                         type="button"
-                        className={`flex min-h-10 items-center gap-1.5 px-4 font-bold text-xs leading-none transition-all ${
+                        className={`flex min-h-11 items-center gap-1.5 px-4 font-bold text-xs leading-none transition-all ${
                           copied 
                             ? 'bg-[var(--accent)] text-[var(--surface)] scale-95' 
                             : 'bg-[var(--foreground)] text-[var(--background)] hover:opacity-85 active:scale-95'

@@ -18,7 +18,7 @@ export function GithubNavLink() {
           location: 'header',
         });
       }}
-      className="inline-flex h-10 min-w-10 items-center gap-2 px-3 text-sm font-medium text-[var(--muted)] transition-colors hover:bg-[var(--surface-muted)] hover:text-[var(--foreground)]"
+      className="inline-flex h-11 min-w-11 items-center gap-2 px-3 text-sm font-medium text-[var(--muted)] transition-colors hover:bg-[var(--surface-muted)] hover:text-[var(--foreground)]"
     >
       <Icons.Github size={15} />
       <span className="hidden sm:inline">GitHub</span>

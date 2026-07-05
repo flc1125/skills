@@ -91,7 +91,10 @@ export function ThemeToggle() {
 
   return (
     <Menu as="div" className="relative">
-      <Menu.Button className="inline-flex h-10 min-w-10 items-center gap-2 px-3 text-sm font-medium text-[var(--muted)] transition-colors hover:bg-[var(--surface-muted)] hover:text-[var(--foreground)]">
+      <Menu.Button
+        aria-label={`Theme selector, current theme: ${activeOption.label}`}
+        className="inline-flex h-11 min-w-11 items-center gap-2 px-3 text-sm font-medium text-[var(--muted)] transition-colors hover:bg-[var(--surface-muted)] hover:text-[var(--foreground)]"
+      >
         <ActiveIcon size={15} />
         <span className="hidden sm:inline">{activeOption.label}</span>
         <ChevronDown size={14} className="text-[var(--muted)]" />
