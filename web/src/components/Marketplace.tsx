@@ -6,7 +6,7 @@ import { SkillMetadata, Skill } from '@/lib/skills';
 import { SkillCard } from './SkillCard';
 import { SkillModal } from './SkillModal';
 import { RepositoryInstallPanel } from './RepositoryInstallPanel';
-import { ArrowUpRight, Files, Github, Search, TerminalSquare } from 'lucide-react';
+import { Files, Search, TerminalSquare } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
 import { parseSkillMetadataDate } from '@/lib/utils';
 import { trackEvent } from '@/lib/gtag';
@@ -158,7 +158,7 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
 
   return (
     <div className="relative mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
-      <section className="grid min-w-0 min-h-[calc(100dvh-4rem)] gap-10 border-b border-[var(--rule)] py-12 md:grid-cols-[minmax(0,0.92fr)_minmax(18rem,0.58fr)] md:items-center lg:py-16">
+      <section className="grid min-w-0 min-h-[calc(100dvh-4rem)] gap-8 border-b border-[var(--rule)] py-12 md:grid-cols-[minmax(0,0.8fr)_minmax(18rem,0.62fr)] md:items-center lg:py-16">
         <div className="min-w-0 max-w-3xl">
           <h1 className="max-w-4xl text-balance text-[clamp(3rem,8vw,7.5rem)] font-black leading-[0.9] tracking-[-0.075em] text-[var(--foreground)]">
             Agent skills, indexed for repeatable work.
@@ -166,23 +166,7 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
           <p className="mt-7 max-w-2xl text-base leading-8 text-[var(--muted)] sm:text-lg">
             Browse the skill set, inspect the source instructions, and copy exact install commands without breaking out of the catalog.
           </p>
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <a
-              href="https://github.com/flc1125/skills"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => {
-                trackEvent('github_star_prompt_click', {
-                  target: 'github_repository',
-                  source: 'hero_star_prompt',
-                });
-              }}
-              className="inline-flex min-h-11 items-center justify-center gap-2 bg-[var(--foreground)] px-5 text-sm font-semibold text-[var(--background)] transition hover:opacity-90"
-            >
-              <Github size={16} />
-              <span>Open repository</span>
-              <ArrowUpRight size={15} />
-            </a>
+          <div className="mt-9">
             <div className="grid grid-cols-2 border border-[var(--rule)] bg-[var(--surface)] text-sm shadow-[var(--shadow-register)] sm:min-w-72">
               <div className="border-r border-[var(--rule)] px-4 py-3">
                 <p className="font-mono text-xl font-semibold text-[var(--foreground)]">{totalSkills}</p>
