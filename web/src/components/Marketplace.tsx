@@ -6,7 +6,7 @@ import { SkillMetadata, Skill } from '@/lib/skills';
 import { SkillCard } from './SkillCard';
 import { SkillModal } from './SkillModal';
 import { RepositoryInstallPanel } from './RepositoryInstallPanel';
-import { Archive, ArrowUpRight, Files, Github, Search, TerminalSquare } from 'lucide-react';
+import { ArrowUpRight, Files, Github, Search, TerminalSquare } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
 import { parseSkillMetadataDate } from '@/lib/utils';
 import { trackEvent } from '@/lib/gtag';
@@ -157,17 +157,9 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
   };
 
   return (
-    <div className="relative mx-auto max-w-[1400px] overflow-hidden px-4 sm:px-6 lg:px-8">
+    <div className="relative mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
       <section className="grid min-w-0 min-h-[calc(100dvh-4rem)] gap-10 border-b border-[var(--rule)] py-12 md:grid-cols-[minmax(0,0.92fr)_minmax(18rem,0.58fr)] md:items-center lg:py-16">
         <div className="min-w-0 max-w-3xl">
-          <div className="mb-8 grid w-full max-w-xl grid-cols-[auto_1fr] items-center gap-4 border-y border-[var(--rule)] py-4">
-            <span className="flex h-11 w-11 items-center justify-center bg-[var(--foreground)] text-[var(--background)]">
-              <Archive size={19} />
-            </span>
-            <p className="text-sm leading-6 text-[var(--muted)]">
-              A maintained catalog of executable workflow instructions for agent work.
-            </p>
-          </div>
           <h1 className="max-w-4xl text-balance text-[clamp(3rem,8vw,7.5rem)] font-black leading-[0.9] tracking-[-0.075em] text-[var(--foreground)]">
             Agent skills, indexed for repeatable work.
           </h1>
@@ -240,7 +232,7 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
       </section>
 
       <section className="grid min-w-0 gap-8 py-12 sm:py-16 lg:grid-cols-[18rem_minmax(0,1fr)] lg:items-start">
-        <aside className="lg:sticky lg:top-24">
+        <aside className="lg:sticky lg:top-24 lg:self-start">
           <div className="border border-[var(--rule)] bg-[var(--surface)] p-4 shadow-[var(--shadow-register)]">
             <div className="mb-4 flex items-center gap-3">
               <Search className="text-[var(--accent)]" size={18} />
