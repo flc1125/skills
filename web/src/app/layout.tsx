@@ -5,6 +5,7 @@ import Script from 'next/script';
 import { GaPageViewTracker } from '@/components/GaPageViewTracker';
 import { GithubNavLink } from '@/components/GithubNavLink';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { BrandMark } from '@/components/BrandMark';
 import "./globals.css";
 
 const GA_MEASUREMENT_ID = 'G-GYPECK2498';
@@ -69,7 +70,7 @@ export default function RootLayout({
               className="group flex min-w-0 items-center gap-4 outline-none transition-opacity hover:opacity-80"
               aria-label="Go to homepage"
             >
-              <span className="atlas-mark ml-1 shrink-0" aria-hidden="true" />
+              <BrandMark className="h-9 w-9 shrink-0" />
               <span className="font-display min-w-0 text-lg font-extrabold tracking-[-0.03em] text-[var(--foreground)] sm:text-xl">
                 Flc&apos;s Skills
               </span>

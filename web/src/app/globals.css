@@ -104,36 +104,6 @@ pre {
   font-family: "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
 }
 
-.atlas-mark {
-  position: relative;
-  width: 30px;
-  height: 30px;
-  border: 1px solid color-mix(in srgb, var(--accent) 78%, transparent);
-  transform: rotate(45deg);
-  box-shadow: inset 0 0 22px color-mix(in srgb, var(--accent) 8%, transparent);
-}
-
-.atlas-mark::before,
-.atlas-mark::after {
-  position: absolute;
-  content: "";
-  background: var(--accent);
-}
-
-.atlas-mark::before {
-  top: 14px;
-  left: 7px;
-  width: 14px;
-  height: 1px;
-}
-
-.atlas-mark::after {
-  top: 7px;
-  left: 14px;
-  width: 1px;
-  height: 14px;
-}
-
 .signal-orbit {
   position: absolute;
   top: 2.5rem;
