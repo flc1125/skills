@@ -44,20 +44,21 @@ export function RepositoryInstallPanel() {
       <span className="absolute -top-1 left-0 h-2 w-2 bg-[var(--accent)] shadow-[0_0_18px_color-mix(in_srgb,var(--accent)_75%,transparent)]" aria-hidden="true" />
 
       <div className="flex min-h-16 flex-col gap-4 border-b border-[var(--rule)] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-        <h2 className="font-display text-xl font-extrabold tracking-[-0.02em] text-[var(--foreground)]">Install full collection</h2>
-        <div className="flex items-center gap-1" aria-label="Install provider">
+        <h2 className="font-display text-xl font-extrabold tracking-[-0.02em] text-[var(--foreground)]">Install plugin</h2>
+        <div className="grid h-9 w-36 grid-cols-2 divide-x divide-[var(--rule)] border border-[var(--rule-strong)]" aria-label="Install provider">
           {methods.map((method) => (
             <button
               key={method.id}
               type="button"
               onClick={() => setActiveMethodId(method.id)}
-              className={`min-h-9 border px-3 font-mono text-[10px] font-semibold uppercase tracking-[0.16em] transition-colors ${
+              aria-pressed={method.id === activeMethod.id}
+              className={`grid h-full min-w-0 place-items-center px-2 font-mono font-semibold uppercase tracking-[0.12em] transition-colors ${
                 method.id === activeMethod.id
-                  ? 'border-[color-mix(in_srgb,var(--signal)_55%,transparent)] text-[var(--signal)]'
-                  : 'border-transparent text-[var(--muted)] hover:border-[var(--rule)] hover:text-[var(--foreground)]'
+                  ? 'bg-[color-mix(in_srgb,var(--signal)_9%,transparent)] text-[var(--signal)]'
+                  : 'text-[var(--muted)] hover:bg-[color-mix(in_srgb,var(--surface-muted)_45%,transparent)] hover:text-[var(--foreground)]'
               }`}
             >
-              {method.label}
+              <span className="text-[10px]">{method.label}</span>
             </button>
           ))}
         </div>

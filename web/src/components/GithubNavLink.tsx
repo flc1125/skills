@@ -18,10 +18,10 @@ export function GithubNavLink() {
           location: 'header',
         });
       }}
-      className="inline-flex h-11 min-w-11 items-center gap-2 border border-[var(--rule)] bg-[color-mix(in_srgb,var(--surface)_66%,transparent)] px-3 text-xs font-semibold uppercase tracking-[0.08em] text-[var(--muted)] transition-colors hover:border-[color-mix(in_srgb,var(--accent)_55%,transparent)] hover:text-[var(--foreground)]"
+      className="inline-flex h-10 min-w-10 items-center justify-center gap-1.5 border border-[var(--rule)] bg-[color-mix(in_srgb,var(--surface)_66%,transparent)] px-2.5 text-[11px] font-semibold uppercase tracking-[0.06em] text-[var(--muted)] transition-colors hover:border-[color-mix(in_srgb,var(--accent)_55%,transparent)] hover:text-[var(--foreground)] xl:h-11 xl:min-w-11 xl:px-3"
     >
-      <Icons.Github size={15} />
-      <span className="hidden sm:inline">GitHub</span>
+      <Icons.Github size={14} />
+      <span className="hidden xl:inline">GitHub</span>
     </a>
   );
 }

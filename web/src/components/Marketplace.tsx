@@ -221,7 +221,7 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
         <div className="grid gap-4 border-b border-[var(--rule-strong)] pb-5 sm:grid-cols-[1fr_auto] sm:items-end">
           <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2">
             <h2 id="catalog-heading" className="font-display text-4xl font-extrabold tracking-[-0.045em] text-[var(--foreground)]">
-              Skill atlas
+              Browse skills
             </h2>
             <p className="text-sm text-[var(--muted)]" aria-live="polite">
               {String(orderedSkills.length).padStart(2, '0')} visible records

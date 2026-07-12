@@ -93,11 +93,11 @@ export function ThemeToggle() {
     <Menu as="div" className="relative">
       <Menu.Button
         aria-label={`Theme selector, current theme: ${activeOption.label}`}
-        className="inline-flex h-11 min-w-11 items-center gap-2 border border-[var(--rule)] bg-[color-mix(in_srgb,var(--surface)_66%,transparent)] px-3 text-xs font-semibold uppercase tracking-[0.08em] text-[var(--muted)] transition-colors hover:border-[color-mix(in_srgb,var(--accent)_55%,transparent)] hover:text-[var(--foreground)]"
+        className="inline-flex h-10 min-w-10 items-center justify-center gap-1.5 border border-[var(--rule)] bg-[color-mix(in_srgb,var(--surface)_66%,transparent)] px-2.5 text-[11px] font-semibold uppercase tracking-[0.06em] text-[var(--muted)] transition-colors hover:border-[color-mix(in_srgb,var(--accent)_55%,transparent)] hover:text-[var(--foreground)] xl:h-11 xl:min-w-11 xl:px-3"
       >
-        <ActiveIcon size={15} />
-        <span className="hidden sm:inline">{activeOption.label}</span>
-        <ChevronDown size={13} className="text-[var(--muted)]" />
+        <ActiveIcon size={14} />
+        <span className="hidden xl:inline">{activeOption.label}</span>
+        <ChevronDown size={12} className="hidden text-[var(--muted)] xl:block" />
       </Menu.Button>
 
       <Transition
@@ -109,7 +109,7 @@ export function ThemeToggle() {
         leaveFrom="opacity-100 translate-y-0"
         leaveTo="opacity-0 -translate-y-1"
       >
-        <Menu.Items className="absolute right-0 mt-2 w-44 origin-top-right border border-[var(--rule-strong)] bg-[var(--surface)] p-1.5 shadow-[var(--shadow-station)] backdrop-blur-md focus:outline-none">
+        <Menu.Items className="absolute right-0 mt-1.5 w-38 origin-top-right border border-[var(--rule-strong)] bg-[var(--surface)] p-1 shadow-[var(--shadow-station)] backdrop-blur-md focus:outline-none">
           {OPTIONS.map((option) => {
             const Icon = option.icon;
             const isActive = option.value === theme;
@@ -120,18 +120,18 @@ export function ThemeToggle() {
                   <button
                     type="button"
                     onClick={() => handleThemeChange(option.value)}
-                    className={`flex min-h-11 w-full items-center justify-between px-3 py-2 text-xs font-semibold uppercase tracking-[0.08em] transition-colors ${
+                    className={`flex min-h-10 w-full items-center justify-between px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.04em] transition-colors ${
                       active
                         ? 'bg-[var(--surface-muted)] text-[var(--accent)]'
                         : 'text-[var(--muted)]'
                     }`}
                   >
-                    <span className="flex items-center gap-2">
-                      <Icon size={15} />
+                    <span className="flex items-center gap-2 text-[11px]">
+                      <Icon size={14} />
                       <span>{option.label}</span>
                     </span>
                     <span className="w-4">
-                      {isActive ? <Check size={14} /> : null}
+                      {isActive ? <Check size={12} /> : null}
                     </span>
                   </button>
                 )}
