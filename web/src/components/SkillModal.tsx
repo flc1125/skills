@@ -181,7 +181,7 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
                                 target: 'github_skill_source',
                               });
                             }}
-                            className="inline-flex h-8 shrink-0 basis-full items-center justify-center gap-1.5 border border-[var(--rule-strong)] bg-[var(--background)] px-2.5 text-[var(--muted)] transition hover:border-[var(--accent)] hover:text-[var(--accent)] sm:basis-auto"
+                            className="inline-flex h-8 shrink-0 basis-full items-center justify-center gap-1.5 border border-[color-mix(in_srgb,var(--signal)_52%,transparent)] bg-[color-mix(in_srgb,var(--signal)_9%,transparent)] px-2.5 text-[var(--signal)] transition-colors hover:bg-[var(--signal)] hover:text-[var(--background)] sm:basis-auto"
                             title="View source file on GitHub"
                           >
                             <ExternalLink size={12} className="flex-shrink-0" />
