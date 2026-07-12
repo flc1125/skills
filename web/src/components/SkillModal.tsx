@@ -154,18 +154,18 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
                     </div>
                     <div className="min-w-0 pl-14">
                       {skill ? (
-                        <div className="mt-2 flex min-w-0 flex-wrap items-center gap-2 font-mono text-[12px] font-semibold text-[var(--muted)]">
-                          <span className="inline-flex max-w-full items-center border border-[var(--rule)] bg-[var(--background)] px-2.5 py-1 text-[10px] lowercase text-[var(--signal)]">
+                        <div className="mt-2 flex min-w-0 flex-wrap items-center gap-2 font-mono text-[10px] font-semibold text-[var(--muted)]">
+                          <span className="inline-flex h-8 max-w-full items-center border border-[var(--rule)] bg-[var(--background)] px-2.5 lowercase text-[var(--signal)]">
                             {skill.name}
                           </span>
                           {publishedAt ? (
-                            <div className="flex items-center gap-1.5 border border-[var(--rule)] bg-[var(--background)] px-2.5 py-1 text-[var(--muted)]">
+                            <div className="flex h-8 items-center gap-1.5 border border-[var(--rule)] bg-[var(--background)] px-2.5 text-[var(--muted)]">
                               <CalendarDays size={12} className="flex-shrink-0" />
                               <span>{publishedAt}</span>
                             </div>
                           ) : null}
                           {fileCountLabel ? (
-                            <div className="flex items-center gap-1.5 border border-[var(--rule)] bg-[var(--background)] px-2.5 py-1 text-[var(--muted)]">
+                            <div className="flex h-8 items-center gap-1.5 border border-[var(--rule)] bg-[var(--background)] px-2.5 text-[var(--muted)]">
                               <Files size={12} className="flex-shrink-0" />
                               <span>{fileCountLabel}</span>
                             </div>
@@ -181,7 +181,7 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
                                 target: 'github_skill_source',
                               });
                             }}
-                            className="inline-flex min-h-8 shrink-0 basis-full items-center justify-center gap-1.5 border border-[var(--rule-strong)] bg-[var(--background)] px-2.5 py-1 text-[var(--muted)] transition hover:border-[var(--accent)] hover:text-[var(--accent)] sm:basis-auto"
+                            className="inline-flex h-8 shrink-0 basis-full items-center justify-center gap-1.5 border border-[var(--rule-strong)] bg-[var(--background)] px-2.5 text-[var(--muted)] transition hover:border-[var(--accent)] hover:text-[var(--accent)] sm:basis-auto"
                             title="View source file on GitHub"
                           >
                             <ExternalLink size={12} className="flex-shrink-0" />
