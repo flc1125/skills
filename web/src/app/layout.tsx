@@ -76,7 +76,7 @@ export default function RootLayout({
               </span>
             </Link>
             <nav>
-              <div className="flex items-center gap-1.5">
+              <div className="grid h-9 w-[73px] grid-cols-2 divide-x divide-[var(--rule)] border border-[var(--rule-strong)] bg-[color-mix(in_srgb,var(--surface)_58%,transparent)]">
                 <ThemeToggle />
                 <GithubNavLink />
               </div>

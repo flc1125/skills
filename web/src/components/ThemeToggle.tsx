@@ -2,7 +2,7 @@
 
 import { Fragment, useEffect, useSyncExternalStore } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { Check, ChevronDown, Laptop, Moon, Sun } from 'lucide-react';
+import { Check, Laptop, Moon, Sun } from 'lucide-react';
 
 type ThemeMode = 'system' | 'light' | 'dark';
 
@@ -90,14 +90,13 @@ export function ThemeToggle() {
   };
 
   return (
-    <Menu as="div" className="relative">
+    <Menu as="div" className="relative h-full w-full">
       <Menu.Button
         aria-label={`Theme selector, current theme: ${activeOption.label}`}
-        className="inline-flex h-10 min-w-10 items-center justify-center gap-1.5 border border-[var(--rule)] bg-[color-mix(in_srgb,var(--surface)_66%,transparent)] px-2.5 text-[11px] font-semibold uppercase tracking-[0.06em] text-[var(--muted)] transition-colors hover:border-[color-mix(in_srgb,var(--accent)_55%,transparent)] hover:text-[var(--foreground)] xl:h-11 xl:min-w-11 xl:px-3"
+        title={`Theme: ${activeOption.label}`}
+        className="grid h-full w-full place-items-center text-[var(--muted)] transition-colors hover:bg-[color-mix(in_srgb,var(--surface-muted)_48%,transparent)] hover:text-[var(--foreground)]"
       >
-        <ActiveIcon size={14} />
-        <span className="hidden xl:inline">{activeOption.label}</span>
-        <ChevronDown size={12} className="hidden text-[var(--muted)] xl:block" />
+        <ActiveIcon size={15} />
       </Menu.Button>
 
       <Transition
