@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { Check, Copy, PackagePlus, Terminal } from 'lucide-react';
+import { Check, Copy } from 'lucide-react';
 import { visibleRepositoryInstallMethods } from '@/lib/install-methods';
 import { trackEvent } from '@/lib/gtag';
 
@@ -11,7 +11,6 @@ export function RepositoryInstallPanel() {
   const methods = visibleRepositoryInstallMethods;
   const [activeMethodId, setActiveMethodId] = useState(methods[0]?.id ?? '');
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
-
   const activeMethod = useMemo(
     () => methods.find((method) => method.id === activeMethodId) ?? methods[0],
     [activeMethodId, methods]
@@ -41,108 +40,67 @@ export function RepositoryInstallPanel() {
   };
 
   return (
-    <div>
-      <div className="border border-[var(--rule)] bg-[var(--surface)] shadow-[var(--shadow-register)]">
-        <div className="grid gap-0 lg:grid-cols-[0.76fr_1.24fr]">
-          <div className="border-b border-[var(--rule)] bg-[var(--surface-muted)] px-5 py-6 sm:px-6 lg:border-b-0 lg:border-r">
-            <div className="mb-5 flex h-12 w-12 items-center justify-center bg-[var(--foreground)] text-[var(--background)]">
-              <PackagePlus size={21} />
-            </div>
-            <p className="font-mono text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
-              install ledger
-            </p>
-            <h2 className="mt-3 max-w-sm text-3xl font-black leading-[1] tracking-[-0.055em] text-[var(--foreground)]">
-              Add the full skill collection.
-            </h2>
-            <p className="mt-4 max-w-sm text-sm leading-6 text-[var(--muted)]">
-              Install the repository as a plugin, or open a record below to copy one individual skill command.
-            </p>
-          </div>
+    <aside className="relative ml-auto w-full max-w-[31rem] border-t border-[color-mix(in_srgb,var(--accent)_68%,transparent)] bg-[color-mix(in_srgb,var(--surface)_94%,transparent)] shadow-[var(--shadow-station)]">
+      <span className="absolute -top-1 left-0 h-2 w-2 bg-[var(--accent)] shadow-[0_0_18px_color-mix(in_srgb,var(--accent)_75%,transparent)]" aria-hidden="true" />
 
-          <div className="px-5 py-7 sm:px-6 sm:py-8">
-            <div className="mb-4">
-              <div>
-                {methods.length > 1 ? (
-                  <div className="inline-flex flex-wrap border border-[var(--rule)] bg-[var(--background)] p-1" aria-label="Install provider">
-                    {methods.map((method) => (
-                      <button
-                        key={method.id}
-                        type="button"
-                        onClick={() => setActiveMethodId(method.id)}
-                        className={`inline-flex min-h-10 items-center gap-1.5 px-3 text-xs font-semibold transition ${
-                          method.id === activeMethod.id
-                            ? 'bg-[var(--foreground)] text-[var(--background)]'
-                            : 'text-[var(--muted)] hover:text-[var(--foreground)]'
-                        }`}
-                      >
-                        {method.id === activeMethod.id ? <Terminal size={14} /> : null}
-                        <span>{method.label}</span>
-                      </button>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="inline-flex min-h-10 items-center gap-2 border border-[var(--rule)] bg-[var(--background)] px-3 font-mono text-xs font-semibold text-[var(--accent)]">
-                    <Terminal size={14} />
-                    <span>{activeMethod.label}</span>
-                  </div>
-                )}
-                <p className="mt-4 max-w-2xl text-sm leading-6 text-[var(--muted)]">
-                  {activeMethod.description}
-                </p>
-              </div>
-            </div>
-
-            {activeMethod.status === 'planned' ? (
-              <div className="border border-[var(--rule)] bg-[var(--background)] px-4 py-5 text-sm leading-6 text-[var(--muted)]">
-                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
-                  Coming soon
-                </p>
-                <p className="mt-2">
-                  Claude support is not available yet. Please use Codex for now.
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {activeMethod.commands.map((entry, index) => {
-                  const copyKey = `${activeMethod.id}-${index}`;
-                  const isCopied = copiedKey === copyKey;
-
-                  return (
-                    <div
-                      key={entry.command}
-                      className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 border border-[var(--rule)] bg-[var(--background)] px-4 py-3"
-                    >
-                      <span className="flex h-8 w-8 items-center justify-center bg-[var(--surface)] font-mono text-xs font-semibold text-[var(--accent)]">
-                        {String(index + 1).padStart(2, '0')}
-                      </span>
-                      <div className="min-w-0">
-                        <p className="mb-1 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
-                          {entry.label}
-                        </p>
-                        <code className="block min-w-0 select-all truncate font-mono text-xs text-[var(--foreground)]">
-                          {entry.command}
-                        </code>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => copyCommands(copyKey, entry.command, entry.label)}
-                        className={`flex h-10 w-10 items-center justify-center transition ${
-                          isCopied
-                            ? 'bg-[var(--accent)] text-[var(--surface)]'
-                            : 'bg-[var(--foreground)] text-[var(--background)] hover:opacity-85'
-                        }`}
-                        aria-label={`Copy ${entry.label} command`}
-                      >
-                        {isCopied ? <Check size={15} /> : <Copy size={15} />}
-                      </button>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
+      <div className="flex min-h-16 flex-col gap-4 border-b border-[var(--rule)] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+        <h2 className="font-display text-xl font-extrabold tracking-[-0.02em] text-[var(--foreground)]">Install full collection</h2>
+        <div className="flex items-center gap-1" aria-label="Install provider">
+          {methods.map((method) => (
+            <button
+              key={method.id}
+              type="button"
+              onClick={() => setActiveMethodId(method.id)}
+              className={`min-h-9 border px-3 font-mono text-[10px] font-semibold uppercase tracking-[0.16em] transition-colors ${
+                method.id === activeMethod.id
+                  ? 'border-[color-mix(in_srgb,var(--signal)_55%,transparent)] text-[var(--signal)]'
+                  : 'border-transparent text-[var(--muted)] hover:border-[var(--rule)] hover:text-[var(--foreground)]'
+              }`}
+            >
+              {method.label}
+            </button>
+          ))}
         </div>
       </div>
-    </div>
+
+      {activeMethod.status === 'planned' ? (
+        <div className="px-5 py-8">
+          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">Signal pending</p>
+          <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
+            Claude plugin support is planned but not available yet. Use the Codex channel for the current install path.
+          </p>
+        </div>
+      ) : (
+        <div>
+          {activeMethod.commands.map((entry, index) => {
+            const copyKey = `${activeMethod.id}-${index}`;
+            const isCopied = copiedKey === copyKey;
+
+            return (
+              <div key={entry.command} className="relative border-b border-[var(--rule)] px-5 py-5 last:border-b-0 sm:pr-16">
+                <p className="mb-2 font-mono text-[9px] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+                  {String(index + 1).padStart(2, '0')} · {entry.label}
+                </p>
+                <code className="block min-w-0 break-all pr-12 text-[11px] leading-5 text-[var(--foreground)] sm:overflow-x-auto sm:whitespace-nowrap sm:pr-0 sm:text-xs sm:leading-6">
+                  {entry.command}
+                </code>
+                <button
+                  type="button"
+                  onClick={() => copyCommands(copyKey, entry.command, entry.label)}
+                  className={`absolute bottom-4 right-4 grid h-11 w-11 place-items-center border transition-colors ${
+                    isCopied
+                      ? 'border-[var(--accent)] bg-[var(--accent)] text-[var(--background)]'
+                      : 'border-[var(--rule-strong)] bg-[var(--background)] text-[var(--muted)] hover:border-[var(--accent)] hover:text-[var(--accent)]'
+                  }`}
+                  aria-label={`Copy ${entry.label} command`}
+                >
+                  {isCopied ? <Check size={16} /> : <Copy size={16} strokeWidth={1.5} />}
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </aside>
   );
 }

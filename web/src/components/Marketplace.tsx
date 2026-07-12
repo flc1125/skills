@@ -1,15 +1,15 @@
 'use client';
 
-import { useState, useMemo, useEffect, useRef } from 'react';
-import { useSearchParams, usePathname } from 'next/navigation';
-import { SkillMetadata, Skill } from '@/lib/skills';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { AnimatePresence, MotionConfig } from 'framer-motion';
+import { Search } from 'lucide-react';
+import { RepositoryInstallPanel } from './RepositoryInstallPanel';
 import { SkillCard } from './SkillCard';
 import { SkillModal } from './SkillModal';
-import { RepositoryInstallPanel } from './RepositoryInstallPanel';
-import { Files, Search, TerminalSquare } from 'lucide-react';
-import { AnimatePresence, MotionConfig } from 'framer-motion';
-import { parseSkillMetadataDate } from '@/lib/utils';
 import { trackEvent } from '@/lib/gtag';
+import { parseSkillMetadataDate } from '@/lib/utils';
+import type { Skill, SkillMetadata } from '@/lib/skills';
 
 interface MarketplaceProps {
   initialSkills: SkillMetadata[];
@@ -30,19 +30,31 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const selectedSkillSlug = searchParams.get('skill');
-  
+  const searchInputRef = useRef<HTMLInputElement | null>(null);
+  const lastTrackedSearch = useRef<string | null>(null);
   const [search, setSearch] = useState('');
   const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
   const [isLoadingSkill, setIsLoadingSkill] = useState(false);
   const [skillLoadError, setSkillLoadError] = useState<string | null>(null);
   const [hasMounted, setHasMounted] = useState(false);
-  const lastTrackedSearch = useRef<string | null>(null);
   const activeSelectedSkill =
     selectedSkillSlug && selectedSkill?.slug === selectedSkillSlug ? selectedSkill : null;
   const isModalOpen = hasMounted && selectedSkillSlug !== null;
 
   useEffect(() => {
     setHasMounted(true);
+  }, []);
+
+  useEffect(() => {
+    const handleShortcut = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault();
+        searchInputRef.current?.focus();
+      }
+    };
+
+    window.addEventListener('keydown', handleShortcut);
+    return () => window.removeEventListener('keydown', handleShortcut);
   }, []);
 
   useEffect(() => {
@@ -96,16 +108,20 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
     };
   }, [hasMounted, selectedSkillSlug]);
 
-  const filteredSkills = useMemo(() => {
-    return initialSkills.filter((skill) => {
-      const displayName = skill.metadata?.name ?? skill.name;
-      const displayDescription = skill.metadata?.description ?? skill.description;
-      const matchesSearch = 
-        displayName.toLowerCase().includes(search.toLowerCase()) ||
-        displayDescription.toLowerCase().includes(search.toLowerCase());
-      
-      return matchesSearch;
-    });
+  const orderedSkills = useMemo(() => {
+    const normalizedSearch = search.toLowerCase();
+
+    return initialSkills
+      .filter((skill) => {
+        const displayName = skill.metadata?.name ?? skill.name;
+        const displayDescription = skill.metadata?.description ?? skill.description;
+
+        return (
+          displayName.toLowerCase().includes(normalizedSearch) ||
+          displayDescription.toLowerCase().includes(normalizedSearch)
+        );
+      })
+      .sort(compareSkillsByCreated);
   }, [initialSkills, search]);
 
   const totalSkills = initialSkills.length;
@@ -113,14 +129,6 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
     () => initialSkills.reduce((sum, skill) => sum + skill.fileCount, 0),
     [initialSkills]
   );
-
-  const orderedSkills = useMemo(() => {
-    return [...filteredSkills].sort(compareSkillsByCreated);
-  }, [filteredSkills]);
-
-  const recentSkills = useMemo(() => {
-    return [...initialSkills].sort(compareSkillsByCreated).slice(0, 4);
-  }, [initialSkills]);
 
   useEffect(() => {
     const query = search.trim();
@@ -161,142 +169,93 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
   };
 
   return (
-    <div className="relative mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
-      <section className="grid min-w-0 min-h-[calc(100dvh-4rem)] gap-8 border-b border-[var(--rule)] py-12 md:grid-cols-[minmax(0,0.8fr)_minmax(18rem,0.62fr)] md:items-center lg:py-16">
-        <div className="min-w-0 max-w-3xl">
-          <h1 className="max-w-4xl text-balance text-[clamp(3rem,8vw,7.5rem)] font-black leading-[0.9] tracking-[-0.075em] text-[var(--foreground)]">
-            Agent skills, indexed for repeatable work.
+    <div className="relative mx-auto max-w-[1360px] px-5 sm:px-8 lg:px-10">
+      <section className="relative grid min-h-[42rem] gap-10 border-b border-[var(--rule)] py-12 md:grid-cols-[minmax(0,1.08fr)_minmax(22rem,0.92fr)] md:items-center lg:gap-16 lg:py-14">
+        <div className="signal-orbit" aria-hidden="true" />
+
+        <div className="relative z-10 min-w-0 max-w-3xl">
+          <h1 className="font-display text-[clamp(3.4rem,5.2vw,5rem)] font-extrabold leading-[0.94] tracking-[-0.06em] text-[var(--foreground)]">
+            Find the right skill.
+            <br />
+            Start with the <span className="text-[var(--accent)]">exact workflow.</span>
           </h1>
-          <p className="mt-7 max-w-2xl text-base leading-8 text-[var(--muted)] sm:text-lg">
-            Browse the skill set, inspect the source instructions, and copy exact install commands without breaking out of the catalog.
+          <p className="mt-7 max-w-[38rem] text-base leading-8 text-[var(--muted)] sm:text-lg">
+            A curated atlas of reusable agent workflows—built to turn repeatable engineering, research, and knowledge tasks into precise operating systems.
           </p>
-          <div className="mt-9">
-            <div className="grid grid-cols-2 border border-[var(--rule)] bg-[var(--surface)] text-sm shadow-[var(--shadow-register)] sm:min-w-72">
-              <div className="border-r border-[var(--rule)] px-4 py-3">
-                <p className="font-mono text-xl font-semibold text-[var(--foreground)]">{totalSkills}</p>
-                <p className="mt-1 text-xs text-[var(--muted)]">published skills</p>
-              </div>
-              <div className="px-4 py-3">
-                <p className="font-mono text-xl font-semibold text-[var(--foreground)]">{totalFiles}</p>
-                <p className="mt-1 text-xs text-[var(--muted)]">source files</p>
-              </div>
+
+          <div className="mt-8 flex h-16 max-w-[38rem] items-center border border-[var(--rule-strong)] bg-[color-mix(in_srgb,var(--background)_82%,transparent)] shadow-[0_20px_55px_-34px_rgba(0,0,0,0.55)]">
+            <span className="grid h-full w-16 shrink-0 place-items-center border-r border-[var(--rule)] text-[var(--signal)]" aria-hidden="true">
+              <Search size={20} strokeWidth={1.5} />
+            </span>
+            <label htmlFor="skill-search" className="sr-only">Search catalog</label>
+            <input
+              ref={searchInputRef}
+              id="skill-search"
+              type="search"
+              placeholder="Search skills by name or workflow"
+              className="h-full min-w-0 flex-1 bg-transparent px-4 text-sm font-medium text-[var(--foreground)] outline-none placeholder:text-[var(--muted)] sm:text-base"
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+            />
+            <span className="hidden h-full shrink-0 place-items-center border-l border-[var(--rule)] px-4 font-mono text-[11px] text-[var(--muted)] sm:grid">⌘ K</span>
+          </div>
+
+          <div className="mt-7 flex flex-wrap gap-x-10 gap-y-3" aria-label="Collection facts">
+            <div className="flex items-baseline gap-3">
+              <strong className="font-display text-2xl font-extrabold text-[var(--amber)]">{totalSkills}</strong>
+              <span className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--muted)]">skills mapped</span>
+            </div>
+            <div className="flex items-baseline gap-3">
+              <strong className="font-display text-2xl font-extrabold text-[var(--amber)]">{totalFiles}</strong>
+              <span className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--muted)]">source files</span>
             </div>
           </div>
         </div>
 
-        <aside className="min-w-0 border border-[var(--rule)] bg-[var(--surface)] shadow-[var(--shadow-register)]">
-          <div className="flex items-center justify-between border-b border-[var(--rule)] px-5 py-4">
-            <div>
-              <p className="font-mono text-xs uppercase tracking-[0.18em] text-[var(--muted)]">live index</p>
-              <p className="mt-1 text-sm font-semibold text-[var(--foreground)]">Newest records in this dataset</p>
-            </div>
-            <TerminalSquare className="text-[var(--accent)]" size={20} />
-          </div>
-          <div className="divide-y divide-[var(--rule)]">
-            {recentSkills.map((skill, index) => (
-              <button
-                key={skill.slug}
-                type="button"
-                onClick={() => handleCardClick(skill)}
-                className="grid w-full grid-cols-[auto_1fr] gap-4 px-5 py-4 text-left transition hover:bg-[var(--surface-muted)]"
-              >
-                <span className="font-mono text-xs text-[var(--accent)]">{String(index + 1).padStart(2, '0')}</span>
-                <span className="min-w-0">
-                  <span className="block truncate text-sm font-semibold text-[var(--foreground)]">
-                    {skill.metadata?.name ?? skill.name}
-                  </span>
-                  <span className="mt-1 block truncate font-mono text-xs text-[var(--muted)]">
-                    {skill.installName}
-                  </span>
-                </span>
-              </button>
-            ))}
-          </div>
-        </aside>
-      </section>
-
-      <section className="border-b border-[var(--rule)] py-12 sm:py-16">
-        <RepositoryInstallPanel />
-      </section>
-
-      <section className="grid min-w-0 gap-8 py-12 sm:py-16 lg:grid-cols-[18rem_minmax(0,1fr)] lg:items-start">
-        <aside className="lg:sticky lg:top-24 lg:self-start">
-          <div className="border border-[var(--rule)] bg-[var(--surface)] p-4 shadow-[var(--shadow-register)]">
-            <div className="mb-4 flex items-center gap-3">
-              <Search className="text-[var(--accent)]" size={18} />
-              <div>
-                <h2 className="text-lg font-bold tracking-[-0.03em] text-[var(--foreground)]">Skill index</h2>
-                <p className="mt-1 text-xs leading-5 text-[var(--muted)]">
-                  Search display names and descriptions.
-                </p>
-              </div>
-            </div>
-            <label className="block text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]" htmlFor="skill-search">
-              Search catalog
-            </label>
-            <div className="relative mt-2">
-              <Search className="pointer-events-none absolute left-3 top-1/2 z-10 -translate-y-1/2 text-[var(--muted)]" size={16} />
-              <input
-                id="skill-search"
-                type="text"
-                placeholder="Search skills"
-                className="relative h-12 w-full border border-[var(--rule)] bg-[var(--background)] pl-10 pr-3 text-sm font-medium text-[var(--foreground)] outline-none transition placeholder:text-[var(--muted)] focus:border-[var(--accent)]"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </div>
-            <div className="mt-5 grid grid-cols-2 border border-[var(--rule)] font-mono text-xs">
-              <div className="border-r border-[var(--rule)] p-3">
-                <p className="text-lg font-semibold text-[var(--foreground)]">{orderedSkills.length}</p>
-                <p className="mt-1 text-[var(--muted)]">visible</p>
-              </div>
-              <div className="p-3">
-                <p className="text-lg font-semibold text-[var(--foreground)]">{totalSkills}</p>
-                <p className="mt-1 text-[var(--muted)]">total</p>
-              </div>
-            </div>
-          </div>
-        </aside>
-
-        <div className="min-w-0">
-          <div className="mb-5 flex flex-col gap-3 border-b border-[var(--rule)] pb-5 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="font-mono text-xs uppercase tracking-[0.18em] text-[var(--accent)]">catalog records</p>
-              <h2 className="mt-2 text-3xl font-black tracking-[-0.055em] text-[var(--foreground)] sm:text-4xl">
-                Browse the working set
-              </h2>
-            </div>
-            <div className="inline-flex items-center gap-2 text-sm text-[var(--muted)]">
-              <Files size={16} />
-              <span>{totalFiles} files indexed</span>
-            </div>
-          </div>
-
-          <MotionConfig reducedMotion="user">
-            <div className="grid min-w-0 grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-[1.08fr_0.92fr]">
-              <AnimatePresence mode="popLayout">
-                {orderedSkills.map((skill, index) => (
-                  <SkillCard
-                    key={skill.slug}
-                    skill={skill}
-                    position={index + 1}
-                    onClick={handleCardClick}
-                  />
-                ))}
-              </AnimatePresence>
-            </div>
-          </MotionConfig>
-
-          {orderedSkills.length === 0 && (
-            <div className="border border-[var(--rule)] bg-[var(--surface)] px-6 py-20 shadow-[var(--shadow-register)]">
-              <div className="mb-5 h-1 w-24 bg-[var(--accent)]" />
-              <h3 className="text-2xl font-black tracking-[-0.04em] text-[var(--foreground)]">No matching records</h3>
-              <p className="mt-3 max-w-md text-sm leading-6 text-[var(--muted)]">
-                The current search does not match any skill name or description. Clear or narrow the query to restore the catalog.
-              </p>
-            </div>
-          )}
+        <div className="relative z-10 min-w-0">
+          <RepositoryInstallPanel />
         </div>
+      </section>
+
+      <section className="py-12 sm:py-16" aria-labelledby="catalog-heading">
+        <div className="grid gap-4 border-b border-[var(--rule-strong)] pb-5 sm:grid-cols-[1fr_auto] sm:items-end">
+          <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2">
+            <h2 id="catalog-heading" className="font-display text-4xl font-extrabold tracking-[-0.045em] text-[var(--foreground)]">
+              Skill atlas
+            </h2>
+            <p className="text-sm text-[var(--muted)]" aria-live="polite">
+              {String(orderedSkills.length).padStart(2, '0')} visible records
+            </p>
+          </div>
+          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--muted)]">
+            Newest signal first
+          </p>
+        </div>
+
+        <MotionConfig reducedMotion="user">
+          <div>
+            <AnimatePresence mode="popLayout">
+              {orderedSkills.map((skill, index) => (
+                <SkillCard
+                  key={skill.slug}
+                  skill={skill}
+                  position={index + 1}
+                  onClick={handleCardClick}
+                />
+              ))}
+            </AnimatePresence>
+          </div>
+        </MotionConfig>
+
+        {orderedSkills.length === 0 ? (
+          <div className="border-b border-[var(--rule)] py-16">
+            <div className="mb-5 h-2 w-2 rotate-45 border border-[var(--accent)] shadow-[0_0_14px_color-mix(in_srgb,var(--accent)_60%,transparent)]" />
+            <h3 className="font-display text-2xl font-extrabold tracking-[-0.03em] text-[var(--foreground)]">No matching signal</h3>
+            <p className="mt-2 max-w-md text-sm leading-6 text-[var(--muted)]">
+              Try a broader workflow, tool, or outcome to restore the atlas.
+            </p>
+          </div>
+        ) : null}
       </section>
 
       <SkillModal

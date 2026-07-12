@@ -93,11 +93,11 @@ export function ThemeToggle() {
     <Menu as="div" className="relative">
       <Menu.Button
         aria-label={`Theme selector, current theme: ${activeOption.label}`}
-        className="inline-flex h-11 min-w-11 items-center gap-2 px-3 text-sm font-medium text-[var(--muted)] transition-colors hover:bg-[var(--surface-muted)] hover:text-[var(--foreground)]"
+        className="inline-flex h-11 min-w-11 items-center gap-2 border border-[var(--rule)] bg-[color-mix(in_srgb,var(--surface)_66%,transparent)] px-3 text-xs font-semibold uppercase tracking-[0.08em] text-[var(--muted)] transition-colors hover:border-[color-mix(in_srgb,var(--accent)_55%,transparent)] hover:text-[var(--foreground)]"
       >
         <ActiveIcon size={15} />
         <span className="hidden sm:inline">{activeOption.label}</span>
-        <ChevronDown size={14} className="text-[var(--muted)]" />
+        <ChevronDown size={13} className="text-[var(--muted)]" />
       </Menu.Button>
 
       <Transition
@@ -109,7 +109,7 @@ export function ThemeToggle() {
         leaveFrom="opacity-100 translate-y-0"
         leaveTo="opacity-0 -translate-y-1"
       >
-        <Menu.Items className="absolute right-0 mt-2 w-44 origin-top-right border border-[var(--rule)] bg-[var(--surface)] p-1.5 shadow-[var(--shadow-register)] backdrop-blur-md focus:outline-none">
+        <Menu.Items className="absolute right-0 mt-2 w-44 origin-top-right border border-[var(--rule-strong)] bg-[var(--surface)] p-1.5 shadow-[var(--shadow-station)] backdrop-blur-md focus:outline-none">
           {OPTIONS.map((option) => {
             const Icon = option.icon;
             const isActive = option.value === theme;
@@ -120,9 +120,9 @@ export function ThemeToggle() {
                   <button
                     type="button"
                     onClick={() => handleThemeChange(option.value)}
-                    className={`flex min-h-11 w-full items-center justify-between px-3 py-2 text-sm font-medium transition-colors ${
+                    className={`flex min-h-11 w-full items-center justify-between px-3 py-2 text-xs font-semibold uppercase tracking-[0.08em] transition-colors ${
                       active
-                        ? 'bg-[var(--surface-muted)] text-[var(--foreground)]'
+                        ? 'bg-[var(--surface-muted)] text-[var(--accent)]'
                         : 'text-[var(--muted)]'
                     }`}
                   >
