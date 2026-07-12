@@ -138,6 +138,25 @@ pre {
   right: -4px;
 }
 
+.catalog-band {
+  --catalog-background: color-mix(in srgb, var(--surface) 94%, var(--background));
+  position: relative;
+  isolation: isolate;
+}
+
+.catalog-band::before {
+  position: absolute;
+  inset: 0 calc(50% - 50vw);
+  z-index: -1;
+  content: "";
+  background: linear-gradient(
+    to bottom,
+    transparent 0,
+    var(--catalog-background) 3rem,
+    var(--catalog-background) 100%
+  );
+}
+
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
 }

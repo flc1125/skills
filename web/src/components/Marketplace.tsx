@@ -217,7 +217,7 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
         </div>
       </section>
 
-      <section className="py-12 sm:py-16" aria-labelledby="catalog-heading">
+      <section className="catalog-band py-12 sm:py-16" aria-labelledby="catalog-heading">
         <div className="grid gap-4 border-b border-[var(--rule-strong)] pb-5 sm:grid-cols-[1fr_auto] sm:items-end">
           <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2">
             <h2 id="catalog-heading" className="font-display text-4xl font-extrabold tracking-[-0.045em] text-[var(--foreground)]">

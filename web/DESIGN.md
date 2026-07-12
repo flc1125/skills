@@ -47,7 +47,7 @@ Never introduce purple AI gradients, beige paper surfaces, neon outer glows, or 
 - Maximum content width: `1360px`.
 - Header: simple brand mark, theme selector, and GitHub link.
 - First viewport: asymmetric two-column composition. Search and collection facts sit with the main statement; the install station is the dominant secondary object.
-- Catalog: open horizontal records separated by signal rules. Do not turn it into a generic card grid.
+- Catalog: a full-width surface band containing open horizontal records separated by signal rules. Fade the band in over 48px at the top, then keep the surface opaque through the bottom of the page so record dividers stay easy to scan without reintroducing the page grid. Do not turn it into a generic card grid.
 - Detail: a large focused modal that preserves browsing context and uses the same station geometry.
 - Mobile: stack the hero and install station; catalog rows reduce metadata without losing the primary action.
 
