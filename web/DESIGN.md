@@ -53,7 +53,7 @@ Never introduce purple AI gradients, beige paper surfaces, neon outer glows, or 
 
 ## 5. Component Language
 
-- Brand mark: a white geometric SVG `FS` monogram on a solid coral tile with precise cut corners.
+- Brand mark: a white geometric SVG `FS` monogram on a coral cut-corner tile, offset over an Atlas Ink tile to create a compact two-layer signal mark. Keep the ink layer structural rather than shadow-like.
 - Signal nodes: small diamonds or points, used sparingly for catalog position and spatial rhythm.
 - Install station: one elevated panel with a coral top rule and exact copy controls.
 - Search: one long command-like field with a cyan icon zone and keyboard shortcut.
