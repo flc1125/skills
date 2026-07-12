@@ -88,14 +88,14 @@ export function RepositoryInstallPanel() {
                 <button
                   type="button"
                   onClick={() => copyCommands(copyKey, entry.command, entry.label)}
-                  className={`absolute bottom-4 right-4 grid h-11 w-11 place-items-center border transition-colors ${
+                  className={`absolute right-4 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center border transition-colors ${
                     isCopied
                       ? 'border-[var(--accent)] bg-[var(--accent)] text-[var(--background)]'
                       : 'border-[var(--rule-strong)] bg-[var(--background)] text-[var(--muted)] hover:border-[var(--accent)] hover:text-[var(--accent)]'
                   }`}
                   aria-label={`Copy ${entry.label} command`}
                 >
-                  {isCopied ? <Check size={16} /> : <Copy size={16} strokeWidth={1.5} />}
+                  {isCopied ? <Check size={14} /> : <Copy size={14} strokeWidth={1.5} />}
                 </button>
               </div>
             );
