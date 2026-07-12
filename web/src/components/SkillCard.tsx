@@ -1,11 +1,11 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { SkillMetadata } from '@/lib/skills';
 import { motion } from 'framer-motion';
-import { ArrowUpRight, CalendarDays, Files } from 'lucide-react';
-import { formatSkillPublishedAt } from '@/lib/utils';
+import { ArrowRight, CalendarDays, Files } from 'lucide-react';
 import { trackEvent } from '@/lib/gtag';
+import { formatSkillPublishedAt } from '@/lib/utils';
+import type { SkillMetadata } from '@/lib/skills';
 
 interface SkillCardProps {
   skill: SkillMetadata;
@@ -19,8 +19,6 @@ export function SkillCard({ skill, position, onClick }: SkillCardProps) {
   const displayName = skill.metadata?.name ?? skill.name;
   const displayDescription = skill.metadata?.description ?? skill.description;
   const publishedAt = formatSkillPublishedAt(skill.metadata?.created);
-  const fileCountLabel = `${skill.fileCount} ${skill.fileCount === 1 ? 'file' : 'files'}`;
-  const indexLabel = String(position).padStart(2, '0');
 
   useEffect(() => {
     const element = cardRef.current;
@@ -50,7 +48,6 @@ export function SkillCard({ skill, position, onClick }: SkillCardProps) {
     );
 
     observer.observe(element);
-
     return () => observer.disconnect();
   }, [displayName, position, skill.slug]);
 
@@ -69,46 +66,44 @@ export function SkillCard({ skill, position, onClick }: SkillCardProps) {
       ref={cardRef}
       type="button"
       layout
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.95 }}
-      whileHover={{ y: -2 }}
+      exit={{ opacity: 0, y: -8 }}
       transition={{ type: 'spring', stiffness: 100, damping: 20 }}
       onClick={handleClick}
-      className="group relative flex h-full min-h-[17rem] cursor-pointer flex-col overflow-hidden border border-[var(--rule)] bg-[var(--surface)] text-left shadow-[var(--shadow-register)] transition-colors hover:bg-[color-mix(in_srgb,var(--surface)_78%,var(--surface-muted))]"
+      className="group relative grid min-h-32 w-full cursor-pointer grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-4 border-b border-[var(--rule)] px-1 py-6 text-left transition-colors hover:bg-[linear-gradient(90deg,color-mix(in_srgb,var(--accent)_7%,transparent),transparent_74%)] sm:grid-cols-[3rem_minmax(0,1fr)_12rem_8rem] sm:gap-6"
     >
-      <div className="flex items-start justify-between gap-4 border-b border-[var(--rule)] px-5 py-4">
-        <span className="font-mono text-xs font-semibold text-[var(--accent)]">{indexLabel}</span>
-        <ArrowUpRight className="shrink-0 text-[var(--muted)] transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[var(--accent)]" size={16} />
-      </div>
-      <div className="flex flex-1 flex-col p-5">
-        <h3 className="text-xl font-black leading-tight tracking-[-0.045em] text-[var(--foreground)]">
-          {displayName}
-        </h3>
-        <span className="mt-3 inline-flex w-fit max-w-full items-center border border-[var(--rule)] bg-[var(--background)] px-2.5 py-1 font-mono text-[11px] font-semibold lowercase text-[var(--accent)]">
-          <span className="truncate">{skill.name}</span>
-        </span>
-        <p className="mt-5 flex-grow text-sm leading-7 text-[var(--muted)]">
-          {displayDescription}
-        </p>
+      <span className="grid place-items-center" aria-hidden="true">
+        <span className="h-2 w-2 rotate-45 border border-[var(--rule-strong)] transition-all group-hover:border-[var(--accent)] group-hover:shadow-[0_0_14px_color-mix(in_srgb,var(--accent)_72%,transparent)]" />
+      </span>
 
-        {(publishedAt || skill.fileCount > 0) ? (
-          <div className="mt-6 grid grid-cols-1 gap-2 border-t border-[var(--rule)] pt-4 font-mono text-[11px] font-medium text-[var(--muted)] sm:grid-cols-2">
-            {publishedAt ? (
-              <div className="flex items-center gap-1.5">
-                <CalendarDays size={12} className="flex-shrink-0" />
-                <span>{publishedAt}</span>
-              </div>
-            ) : null}
-            {skill.fileCount > 0 ? (
-              <div className="flex items-center gap-1.5 sm:justify-end">
-                <Files size={12} className="flex-shrink-0" />
-                <span>{fileCountLabel}</span>
-              </div>
-            ) : null}
-          </div>
-        ) : null}
-      </div>
+      <span className="min-w-0">
+        <span className="font-display block text-xl font-extrabold tracking-[-0.025em] text-[var(--foreground)] sm:text-2xl">
+          {displayName}
+        </span>
+        <span className="mt-2 block max-w-3xl text-sm leading-6 text-[var(--muted)]">
+          {displayDescription}
+        </span>
+        <span className="mt-3 inline-flex font-mono text-[10px] uppercase tracking-[0.08em] text-[var(--signal)] sm:hidden">
+          {skill.installName}
+        </span>
+      </span>
+
+      <span className="hidden min-w-0 sm:block">
+        <span className="flex items-center gap-2 font-mono text-[10px] text-[var(--muted)]">
+          <CalendarDays size={13} strokeWidth={1.5} />
+          {publishedAt ?? 'Uncalibrated'}
+        </span>
+        <span className="mt-2 flex items-center gap-2 font-mono text-[10px] text-[var(--muted)]">
+          <Files size={13} strokeWidth={1.5} />
+          {skill.fileCount} {skill.fileCount === 1 ? 'file' : 'files'}
+        </span>
+      </span>
+
+      <span className="flex items-center gap-2 justify-self-end text-xs font-semibold uppercase tracking-[0.1em] text-[var(--muted)] transition-colors group-hover:text-[var(--accent)]">
+        <span className="hidden lg:inline">View skill</span>
+        <ArrowRight size={18} strokeWidth={1.5} className="transition-transform group-hover:translate-x-1" />
+      </span>
     </motion.button>
   );
 }

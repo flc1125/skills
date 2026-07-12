@@ -8,11 +8,11 @@ export default async function Home() {
   return (
     <div className="min-h-screen">
       <Suspense fallback={
-        <div className="max-w-7xl mx-auto px-4 py-24 text-center">
-          <div className="animate-pulse flex flex-col items-center">
-            <div className="mb-4 h-12 w-12 bg-[var(--surface-muted)]"></div>
-            <div className="mb-2 h-4 w-48 bg-[var(--surface-muted)]"></div>
-            <div className="h-4 w-32 bg-[var(--surface-muted)]"></div>
+        <div className="mx-auto max-w-[1360px] px-5 py-24 sm:px-8 lg:px-10">
+          <div className="animate-pulse border-y border-[var(--rule)] py-16">
+            <div className="mb-5 h-3 w-28 bg-[var(--surface-muted)]"></div>
+            <div className="mb-3 h-12 w-3/5 bg-[var(--surface-muted)]"></div>
+            <div className="h-12 w-2/5 bg-[var(--surface-muted)]"></div>
           </div>
         </div>
       }>

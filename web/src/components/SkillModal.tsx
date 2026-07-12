@@ -126,7 +126,7 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-[rgba(29,28,25,0.48)] backdrop-blur-sm" />
+          <div className="fixed inset-0 bg-[rgba(2,7,14,0.74)] backdrop-blur-md" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
@@ -140,32 +140,32 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-5xl transform overflow-hidden border border-[var(--rule)] bg-[var(--surface)] p-0 shadow-[var(--shadow-register)] transition-all">
-                <div className="h-1 bg-[var(--accent)]" />
-                <div className="flex items-start justify-between gap-3 border-b border-[var(--rule)] bg-[var(--surface-muted)] px-5 py-5 sm:items-center sm:gap-5 sm:px-7">
+              <Dialog.Panel className="w-full max-w-5xl transform overflow-hidden border border-[var(--rule-strong)] border-t-[color-mix(in_srgb,var(--accent)_72%,transparent)] bg-[var(--surface)] p-0 shadow-[var(--shadow-station)] transition-all">
+                <div className="relative h-1 bg-[var(--accent)] after:absolute after:left-0 after:top-0 after:h-2 after:w-2 after:bg-[var(--accent)] after:shadow-[0_0_18px_color-mix(in_srgb,var(--accent)_72%,transparent)]" />
+                <div className="flex items-start justify-between gap-3 border-b border-[var(--rule)] bg-[color-mix(in_srgb,var(--surface-muted)_72%,var(--surface))] px-5 py-5 sm:items-center sm:gap-5 sm:px-7">
                   <div className="min-w-0">
                     <div className="flex min-w-0 items-center gap-3">
-                      <div className="flex h-11 w-11 shrink-0 items-center justify-center bg-[var(--foreground)] text-[var(--background)]">
-                        <Terminal size={20} />
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center border border-[var(--rule-strong)] bg-[var(--background)] text-[var(--signal)]">
+                        <Terminal size={19} strokeWidth={1.5} />
                       </div>
-                      <Dialog.Title as="h3" className="min-w-0 text-2xl font-black leading-tight tracking-[-0.045em] text-[var(--foreground)]">
+                      <Dialog.Title as="h3" className="font-display min-w-0 text-3xl font-extrabold leading-tight tracking-[-0.04em] text-[var(--foreground)]">
                         {displayName}
                       </Dialog.Title>
                     </div>
                     <div className="min-w-0 pl-14">
                       {skill ? (
-                        <div className="mt-2 flex min-w-0 flex-wrap items-center gap-2 font-mono text-[12px] font-semibold text-[var(--muted)]">
-                          <span className="inline-flex max-w-full items-center border border-[var(--rule)] bg-[var(--background)] px-2.5 py-1 text-[10px] lowercase text-[var(--accent)]">
+                        <div className="mt-2 flex min-w-0 flex-wrap items-center gap-2 font-mono text-[10px] font-semibold text-[var(--muted)]">
+                          <span className="inline-flex h-8 max-w-full items-center border border-[var(--rule)] bg-[var(--background)] px-2.5 lowercase text-[var(--signal)]">
                             {skill.name}
                           </span>
                           {publishedAt ? (
-                            <div className="flex items-center gap-1.5 border border-[var(--rule)] bg-[var(--background)] px-2.5 py-1 text-[var(--muted)]">
+                            <div className="flex h-8 items-center gap-1.5 border border-[var(--rule)] bg-[var(--background)] px-2.5 text-[var(--muted)]">
                               <CalendarDays size={12} className="flex-shrink-0" />
                               <span>{publishedAt}</span>
                             </div>
                           ) : null}
                           {fileCountLabel ? (
-                            <div className="flex items-center gap-1.5 border border-[var(--rule)] bg-[var(--background)] px-2.5 py-1 text-[var(--muted)]">
+                            <div className="flex h-8 items-center gap-1.5 border border-[var(--rule)] bg-[var(--background)] px-2.5 text-[var(--muted)]">
                               <Files size={12} className="flex-shrink-0" />
                               <span>{fileCountLabel}</span>
                             </div>
@@ -181,7 +181,7 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
                                 target: 'github_skill_source',
                               });
                             }}
-                            className="inline-flex min-h-8 shrink-0 basis-full items-center justify-center gap-1.5 bg-[var(--foreground)] px-2.5 py-1 text-[var(--background)] transition hover:opacity-90 sm:basis-auto"
+                            className="inline-flex h-8 shrink-0 basis-full items-center justify-center gap-1.5 border border-[color-mix(in_srgb,var(--signal)_52%,transparent)] bg-[color-mix(in_srgb,var(--signal)_9%,transparent)] px-2.5 text-[var(--signal)] transition-colors hover:bg-[var(--signal)] hover:text-[var(--background)] sm:basis-auto"
                             title="View source file on GitHub"
                           >
                             <ExternalLink size={12} className="flex-shrink-0" />
@@ -194,7 +194,7 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
                   <div className="flex shrink-0 items-center gap-2">
                     <button
                       onClick={onClose}
-                      className="flex h-11 w-11 items-center justify-center border border-[var(--rule)] bg-[var(--surface)] text-[var(--muted)] transition hover:bg-[var(--background)] hover:text-[var(--foreground)]"
+                      className="flex h-11 w-11 items-center justify-center border border-[var(--rule-strong)] bg-[var(--background)] text-[var(--muted)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
                       aria-label="Close skill details"
                     >
                       <X size={18} />
@@ -216,13 +216,13 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
                     </div>
                   ) : skill ? (
                     <div className="prose max-w-none text-[var(--foreground)] dark:prose-invert
-                      prose-headings:font-black prose-headings:tracking-[-0.04em] prose-headings:text-[var(--foreground)] prose-h1:text-3xl prose-h2:text-2xl
+                      prose-headings:font-display prose-headings:font-extrabold prose-headings:tracking-[-0.04em] prose-headings:text-[var(--foreground)] prose-h1:text-3xl prose-h2:text-2xl
                       prose-p:max-w-[65ch] prose-p:text-sm prose-p:leading-7 prose-p:text-[var(--muted)] prose-li:text-sm prose-li:leading-7 prose-li:text-[var(--muted)] prose-a:font-semibold prose-a:text-[var(--accent)]">
                       <ReactMarkdown
                         components={{
                           pre({ children }) {
                             return (
-                              <pre className="my-4 overflow-x-auto border border-[var(--rule)] bg-[var(--foreground)] p-4 text-xs text-[var(--background)]">
+                              <pre className="my-4 overflow-x-auto border border-[var(--rule-strong)] bg-[var(--background)] p-4 text-xs text-[var(--foreground)]">
                                 {children}
                               </pre>
                             )
@@ -268,13 +268,13 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
                 </div>
 
                 {skill ? (
-                  <div className="border-t border-[var(--rule)] bg-[var(--surface-muted)] px-5 py-5 sm:px-7">
+                  <div className="border-t border-[var(--rule)] bg-[color-mix(in_srgb,var(--surface-muted)_72%,var(--surface))] px-5 py-5 sm:px-7">
                   <p className="mb-2.5 ml-1 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
                     Install this individual skill
                   </p>
                   <div className="group">
-                    <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 border border-[var(--rule)] bg-[var(--surface)] px-4 py-3 transition-colors group-hover:border-[var(--accent)]">
-                      <Terminal size={16} className="flex-shrink-0 text-[var(--accent)]" />
+                    <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 border border-[var(--rule-strong)] bg-[var(--background)] px-4 py-3 transition-colors group-hover:border-[var(--accent)]">
+                      <Terminal size={16} className="flex-shrink-0 text-[var(--signal)]" />
                       <code className="min-w-0 flex-1 select-all truncate font-mono text-xs text-[var(--foreground)]">
                         {command}
                       </code>
@@ -283,8 +283,8 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
                         type="button"
                         className={`flex min-h-11 items-center gap-1.5 px-4 font-bold text-xs leading-none transition-all ${
                           copied 
-                            ? 'bg-[var(--accent)] text-[var(--surface)] scale-95' 
-                            : 'bg-[var(--foreground)] text-[var(--background)] hover:opacity-85 active:scale-95'
+                            ? 'bg-[var(--accent)] text-white scale-95'
+                            : 'border border-[var(--rule-strong)] bg-[var(--surface)] text-[var(--muted)] hover:border-[var(--accent)] hover:text-[var(--accent)] active:scale-95'
                         }`}
                       >
                         {copied ? (

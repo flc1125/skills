@@ -5,6 +5,7 @@ import Script from 'next/script';
 import { GaPageViewTracker } from '@/components/GaPageViewTracker';
 import { GithubNavLink } from '@/components/GithubNavLink';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { BrandMark } from '@/components/BrandMark';
 import "./globals.css";
 
 const GA_MEASUREMENT_ID = 'G-GYPECK2498';
@@ -62,37 +63,31 @@ export default function RootLayout({
         <Suspense fallback={null}>
           <GaPageViewTracker />
         </Suspense>
-        <header className="sticky top-0 z-40 border-b border-[var(--rule)] bg-[color-mix(in_srgb,var(--surface)_88%,transparent)] backdrop-blur-xl">
-          <div className="mx-auto flex h-16 max-w-[1400px] items-center justify-between px-4 sm:px-6 lg:px-8">
+        <header className="fixed inset-x-0 top-0 z-40 border-b border-[var(--rule)] bg-[var(--header)] backdrop-blur-xl">
+          <div className="mx-auto flex h-20 max-w-[1360px] items-center justify-between px-5 sm:px-8 lg:px-10">
             <Link
               href="/"
-              className="group flex min-w-0 items-center gap-3 rounded-md outline-none transition-opacity hover:opacity-85"
+              className="group flex min-w-0 items-center gap-4 outline-none transition-opacity hover:opacity-80"
               aria-label="Go to homepage"
             >
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center border border-[var(--foreground)] bg-[var(--foreground)] text-[var(--background)]">
-                <span className="font-mono text-sm font-semibold">FS</span>
-              </div>
-              <span className="min-w-0 text-base font-semibold tracking-[-0.02em] text-[var(--foreground)] sm:text-lg">
+              <BrandMark className="h-9 w-9 shrink-0" />
+              <span className="font-display min-w-0 text-lg font-extrabold tracking-[-0.03em] text-[var(--foreground)] sm:text-xl">
                 Flc&apos;s Skills
               </span>
             </Link>
-            <nav className="border border-[var(--rule)] bg-[var(--surface)] p-1 shadow-[var(--shadow-register)]">
-              <div className="flex items-center gap-1">
+            <nav>
+              <div className="grid h-9 w-[73px] grid-cols-2 divide-x divide-[var(--rule)] border border-[var(--rule-strong)] bg-[color-mix(in_srgb,var(--surface)_58%,transparent)]">
                 <ThemeToggle />
-                <span
-                  aria-hidden="true"
-                  className="h-4 w-px bg-[var(--rule)]"
-                />
                 <GithubNavLink />
               </div>
             </nav>
           </div>
         </header>
-        <main>{children}</main>
-        <footer className="border-t border-[var(--rule)] bg-[var(--surface)] py-10">
-          <div className="mx-auto grid max-w-[1400px] gap-6 px-4 sm:px-6 md:grid-cols-[1fr_auto] md:items-end lg:px-8">
+        <main className="pt-20">{children}</main>
+        <footer className="border-t border-[var(--rule)] bg-[color-mix(in_srgb,var(--surface)_74%,transparent)] py-10">
+          <div className="mx-auto grid max-w-[1360px] gap-6 px-5 sm:px-8 md:grid-cols-[1fr_auto] md:items-end lg:px-10">
             <div>
-              <p className="mb-2 font-semibold tracking-[-0.02em] text-[var(--foreground)]">Flc&apos;s Skills</p>
+              <p className="font-display mb-2 text-lg font-extrabold tracking-[-0.02em] text-[var(--foreground)]">Flc&apos;s Skills</p>
               <p className="max-w-xl text-sm leading-6 text-[var(--muted)]">
                 Reusable workflow skills for agents that need clearer operating rules and repeatable outcomes.
               </p>
