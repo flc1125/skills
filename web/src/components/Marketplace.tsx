@@ -202,11 +202,11 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
 
           <div className="mt-7 flex flex-wrap gap-x-10 gap-y-3" aria-label="Collection facts">
             <div className="flex items-baseline gap-3">
-              <strong className="font-display text-2xl font-extrabold text-[var(--amber)]">{totalSkills}</strong>
+              <strong className="font-display text-2xl font-extrabold text-[var(--accent)]">{totalSkills}</strong>
               <span className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--muted)]">skills mapped</span>
             </div>
             <div className="flex items-baseline gap-3">
-              <strong className="font-display text-2xl font-extrabold text-[var(--amber)]">{totalFiles}</strong>
+              <strong className="font-display text-2xl font-extrabold text-[var(--accent)]">{totalFiles}</strong>
               <span className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--muted)]">source files</span>
             </div>
           </div>

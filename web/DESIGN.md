@@ -20,7 +20,6 @@ The marketplace is a technical atlas for reusable agent workflows. It should fee
 - Muted Text: `#8FA4BA`.
 - Coral Signal: `#FF715B` — primary accent, active nodes, important actions.
 - Cyan Signal: `#70D7E5` — focus, navigation, and information signal.
-- Amber Reading: `#FFC56B` — collection counts and calibrated data.
 
 ### Light signal
 
@@ -33,7 +32,6 @@ The light theme is the same atlas system under daylight, not a separate aestheti
 - Muted Text: `#526A7E`.
 - Coral Signal: `#E95545`.
 - Cyan Signal: `#147F91`.
-- Amber Reading: `#9A6410`.
 
 Never introduce purple AI gradients, beige paper surfaces, neon outer glows, or pure black.
 

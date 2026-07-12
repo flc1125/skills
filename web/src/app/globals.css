@@ -18,7 +18,6 @@
   --accent: #e95545;
   --accent-strong: #c83f33;
   --signal: #147f91;
-  --amber: #9a6410;
   --shadow-station: 0 32px 90px -46px rgba(18, 40, 60, 0.42);
   --header: rgba(231, 238, 245, 0.88);
 }
@@ -34,7 +33,6 @@
   --accent: #ff715b;
   --accent-strong: #ff8a78;
   --signal: #70d7e5;
-  --amber: #ffc56b;
   --shadow-station: 0 34px 90px -34px rgba(0, 0, 0, 0.58);
   --header: rgba(7, 16, 30, 0.88);
 }
