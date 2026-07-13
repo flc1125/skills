@@ -1,0 +1,4 @@
+interface:
+  display_name: "Create Plan"
+  short_description: "Create repository-aware technical plans"
+  default_prompt: "Use $create-plan to investigate this repository and create a scoped, actionable technical plan."
