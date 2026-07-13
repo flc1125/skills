@@ -70,6 +70,17 @@ Extract:
 - risks, migrations, or rollout notes only when they materially affect review
 - any issue references already implied by commits or branch naming
 
+Build a change-impact inventory before drafting:
+
+- new or changed user-facing capabilities
+- removed, renamed, or changed public APIs, packages, commands, configuration, or dependencies
+- behavior changes involving defaults, errors, context, cancellation, panic, ordering, timeouts, retries, persistence, or lifecycle
+- actions required from downstream users to upgrade safely
+- important contracts or scope boundaries that remain unchanged
+- validation actually performed, including material checks that could not be run
+
+Use the base-to-head diff, current code, and tests as the primary evidence. Treat commit messages, plans, and earlier design notes as secondary context because they may describe ideas that were later revised or removed.
+
 Do not write the merge request until the scope is understood.
 
 ### 3. Write the merge request title
@@ -82,11 +93,15 @@ If the repository uses conventional-commit style titles, follow that pattern:
 - `fix(api): handle null response`
 - `refactor(auth): extract validation logic`
 
+Use the conventional-commit `!` marker when the change is actually incompatible, for example `refactor(auth)!: replace token storage`. Do not use `!` merely because a diff is large or heavily refactored.
+
 If no convention is visible, use a plain imperative summary.
 
 ### 4. Write the merge request description
 
-Use the default MR Body conventions in [references/mr-body-conventions.md](references/mr-body-conventions.md) unless the user explicitly asks for another format.
+Use the default MR body conventions in [references/mr-body-conventions.md](references/mr-body-conventions.md) unless the user explicitly asks for another format.
+
+When the change is incompatible, or the user asks for breaking changes, before-and-after comparisons, upgrade notes, or migration guidance, also read and apply [references/breaking-change-conventions.md](references/breaking-change-conventions.md). Add only the sections supported by the actual change; do not emit empty headings.
 
 ### 5. Create or update the merge request
 
@@ -160,6 +175,10 @@ If the user asks to open the merge request directly, still summarize the final t
 - Prefer draft merge requests when work is incomplete, risky, or waiting on feedback.
 - Keep one merge request focused on one coherent change set.
 - Explain behavior changes, migrations, and follow-up work only when they materially affect review.
+- Determine compatibility from required downstream action, not from diff size, commit wording, or whether the implementation is called a refactor.
+- Give every removed or renamed public surface a replacement, migration action, or explicit statement that no direct replacement exists.
+- State preserved contracts when reviewers could otherwise mistake a scoped refactor for a broader behavior change.
+- Treat merge request titles, descriptions, comments, and notes as public. Strip local debugging details and machine-specific paths before publishing.
 - Use issue-closing syntax only when the linkage is clear and intended for GitLab.
 
 ## Red Flags
