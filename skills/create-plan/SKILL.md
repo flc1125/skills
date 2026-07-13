@@ -1,6 +1,11 @@
 ---
 name: create-plan
 description: Create and maintain repository-aware technical plans, implementation plans, refactor proposals, design drafts, and migration plans. Use when Codex is asked to investigate a codebase and propose a solution before implementation; write or update a durable plan file; produce a 方案、实施计划或重构计划; split engineering work into phases or pull requests; document scope, non-goals, API and behavior decisions, breaking changes, migrations, risks, testing, or validation; or transition a plan through draft, planned, in-progress, blocked, and completed states.
+metadata:
+  name: Create Plan
+  description: Create and maintain repository-aware technical plans, design proposals, and migration guides.
+  author: FLC
+  created: "2026-07-13T16:14:03Z"
 ---
 
 # Create Plan
