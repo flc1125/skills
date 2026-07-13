@@ -13,6 +13,7 @@ npx skills add https://github.com/flc1125/skills --skill github-create-pr
 - Check branch status and PR base
 - Analyze commits and diff
 - Draft a clear PR title and body
+- Document breaking changes, before-and-after comparisons, and migration steps when needed
 - Create or update a PR with `gh`
 - Add reviewers when needed
 
@@ -25,6 +26,7 @@ github-create-pr/
 ├── agents/
 │   └── openai.yaml
 └── references/
+    ├── breaking-change-conventions.md
     └── pr-body-conventions.md
 ```
 

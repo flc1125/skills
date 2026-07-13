@@ -14,6 +14,7 @@ npx skills add https://github.com/flc1125/skills --skill gitlab-create-mr
 - Detect the correct GitLab host for GitLab.com or self-managed instances
 - Analyze commits and diff before drafting the MR
 - Draft a clear merge request title and description
+- Document breaking changes, before-and-after comparisons, and migration steps when needed
 - Create the merge request with `glab`
 - Reuse a local MR body conventions document for consistent descriptions
 
@@ -26,6 +27,7 @@ gitlab-create-mr/
 ├── agents/
 │   └── openai.yaml
 └── references/
+    ├── breaking-change-conventions.md
     ├── mr-body-conventions.md
     └── verified-commands.md
 ```
