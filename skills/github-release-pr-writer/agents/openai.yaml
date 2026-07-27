@@ -1,0 +1,4 @@
+interface:
+  display_name: "GitHub Release PR Writer"
+  short_description: "Draft evidence-backed GitHub release PR descriptions"
+  default_prompt: "Use $github-release-pr-writer to inspect a GitHub release pull request and draft an accurate reviewer-focused description."

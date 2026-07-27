@@ -1,0 +1,4 @@
+interface:
+  display_name: "GitHub Release Notes Writer"
+  short_description: "Write user-focused GitHub release notes and migrations"
+  default_prompt: "Use $github-release-notes-writer to inspect a GitHub release range and draft accurate user-focused Release Notes."
