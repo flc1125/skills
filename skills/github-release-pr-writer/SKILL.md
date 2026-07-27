@@ -5,7 +5,7 @@ metadata:
   name: GitHub Release PR Writer
   description: Draft accurate, reviewer-focused descriptions for GitHub release pull requests.
   author: Flc
-  created: "2026-07-27T00:55:09Z"
+  created: "2026-07-27T01:03:37Z"
 ---
 
 # GitHub Release PR Writer

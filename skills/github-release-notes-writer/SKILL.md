@@ -5,7 +5,7 @@ metadata:
   name: GitHub Release Notes Writer
   description: Write accurate, user-focused GitHub Release Notes with practical upgrade and migration guidance.
   author: Flc
-  created: "2026-07-27T00:55:09Z"
+  created: "2026-07-27T01:03:37Z"
 ---
 
 # GitHub Release Notes Writer
