@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { ArrowRight, CalendarDays, Files } from 'lucide-react';
 import { trackEvent } from '@/lib/gtag';
 import { formatSkillPublishedAt } from '@/lib/utils';

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { AnimatePresence, MotionConfig } from 'framer-motion';
+import { AnimatePresence, MotionConfig } from 'motion/react';
 import { Search } from 'lucide-react';
 import { RepositoryInstallPanel } from './RepositoryInstallPanel';
 import { SkillCard } from './SkillCard';
