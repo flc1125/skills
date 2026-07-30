@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { motion } from 'motion/react';
+import { motion, useMotionTemplate, useMotionValue } from 'motion/react';
 import { ArrowRight, CalendarDays, Files } from 'lucide-react';
 import { trackEvent } from '@/lib/gtag';
 import { formatSkillPublishedAt } from '@/lib/utils';
@@ -16,6 +16,9 @@ interface SkillCardProps {
 export function SkillCard({ skill, position, onClick }: SkillCardProps) {
   const cardRef = useRef<HTMLButtonElement | null>(null);
   const hasTrackedImpression = useRef(false);
+  const spotlightX = useMotionValue(0);
+  const spotlightY = useMotionValue(0);
+  const spotlight = useMotionTemplate`radial-gradient(220px circle at ${spotlightX}px ${spotlightY}px, color-mix(in srgb, var(--accent) 7%, transparent), transparent 72%)`;
   const displayName = skill.metadata?.name ?? skill.name;
   const displayDescription = skill.metadata?.description ?? skill.description;
   const publishedAt = formatSkillPublishedAt(skill.metadata?.created);
@@ -73,9 +76,19 @@ export function SkillCard({ skill, position, onClick }: SkillCardProps) {
       whileHover={{ y: -4 }}
       whileTap={{ scale: 0.98 }}
       onClick={handleClick}
-      className="group flex h-full w-full cursor-pointer flex-col rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 text-left shadow-[var(--shadow-card)] transition-[box-shadow,border-color] duration-200 hover:border-[color-mix(in_srgb,var(--accent)_32%,var(--border))] hover:shadow-[var(--shadow-card-hover)]"
+      onMouseMove={(event) => {
+        const rect = event.currentTarget.getBoundingClientRect();
+        spotlightX.set(event.clientX - rect.left);
+        spotlightY.set(event.clientY - rect.top);
+      }}
+      className="group relative flex h-full w-full cursor-pointer flex-col overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 text-left shadow-[var(--shadow-card)] transition-[box-shadow,border-color] duration-200 hover:border-[color-mix(in_srgb,var(--accent)_32%,var(--border))] hover:shadow-[var(--shadow-card-hover)] focus-visible:outline-offset-[-3px]"
     >
-      <span className="font-display block text-base font-bold tracking-tight text-[var(--foreground)]">
+      <motion.span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{ background: spotlight }}
+      />
+      <span className="font-display relative block text-base font-bold tracking-tight text-[var(--foreground)] transition-colors duration-200 group-hover:text-[var(--accent)]">
         {displayName}
       </span>
       <span className="mt-2 line-clamp-2 block text-sm leading-6 text-[var(--muted)]">

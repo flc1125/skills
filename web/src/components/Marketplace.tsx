@@ -268,15 +268,25 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
         </div>
 
         {orderedSkills.length === 0 ? (
-          <div className="flex flex-col items-center rounded-2xl border border-dashed border-[var(--border-strong)] py-16 text-center">
-            <span className="grid h-11 w-11 place-items-center rounded-full bg-[var(--surface-muted)] text-[var(--muted)]">
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25, ease: 'easeOut' }}
+            className="flex flex-col items-center rounded-2xl border border-dashed border-[var(--border-strong)] py-16 text-center"
+          >
+            <motion.span
+              initial={{ scale: 0.4, rotate: -14 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ type: 'spring', stiffness: 320, damping: 13, delay: 0.08 }}
+              className="grid h-11 w-11 place-items-center rounded-full bg-[var(--surface-muted)] text-[var(--muted)]"
+            >
               <Search size={18} strokeWidth={1.8} />
-            </span>
+            </motion.span>
             <h3 className="font-display mt-4 text-lg font-bold text-[var(--foreground)]">No matching skills</h3>
             <p className="mt-1 max-w-sm text-sm leading-6 text-[var(--muted)]">
               Try a broader workflow, tool, or outcome.
             </p>
-          </div>
+          </motion.div>
         ) : null}
       </section>
 
