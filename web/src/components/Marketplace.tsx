@@ -152,6 +152,7 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
   }, [initialSkills, search]);
 
   const totalSkills = initialSkills.length;
+  const isSearching = search.trim().length > 0;
   const totalFiles = useMemo(
     () => initialSkills.reduce((sum, skill) => sum + skill.fileCount, 0),
     [initialSkills]
@@ -242,8 +243,21 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
         </motion.div>
       </section>
 
-      <motion.section variants={heroItem} className="mx-auto max-w-2xl pb-16">
-        <RepositoryInstallPanel />
+      <motion.section variants={heroItem} className="mx-auto max-w-2xl">
+        <AnimatePresence initial={false}>
+          {!isSearching && (
+            <motion.div
+              key="quick-install-panel"
+              initial={{ opacity: 0, height: 0, marginBottom: 0 }}
+              animate={{ opacity: 1, height: 'auto', marginBottom: 64 }}
+              exit={{ opacity: 0, height: 0, marginBottom: 0, transition: { duration: 0.2, ease: [0.32, 0.72, 0, 1] } }}
+              transition={{ duration: 0.28, ease: [0.32, 0.72, 0, 1] }}
+              className="overflow-hidden"
+            >
+              <RepositoryInstallPanel />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.section>
 
       <section className="pb-8" aria-labelledby="catalog-heading">
