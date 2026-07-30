@@ -2,7 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { AnimatePresence, MotionConfig } from 'motion/react';
+import { AnimatePresence, MotionConfig, animate, motion, useMotionValue, useReducedMotion, useTransform } from 'motion/react';
+import type { Variants } from 'motion/react';
 import { Search } from 'lucide-react';
 import { RepositoryInstallPanel } from './RepositoryInstallPanel';
 import { SkillCard } from './SkillCard';
@@ -24,6 +25,32 @@ function compareSkillsByCreated(left: SkillMetadata, right: SkillMetadata) {
   }
 
   return left.name.localeCompare(right.name);
+}
+
+const heroContainer: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.07, delayChildren: 0.05 } },
+};
+
+const heroItem: Variants = {
+  hidden: { opacity: 0, y: 16 },
+  show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 240, damping: 26 } },
+};
+
+function AnimatedNumber({ value }: { value: number }) {
+  const shouldReduceMotion = useReducedMotion();
+  const motionValue = useMotionValue(0);
+  const rounded = useTransform(motionValue, (latest) => Math.round(latest));
+
+  useEffect(() => {
+    const controls = animate(motionValue, value, {
+      duration: shouldReduceMotion ? 0 : 0.7,
+      ease: 'easeOut',
+    });
+    return () => controls.stop();
+  }, [motionValue, shouldReduceMotion, value]);
+
+  return <motion.span>{rounded}</motion.span>;
 }
 
 export function Marketplace({ initialSkills }: MarketplaceProps) {
@@ -169,17 +196,23 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
   };
 
   return (
-    <div className="mx-auto max-w-6xl px-5 sm:px-8">
+    <MotionConfig reducedMotion="user">
+    <motion.div
+      variants={heroContainer}
+      initial="hidden"
+      animate="show"
+      className="mx-auto max-w-6xl px-5 sm:px-8"
+    >
       <section className="mx-auto max-w-3xl pb-14 pt-16 text-center sm:pt-24">
-        <h1 className="font-display text-[clamp(2.6rem,6vw,4.25rem)] font-extrabold leading-[1.05] tracking-tight text-[var(--foreground)]">
+        <motion.h1 variants={heroItem} className="font-display text-[clamp(2.6rem,6vw,4.25rem)] font-extrabold leading-[1.05] tracking-tight text-[var(--foreground)]">
           Find your next
           <span className="text-[var(--accent)]"> workflow.</span>
-        </h1>
-        <p className="mx-auto mt-5 max-w-xl text-base leading-7 text-[var(--muted)] sm:text-lg sm:leading-8">
+        </motion.h1>
+        <motion.p variants={heroItem} className="mx-auto mt-5 max-w-xl text-base leading-7 text-[var(--muted)] sm:text-lg sm:leading-8">
           A curated collection of reusable agent skills—turn repeatable engineering, research, and knowledge tasks into one-command workflows.
-        </p>
+        </motion.p>
 
-        <div className="mx-auto mt-9 flex h-14 max-w-xl items-center rounded-full border border-[var(--border)] bg-[var(--surface)] pl-5 pr-2 shadow-[var(--shadow-card)] transition-[border-color,box-shadow] focus-within:border-[color-mix(in_srgb,var(--accent)_45%,var(--border))] focus-within:shadow-[var(--shadow-card-hover)]">
+        <motion.div variants={heroItem} className="mx-auto mt-9 flex h-14 max-w-xl items-center rounded-full border border-[var(--border)] bg-[var(--surface)] pl-5 pr-2 shadow-[var(--shadow-card)] transition-[border-color,box-shadow] focus-within:border-[color-mix(in_srgb,var(--accent)_45%,var(--border))] focus-within:shadow-[var(--shadow-card-hover)]">
           <Search size={18} strokeWidth={1.8} className="shrink-0 text-[var(--muted)]" aria-hidden="true" />
           <label htmlFor="skill-search" className="sr-only">Search catalog</label>
           <input
@@ -192,24 +225,24 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
             onChange={(event) => setSearch(event.target.value)}
           />
           <span className="hidden h-9 shrink-0 items-center rounded-full bg-[var(--surface-muted)] px-3 font-mono text-[11px] text-[var(--muted)] sm:flex">⌘ K</span>
-        </div>
+        </motion.div>
 
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-2" aria-label="Collection facts">
+        <motion.div variants={heroItem} className="mt-6 flex flex-wrap items-center justify-center gap-2" aria-label="Collection facts">
           <span className="inline-flex h-8 items-center rounded-full bg-[var(--surface-muted)] px-3.5 text-xs font-medium text-[var(--muted)]">
-            <strong className="mr-1.5 font-display font-bold text-[var(--foreground)]">{totalSkills}</strong> skills
+            <strong className="mr-1.5 font-display font-bold text-[var(--foreground)]"><AnimatedNumber value={totalSkills} /></strong> skills
           </span>
           <span className="inline-flex h-8 items-center rounded-full bg-[var(--surface-muted)] px-3.5 text-xs font-medium text-[var(--muted)]">
-            <strong className="mr-1.5 font-display font-bold text-[var(--foreground)]">{totalFiles}</strong> source files
+            <strong className="mr-1.5 font-display font-bold text-[var(--foreground)]"><AnimatedNumber value={totalFiles} /></strong> source files
           </span>
           <span className="inline-flex h-8 items-center rounded-full bg-[var(--surface-muted)] px-3.5 text-xs font-medium text-[var(--muted)]">
             One command to install
           </span>
-        </div>
+        </motion.div>
       </section>
 
-      <section className="mx-auto max-w-2xl pb-16">
+      <motion.section variants={heroItem} className="mx-auto max-w-2xl pb-16">
         <RepositoryInstallPanel />
-      </section>
+      </motion.section>
 
       <section className="pb-8" aria-labelledby="catalog-heading">
         <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
@@ -221,20 +254,18 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
           </p>
         </div>
 
-        <MotionConfig reducedMotion="user">
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <AnimatePresence mode="popLayout">
-              {orderedSkills.map((skill, index) => (
-                <SkillCard
-                  key={skill.slug}
-                  skill={skill}
-                  position={index + 1}
-                  onClick={handleCardClick}
-                />
-              ))}
-            </AnimatePresence>
-          </div>
-        </MotionConfig>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <AnimatePresence mode="popLayout">
+            {orderedSkills.map((skill, index) => (
+              <SkillCard
+                key={skill.slug}
+                skill={skill}
+                position={index + 1}
+                onClick={handleCardClick}
+              />
+            ))}
+          </AnimatePresence>
+        </div>
 
         {orderedSkills.length === 0 ? (
           <div className="flex flex-col items-center rounded-2xl border border-dashed border-[var(--border-strong)] py-16 text-center">
@@ -256,6 +287,7 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
         error={skillLoadError}
         onClose={handleCloseModal}
       />
-    </div>
+    </motion.div>
+    </MotionConfig>
   );
 }

@@ -67,9 +67,15 @@ The only decorative treatment is a faint tangerine radial glow at the top center
 ## 6. Motion
 
 - Springs over easings: cards enter with a soft spring (`stiffness ~260, damping ~28`) and a short per-item stagger (≤12 items, ~35ms each).
+- The hero (headline, subtext, search, fact pills, install panel) enters as a choreographed sequence — fade-up with ~70ms stagger.
+- Stat numbers (skill/file counts) count up from 0 on first paint (~700ms, instant under reduced motion).
 - Catalog filtering uses `AnimatePresence mode="popLayout"` with `layout` springs; the stagger delay applies to entrance only, never to layout reflow.
+- Press feedback uses Motion `whileTap` scale springs on cards, tabs, and copy buttons (no CSS `:active` transforms — inline Motion transforms would override them anyway).
+- Copy success swaps the icon with a spring pop (`scale 0.4 → 1`, slight overshoot) via `AnimatePresence mode="wait"`.
+- The install provider tabs slide their indicator (`layoutId`) and cross-slide the command area on switch.
+- Card hover lift is `whileHover={{ y: -4 }}` (Motion-driven, not a CSS transform, so it composes with layout animations).
+- Theme switching transitions colors globally (200ms on background/border/color/fill/stroke/box-shadow via a `@layer base` rule that utilities can override).
 - Modal: backdrop fade (200ms), panel spring from `scale 0.96 / y 16`.
-- Hover: lift cards, slide arrows a pixel, tint icon buttons. 150–250ms.
 - Respect `prefers-reduced-motion` everywhere (`MotionConfig reducedMotion="user"` plus the global CSS guard).
 
 ## 7. Functional Invariants

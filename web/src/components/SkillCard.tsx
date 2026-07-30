@@ -70,8 +70,10 @@ export function SkillCard({ skill, position, onClick }: SkillCardProps) {
       animate={{ opacity: 1, y: 0, transition: { type: 'spring', stiffness: 260, damping: 28, delay: Math.min(position, 12) * 0.035 } }}
       exit={{ opacity: 0, scale: 0.96, transition: { duration: 0.15 } }}
       transition={{ type: 'spring', stiffness: 320, damping: 30 }}
+      whileHover={{ y: -4 }}
+      whileTap={{ scale: 0.98 }}
       onClick={handleClick}
-      className="group flex h-full w-full cursor-pointer flex-col rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 text-left shadow-[var(--shadow-card)] transition-[box-shadow,border-color,transform] duration-200 hover:-translate-y-1 hover:border-[color-mix(in_srgb,var(--accent)_32%,var(--border))] hover:shadow-[var(--shadow-card-hover)]"
+      className="group flex h-full w-full cursor-pointer flex-col rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 text-left shadow-[var(--shadow-card)] transition-[box-shadow,border-color] duration-200 hover:border-[color-mix(in_srgb,var(--accent)_32%,var(--border))] hover:shadow-[var(--shadow-card-hover)]"
     >
       <span className="font-display block text-base font-bold tracking-tight text-[var(--foreground)]">
         {displayName}

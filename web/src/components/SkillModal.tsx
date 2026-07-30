@@ -263,27 +263,44 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
                         <code className="min-w-0 flex-1 select-all truncate font-mono text-xs text-[var(--foreground)]">
                           {command}
                         </code>
-                        <button
+                        <motion.button
                           onClick={copyToClipboard}
                           type="button"
-                          className={`flex h-9 shrink-0 items-center gap-1.5 rounded-full px-4 text-xs font-semibold transition-all ${
+                          whileTap={{ scale: 0.92 }}
+                          className={`flex h-9 shrink-0 items-center gap-1.5 rounded-full px-4 text-xs font-semibold transition-colors ${
                             copied
                               ? 'bg-[var(--accent)] text-[var(--on-accent)]'
                               : 'bg-[var(--surface)] text-[var(--muted)] shadow-[var(--shadow-card)] hover:text-[var(--accent)]'
                           }`}
                         >
-                          {copied ? (
-                            <>
-                              <Check size={13} />
-                              <span>Copied</span>
-                            </>
-                          ) : (
-                            <>
-                              <Copy size={13} />
-                              <span>Copy</span>
-                            </>
-                          )}
-                        </button>
+                          <AnimatePresence mode="wait" initial={false}>
+                            {copied ? (
+                              <motion.span
+                                key="copied"
+                                className="flex items-center gap-1.5"
+                                initial={{ scale: 0.5, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                exit={{ scale: 0.5, opacity: 0 }}
+                                transition={{ type: 'spring', stiffness: 500, damping: 22 }}
+                              >
+                                <Check size={13} />
+                                <span>Copied</span>
+                              </motion.span>
+                            ) : (
+                              <motion.span
+                                key="copy"
+                                className="flex items-center gap-1.5"
+                                initial={{ scale: 0.5, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                exit={{ scale: 0.5, opacity: 0 }}
+                                transition={{ type: 'spring', stiffness: 300, damping: 24 }}
+                              >
+                                <Copy size={13} />
+                                <span>Copy</span>
+                              </motion.span>
+                            )}
+                          </AnimatePresence>
+                        </motion.button>
                       </div>
                     </div>
                   ) : null}

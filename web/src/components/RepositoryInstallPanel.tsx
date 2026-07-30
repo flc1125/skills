@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { motion } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 import { Check, Copy, TerminalSquare } from 'lucide-react';
 import { visibleRepositoryInstallMethods } from '@/lib/install-methods';
 import { trackEvent } from '@/lib/gtag';
@@ -52,11 +52,12 @@ export function RepositoryInstallPanel() {
             const isActive = method.id === activeMethod.id;
 
             return (
-              <button
+              <motion.button
                 key={method.id}
                 type="button"
                 onClick={() => setActiveMethodId(method.id)}
                 aria-pressed={isActive}
+                whileTap={{ scale: 0.94 }}
                 className={`relative rounded-full px-4 py-1.5 text-xs font-semibold transition-colors ${
                   isActive ? 'text-[var(--foreground)]' : 'text-[var(--muted)] hover:text-[var(--foreground)]'
                 }`}
@@ -69,12 +70,20 @@ export function RepositoryInstallPanel() {
                   />
                 ) : null}
                 <span className="relative">{method.label}</span>
-              </button>
+              </motion.button>
             );
           })}
         </div>
       </div>
 
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={activeMethod.id}
+          initial={{ opacity: 0, x: 14 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -14 }}
+          transition={{ duration: 0.18, ease: 'easeOut' }}
+        >
       {activeMethod.status === 'planned' ? (
         <div className="mt-5 rounded-xl bg-[var(--accent-soft)] px-4 py-4">
           <p className="text-sm font-semibold text-[var(--accent)]">Coming soon</p>
@@ -101,23 +110,48 @@ export function RepositoryInstallPanel() {
                     {entry.command}
                   </code>
                 </div>
-                <button
+                <motion.button
                   type="button"
                   onClick={() => copyCommands(copyKey, entry.command, entry.label)}
-                  className={`grid h-9 w-9 shrink-0 place-items-center rounded-full transition-all ${
+                  whileTap={{ scale: 0.85 }}
+                  className={`grid h-9 w-9 shrink-0 place-items-center rounded-full transition-colors ${
                     isCopied
                       ? 'bg-[var(--accent)] text-[var(--on-accent)]'
                       : 'bg-[var(--surface)] text-[var(--muted)] shadow-[var(--shadow-card)] hover:text-[var(--accent)]'
                   }`}
                   aria-label={`Copy ${entry.label} command`}
                 >
-                  {isCopied ? <Check size={14} /> : <Copy size={14} strokeWidth={1.5} />}
-                </button>
+                  <AnimatePresence mode="wait" initial={false}>
+                    {isCopied ? (
+                      <motion.span
+                        key="copied"
+                        initial={{ scale: 0.4, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0.4, opacity: 0 }}
+                        transition={{ type: 'spring', stiffness: 500, damping: 22 }}
+                      >
+                        <Check size={14} />
+                      </motion.span>
+                    ) : (
+                      <motion.span
+                        key="copy"
+                        initial={{ scale: 0.4, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0.4, opacity: 0 }}
+                        transition={{ type: 'spring', stiffness: 300, damping: 24 }}
+                      >
+                        <Copy size={14} strokeWidth={1.5} />
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+                </motion.button>
               </div>
             );
           })}
         </div>
       )}
+        </motion.div>
+      </AnimatePresence>
     </aside>
   );
 }
