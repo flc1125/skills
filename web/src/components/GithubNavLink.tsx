@@ -19,9 +19,9 @@ export function GithubNavLink() {
           location: 'header',
         });
       }}
-      className="grid h-full w-full place-items-center text-[var(--muted)] transition-colors hover:bg-[color-mix(in_srgb,var(--surface-muted)_48%,transparent)] hover:text-[var(--foreground)]"
+      className="grid h-9 w-9 place-items-center rounded-full text-[var(--muted)] transition-colors hover:bg-[var(--surface-muted)] hover:text-[var(--foreground)]"
     >
-      <Icons.Github size={15} />
+      <Icons.Github size={16} />
     </a>
   );
 }

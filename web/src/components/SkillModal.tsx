@@ -1,8 +1,9 @@
 'use client';
 
 import { Skill } from '@/lib/skills';
-import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useState, useEffect, useRef } from 'react';
+import { Dialog } from '@headlessui/react';
+import { useState, useEffect, useRef } from 'react';
+import { AnimatePresence, MotionConfig, motion } from 'motion/react';
 import ReactMarkdown from 'react-markdown';
 import { X, Terminal, Copy, Check, ExternalLink, CalendarDays, Files } from 'lucide-react';
 import { formatSkillPublishedAt } from '@/lib/utils';
@@ -92,8 +93,6 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
     trackedViewSlug.current = skill.slug;
   }, [displayName, isOpen, skill]);
 
-  if (!isOpen) return null;
-
   const command = skill
     ? `npx skills add https://github.com/flc1125/skills --skill ${skill.installName}`
     : '';
@@ -115,60 +114,50 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
   };
 
   return (
-    <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-50" onClose={onClose}>
-        <Transition.Child
-          as={Fragment}
-          enter="ease-out duration-300"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in duration-200"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <div className="fixed inset-0 bg-[rgba(2,7,14,0.74)] backdrop-blur-md" />
-        </Transition.Child>
+    <MotionConfig reducedMotion="user">
+      <AnimatePresence>
+        {isOpen && (
+          <Dialog open={isOpen} onClose={onClose} className="relative z-50">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 bg-[rgba(12,14,22,0.45)] backdrop-blur-sm"
+              aria-hidden="true"
+            />
 
-        <div className="fixed inset-0 overflow-y-auto">
-          <div className="flex min-h-full items-center justify-center p-3 sm:p-4">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 scale-95"
-              enterTo="opacity-100 scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95"
-            >
-              <Dialog.Panel className="w-full max-w-5xl transform overflow-hidden border border-[var(--rule-strong)] border-t-[color-mix(in_srgb,var(--accent)_72%,transparent)] bg-[var(--surface)] p-0 shadow-[var(--shadow-station)] transition-all">
-                <div className="relative h-1 bg-[var(--accent)] after:absolute after:left-0 after:top-0 after:h-2 after:w-2 after:bg-[var(--accent)] after:shadow-[0_0_18px_color-mix(in_srgb,var(--accent)_72%,transparent)]" />
-                <div className="flex items-start justify-between gap-3 border-b border-[var(--rule)] bg-[color-mix(in_srgb,var(--surface-muted)_72%,var(--surface))] px-5 py-5 sm:items-center sm:gap-5 sm:px-7">
-                  <div className="min-w-0">
-                    <div className="flex min-w-0 items-center gap-3">
-                      <div className="flex h-11 w-11 shrink-0 items-center justify-center border border-[var(--rule-strong)] bg-[var(--background)] text-[var(--signal)]">
-                        <Terminal size={19} strokeWidth={1.5} />
-                      </div>
-                      <Dialog.Title as="h3" className="font-display min-w-0 text-3xl font-extrabold leading-tight tracking-[-0.04em] text-[var(--foreground)]">
+            <div className="fixed inset-0 overflow-y-auto">
+              <div className="flex min-h-full items-center justify-center p-4 sm:p-6">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.96, y: 16 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.97, y: 10 }}
+                  transition={{ type: 'spring', stiffness: 320, damping: 30 }}
+                  className="w-full max-w-3xl"
+                >
+                  <Dialog.Panel className="w-full overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-modal)]">
+                  <div className="flex items-start justify-between gap-4 px-6 pt-6 sm:px-8 sm:pt-7">
+                    <div className="min-w-0">
+                      <Dialog.Title as="h3" className="font-display text-2xl font-bold tracking-tight text-[var(--foreground)] sm:text-3xl">
                         {displayName}
                       </Dialog.Title>
-                    </div>
-                    <div className="min-w-0 pl-14">
                       {skill ? (
-                        <div className="mt-2 flex min-w-0 flex-wrap items-center gap-2 font-mono text-[10px] font-semibold text-[var(--muted)]">
-                          <span className="inline-flex h-8 max-w-full items-center border border-[var(--rule)] bg-[var(--background)] px-2.5 lowercase text-[var(--signal)]">
+                        <div className="mt-3 flex min-w-0 flex-wrap items-center gap-2 text-xs">
+                          <span className="inline-flex h-7 max-w-full items-center rounded-full bg-[var(--surface-muted)] px-3 font-mono text-[11px] text-[var(--muted)]">
                             {skill.name}
                           </span>
                           {publishedAt ? (
-                            <div className="flex h-8 items-center gap-1.5 border border-[var(--rule)] bg-[var(--background)] px-2.5 text-[var(--muted)]">
-                              <CalendarDays size={12} className="flex-shrink-0" />
-                              <span>{publishedAt}</span>
-                            </div>
+                            <span className="inline-flex h-7 items-center gap-1.5 rounded-full bg-[var(--surface-muted)] px-3 text-[var(--muted)]">
+                              <CalendarDays size={12} className="shrink-0" />
+                              {publishedAt}
+                            </span>
                           ) : null}
                           {fileCountLabel ? (
-                            <div className="flex h-8 items-center gap-1.5 border border-[var(--rule)] bg-[var(--background)] px-2.5 text-[var(--muted)]">
-                              <Files size={12} className="flex-shrink-0" />
-                              <span>{fileCountLabel}</span>
-                            </div>
+                            <span className="inline-flex h-7 items-center gap-1.5 rounded-full bg-[var(--surface-muted)] px-3 text-[var(--muted)]">
+                              <Files size={12} className="shrink-0" />
+                              {fileCountLabel}
+                            </span>
                           ) : null}
                           <a
                             href={sourceUrl}
@@ -181,133 +170,138 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
                                 target: 'github_skill_source',
                               });
                             }}
-                            className="inline-flex h-8 shrink-0 basis-full items-center justify-center gap-1.5 border border-[color-mix(in_srgb,var(--signal)_52%,transparent)] bg-[color-mix(in_srgb,var(--signal)_9%,transparent)] px-2.5 text-[var(--signal)] transition-colors hover:bg-[var(--signal)] hover:text-[var(--background)] sm:basis-auto"
+                            className="inline-flex h-7 items-center gap-1.5 rounded-full bg-[var(--accent-soft)] px-3 font-semibold text-[var(--accent)] transition-colors hover:bg-[var(--accent)] hover:text-[var(--on-accent)]"
                             title="View source file on GitHub"
                           >
-                            <ExternalLink size={12} className="flex-shrink-0" />
-                            <span>View on GitHub</span>
+                            <ExternalLink size={12} className="shrink-0" />
+                            View on GitHub
                           </a>
                         </div>
                       ) : null}
                     </div>
-                  </div>
-                  <div className="flex shrink-0 items-center gap-2">
                     <button
                       onClick={onClose}
-                      className="flex h-11 w-11 items-center justify-center border border-[var(--rule-strong)] bg-[var(--background)] text-[var(--muted)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
+                      className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[var(--surface-muted)] text-[var(--muted)] transition-colors hover:bg-[var(--accent-soft)] hover:text-[var(--accent)]"
                       aria-label="Close skill details"
                     >
-                      <X size={18} />
+                      <X size={17} />
                     </button>
                   </div>
-                </div>
 
-                <div className="max-h-[62vh] overflow-y-auto px-5 py-6 custom-scrollbar sm:px-7">
-                  {isLoading ? (
-                    <div className="space-y-3 animate-pulse">
-                      <div className="h-4 bg-[var(--surface-muted)]" />
-                      <div className="h-4 bg-[var(--surface-muted)]" />
-                      <div className="h-4 w-5/6 bg-[var(--surface-muted)]" />
-                      <div className="h-24 bg-[var(--background)]" />
-                    </div>
-                  ) : error ? (
-                    <div className="border border-[var(--rule)] bg-[var(--background)] px-4 py-3 text-sm text-[var(--foreground)]">
-                      {error}
-                    </div>
-                  ) : skill ? (
-                    <div className="prose max-w-none text-[var(--foreground)] dark:prose-invert
-                      prose-headings:font-display prose-headings:font-extrabold prose-headings:tracking-[-0.04em] prose-headings:text-[var(--foreground)] prose-h1:text-3xl prose-h2:text-2xl
-                      prose-p:max-w-[65ch] prose-p:text-sm prose-p:leading-7 prose-p:text-[var(--muted)] prose-li:text-sm prose-li:leading-7 prose-li:text-[var(--muted)] prose-a:font-semibold prose-a:text-[var(--accent)]">
-                      <ReactMarkdown
-                        components={{
-                          pre({ children }) {
-                            return (
-                              <pre className="my-4 overflow-x-auto border border-[var(--rule-strong)] bg-[var(--background)] p-4 text-xs text-[var(--foreground)]">
-                                {children}
-                              </pre>
-                            )
-                          },
-                          code(props) {
-                            const { children, className, ...codeProps } = props;
-                            const { node: _node, inline: _inline, ...rest } = codeProps as typeof codeProps & {
-                              inline?: boolean;
-                              node?: unknown;
-                            };
-                            const match = /language-(\w+)/.exec(className || '');
-                            return match ? (
-                              <code className={className} {...rest}>
-                                {children}
-                              </code>
-                            ) : (
-                              <code className="mx-0.5 bg-[var(--surface-muted)] px-2 py-0.5 font-semibold text-[var(--foreground)] before:content-none after:content-none" {...rest}>
-                                {children}
-                              </code>
-                            )
-                          },
-                          a({ href, children, ...props }) {
-                            const resolvedHref = skill ? resolveSkillContentLink(skill, href) : href;
-                            const isExternal = resolvedHref?.startsWith('http://') || resolvedHref?.startsWith('https://');
+                  <div className="mt-5 max-h-[58vh] overflow-y-auto px-6 pb-2 custom-scrollbar sm:px-8">
+                    {isLoading ? (
+                      <div className="space-y-3 animate-pulse pb-4">
+                        <div className="h-4 rounded-full bg-[var(--surface-muted)]" />
+                        <div className="h-4 rounded-full bg-[var(--surface-muted)]" />
+                        <div className="h-4 w-5/6 rounded-full bg-[var(--surface-muted)]" />
+                        <div className="h-24 rounded-2xl bg-[var(--surface-muted)]" />
+                      </div>
+                    ) : error ? (
+                      <div className="rounded-2xl bg-[var(--accent-soft)] px-4 py-3 text-sm text-[var(--foreground)]">
+                        {error}
+                      </div>
+                    ) : skill ? (
+                      <div className="prose max-w-none text-[var(--foreground)] dark:prose-invert
+                        prose-headings:font-display prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-[var(--foreground)] prose-h1:text-2xl prose-h2:text-xl
+                        prose-p:max-w-[65ch] prose-p:text-sm prose-p:leading-7 prose-p:text-[var(--muted)] prose-li:text-sm prose-li:leading-7 prose-li:text-[var(--muted)] prose-a:font-semibold prose-a:text-[var(--accent)]">
+                        <ReactMarkdown
+                          components={{
+                            pre({ children }) {
+                              return (
+                                <pre className="my-4 overflow-x-auto rounded-xl bg-[var(--surface-muted)] p-4 text-xs text-[var(--foreground)]">
+                                  {children}
+                                </pre>
+                              )
+                            },
+                            code(props) {
+                              const { children, className, ...codeProps } = props;
+                              const { node: _node, inline: _inline, ...rest } = codeProps as typeof codeProps & {
+                                inline?: boolean;
+                                node?: unknown;
+                              };
+                              const match = /language-(\w+)/.exec(className || '');
+                              return match ? (
+                                <code className={className} {...rest}>
+                                  {children}
+                                </code>
+                              ) : (
+                                <code className="mx-0.5 rounded-md bg-[var(--surface-muted)] px-1.5 py-0.5 font-semibold text-[var(--foreground)] before:content-none after:content-none" {...rest}>
+                                  {children}
+                                </code>
+                              )
+                            },
+                            a({ href, children, ...props }) {
+                              const resolvedHref = skill ? resolveSkillContentLink(skill, href) : href;
+                              const isExternal = resolvedHref?.startsWith('http://') || resolvedHref?.startsWith('https://');
 
-                            return (
-                              <a
-                                href={resolvedHref}
-                                target={isExternal ? '_blank' : undefined}
-                                rel={isExternal ? 'noopener noreferrer' : undefined}
-                                {...props}
-                              >
-                                {children}
-                              </a>
-                            );
-                          }
-                        }}
-                      >
-                        {skill.content}
-                      </ReactMarkdown>
+                              return (
+                                <a
+                                  href={resolvedHref}
+                                  target={isExternal ? '_blank' : undefined}
+                                  rel={isExternal ? 'noopener noreferrer' : undefined}
+                                  {...props}
+                                >
+                                  {children}
+                                </a>
+                              );
+                            }
+                          }}
+                        >
+                          {skill.content}
+                        </ReactMarkdown>
+                      </div>
+                    ) : null}
+                  </div>
+
+                  {skill ? (
+                    <div className="px-6 pb-6 pt-4 sm:px-8 sm:pb-7">
+                      <p className="mb-2 text-xs font-medium text-[var(--muted)]">
+                        Install this skill
+                      </p>
+                      <div className="flex items-center gap-3 rounded-xl bg-[var(--surface-muted)] py-2.5 pl-4 pr-2">
+                        <Terminal size={15} className="shrink-0 text-[var(--accent)]" />
+                        <code className="min-w-0 flex-1 select-all truncate font-mono text-xs text-[var(--foreground)]">
+                          {command}
+                        </code>
+                        <motion.button
+                          onClick={copyToClipboard}
+                          type="button"
+                          whileTap={{ scale: 0.92 }}
+                          className={`flex h-9 shrink-0 items-center gap-1.5 rounded-full px-4 text-xs font-semibold transition-colors ${
+                            copied
+                              ? 'bg-[var(--accent)] text-[var(--on-accent)]'
+                              : 'bg-[var(--surface)] text-[var(--muted)] shadow-[var(--shadow-card)] hover:text-[var(--accent)]'
+                          }`}
+                        >
+                          <span className="grid">
+                            <span
+                              className={`col-start-1 row-start-1 flex items-center justify-center gap-1.5 transition-[opacity,transform] duration-150 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
+                                copied ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
+                              }`}
+                            >
+                              <Check size={13} />
+                              <span>Copied</span>
+                            </span>
+                            <span
+                              className={`col-start-1 row-start-1 flex items-center justify-center gap-1.5 transition-[opacity,transform] duration-150 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
+                                copied ? 'scale-75 opacity-0' : 'scale-100 opacity-100'
+                              }`}
+                            >
+                              <Copy size={13} />
+                              <span>Copy</span>
+                            </span>
+                          </span>
+                        </motion.button>
+                      </div>
                     </div>
                   ) : null}
-                </div>
-
-                {skill ? (
-                  <div className="border-t border-[var(--rule)] bg-[color-mix(in_srgb,var(--surface-muted)_72%,var(--surface))] px-5 py-5 sm:px-7">
-                  <p className="mb-2.5 ml-1 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
-                    Install this individual skill
-                  </p>
-                  <div className="group">
-                    <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 border border-[var(--rule-strong)] bg-[var(--background)] px-4 py-3 transition-colors group-hover:border-[var(--accent)]">
-                      <Terminal size={16} className="flex-shrink-0 text-[var(--signal)]" />
-                      <code className="min-w-0 flex-1 select-all truncate font-mono text-xs text-[var(--foreground)]">
-                        {command}
-                      </code>
-                      <button
-                        onClick={copyToClipboard}
-                        type="button"
-                        className={`flex min-h-11 items-center gap-1.5 px-4 font-bold text-xs leading-none transition-all ${
-                          copied 
-                            ? 'bg-[var(--accent)] text-white scale-95'
-                            : 'border border-[var(--rule-strong)] bg-[var(--surface)] text-[var(--muted)] hover:border-[var(--accent)] hover:text-[var(--accent)] active:scale-95'
-                        }`}
-                      >
-                        {copied ? (
-                          <>
-                            <Check size={14} />
-                            <span>Copied</span>
-                          </>
-                        ) : (
-                          <>
-                            <Copy size={14} />
-                            <span>Copy</span>
-                          </>
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                  </div>
-                ) : null}
-              </Dialog.Panel>
-            </Transition.Child>
-          </div>
-        </div>
-      </Dialog>
-    </Transition>
+                  </Dialog.Panel>
+                </motion.div>
+              </div>
+            </div>
+          </Dialog>
+        )}
+      </AnimatePresence>
+    </MotionConfig>
   );
 }
