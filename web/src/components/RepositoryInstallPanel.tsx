@@ -121,29 +121,21 @@ export function RepositoryInstallPanel() {
                   }`}
                   aria-label={`Copy ${entry.label} command`}
                 >
-                  <AnimatePresence mode="wait" initial={false}>
-                    {isCopied ? (
-                      <motion.span
-                        key="copied"
-                        initial={{ scale: 0.4, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        exit={{ scale: 0.4, opacity: 0 }}
-                        transition={{ type: 'spring', stiffness: 500, damping: 22 }}
-                      >
-                        <Check size={14} />
-                      </motion.span>
-                    ) : (
-                      <motion.span
-                        key="copy"
-                        initial={{ scale: 0.4, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        exit={{ scale: 0.4, opacity: 0 }}
-                        transition={{ type: 'spring', stiffness: 300, damping: 24 }}
-                      >
-                        <Copy size={14} strokeWidth={1.5} />
-                      </motion.span>
-                    )}
-                  </AnimatePresence>
+                  <span className="grid">
+                    <Check
+                      size={14}
+                      className={`col-start-1 row-start-1 place-self-center transition-[opacity,transform] duration-150 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
+                        isCopied ? 'scale-100 opacity-100' : 'scale-50 opacity-0'
+                      }`}
+                    />
+                    <Copy
+                      size={14}
+                      strokeWidth={1.5}
+                      className={`col-start-1 row-start-1 place-self-center transition-[opacity,transform] duration-150 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
+                        isCopied ? 'scale-50 opacity-0' : 'scale-100 opacity-100'
+                      }`}
+                    />
+                  </span>
                 </motion.button>
               </div>
             );

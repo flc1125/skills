@@ -273,33 +273,24 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
                               : 'bg-[var(--surface)] text-[var(--muted)] shadow-[var(--shadow-card)] hover:text-[var(--accent)]'
                           }`}
                         >
-                          <AnimatePresence mode="wait" initial={false}>
-                            {copied ? (
-                              <motion.span
-                                key="copied"
-                                className="flex items-center gap-1.5"
-                                initial={{ scale: 0.5, opacity: 0 }}
-                                animate={{ scale: 1, opacity: 1 }}
-                                exit={{ scale: 0.5, opacity: 0 }}
-                                transition={{ type: 'spring', stiffness: 500, damping: 22 }}
-                              >
-                                <Check size={13} />
-                                <span>Copied</span>
-                              </motion.span>
-                            ) : (
-                              <motion.span
-                                key="copy"
-                                className="flex items-center gap-1.5"
-                                initial={{ scale: 0.5, opacity: 0 }}
-                                animate={{ scale: 1, opacity: 1 }}
-                                exit={{ scale: 0.5, opacity: 0 }}
-                                transition={{ type: 'spring', stiffness: 300, damping: 24 }}
-                              >
-                                <Copy size={13} />
-                                <span>Copy</span>
-                              </motion.span>
-                            )}
-                          </AnimatePresence>
+                          <span className="grid">
+                            <span
+                              className={`col-start-1 row-start-1 flex items-center justify-center gap-1.5 transition-[opacity,transform] duration-150 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
+                                copied ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
+                              }`}
+                            >
+                              <Check size={13} />
+                              <span>Copied</span>
+                            </span>
+                            <span
+                              className={`col-start-1 row-start-1 flex items-center justify-center gap-1.5 transition-[opacity,transform] duration-150 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
+                                copied ? 'scale-75 opacity-0' : 'scale-100 opacity-100'
+                              }`}
+                            >
+                              <Copy size={13} />
+                              <span>Copy</span>
+                            </span>
+                          </span>
                         </motion.button>
                       </div>
                     </div>

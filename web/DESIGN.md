@@ -71,7 +71,7 @@ The only decorative treatment is a faint tangerine radial glow at the top center
 - Stat numbers (skill/file counts) count up from 0 on first paint (~700ms, instant under reduced motion).
 - Catalog filtering uses `AnimatePresence mode="popLayout"` with `layout` springs; the stagger delay applies to entrance only, never to layout reflow.
 - Press feedback uses Motion `whileTap` scale springs on cards, tabs, and copy buttons (no CSS `:active` transforms — inline Motion transforms would override them anyway).
-- Copy success swaps the icon with a spring pop (`scale 0.4 → 1`, slight overshoot) via `AnimatePresence mode="wait"`.
+- Copy success crossfades the icon/label in place — both states share one grid cell and animate opacity + scale simultaneously (150ms, `cubic-bezier(0.34, 1.56, 0.64, 1)` for a slight overshoot). Never serialize exit-then-enter here (no `AnimatePresence mode="wait"`); it leaves a dead gap with nothing visible.
 - The install provider tabs slide their indicator (`layoutId`) and cross-slide the command area on switch.
 - Card hover lift is `whileHover={{ y: -4 }}` (Motion-driven, not a CSS transform, so it composes with layout animations).
 - Theme switching transitions colors globally (200ms on background/border/color/fill/stroke/box-shadow via a `@layer base` rule that utilities can override).
