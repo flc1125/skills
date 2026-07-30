@@ -4,7 +4,7 @@
 
 The marketplace is a friendly, modern product surface for discovering reusable agent skills. It should feel light, calm, and effortless: soft cards floating on a quiet canvas, one confident accent color, and generous whitespace.
 
-- Default character: warm off-white canvas, white rounded cards, diffused shadows, and a single indigo accent.
+- Default character: warm off-white canvas, white rounded cards, diffused shadows, and a single vivid tangerine accent.
 - Creativity: 5/10. Familiar product patterns executed with restraint and polish.
 - Density: 4/10. The hero stays airy; the catalog is a comfortable card grid.
 - The previous "technical atlas" language is retired: no coordinate grids, signal nodes, diamond markers, hard rules, or navy station surfaces.
@@ -19,7 +19,7 @@ The marketplace is a friendly, modern product surface for discovering reusable a
 - Foreground: `#1B1E28`.
 - Muted: `#68707F`.
 - Border: `rgba(27, 30, 40, 0.08)` / strong `0.14`.
-- Accent: `#6366F1` (indigo), Accent Strong: `#4F46E5`, Accent Soft: 10% indigo wash.
+- Accent: `#FF5C33` (vivid tangerine), Accent Strong: `#E84620`, Accent Soft: 10% tangerine wash.
 
 ### Dark theme
 
@@ -31,9 +31,9 @@ The dark theme is the same system at night, not a separate aesthetic.
 - Foreground: `#F2F3F7`.
 - Muted: `#9AA2B1`.
 - Border: `rgba(242, 243, 247, 0.09)` / strong `0.16`.
-- Accent: `#818CF8`, Accent Strong: `#A5B4FC`, Accent Soft: 14% wash.
+- Accent: `#FF8A66`, Accent Strong: `#FFA585`, Accent Soft: 16% wash.
 
-The only decorative treatment is a faint indigo radial glow at the top center of the page (`--glow`). No other gradients, no neon, no glassmorphism stacks.
+The only decorative treatment is a faint tangerine radial glow at the top center of the page (`--glow`). No other gradients, no neon, no glassmorphism stacks. Never use blue-violet/indigo as the accent — it reads as generic AI-product branding.
 
 ## 3. Typography
 
@@ -55,7 +55,7 @@ The only decorative treatment is a faint indigo radial glow at the top center of
 
 ## 5. Component Language
 
-- Brand mark: white `FS` monogram on a rounded-square (`rx=11`) indigo gradient tile.
+- Brand mark: white `FS` monogram on a rounded-square (`rx=11`) tangerine gradient tile.
 - Cards: `rounded-2xl`, 1px `--border`, `--shadow-card`. Hover: `-translate-y-1`, accent-tinted border, `--shadow-card-hover`.
 - Buttons and inputs: `rounded-full` for pills/icon buttons, `rounded-xl` for inset rows. Minimum 44px touch target where practical.
 - Chips/badges: `rounded-full` fills of `--surface-muted`; accent actions use `--accent-soft` background with `--accent` text.
