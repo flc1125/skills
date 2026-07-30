@@ -101,6 +101,21 @@ a {
   background: color-mix(in srgb, var(--accent) 24%, transparent);
 }
 
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  margin-left: 6px;
+  cursor: pointer;
+  background: var(--muted);
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>') center / contain no-repeat;
+  transition: background 0.15s ease;
+}
+
+input[type="search"]::-webkit-search-cancel-button:hover {
+  background: var(--accent);
+}
+
 .font-display {
   font-family: var(--font-jakarta), var(--font-inter), ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
