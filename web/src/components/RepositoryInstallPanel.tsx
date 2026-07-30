@@ -97,7 +97,7 @@ export function RepositoryInstallPanel() {
                   <p className="mb-1 text-[11px] font-medium text-[var(--muted)]">
                     {index + 1}. {entry.label}
                   </p>
-                  <code className="block min-w-0 overflow-x-auto whitespace-nowrap pb-1 font-mono text-xs text-[var(--foreground)] [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[var(--border-strong)] [&::-webkit-scrollbar-track]:bg-transparent">
+                  <code className="block min-w-0 select-all truncate font-mono text-xs text-[var(--foreground)]" title={entry.command}>
                     {entry.command}
                   </code>
                 </div>
