@@ -91,13 +91,13 @@ export function RepositoryInstallPanel() {
             return (
               <div
                 key={entry.command}
-                className="flex items-center gap-3 rounded-xl bg-[var(--surface-muted)] py-3 pl-4 pr-2.5"
+                className="flex min-w-0 items-center gap-3 rounded-xl bg-[var(--surface-muted)] py-3 pl-4 pr-2.5"
               >
                 <div className="min-w-0 flex-1">
                   <p className="mb-1 text-[11px] font-medium text-[var(--muted)]">
                     {index + 1}. {entry.label}
                   </p>
-                  <code className="block min-w-0 overflow-x-auto whitespace-nowrap font-mono text-xs text-[var(--foreground)]">
+                  <code className="block min-w-0 overflow-x-auto whitespace-nowrap pb-1 font-mono text-xs text-[var(--foreground)] [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[var(--border-strong)] [&::-webkit-scrollbar-track]:bg-transparent">
                     {entry.command}
                   </code>
                 </div>
