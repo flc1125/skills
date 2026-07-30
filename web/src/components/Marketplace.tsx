@@ -212,7 +212,8 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
           A curated collection of reusable agent skills—turn repeatable engineering, research, and knowledge tasks into one-command workflows.
         </motion.p>
 
-        <motion.div variants={heroItem} className="mx-auto mt-9 flex h-14 max-w-xl items-center rounded-full border border-[var(--border)] bg-[var(--surface)] pl-5 pr-2 shadow-[var(--shadow-card)] transition-[border-color,box-shadow] focus-within:border-[color-mix(in_srgb,var(--accent)_45%,var(--border))] focus-within:shadow-[var(--shadow-card-hover)]">
+        <motion.div variants={heroItem} className="mx-auto mt-9 max-w-xl">
+          <div className="flex h-14 items-center rounded-full border border-[var(--border)] bg-[var(--surface)] pl-5 pr-2 shadow-[var(--shadow-card)] transition-[border-color,box-shadow,scale] duration-200 focus-within:scale-[1.02] focus-within:border-[color-mix(in_srgb,var(--accent)_45%,var(--border))] focus-within:shadow-[var(--shadow-card-hover)]">
           <Search size={18} strokeWidth={1.8} className="shrink-0 text-[var(--muted)]" aria-hidden="true" />
           <label htmlFor="skill-search" className="sr-only">Search catalog</label>
           <input
@@ -225,6 +226,7 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
             onChange={(event) => setSearch(event.target.value)}
           />
           <span className="hidden h-9 shrink-0 items-center rounded-full bg-[var(--surface-muted)] px-3 font-mono text-[11px] text-[var(--muted)] sm:flex">⌘ K</span>
+          </div>
         </motion.div>
 
         <motion.div variants={heroItem} className="mt-6 flex flex-wrap items-center justify-center gap-2" aria-label="Collection facts">
