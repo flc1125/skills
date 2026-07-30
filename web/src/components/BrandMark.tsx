@@ -19,14 +19,14 @@ export function BrandMark({ className }: BrandMarkProps) {
       </defs>
       <rect x="2" y="2" width="36" height="36" rx="11" fill="url(#brand-gradient)" />
       <path
-        d="M13 27.5v-15h9.5M13 20.5h7.5"
+        d="M11 27.5v-15h7M11 20.5h5.5"
         stroke="#fff"
         strokeWidth="2.4"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
-        d="M28.5 13.5h-5c-2.3 0-3.5 1.1-3.5 2.8 0 4.2 8.5 2.3 8.5 7.4 0 2.6-2 4-5.2 4h-4.8"
+        d="M30 13.5h-4.2c-2 0-3 1-3 2.6 0 3.9 7.2 2.1 7.2 6.6 0 2.3-1.7 3.6-4.4 3.6h-4.1"
         stroke="#fff"
         strokeWidth="2.4"
         strokeLinecap="round"
