@@ -2,11 +2,24 @@ import type { Metadata } from "next";
 import { Suspense } from 'react';
 import Link from 'next/link';
 import Script from 'next/script';
+import { Inter, Plus_Jakarta_Sans } from 'next/font/google';
 import { GaPageViewTracker } from '@/components/GaPageViewTracker';
 import { GithubNavLink } from '@/components/GithubNavLink';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { BrandMark } from '@/components/BrandMark';
 import "./globals.css";
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+});
+
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  variable: '--font-jakarta',
+  display: 'swap',
+});
 
 const GA_MEASUREMENT_ID = 'G-GYPECK2498';
 
@@ -42,7 +55,7 @@ export default function RootLayout({
   `;
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} ${jakarta.variable}`} suppressHydrationWarning>
       <head>
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
@@ -63,37 +76,33 @@ export default function RootLayout({
         <Suspense fallback={null}>
           <GaPageViewTracker />
         </Suspense>
-        <header className="fixed inset-x-0 top-0 z-40 border-b border-[var(--rule)] bg-[var(--header)] backdrop-blur-xl">
-          <div className="mx-auto flex h-20 max-w-[1360px] items-center justify-between px-5 sm:px-8 lg:px-10">
+        <header className="fixed inset-x-0 top-0 z-40 border-b border-[var(--border)] bg-[var(--header)] backdrop-blur-xl">
+          <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-8">
             <Link
               href="/"
-              className="group flex min-w-0 items-center gap-4 outline-none transition-opacity hover:opacity-80"
+              className="group flex min-w-0 items-center gap-3 outline-none transition-opacity hover:opacity-80"
               aria-label="Go to homepage"
             >
-              <BrandMark className="h-9 w-9 shrink-0" />
-              <span className="font-display min-w-0 text-lg font-extrabold tracking-[-0.03em] text-[var(--foreground)] sm:text-xl">
+              <BrandMark className="h-8 w-8 shrink-0" />
+              <span className="font-display min-w-0 text-lg font-bold tracking-tight text-[var(--foreground)]">
                 Flc&apos;s Skills
               </span>
             </Link>
-            <nav>
-              <div className="grid h-9 w-[73px] grid-cols-2 divide-x divide-[var(--rule)] border border-[var(--rule-strong)] bg-[color-mix(in_srgb,var(--surface)_58%,transparent)]">
-                <ThemeToggle />
-                <GithubNavLink />
-              </div>
+            <nav className="flex items-center gap-2">
+              <ThemeToggle />
+              <GithubNavLink />
             </nav>
           </div>
         </header>
-        <main className="pt-20">{children}</main>
-        <footer className="border-t border-[var(--rule)] bg-[color-mix(in_srgb,var(--surface)_74%,transparent)] py-10">
-          <div className="mx-auto grid max-w-[1360px] gap-6 px-5 sm:px-8 md:grid-cols-[1fr_auto] md:items-end lg:px-10">
-            <div>
-              <p className="font-display mb-2 text-lg font-extrabold tracking-[-0.02em] text-[var(--foreground)]">Flc&apos;s Skills</p>
-              <p className="max-w-xl text-sm leading-6 text-[var(--muted)]">
-                Reusable workflow skills for agents that need clearer operating rules and repeatable outcomes.
-              </p>
-            </div>
-            <p className="text-xs text-[var(--muted)]">
-              © 2026 Flc&apos;s Skills. Created by{' '}
+        <main className="pt-16">{children}</main>
+        <footer className="mt-24 border-t border-[var(--border)] py-10">
+          <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 px-5 text-center sm:px-8">
+            <p className="font-display text-sm font-bold text-[var(--foreground)]">Flc&apos;s Skills</p>
+            <p className="max-w-md text-xs leading-5 text-[var(--muted)]">
+              Reusable workflow skills for agents that need clearer operating rules and repeatable outcomes.
+            </p>
+            <p className="mt-2 text-xs text-[var(--muted)]">
+              © 2026{' '}
               <a
                 href="https://flc.io"
                 target="_blank"

@@ -1,72 +1,76 @@
-# Design System: Technical Atlas
+# Design System: Soft Modern
 
 ## 1. Visual Direction
 
-The marketplace is a technical atlas for reusable agent workflows. It should feel precise, spatial, and quietly cinematic: a map of operational knowledge rather than a conventional documentation site or marketing grid.
+The marketplace is a friendly, modern product surface for discovering reusable agent skills. It should feel light, calm, and effortless: soft cards floating on a quiet canvas, one confident accent color, and generous whitespace.
 
-- Default character: deep navy field, fine coordinate grid, signal nodes, and open record rows.
-- Creativity: 7/10. Distinctive enough to be recognizable, restrained enough for repeated technical use.
-- Density: 5/10. The first viewport stays focused; the catalog becomes denser as users browse.
-- Avoid the previous workshop ledger language entirely: no beige paper, verdigris, register surfaces, oversized black-on-cream typography, or archival stationery motifs.
+- Default character: warm off-white canvas, white rounded cards, diffused shadows, and a single indigo accent.
+- Creativity: 5/10. Familiar product patterns executed with restraint and polish.
+- Density: 4/10. The hero stays airy; the catalog is a comfortable card grid.
+- The previous "technical atlas" language is retired: no coordinate grids, signal nodes, diamond markers, hard rules, or navy station surfaces.
 
 ## 2. Color System
 
-### Dark signal
+### Light theme
 
-- Atlas Ink: `#07101E` — page canvas.
-- Station Surface: `#0D1B2E` — install panel, modal, and elevated controls.
-- Deep Station: `#102238` — secondary surfaces.
-- Primary Text: `#EEF6FF`.
-- Muted Text: `#8FA4BA`.
-- Coral Signal: `#FF715B` — primary accent, active nodes, important actions.
-- Cyan Signal: `#70D7E5` — focus, navigation, and information signal.
+- Background: `#FAF9F7` — warm off-white canvas.
+- Surface: `#FFFFFF` — cards, modal, popovers.
+- Surface Muted: `#F1F0EE` — inset fills (command rows, chips, segmented control track).
+- Foreground: `#1B1E28`.
+- Muted: `#68707F`.
+- Border: `rgba(27, 30, 40, 0.08)` / strong `0.14`.
+- Accent: `#6366F1` (indigo), Accent Strong: `#4F46E5`, Accent Soft: 10% indigo wash.
 
-### Light signal
+### Dark theme
 
-The light theme is the same atlas system under daylight, not a separate aesthetic.
+The dark theme is the same system at night, not a separate aesthetic.
 
-- Canvas: `#E7EEF5`.
-- Station Surface: `#F6F9FC`.
-- Secondary Surface: `#DCE7EF`.
-- Primary Text: `#0B1825`.
-- Muted Text: `#526A7E`.
-- Coral Signal: `#E95545`.
-- Cyan Signal: `#147F91`.
+- Background: `#0E0F13`.
+- Surface: `#17181E`.
+- Surface Muted: `#1F2129`.
+- Foreground: `#F2F3F7`.
+- Muted: `#9AA2B1`.
+- Border: `rgba(242, 243, 247, 0.09)` / strong `0.16`.
+- Accent: `#818CF8`, Accent Strong: `#A5B4FC`, Accent Soft: 14% wash.
 
-Never introduce purple AI gradients, beige paper surfaces, neon outer glows, or pure black.
+The only decorative treatment is a faint indigo radial glow at the top center of the page (`--glow`). No other gradients, no neon, no glassmorphism stacks.
 
 ## 3. Typography
 
-- Display: `Avenir Next`, Avenir, `Century Gothic`, or a humanist sans fallback. Use for the hero, section titles, modal titles, and record names.
-- Interface: Inter or the system sans stack. Use for descriptions, controls, and navigation.
-- Mono: SFMono-Regular, Menlo, or Consolas. Use for install commands, identifiers, counts, dates, and compact status text.
-- Headlines are geometric and humanist, with strong weight and open counters; they must fit cleanly on a 1280px desktop and 390px mobile viewport.
+- Display: `Plus Jakarta Sans` (loaded via `next/font/google` as `--font-jakarta`). Used for the hero, section titles, modal titles, card titles, and the wordmark. Apply via the `.font-display` class.
+- Interface: `Inter` (`--font-inter`). Body text, controls, navigation.
+- Mono: SFMono-Regular/Menlo stack. Install commands, dates, file counts, keyboard hints.
+- Headings use tight tracking and bold/extrabold weights; body text is regular/medium with relaxed leading.
 
 ## 4. Layout
 
-- Maximum content width: `1360px`.
-- Header: simple brand mark, theme selector, and GitHub link.
-- First viewport: asymmetric two-column composition. Search and collection facts sit with the main statement; the install station is the dominant secondary object.
-- Catalog: a full-width surface band containing open horizontal records separated by signal rules. Fade the band in over 48px at the top, then keep the surface opaque through the bottom of the page so record dividers stay easy to scan without reintroducing the page grid. Do not turn it into a generic card grid.
-- Detail: a large focused modal that preserves browsing context and uses the same station geometry.
-- Mobile: stack the hero and install station; catalog rows reduce metadata without losing the primary action.
+- Maximum content width: `72rem` (`max-w-6xl`).
+- Header: fixed, 64px, blurred translucent background, hairline bottom border. Left: rounded gradient brand mark + wordmark. Right: theme selector and GitHub link as circular icon buttons.
+- Hero: centered composition — headline, subtext, the search field as the hero object (large pill with ⌘K badge), then fact pills (skill count, file count).
+- Quick install: one centered `max-w-2xl` card below the hero containing the provider segmented control and command rows.
+- Catalog: a responsive card grid — 1 column on mobile, 2 on `sm`, 3 on `lg` — with a small heading row above it.
+- Detail: a centered `rounded-3xl` modal that preserves browsing context.
+- Footer: centered wordmark, one-line description, copyright.
+- Mobile: everything stacks; cards go full width; the search pill keeps its primary action.
 
 ## 5. Component Language
 
-- Brand mark: a white geometric SVG `FS` monogram on a coral cut-corner tile, offset over an Atlas Ink tile to create a compact two-layer signal mark. Keep the ink layer structural rather than shadow-like.
-- Signal nodes: small diamonds or points, used sparingly for catalog position and spatial rhythm.
-- Install station: one elevated panel with a coral top rule and exact copy controls.
-- Search: one long command-like field with a cyan icon zone and keyboard shortcut.
-- Catalog rows: open, border-separated, and hover toward a faint coral signal wash.
-- Buttons: square or lightly rectangular, minimum 44px target, thin structural border, no pill treatment unless required by an external component.
-- Empty/error states: inline atlas messages near the affected content.
+- Brand mark: white `FS` monogram on a rounded-square (`rx=11`) indigo gradient tile.
+- Cards: `rounded-2xl`, 1px `--border`, `--shadow-card`. Hover: `-translate-y-1`, accent-tinted border, `--shadow-card-hover`.
+- Buttons and inputs: `rounded-full` for pills/icon buttons, `rounded-xl` for inset rows. Minimum 44px touch target where practical.
+- Chips/badges: `rounded-full` fills of `--surface-muted`; accent actions use `--accent-soft` background with `--accent` text.
+- Search: one large pill field, search icon on the left, `⌘K` kbd chip on the right, accent focus ring via border + shadow.
+- Segmented control: muted track pill with a white/surface sliding indicator (`layoutId` spring).
+- Copy buttons: circular, surface background; success state fills with `--accent`.
+- Empty/error states: centered, dashed-border panel or soft accent wash, inline near the affected content.
 
 ## 6. Motion
 
-- Use 160–220ms state transitions and restrained spring entrances.
-- Animate opacity and transform for catalog filtering and modal transitions.
-- Hover states may illuminate a signal node or move an arrow by a few pixels.
-- Respect `prefers-reduced-motion` everywhere.
+- Springs over easings: cards enter with a soft spring (`stiffness ~260, damping ~28`) and a short per-item stagger (≤12 items, ~35ms each).
+- Catalog filtering uses `AnimatePresence mode="popLayout"` with `layout` springs; the stagger delay applies to entrance only, never to layout reflow.
+- Modal: backdrop fade (200ms), panel spring from `scale 0.96 / y 16`.
+- Hover: lift cards, slide arrows a pixel, tint icon buttons. 150–250ms.
+- Respect `prefers-reduced-motion` everywhere (`MotionConfig reducedMotion="user"` plus the global CSS guard).
 
 ## 7. Functional Invariants
 
@@ -84,11 +88,10 @@ Never introduce purple AI gradients, beige paper surfaces, neon outer glows, or 
 
 ## 8. Anti-patterns
 
-- No reuse of the previous ledger/workshop visual language.
-- No beige, paper clay, verdigris, or stationery metaphors.
-- No default bento grid or repeated floating cards.
+- No revival of the atlas/ledger visual languages (grids, signal nodes, navy stations, beige paper).
+- No heavy gradients, glassmorphism stacks, or glow effects beyond the single page glow.
+- No sharp-cornered cards or hard uppercase microcopy.
 - No fake metrics or fabricated proof.
-- No decorative badge clutter or hero eyebrow labels.
-- No generic AI gradients or glow-heavy cyberpunk treatment.
+- No decorative badge clutter.
 - No text glyphs when an existing icon component communicates the action.
 - No clipped commands, headings, or mobile controls.

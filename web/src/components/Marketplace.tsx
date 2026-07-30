@@ -169,71 +169,60 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
   };
 
   return (
-    <div className="relative mx-auto max-w-[1360px] px-5 sm:px-8 lg:px-10">
-      <section className="relative grid min-h-[42rem] gap-10 border-b border-[var(--rule)] py-12 md:grid-cols-[minmax(0,1.08fr)_minmax(22rem,0.92fr)] md:items-center lg:gap-16 lg:py-14">
-        <div className="signal-orbit" aria-hidden="true" />
+    <div className="mx-auto max-w-6xl px-5 sm:px-8">
+      <section className="mx-auto max-w-3xl pb-14 pt-16 text-center sm:pt-24">
+        <h1 className="font-display text-[clamp(2.6rem,6vw,4.25rem)] font-extrabold leading-[1.05] tracking-tight text-[var(--foreground)]">
+          Find your next
+          <span className="text-[var(--accent)]"> workflow.</span>
+        </h1>
+        <p className="mx-auto mt-5 max-w-xl text-base leading-7 text-[var(--muted)] sm:text-lg sm:leading-8">
+          A curated collection of reusable agent skills—turn repeatable engineering, research, and knowledge tasks into one-command workflows.
+        </p>
 
-        <div className="relative z-10 min-w-0 max-w-3xl">
-          <h1 className="font-display text-[clamp(3.4rem,5.2vw,5rem)] font-extrabold leading-[0.94] tracking-[-0.06em] text-[var(--foreground)]">
-            Find the right skill.
-            <br />
-            Start with the <span className="text-[var(--accent)]">exact workflow.</span>
-          </h1>
-          <p className="mt-7 max-w-[38rem] text-base leading-8 text-[var(--muted)] sm:text-lg">
-            A curated atlas of reusable agent workflows—built to turn repeatable engineering, research, and knowledge tasks into precise operating systems.
-          </p>
-
-          <div className="mt-8 flex h-16 max-w-[38rem] items-center border border-[var(--rule-strong)] bg-[color-mix(in_srgb,var(--background)_82%,transparent)] shadow-[0_20px_55px_-34px_rgba(0,0,0,0.55)]">
-            <span className="grid h-full w-16 shrink-0 place-items-center border-r border-[var(--rule)] text-[var(--signal)]" aria-hidden="true">
-              <Search size={20} strokeWidth={1.5} />
-            </span>
-            <label htmlFor="skill-search" className="sr-only">Search catalog</label>
-            <input
-              ref={searchInputRef}
-              id="skill-search"
-              type="search"
-              placeholder="Search skills by name or workflow"
-              className="h-full min-w-0 flex-1 bg-transparent px-4 text-sm font-medium text-[var(--foreground)] outline-none placeholder:text-[var(--muted)] sm:text-base"
-              value={search}
-              onChange={(event) => setSearch(event.target.value)}
-            />
-            <span className="hidden h-full shrink-0 place-items-center border-l border-[var(--rule)] px-4 font-mono text-[11px] text-[var(--muted)] sm:grid">⌘ K</span>
-          </div>
-
-          <div className="mt-7 flex flex-wrap gap-x-10 gap-y-3" aria-label="Collection facts">
-            <div className="flex items-baseline gap-3">
-              <strong className="font-display text-2xl font-extrabold text-[var(--accent)]">{totalSkills}</strong>
-              <span className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--muted)]">skills mapped</span>
-            </div>
-            <div className="flex items-baseline gap-3">
-              <strong className="font-display text-2xl font-extrabold text-[var(--accent)]">{totalFiles}</strong>
-              <span className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--muted)]">source files</span>
-            </div>
-          </div>
+        <div className="mx-auto mt-9 flex h-14 max-w-xl items-center rounded-full border border-[var(--border)] bg-[var(--surface)] pl-5 pr-2 shadow-[var(--shadow-card)] transition-[border-color,box-shadow] focus-within:border-[color-mix(in_srgb,var(--accent)_45%,var(--border))] focus-within:shadow-[var(--shadow-card-hover)]">
+          <Search size={18} strokeWidth={1.8} className="shrink-0 text-[var(--muted)]" aria-hidden="true" />
+          <label htmlFor="skill-search" className="sr-only">Search catalog</label>
+          <input
+            ref={searchInputRef}
+            id="skill-search"
+            type="search"
+            placeholder="Search skills by name or workflow"
+            className="h-full min-w-0 flex-1 bg-transparent px-3 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--muted)] sm:text-base"
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+          />
+          <span className="hidden h-9 shrink-0 items-center rounded-full bg-[var(--surface-muted)] px-3 font-mono text-[11px] text-[var(--muted)] sm:flex">⌘ K</span>
         </div>
 
-        <div className="relative z-10 min-w-0">
-          <RepositoryInstallPanel />
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-2" aria-label="Collection facts">
+          <span className="inline-flex h-8 items-center rounded-full bg-[var(--surface-muted)] px-3.5 text-xs font-medium text-[var(--muted)]">
+            <strong className="mr-1.5 font-display font-bold text-[var(--foreground)]">{totalSkills}</strong> skills
+          </span>
+          <span className="inline-flex h-8 items-center rounded-full bg-[var(--surface-muted)] px-3.5 text-xs font-medium text-[var(--muted)]">
+            <strong className="mr-1.5 font-display font-bold text-[var(--foreground)]">{totalFiles}</strong> source files
+          </span>
+          <span className="inline-flex h-8 items-center rounded-full bg-[var(--surface-muted)] px-3.5 text-xs font-medium text-[var(--muted)]">
+            One command to install
+          </span>
         </div>
       </section>
 
-      <section className="catalog-band py-12 sm:py-16" aria-labelledby="catalog-heading">
-        <div className="grid gap-4 border-b border-[var(--rule-strong)] pb-5 sm:grid-cols-[1fr_auto] sm:items-end">
-          <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2">
-            <h2 id="catalog-heading" className="font-display text-4xl font-extrabold tracking-[-0.045em] text-[var(--foreground)]">
-              Browse skills
-            </h2>
-            <p className="text-sm text-[var(--muted)]" aria-live="polite">
-              {String(orderedSkills.length).padStart(2, '0')} visible records
-            </p>
-          </div>
-          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--muted)]">
-            Newest signal first
+      <section className="mx-auto max-w-2xl pb-16">
+        <RepositoryInstallPanel />
+      </section>
+
+      <section className="pb-8" aria-labelledby="catalog-heading">
+        <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
+          <h2 id="catalog-heading" className="font-display text-2xl font-bold tracking-tight text-[var(--foreground)] sm:text-3xl">
+            Browse skills
+          </h2>
+          <p className="text-sm text-[var(--muted)]" aria-live="polite">
+            {orderedSkills.length} {orderedSkills.length === 1 ? 'skill' : 'skills'} · newest first
           </p>
         </div>
 
         <MotionConfig reducedMotion="user">
-          <div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <AnimatePresence mode="popLayout">
               {orderedSkills.map((skill, index) => (
                 <SkillCard
@@ -248,11 +237,13 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
         </MotionConfig>
 
         {orderedSkills.length === 0 ? (
-          <div className="border-b border-[var(--rule)] py-16">
-            <div className="mb-5 h-2 w-2 rotate-45 border border-[var(--accent)] shadow-[0_0_14px_color-mix(in_srgb,var(--accent)_60%,transparent)]" />
-            <h3 className="font-display text-2xl font-extrabold tracking-[-0.03em] text-[var(--foreground)]">No matching signal</h3>
-            <p className="mt-2 max-w-md text-sm leading-6 text-[var(--muted)]">
-              Try a broader workflow, tool, or outcome to restore the atlas.
+          <div className="flex flex-col items-center rounded-2xl border border-dashed border-[var(--border-strong)] py-16 text-center">
+            <span className="grid h-11 w-11 place-items-center rounded-full bg-[var(--surface-muted)] text-[var(--muted)]">
+              <Search size={18} strokeWidth={1.8} />
+            </span>
+            <h3 className="font-display mt-4 text-lg font-bold text-[var(--foreground)]">No matching skills</h3>
+            <p className="mt-1 max-w-sm text-sm leading-6 text-[var(--muted)]">
+              Try a broader workflow, tool, or outcome.
             </p>
           </div>
         ) : null}

@@ -8,11 +8,16 @@ export default async function Home() {
   return (
     <div className="min-h-screen">
       <Suspense fallback={
-        <div className="mx-auto max-w-[1360px] px-5 py-24 sm:px-8 lg:px-10">
-          <div className="animate-pulse border-y border-[var(--rule)] py-16">
-            <div className="mb-5 h-3 w-28 bg-[var(--surface-muted)]"></div>
-            <div className="mb-3 h-12 w-3/5 bg-[var(--surface-muted)]"></div>
-            <div className="h-12 w-2/5 bg-[var(--surface-muted)]"></div>
+        <div className="mx-auto max-w-6xl px-5 py-24 sm:px-8">
+          <div className="mx-auto flex max-w-3xl animate-pulse flex-col items-center">
+            <div className="mb-4 h-12 w-3/5 rounded-2xl bg-[var(--surface-muted)]"></div>
+            <div className="mb-10 h-12 w-2/5 rounded-2xl bg-[var(--surface-muted)]"></div>
+            <div className="h-14 w-full max-w-xl rounded-full bg-[var(--surface-muted)]"></div>
+          </div>
+          <div className="mt-20 grid animate-pulse gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {[0, 1, 2, 3, 4, 5].map((item) => (
+              <div key={item} className="h-36 rounded-2xl bg-[var(--surface-muted)]"></div>
+            ))}
           </div>
         </div>
       }>

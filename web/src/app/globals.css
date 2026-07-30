@@ -8,33 +8,41 @@
 }
 
 :root {
-  --background: #e7eef5;
-  --foreground: #0b1825;
-  --surface: #f6f9fc;
-  --surface-muted: #dce7ef;
-  --muted: #526a7e;
-  --rule: rgba(32, 56, 76, 0.18);
-  --rule-strong: rgba(32, 56, 76, 0.34);
-  --accent: #e95545;
-  --accent-strong: #c83f33;
-  --signal: #147f91;
-  --shadow-station: 0 32px 90px -46px rgba(18, 40, 60, 0.42);
-  --header: rgba(231, 238, 245, 0.88);
+  --background: #faf9f7;
+  --surface: #ffffff;
+  --surface-muted: #f1f0ee;
+  --foreground: #1b1e28;
+  --muted: #68707f;
+  --border: rgba(27, 30, 40, 0.08);
+  --border-strong: rgba(27, 30, 40, 0.14);
+  --accent: #6366f1;
+  --accent-strong: #4f46e5;
+  --accent-soft: rgba(99, 102, 241, 0.1);
+  --on-accent: #ffffff;
+  --header: rgba(250, 249, 247, 0.78);
+  --shadow-card: 0 1px 2px rgba(27, 30, 40, 0.05), 0 10px 30px -14px rgba(27, 30, 40, 0.14);
+  --shadow-card-hover: 0 2px 4px rgba(27, 30, 40, 0.06), 0 20px 44px -16px rgba(79, 70, 229, 0.22);
+  --shadow-modal: 0 24px 70px -12px rgba(27, 30, 40, 0.3);
+  --glow: radial-gradient(ellipse 60% 44% at 50% -6%, rgba(99, 102, 241, 0.13), transparent 70%);
 }
 
 .dark {
-  --background: #07101e;
-  --foreground: #eef6ff;
-  --surface: #0d1b2e;
-  --surface-muted: #102238;
-  --muted: #8fa4ba;
-  --rule: rgba(158, 190, 220, 0.18);
-  --rule-strong: rgba(158, 190, 220, 0.34);
-  --accent: #ff715b;
-  --accent-strong: #ff8a78;
-  --signal: #70d7e5;
-  --shadow-station: 0 34px 90px -34px rgba(0, 0, 0, 0.58);
-  --header: rgba(7, 16, 30, 0.88);
+  --background: #0e0f13;
+  --surface: #17181e;
+  --surface-muted: #1f2129;
+  --foreground: #f2f3f7;
+  --muted: #9aa2b1;
+  --border: rgba(242, 243, 247, 0.09);
+  --border-strong: rgba(242, 243, 247, 0.16);
+  --accent: #818cf8;
+  --accent-strong: #a5b4fc;
+  --accent-soft: rgba(129, 140, 248, 0.14);
+  --on-accent: #12131f;
+  --header: rgba(14, 15, 19, 0.72);
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 32px -14px rgba(0, 0, 0, 0.5);
+  --shadow-card-hover: 0 2px 4px rgba(0, 0, 0, 0.35), 0 22px 48px -16px rgba(99, 102, 241, 0.32);
+  --shadow-modal: 0 24px 70px -12px rgba(0, 0, 0, 0.65);
+  --glow: radial-gradient(ellipse 60% 44% at 50% -6%, rgba(129, 140, 248, 0.15), transparent 70%);
 }
 
 html {
@@ -45,11 +53,8 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   color: var(--foreground);
-  background:
-    radial-gradient(circle at 82% 10%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 24rem),
-    radial-gradient(circle at 62% 36%, color-mix(in srgb, var(--signal) 7%, transparent), transparent 28rem),
-    linear-gradient(180deg, var(--background), color-mix(in srgb, var(--background) 92%, var(--surface-muted)));
-  font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--background);
+  font-family: var(--font-inter), ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   text-rendering: optimizeLegibility;
 }
 
@@ -59,12 +64,7 @@ body::before {
   z-index: -1;
   content: "";
   pointer-events: none;
-  opacity: 0.58;
-  background-image:
-    linear-gradient(color-mix(in srgb, var(--rule) 42%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--rule) 42%, transparent) 1px, transparent 1px);
-  background-size: 80px 80px;
-  mask-image: linear-gradient(to bottom, black 0 66%, transparent 94%);
+  background: var(--glow);
 }
 
 button,
@@ -77,23 +77,18 @@ a {
   -webkit-tap-highlight-color: transparent;
 }
 
-button:active,
-a:active {
-  transform: translateY(1px);
-}
-
 :focus-visible {
-  outline: 2px solid var(--signal);
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
 
 ::selection {
   color: var(--foreground);
-  background: color-mix(in srgb, var(--accent) 30%, transparent);
+  background: color-mix(in srgb, var(--accent) 24%, transparent);
 }
 
 .font-display {
-  font-family: "Avenir Next", Avenir, "Century Gothic", "Trebuchet MS", "Segoe UI", sans-serif;
+  font-family: var(--font-jakarta), var(--font-inter), ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 .font-mono,
@@ -102,63 +97,8 @@ pre {
   font-family: "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
 }
 
-.signal-orbit {
-  position: absolute;
-  top: 2.5rem;
-  right: -2rem;
-  width: min(44vw, 36rem);
-  height: 18rem;
-  pointer-events: none;
-  border-top: 1px solid color-mix(in srgb, var(--signal) 48%, transparent);
-  border-right: 1px solid color-mix(in srgb, var(--signal) 18%, transparent);
-  border-radius: 0 18rem 0 0;
-  transform: skewY(-7deg);
-  opacity: 0.6;
-}
-
-.signal-orbit::before,
-.signal-orbit::after {
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  content: "";
-  border: 1px solid var(--accent);
-  border-radius: 999px;
-  background: var(--background);
-  box-shadow: 0 0 18px color-mix(in srgb, var(--accent) 70%, transparent);
-}
-
-.signal-orbit::before {
-  top: -4px;
-  left: 6rem;
-}
-
-.signal-orbit::after {
-  top: 8rem;
-  right: -4px;
-}
-
-.catalog-band {
-  --catalog-background: color-mix(in srgb, var(--surface) 94%, var(--background));
-  position: relative;
-  isolation: isolate;
-}
-
-.catalog-band::before {
-  position: absolute;
-  inset: 0 calc(50% - 50vw);
-  z-index: -1;
-  content: "";
-  background: linear-gradient(
-    to bottom,
-    transparent 0,
-    var(--catalog-background) 3rem,
-    var(--catalog-background) 100%
-  );
-}
-
 .custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
@@ -166,17 +106,8 @@ pre {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: color-mix(in srgb, var(--muted) 42%, transparent);
-}
-
-@media (max-width: 767px) {
-  body::before {
-    background-size: 48px 48px;
-  }
-
-  .signal-orbit {
-    display: none;
-  }
+  background: color-mix(in srgb, var(--muted) 36%, transparent);
+  border-radius: 999px;
 }
 
 @media (prefers-reduced-motion: reduce) {

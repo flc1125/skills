@@ -90,25 +90,25 @@ export function ThemeToggle() {
   };
 
   return (
-    <Menu as="div" className="relative h-full w-full">
+    <Menu as="div" className="relative">
       <Menu.Button
         aria-label={`Theme selector, current theme: ${activeOption.label}`}
         title={`Theme: ${activeOption.label}`}
-        className="grid h-full w-full place-items-center text-[var(--muted)] transition-colors hover:bg-[color-mix(in_srgb,var(--surface-muted)_48%,transparent)] hover:text-[var(--foreground)]"
+        className="grid h-9 w-9 place-items-center rounded-full text-[var(--muted)] transition-colors hover:bg-[var(--surface-muted)] hover:text-[var(--foreground)]"
       >
-        <ActiveIcon size={15} />
+        <ActiveIcon size={16} />
       </Menu.Button>
 
       <Transition
         as={Fragment}
         enter="transition ease-out duration-150"
-        enterFrom="opacity-0 -translate-y-1"
-        enterTo="opacity-100 translate-y-0"
+        enterFrom="opacity-0 -translate-y-1 scale-95"
+        enterTo="opacity-100 translate-y-0 scale-100"
         leave="transition ease-in duration-100"
-        leaveFrom="opacity-100 translate-y-0"
-        leaveTo="opacity-0 -translate-y-1"
+        leaveFrom="opacity-100 translate-y-0 scale-100"
+        leaveTo="opacity-0 -translate-y-1 scale-95"
       >
-        <Menu.Items className="absolute right-0 mt-1.5 w-38 origin-top-right border border-[var(--rule-strong)] bg-[var(--surface)] p-1 shadow-[var(--shadow-station)] backdrop-blur-md focus:outline-none">
+        <Menu.Items className="absolute right-0 mt-2 w-40 origin-top-right rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-1.5 shadow-[var(--shadow-card-hover)] focus:outline-none">
           {OPTIONS.map((option) => {
             const Icon = option.icon;
             const isActive = option.value === theme;
@@ -119,18 +119,18 @@ export function ThemeToggle() {
                   <button
                     type="button"
                     onClick={() => handleThemeChange(option.value)}
-                    className={`flex min-h-10 w-full items-center justify-between px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.04em] transition-colors ${
+                    className={`flex min-h-10 w-full items-center justify-between rounded-xl px-3 py-2 text-[13px] font-medium transition-colors ${
                       active
-                        ? 'bg-[var(--surface-muted)] text-[var(--accent)]'
+                        ? 'bg-[var(--accent-soft)] text-[var(--accent)]'
                         : 'text-[var(--muted)]'
                     }`}
                   >
-                    <span className="flex items-center gap-2 text-[11px]">
-                      <Icon size={14} />
+                    <span className="flex items-center gap-2.5">
+                      <Icon size={15} />
                       <span>{option.label}</span>
                     </span>
                     <span className="w-4">
-                      {isActive ? <Check size={12} /> : null}
+                      {isActive ? <Check size={13} /> : null}
                     </span>
                   </button>
                 )}

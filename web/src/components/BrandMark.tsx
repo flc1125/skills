@@ -11,21 +11,26 @@ export function BrandMark({ className }: BrandMarkProps) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <path d="M7 7h27l4 4v27H11l-4-4V7Z" fill="#0B1825" />
-      <path d="M2 2h27l4 4v27H6l-4-4V2Z" fill="var(--accent)" />
+      <defs>
+        <linearGradient id="brand-gradient" x1="4" y1="2" x2="36" y2="38" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#818CF8" />
+          <stop offset="1" stopColor="#6366F1" />
+        </linearGradient>
+      </defs>
+      <rect x="2" y="2" width="36" height="36" rx="11" fill="url(#brand-gradient)" />
       <path
-        d="M8.5 25v-15h9.25m-9.25 7h7.25"
+        d="M13 27.5v-15h9.5M13 20.5h7.5"
         stroke="#fff"
-        strokeWidth="2"
-        strokeLinecap="square"
-        strokeLinejoin="miter"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
-        d="M27 10.5h-4.75c-2.1 0-3.25 1.05-3.25 2.65 0 4.1 8 2.15 8 7.2 0 2.85-2 4.65-5.15 4.65H18"
+        d="M28.5 13.5h-5c-2.3 0-3.5 1.1-3.5 2.8 0 4.2 8.5 2.3 8.5 7.4 0 2.6-2 4-5.2 4h-4.8"
         stroke="#fff"
-        strokeWidth="2"
-        strokeLinecap="square"
-        strokeLinejoin="miter"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

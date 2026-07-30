@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { Check, Copy } from 'lucide-react';
+import { motion } from 'motion/react';
+import { Check, Copy, TerminalSquare } from 'lucide-react';
 import { visibleRepositoryInstallMethods } from '@/lib/install-methods';
 import { trackEvent } from '@/lib/gtag';
 
@@ -40,58 +41,73 @@ export function RepositoryInstallPanel() {
   };
 
   return (
-    <aside className="relative ml-auto w-full max-w-[31rem] border-t border-[color-mix(in_srgb,var(--accent)_68%,transparent)] bg-[color-mix(in_srgb,var(--surface)_94%,transparent)] shadow-[var(--shadow-station)]">
-      <span className="absolute -top-1 left-0 h-2 w-2 bg-[var(--accent)] shadow-[0_0_18px_color-mix(in_srgb,var(--accent)_75%,transparent)]" aria-hidden="true" />
+    <aside className="w-full rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-card)] sm:p-6">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h2 className="font-display flex items-center gap-2 text-base font-bold tracking-tight text-[var(--foreground)]">
+          <TerminalSquare size={18} strokeWidth={1.8} className="text-[var(--accent)]" />
+          Quick install
+        </h2>
+        <div className="flex rounded-full bg-[var(--surface-muted)] p-1" aria-label="Install provider">
+          {methods.map((method) => {
+            const isActive = method.id === activeMethod.id;
 
-      <div className="flex min-h-16 flex-col gap-4 border-b border-[var(--rule)] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-        <h2 className="font-display text-xl font-extrabold tracking-[-0.02em] text-[var(--foreground)]">Install plugin</h2>
-        <div className="grid h-9 w-36 grid-cols-2 divide-x divide-[var(--rule)] border border-[var(--rule-strong)]" aria-label="Install provider">
-          {methods.map((method) => (
-            <button
-              key={method.id}
-              type="button"
-              onClick={() => setActiveMethodId(method.id)}
-              aria-pressed={method.id === activeMethod.id}
-              className={`grid h-full min-w-0 place-items-center px-2 font-mono font-semibold uppercase tracking-[0.12em] transition-colors ${
-                method.id === activeMethod.id
-                  ? 'bg-[color-mix(in_srgb,var(--signal)_9%,transparent)] text-[var(--signal)]'
-                  : 'text-[var(--muted)] hover:bg-[color-mix(in_srgb,var(--surface-muted)_45%,transparent)] hover:text-[var(--foreground)]'
-              }`}
-            >
-              <span className="text-[10px]">{method.label}</span>
-            </button>
-          ))}
+            return (
+              <button
+                key={method.id}
+                type="button"
+                onClick={() => setActiveMethodId(method.id)}
+                aria-pressed={isActive}
+                className={`relative rounded-full px-4 py-1.5 text-xs font-semibold transition-colors ${
+                  isActive ? 'text-[var(--foreground)]' : 'text-[var(--muted)] hover:text-[var(--foreground)]'
+                }`}
+              >
+                {isActive ? (
+                  <motion.span
+                    layoutId="install-provider-indicator"
+                    className="absolute inset-0 rounded-full bg-[var(--surface)] shadow-[var(--shadow-card)]"
+                    transition={{ type: 'spring', stiffness: 400, damping: 32 }}
+                  />
+                ) : null}
+                <span className="relative">{method.label}</span>
+              </button>
+            );
+          })}
         </div>
       </div>
 
       {activeMethod.status === 'planned' ? (
-        <div className="px-5 py-8">
-          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">Signal pending</p>
-          <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
+        <div className="mt-5 rounded-xl bg-[var(--accent-soft)] px-4 py-4">
+          <p className="text-sm font-semibold text-[var(--accent)]">Coming soon</p>
+          <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
             Claude plugin support is planned but not available yet. Use the Codex channel for the current install path.
           </p>
         </div>
       ) : (
-        <div>
+        <div className="mt-5 grid gap-3">
           {activeMethod.commands.map((entry, index) => {
             const copyKey = `${activeMethod.id}-${index}`;
             const isCopied = copiedKey === copyKey;
 
             return (
-              <div key={entry.command} className="relative border-b border-[var(--rule)] px-5 py-5 last:border-b-0 sm:pr-16">
-                <p className="mb-2 font-mono text-[9px] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
-                  {String(index + 1).padStart(2, '0')} · {entry.label}
-                </p>
-                <code className="block min-w-0 break-all pr-12 text-[11px] leading-5 text-[var(--foreground)] sm:overflow-x-auto sm:whitespace-nowrap sm:pr-0 sm:text-xs sm:leading-6">
-                  {entry.command}
-                </code>
+              <div
+                key={entry.command}
+                className="flex items-center gap-3 rounded-xl bg-[var(--surface-muted)] py-3 pl-4 pr-2.5"
+              >
+                <div className="min-w-0 flex-1">
+                  <p className="mb-1 text-[11px] font-medium text-[var(--muted)]">
+                    {index + 1}. {entry.label}
+                  </p>
+                  <code className="block min-w-0 overflow-x-auto whitespace-nowrap font-mono text-xs text-[var(--foreground)]">
+                    {entry.command}
+                  </code>
+                </div>
                 <button
                   type="button"
                   onClick={() => copyCommands(copyKey, entry.command, entry.label)}
-                  className={`absolute right-4 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center border transition-colors ${
+                  className={`grid h-9 w-9 shrink-0 place-items-center rounded-full transition-all ${
                     isCopied
-                      ? 'border-[var(--accent)] bg-[var(--accent)] text-[var(--background)]'
-                      : 'border-[var(--rule-strong)] bg-[var(--background)] text-[var(--muted)] hover:border-[var(--accent)] hover:text-[var(--accent)]'
+                      ? 'bg-[var(--accent)] text-[var(--on-accent)]'
+                      : 'bg-[var(--surface)] text-[var(--muted)] shadow-[var(--shadow-card)] hover:text-[var(--accent)]'
                   }`}
                   aria-label={`Copy ${entry.label} command`}
                 >
