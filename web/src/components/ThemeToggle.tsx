@@ -46,6 +46,19 @@ function applyTheme(mode: ThemeMode) {
   root.style.colorScheme = resolvedTheme;
 }
 
+// The snapshot must change whenever the *resolved* appearance can change,
+// otherwise React bails out of re-rendering and the effect applying the theme
+// never re-runs. In non-system modes the system theme is irrelevant, so the
+// resolved part stays empty and system changes leave the snapshot untouched.
+function getThemeSnapshot(): string {
+  const mode = getStoredTheme();
+  return mode === 'system' ? `${mode}:${getSystemTheme()}` : mode;
+}
+
+function getServerThemeSnapshot(): string {
+  return 'system:light';
+}
+
 const subscribers = new Set<() => void>();
 let mediaQuery: MediaQueryList | null = null;
 
@@ -59,11 +72,7 @@ function ensureMediaQuerySubscription() {
   }
 
   mediaQuery = window.matchMedia(MEDIA_QUERY);
-  mediaQuery.addEventListener('change', () => {
-    if (getStoredTheme() === 'system') {
-      emitThemeChange();
-    }
-  });
+  mediaQuery.addEventListener('change', emitThemeChange);
 }
 
 function subscribe(callback: () => void) {
@@ -76,13 +85,17 @@ function subscribe(callback: () => void) {
 }
 
 export function ThemeToggle() {
-  const theme = useSyncExternalStore(subscribe, getStoredTheme, (): ThemeMode => 'system');
+  const themeSnapshot = useSyncExternalStore(subscribe, getThemeSnapshot, getServerThemeSnapshot);
+  const theme = themeSnapshot.split(':')[0] as ThemeMode;
   const activeOption = OPTIONS.find((option) => option.value === theme) ?? OPTIONS[0];
   const ActiveIcon = activeOption.icon;
 
   useEffect(() => {
     applyTheme(theme);
-  }, [theme]);
+    // themeSnapshot is the real dependency: in system mode it changes when the
+    // OS theme flips even though `theme` stays 'system', and the effect must
+    // re-run to re-apply the resolved appearance.
+  }, [theme, themeSnapshot]);
 
   const handleThemeChange = (mode: ThemeMode) => {
     localStorage.setItem(STORAGE_KEY, mode);
