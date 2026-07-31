@@ -18,11 +18,12 @@
     "clsx": "^2.1.1",
     "glob": "^13.0.0",
     "gray-matter": "^4.0.3",
-    "lucide-react": "^0.577.0",
+    "lucide-react": "^1.28.0",
     "motion": "^12.0.0",
     "next": "^16.1.6",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-icons": "^5.7.0",
     "react-markdown": "^10.0.0",
     "remark-gfm": "^4.0.1",
     "tailwind-merge": "^3.0.0"
