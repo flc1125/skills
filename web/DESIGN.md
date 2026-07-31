@@ -84,6 +84,7 @@ The only decorative treatment is a faint tangerine radial glow at the top center
 - Modal: backdrop fade (200ms), panel spring from `scale 0.96 / y 16`. The modal receives the card's display name as `fallbackName` so the real title shows even before the fetch resolves.
 - The header starts borderless/translucent and gains its border + a faint shadow (`--shadow-header`, lighter than card shadows) once the page is scrolled (>8px), over a 300ms transition.
 - The theme toggle icon spins in with a spring (rotate + scale) whenever the theme changes.
+- A floating back-to-top button (accent circle, bottom-right, safe-area aware) appears once half of the first screen has scrolled past (`scrollY > innerHeight * 0.5`, consistent across display sizes), springing in/out; its outer ring fills with scroll progress via `stroke-dashoffset`, doubling as a silent position indicator. Scrolling back to top respects `prefers-reduced-motion`.
 - Inside the modal, loading skeleton / error / markdown content swap through a quick `AnimatePresence mode="wait"` fade (150–200ms) rather than a hard cut.
 - Respect `prefers-reduced-motion` everywhere (`MotionConfig reducedMotion="user"` plus the global CSS guard).
 
