@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { AnimatePresence, MotionConfig, animate, motion, useMotionValue, useReducedMotion, useTransform } from 'motion/react';
 import type { Variants } from 'motion/react';
@@ -63,7 +63,13 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
   const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
   const [isLoadingSkill, setIsLoadingSkill] = useState(false);
   const [skillLoadError, setSkillLoadError] = useState<string | null>(null);
-  const [hasMounted, setHasMounted] = useState(false);
+  // Hydration-safe mount flag without setState-in-effect: false during SSR
+  // and the first client render, true afterwards.
+  const hasMounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
   const activeSelectedSkill =
     selectedSkillSlug && selectedSkill?.slug === selectedSkillSlug ? selectedSkill : null;
   const selectedSkillMeta = selectedSkillSlug
@@ -71,9 +77,15 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
     : null;
   const isModalOpen = hasMounted && selectedSkillSlug !== null;
 
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
+  // Reset detail state when the selected slug changes or clears, using the
+  // render-time adjustment pattern instead of an effect.
+  const [prevSlug, setPrevSlug] = useState(selectedSkillSlug);
+  if (prevSlug !== selectedSkillSlug) {
+    setPrevSlug(selectedSkillSlug);
+    setSelectedSkill(null);
+    setIsLoadingSkill(false);
+    setSkillLoadError(null);
+  }
 
   useEffect(() => {
     const handleShortcut = (event: KeyboardEvent) => {
@@ -88,14 +100,7 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
   }, []);
 
   useEffect(() => {
-    if (!hasMounted) {
-      return;
-    }
-
-    if (!selectedSkillSlug) {
-      setSelectedSkill(null);
-      setIsLoadingSkill(false);
-      setSkillLoadError(null);
+    if (!hasMounted || !selectedSkillSlug) {
       return;
     }
 

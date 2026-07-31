@@ -79,9 +79,16 @@ export function SkillModal({ skill, fallbackName, isOpen, isLoading, error, onCl
     }
   }, [copied]);
 
-  // Reset content scroll position whenever the modal opens or the skill changes.
-  useEffect(() => {
+  // Reset scroll position whenever the modal opens or the skill changes.
+  // The state flag resets during render; the DOM scroll stays in an effect.
+  const scrollResetKey = `${isOpen}:${skill?.slug ?? ''}`;
+  const [prevScrollResetKey, setPrevScrollResetKey] = useState(scrollResetKey);
+  if (prevScrollResetKey !== scrollResetKey) {
+    setPrevScrollResetKey(scrollResetKey);
     setShowBackToTop(false);
+  }
+
+  useEffect(() => {
     contentRef.current?.scrollTo({ top: 0 });
   }, [isOpen, skill?.slug]);
 
