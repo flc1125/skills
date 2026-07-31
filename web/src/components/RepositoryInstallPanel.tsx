@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { Check, Copy, TerminalSquare } from 'lucide-react';
+import { Check, Copy, SquareTerminal } from 'lucide-react';
 import { visibleRepositoryInstallMethods } from '@/lib/install-methods';
 import { trackEvent } from '@/lib/gtag';
 
@@ -44,7 +44,7 @@ export function RepositoryInstallPanel() {
     <aside className="w-full rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-card)] sm:p-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="font-display flex items-center gap-2 text-base font-bold tracking-tight text-[var(--foreground)]">
-          <TerminalSquare size={18} strokeWidth={1.8} className="text-[var(--accent)]" />
+          <SquareTerminal size={18} strokeWidth={1.8} className="text-[var(--accent)]" />
           Quick install
         </h2>
         <div className="flex rounded-full bg-[var(--surface-muted)] p-1" aria-label="Install provider">

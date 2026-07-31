@@ -5,6 +5,13 @@ import nextTs from 'eslint-config-next/typescript';
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
+  {
+    rules: {
+      // Allow stripping unused properties (e.g. react-markdown's `node`)
+      // out of rest-destructuring patterns without warnings.
+      '@typescript-eslint/no-unused-vars': ['warn', { ignoreRestSiblings: true }],
+    },
+  },
   globalIgnores([
     '.next/**',
     'out/**',
