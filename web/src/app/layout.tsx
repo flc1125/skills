@@ -96,7 +96,7 @@ export default function RootLayout({
           </div>
         </HeaderShell>
         <main className="pt-16">{children}</main>
-        <footer className="mt-24 border-t border-[var(--border)] py-10">
+        <footer className="mt-12 border-t border-[var(--border)] py-10">
           <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 px-5 text-center sm:px-8">
             <p className="font-display text-sm font-bold text-[var(--foreground)]">Flc&apos;s Skills</p>
             <p className="max-w-md text-xs leading-5 text-[var(--muted)]">
