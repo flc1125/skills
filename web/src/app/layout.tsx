@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Script from 'next/script';
 import { Inter, Plus_Jakarta_Sans } from 'next/font/google';
 import { GaPageViewTracker } from '@/components/GaPageViewTracker';
+import { BackToTop } from '@/components/BackToTop';
 import { GithubNavLink } from '@/components/GithubNavLink';
 import { HeaderShell } from '@/components/HeaderShell';
 import { ThemeToggle } from '@/components/ThemeToggle';
@@ -112,6 +113,7 @@ export default function RootLayout({
           </div>
         </HeaderShell>
         <main className="pt-16">{children}</main>
+        <BackToTop />
         <footer className="mt-12 border-t border-[var(--border)] py-10">
           <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 px-5 text-center sm:px-8">
             <p className="font-display text-sm font-bold text-[var(--foreground)]">Flc&apos;s Skills</p>
