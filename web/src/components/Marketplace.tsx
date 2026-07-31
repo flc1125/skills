@@ -66,6 +66,9 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
   const [hasMounted, setHasMounted] = useState(false);
   const activeSelectedSkill =
     selectedSkillSlug && selectedSkill?.slug === selectedSkillSlug ? selectedSkill : null;
+  const selectedSkillMeta = selectedSkillSlug
+    ? initialSkills.find((skill) => skill.slug === selectedSkillSlug) ?? null
+    : null;
   const isModalOpen = hasMounted && selectedSkillSlug !== null;
 
   useEffect(() => {
@@ -272,7 +275,7 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
             Browse skills
           </h2>
           <p className="text-sm text-[var(--muted)]" aria-live="polite">
-            {orderedSkills.length} {orderedSkills.length === 1 ? 'skill' : 'skills'} · newest first
+            {orderedSkills.length} {orderedSkills.length === 1 ? 'skill' : 'skills'}
           </p>
         </motion.div>
 
@@ -314,6 +317,7 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
 
       <SkillModal
         skill={activeSelectedSkill}
+        fallbackName={selectedSkillMeta ? selectedSkillMeta.metadata?.name ?? selectedSkillMeta.name : undefined}
         isOpen={isModalOpen}
         isLoading={isLoadingSkill}
         error={skillLoadError}

@@ -2,6 +2,7 @@
 
 import { Fragment, useEffect, useSyncExternalStore } from 'react';
 import { Menu, Transition } from '@headlessui/react';
+import { MotionConfig, motion } from 'motion/react';
 import { Check, Laptop, Moon, Sun } from 'lucide-react';
 
 type ThemeMode = 'system' | 'light' | 'dark';
@@ -96,7 +97,17 @@ export function ThemeToggle() {
         title={`Theme: ${activeOption.label}`}
         className="grid h-9 w-9 place-items-center rounded-full text-[var(--muted)] transition-colors hover:bg-[var(--surface-muted)] hover:text-[var(--foreground)]"
       >
-        <ActiveIcon size={16} />
+        <MotionConfig reducedMotion="user">
+          <motion.span
+            key={activeOption.value}
+            initial={{ rotate: -120, scale: 0.4, opacity: 0 }}
+            animate={{ rotate: 0, scale: 1, opacity: 1 }}
+            transition={{ type: 'spring', stiffness: 420, damping: 24 }}
+            className="grid place-items-center"
+          >
+            <ActiveIcon size={16} />
+          </motion.span>
+        </MotionConfig>
       </Menu.Button>
 
       <Transition

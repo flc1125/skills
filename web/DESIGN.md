@@ -78,7 +78,10 @@ The only decorative treatment is a faint tangerine radial glow at the top center
 - Empty states animate in: the panel fades up while the icon springs in with a low-damping wobble.
 - Long modal content gets a circular accent back-to-top button (bottom-right of the scroll area) once scrolled past ~240px; it springs in/out and smooth-scrolls the content. Content scroll resets when the modal opens or the skill changes.
 - Theme switching transitions colors globally (200ms on background/border/color/fill/stroke/box-shadow via a `@layer base` rule that utilities can override).
-- Modal: backdrop fade (200ms), panel spring from `scale 0.96 / y 16`.
+- Modal: backdrop fade (200ms), panel spring from `scale 0.96 / y 16`. The modal receives the card's display name as `fallbackName` so the real title shows even before the fetch resolves.
+- The header starts borderless/translucent and gains its border + a faint shadow (`--shadow-header`, lighter than card shadows) once the page is scrolled (>8px), over a 300ms transition.
+- The theme toggle icon spins in with a spring (rotate + scale) whenever the theme changes.
+- Inside the modal, loading skeleton / error / markdown content swap through a quick `AnimatePresence mode="wait"` fade (150–200ms) rather than a hard cut.
 - Respect `prefers-reduced-motion` everywhere (`MotionConfig reducedMotion="user"` plus the global CSS guard).
 
 ## 7. Functional Invariants

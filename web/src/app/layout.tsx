@@ -5,6 +5,7 @@ import Script from 'next/script';
 import { Inter, Plus_Jakarta_Sans } from 'next/font/google';
 import { GaPageViewTracker } from '@/components/GaPageViewTracker';
 import { GithubNavLink } from '@/components/GithubNavLink';
+import { HeaderShell } from '@/components/HeaderShell';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { BrandMark } from '@/components/BrandMark';
 import "./globals.css";
@@ -76,7 +77,7 @@ export default function RootLayout({
         <Suspense fallback={null}>
           <GaPageViewTracker />
         </Suspense>
-        <header className="fixed inset-x-0 top-0 z-40 border-b border-[var(--border)] bg-[var(--header)] backdrop-blur-xl">
+        <HeaderShell>
           <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-8">
             <Link
               href="/"
@@ -93,7 +94,7 @@ export default function RootLayout({
               <GithubNavLink />
             </nav>
           </div>
-        </header>
+        </HeaderShell>
         <main className="pt-16">{children}</main>
         <footer className="mt-24 border-t border-[var(--border)] py-10">
           <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 px-5 text-center sm:px-8">

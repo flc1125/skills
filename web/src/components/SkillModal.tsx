@@ -11,6 +11,7 @@ import { trackEvent } from '@/lib/gtag';
 
 interface SkillModalProps {
   skill: Skill | null;
+  fallbackName?: string;
   isOpen: boolean;
   isLoading: boolean;
   error: string | null;
@@ -61,12 +62,12 @@ function resolveSkillContentLink(skill: Skill, href?: string) {
   return `${GITHUB_BLOB_BASE_URL}/${resolvedPath}${hash ? `#${hash}` : ''}`;
 }
 
-export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillModalProps) {
+export function SkillModal({ skill, fallbackName, isOpen, isLoading, error, onClose }: SkillModalProps) {
   const [copied, setCopied] = useState(false);
   const trackedViewSlug = useRef<string | null>(null);
   const contentRef = useRef<HTMLDivElement | null>(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
-  const displayName = skill?.metadata?.name ?? skill?.name ?? 'Loading skill';
+  const displayName = skill?.metadata?.name ?? skill?.name ?? fallbackName ?? 'Loading skill';
   const publishedAt = formatSkillPublishedAt(skill?.metadata?.created);
   const fileCountLabel = skill ? `${skill.fileCount} ${skill.fileCount === 1 ? 'file' : 'files'}` : null;
 
@@ -207,18 +208,42 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
                       onScroll={(event) => setShowBackToTop(event.currentTarget.scrollTop > 240)}
                       className="mt-5 max-h-[58vh] overflow-y-auto px-6 pb-2 custom-scrollbar sm:px-8"
                     >
+                    <AnimatePresence mode="wait" initial={false}>
                     {isLoading ? (
-                      <div className="space-y-3 animate-pulse pb-4">
-                        <div className="h-4 rounded-full bg-[var(--surface-muted)]" />
-                        <div className="h-4 rounded-full bg-[var(--surface-muted)]" />
-                        <div className="h-4 w-5/6 rounded-full bg-[var(--surface-muted)]" />
-                        <div className="h-24 rounded-2xl bg-[var(--surface-muted)]" />
-                      </div>
+                      <motion.div
+                        key="skeleton"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.15 }}
+                        className="space-y-3 pb-4"
+                      >
+                        <div className="space-y-3 animate-pulse">
+                          <div className="h-4 rounded-full bg-[var(--surface-muted)]" />
+                          <div className="h-4 rounded-full bg-[var(--surface-muted)]" />
+                          <div className="h-4 w-5/6 rounded-full bg-[var(--surface-muted)]" />
+                          <div className="h-24 rounded-2xl bg-[var(--surface-muted)]" />
+                        </div>
+                      </motion.div>
                     ) : error ? (
-                      <div className="rounded-2xl bg-[var(--accent-soft)] px-4 py-3 text-sm text-[var(--foreground)]">
+                      <motion.div
+                        key="error"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.15 }}
+                        className="rounded-2xl bg-[var(--accent-soft)] px-4 py-3 text-sm text-[var(--foreground)]"
+                      >
                         {error}
-                      </div>
+                      </motion.div>
                     ) : skill ? (
+                      <motion.div
+                        key="content"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                      >
                       <div className="prose max-w-none text-[var(--foreground)] dark:prose-invert
                         prose-headings:font-display prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-[var(--foreground)] prose-h1:text-2xl prose-h2:text-xl
                         prose-p:max-w-[65ch] prose-p:text-sm prose-p:leading-7 prose-p:text-[var(--muted)] prose-li:text-sm prose-li:leading-7 prose-li:text-[var(--muted)] prose-a:font-semibold prose-a:text-[var(--accent)]">
@@ -268,7 +293,9 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
                           {skill.content}
                         </ReactMarkdown>
                       </div>
+                      </motion.div>
                     ) : null}
+                    </AnimatePresence>
                     </div>
 
                     <AnimatePresence>
