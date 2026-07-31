@@ -1,0 +1,17 @@
+{
+  "name": "skills",
+  "description": "A curated collection of reusable agent skills maintained by Flc.",
+  "author": {
+    "name": "Flc",
+    "url": "https://github.com/flc1125"
+  },
+  "homepage": "https://skills.flc.io",
+  "repository": "https://github.com/flc1125/skills",
+  "license": "MIT",
+  "keywords": [
+    "claude-code",
+    "skills",
+    "agents",
+    "workflows"
+  ]
+}

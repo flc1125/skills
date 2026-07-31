@@ -1,0 +1,16 @@
+{
+  "name": "flc-skills",
+  "description": "Flc's curated collection of reusable agent skills, also browsable at https://skills.flc.io",
+  "owner": {
+    "name": "Flc",
+    "url": "https://github.com/flc1125"
+  },
+  "plugins": [
+    {
+      "name": "skills",
+      "source": "./",
+      "description": "A curated collection of reusable agent skills for engineering, research, and knowledge workflows.",
+      "category": "Productivity"
+    }
+  ]
+}
