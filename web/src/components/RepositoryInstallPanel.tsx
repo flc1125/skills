@@ -88,7 +88,7 @@ export function RepositoryInstallPanel() {
         <div className="mt-5 rounded-xl bg-[var(--accent-soft)] px-4 py-4">
           <p className="text-sm font-semibold text-[var(--accent)]">Coming soon</p>
           <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
-            Claude plugin support is planned but not available yet. Use the Codex channel for the current install path.
+            {activeMethod.description}
           </p>
         </div>
       ) : (
