@@ -246,7 +246,7 @@ export function SkillModal({ skill, fallbackName, isOpen, isLoading, error, onCl
                       >
                       <div className="prose max-w-none text-[var(--foreground)] dark:prose-invert
                         prose-headings:font-display prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-[var(--foreground)] prose-h1:text-2xl prose-h2:text-xl
-                        prose-p:max-w-[65ch] prose-p:text-sm prose-p:leading-7 prose-p:text-[var(--muted)] prose-li:text-sm prose-li:leading-7 prose-li:text-[var(--muted)] prose-a:font-semibold prose-a:text-[var(--accent)]">
+                        prose-p:max-w-[65ch] prose-p:text-sm prose-p:leading-7 prose-p:text-[var(--muted)] prose-li:text-sm prose-li:leading-7 prose-li:text-[var(--muted)] prose-a:font-semibold prose-a:text-[var(--accent)] prose-a:underline prose-a:decoration-[color-mix(in_srgb,var(--accent)_45%,transparent)] prose-a:underline-offset-2">
                         <ReactMarkdown
                           components={{
                             pre({ children }) {

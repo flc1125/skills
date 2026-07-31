@@ -59,6 +59,7 @@ The only decorative treatment is a faint tangerine radial glow at the top center
 - Cards: `rounded-2xl`, 1px `--border`, `--shadow-card`. Hover: `-translate-y-1`, accent-tinted border, `--shadow-card-hover`.
 - Buttons and inputs: `rounded-full` for pills/icon buttons, `rounded-xl` for inset rows. Minimum 44px touch target where practical.
 - Chips/badges: `rounded-full` fills of `--surface-muted`; accent actions use `--accent-soft` background with `--accent` text.
+- Body-text links always carry an underline (45% accent decoration, offset 2px) — never rely on color alone to signal a link (WCAG 1.4.1).
 - Search: one large pill field, search icon on the left, `⌘K` kbd chip on the right, accent focus ring via border + shadow.
 - Segmented control: muted track pill with a white/surface sliding indicator (`layoutId` spring).
 - Copy buttons: circular, surface background; success state fills with `--accent`.
