@@ -200,7 +200,9 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
   };
 
   // Reflect the open skill in the document title so shared ?skill= links
-  // and browser tabs carry the skill name; restore on close.
+  // and browser tabs carry the skill name; closing always returns to the
+  // homepage, so restore the known site title rather than a captured one
+  // (which may itself be the skill title on direct ?skill= loads).
   useEffect(() => {
     const skillName = selectedSkillMeta?.metadata?.name ?? selectedSkillMeta?.name;
 
@@ -208,11 +210,10 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
       return;
     }
 
-    const previousTitle = document.title;
     document.title = `${skillName} · Flc's Skills`;
 
     return () => {
-      document.title = previousTitle;
+      document.title = "Flc's Skills";
     };
   }, [selectedSkillMeta]);
 

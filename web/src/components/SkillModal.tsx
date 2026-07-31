@@ -260,16 +260,16 @@ export function SkillModal({ skill, fallbackName, isOpen, isLoading, error, onCl
                                 </div>
                               )
                             },
-                            th({ children }) {
+                            th({ children, node: _node, ...props }) {
                               return (
-                                <th className="border-b border-[var(--border)] bg-[var(--surface-muted)] px-3.5 py-2.5 text-left font-display text-xs font-bold text-[var(--foreground)]">
+                                <th {...props} className="border-b border-[var(--border)] bg-[var(--surface-muted)] px-3.5 py-2.5 text-left font-display text-xs font-bold text-[var(--foreground)]">
                                   {children}
                                 </th>
                               )
                             },
-                            td({ children }) {
+                            td({ children, node: _node, ...props }) {
                               return (
-                                <td className="border-b border-[var(--border)] px-3.5 py-2.5 align-top text-[var(--muted)] [&_tr:last-child>&]:border-b-0">
+                                <td {...props} className="border-b border-[var(--border)] px-3.5 py-2.5 align-top text-[var(--muted)] [&_tr:last-child>&]:border-b-0">
                                   {children}
                                 </td>
                               )
