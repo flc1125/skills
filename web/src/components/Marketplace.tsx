@@ -199,6 +199,23 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
     window.history.pushState(null, '', pathname);
   };
 
+  // Reflect the open skill in the document title so shared ?skill= links
+  // and browser tabs carry the skill name; restore on close.
+  useEffect(() => {
+    const skillName = selectedSkillMeta?.metadata?.name ?? selectedSkillMeta?.name;
+
+    if (!skillName) {
+      return;
+    }
+
+    const previousTitle = document.title;
+    document.title = `${skillName} · Flc's Skills`;
+
+    return () => {
+      document.title = previousTitle;
+    };
+  }, [selectedSkillMeta]);
+
   return (
     <MotionConfig reducedMotion="user">
     <motion.div
