@@ -5,7 +5,7 @@ import { Dialog } from '@headlessui/react';
 import { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, MotionConfig, motion } from 'motion/react';
 import ReactMarkdown from 'react-markdown';
-import { X, Terminal, Copy, Check, ExternalLink, CalendarDays, Files } from 'lucide-react';
+import { X, Terminal, Copy, Check, ExternalLink, CalendarDays, Files, ArrowUp } from 'lucide-react';
 import { formatSkillPublishedAt } from '@/lib/utils';
 import { trackEvent } from '@/lib/gtag';
 
@@ -64,6 +64,8 @@ function resolveSkillContentLink(skill: Skill, href?: string) {
 export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillModalProps) {
   const [copied, setCopied] = useState(false);
   const trackedViewSlug = useRef<string | null>(null);
+  const contentRef = useRef<HTMLDivElement | null>(null);
+  const [showBackToTop, setShowBackToTop] = useState(false);
   const displayName = skill?.metadata?.name ?? skill?.name ?? 'Loading skill';
   const publishedAt = formatSkillPublishedAt(skill?.metadata?.created);
   const fileCountLabel = skill ? `${skill.fileCount} ${skill.fileCount === 1 ? 'file' : 'files'}` : null;
@@ -74,6 +76,17 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
       return () => clearTimeout(timeout);
     }
   }, [copied]);
+
+  // Reset content scroll position whenever the modal opens or the skill changes.
+  useEffect(() => {
+    setShowBackToTop(false);
+    contentRef.current?.scrollTo({ top: 0 });
+  }, [isOpen, skill?.slug]);
+
+  const scrollContentToTop = () => {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    contentRef.current?.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+  };
 
   useEffect(() => {
     if (!isOpen) {
@@ -188,7 +201,12 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
                     </button>
                   </div>
 
-                  <div className="mt-5 max-h-[58vh] overflow-y-auto px-6 pb-2 custom-scrollbar sm:px-8">
+                  <div className="relative">
+                    <div
+                      ref={contentRef}
+                      onScroll={(event) => setShowBackToTop(event.currentTarget.scrollTop > 240)}
+                      className="mt-5 max-h-[58vh] overflow-y-auto px-6 pb-2 custom-scrollbar sm:px-8"
+                    >
                     {isLoading ? (
                       <div className="space-y-3 animate-pulse pb-4">
                         <div className="h-4 rounded-full bg-[var(--surface-muted)]" />
@@ -251,6 +269,25 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
                         </ReactMarkdown>
                       </div>
                     ) : null}
+                    </div>
+
+                    <AnimatePresence>
+                      {showBackToTop && (
+                        <motion.button
+                          key="back-to-top"
+                          type="button"
+                          initial={{ opacity: 0, scale: 0.6, y: 8 }}
+                          animate={{ opacity: 1, scale: 1, y: 0 }}
+                          exit={{ opacity: 0, scale: 0.6, y: 8 }}
+                          transition={{ type: 'spring', stiffness: 500, damping: 28 }}
+                          onClick={scrollContentToTop}
+                          className="absolute bottom-4 right-4 grid h-10 w-10 place-items-center rounded-full bg-[var(--accent)] text-[var(--on-accent)] shadow-[var(--shadow-card-hover)]"
+                          aria-label="Back to top"
+                        >
+                          <ArrowUp size={16} />
+                        </motion.button>
+                      )}
+                    </AnimatePresence>
                   </div>
 
                   {skill ? (

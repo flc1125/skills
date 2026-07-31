@@ -76,6 +76,7 @@ The only decorative treatment is a faint tangerine radial glow at the top center
 - Card hover lift is `whileHover={{ y: -4 }}` (Motion-driven, not a CSS transform, so it composes with layout animations). On hover the title also shifts to the accent color and the arrow button fills.
 - Hovered cards show a cursor-following spotlight: a ~220px radial wash of the accent at 7% alpha, driven by Motion values (no React re-renders on mousemove), faded in/out over 300ms. Keep it at or under 8% alpha — it should read as a sheen, not a glow.
 - Empty states animate in: the panel fades up while the icon springs in with a low-damping wobble.
+- Long modal content gets a circular accent back-to-top button (bottom-right of the scroll area) once scrolled past ~240px; it springs in/out and smooth-scrolls the content. Content scroll resets when the modal opens or the skill changes.
 - Theme switching transitions colors globally (200ms on background/border/color/fill/stroke/box-shadow via a `@layer base` rule that utilities can override).
 - Modal: backdrop fade (200ms), panel spring from `scale 0.96 / y 16`.
 - Respect `prefers-reduced-motion` everywhere (`MotionConfig reducedMotion="user"` plus the global CSS guard).
