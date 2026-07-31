@@ -66,7 +66,7 @@ The only decorative treatment is a faint tangerine radial glow at the top center
 
 ## 6. Motion
 
-- Springs over easings: cards enter with a soft spring (`stiffness ~260, damping ~28`) and a short per-item stagger (≤12 items, ~35ms each).
+- Springs over easings: cards enter with a soft spring (`stiffness ~260, damping ~28`) and a short per-item stagger (capped, ~35ms each), triggered by `whileInView` (`once: true`) so below-fold cards animate as the user scrolls to them, not on initial page load. The catalog heading uses the same scroll-triggered entrance.
 - The hero (headline, subtext, search, fact pills, install panel) enters as a choreographed sequence — fade-up with ~70ms stagger.
 - Stat numbers (skill/file counts) count up from 0 on first paint (~700ms, instant under reduced motion).
 - Catalog filtering uses `AnimatePresence mode="popLayout"` with `layout` springs; the stagger delay applies to entrance only, never to layout reflow.

@@ -261,14 +261,20 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
       </motion.section>
 
       <section className="pb-8" aria-labelledby="catalog-heading">
-        <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '0px 0px -40px 0px' }}
+          transition={{ duration: 0.3, ease: 'easeOut' }}
+          className="mb-6 flex flex-wrap items-end justify-between gap-3"
+        >
           <h2 id="catalog-heading" className="font-display text-2xl font-bold tracking-tight text-[var(--foreground)] sm:text-3xl">
             Browse skills
           </h2>
           <p className="text-sm text-[var(--muted)]" aria-live="polite">
             {orderedSkills.length} {orderedSkills.length === 1 ? 'skill' : 'skills'} · newest first
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <AnimatePresence mode="popLayout">
