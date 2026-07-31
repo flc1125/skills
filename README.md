@@ -18,13 +18,13 @@
 
 An open repository of reusable skills maintained for personal use and public reuse.
 
-This repo contains a Codex plugin and installable skills that can be added directly from GitHub and used as building blocks for agent workflows, AI assistants, or other compatible tools.
+This repo contains a Codex plugin, a Claude Code plugin, and installable skills that can be added directly from GitHub and used as building blocks for agent workflows, AI assistants, or other compatible tools.
 
 The installable skill content lives in `skills/`. The Next.js marketplace that powers [skills.flc.io](https://skills.flc.io) now lives in `web/`.
 
 ## ✨ Overview
 
-- Install the full skill collection as a Codex plugin
+- Install the full skill collection as a Codex or Claude Code plugin
 - Install individual skills directly from this repository
 - Browse available skills on the visual marketplace at [skills.flc.io](https://skills.flc.io)
 - Reuse the repository as a lightweight source of portable skills
@@ -41,6 +41,19 @@ codex plugin add skills@flc-skills
 ```
 
 Use this path when you want the full collection available in Codex.
+
+### Install as a Claude Code plugin
+
+Add this repository as a Claude Code plugin marketplace, then install the bundled `skills` plugin:
+
+```bash
+claude plugin marketplace add flc1125/skills
+claude plugin install skills@flc-skills
+```
+
+Or use the interactive `/plugin` command inside Claude Code. Plugin skills are namespaced, so invoke them as `/skills:<skill-name>` (for example `/skills:code-review`).
+
+Use this path when you want the full collection available in Claude Code.
 
 ### Install an individual skill
 

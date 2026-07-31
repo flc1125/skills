@@ -79,16 +79,16 @@ export function RepositoryInstallPanel() {
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={activeMethod.id}
-          initial={{ opacity: 0, x: 14 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -14 }}
-          transition={{ duration: 0.18, ease: 'easeOut' }}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, transition: { duration: 0.12, ease: 'easeIn' } }}
+          transition={{ duration: 0.22, ease: [0.32, 0.72, 0, 1] }}
         >
       {activeMethod.status === 'planned' ? (
         <div className="mt-5 rounded-xl bg-[var(--accent-soft)] px-4 py-4">
           <p className="text-sm font-semibold text-[var(--accent)]">Coming soon</p>
           <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
-            Claude plugin support is planned but not available yet. Use the Codex channel for the current install path.
+            {activeMethod.description}
           </p>
         </div>
       ) : (

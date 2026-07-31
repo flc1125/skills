@@ -33,10 +33,19 @@ export const repositoryInstallMethods: InstallMethod[] = [
   {
     id: 'claude',
     label: 'Claude',
-    description: 'Claude plugin support is planned, but it is not available yet.',
+    description: 'Install the marketplace once, then add the bundled skills plugin to make the full collection available in Claude Code.',
     scope: 'repository',
-    status: 'planned',
-    commands: [],
+    status: 'available',
+    commands: [
+      {
+        label: 'Add marketplace',
+        command: 'claude plugin marketplace add flc1125/skills',
+      },
+      {
+        label: 'Install plugin',
+        command: 'claude plugin install skills@flc-skills',
+      },
+    ],
   },
 ];
 
