@@ -77,6 +77,7 @@ The only decorative treatment is a faint tangerine radial glow at the top center
 - Hovered cards show a cursor-following spotlight: a ~220px radial wash of the accent at 7% alpha, driven by Motion values (no React re-renders on mousemove), faded in/out over 300ms. Keep it at or under 8% alpha — it should read as a sheen, not a glow.
 - Empty states animate in: the panel fades up while the icon springs in with a low-damping wobble.
 - Long modal content gets a circular accent back-to-top button (bottom-right of the scroll area) once scrolled past ~240px; it springs in/out and smooth-scrolls the content. Content scroll resets when the modal opens or the skill changes.
+- The modal panel is a flex column capped at `calc(100dvh - 2rem)`: header and install footer are `shrink-0`, and the markdown area flexes and scrolls internally, so the modal never exceeds the visible viewport on mobile (use `dvh`, not `vh`, to account for mobile browser chrome).
 - Theme switching transitions colors globally (200ms on background/border/color/fill/stroke/box-shadow via a `@layer base` rule that utilities can override).
 - Modal: backdrop fade (200ms), panel spring from `scale 0.96 / y 16`. The modal receives the card's display name as `fallbackName` so the real title shows even before the fetch resolves.
 - The header starts borderless/translucent and gains its border + a faint shadow (`--shadow-header`, lighter than card shadows) once the page is scrolled (>8px), over a 300ms transition.
