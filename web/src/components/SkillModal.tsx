@@ -5,12 +5,14 @@ import { Dialog } from '@headlessui/react';
 import { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, MotionConfig, motion } from 'motion/react';
 import ReactMarkdown from 'react-markdown';
-import { X, Terminal, Copy, Check, ExternalLink, CalendarDays, Files } from 'lucide-react';
+import remarkGfm from 'remark-gfm';
+import { X, Terminal, Copy, Check, ExternalLink, CalendarDays, Files, ArrowUp } from 'lucide-react';
 import { formatSkillPublishedAt } from '@/lib/utils';
 import { trackEvent } from '@/lib/gtag';
 
 interface SkillModalProps {
   skill: Skill | null;
+  fallbackName?: string;
   isOpen: boolean;
   isLoading: boolean;
   error: string | null;
@@ -61,10 +63,12 @@ function resolveSkillContentLink(skill: Skill, href?: string) {
   return `${GITHUB_BLOB_BASE_URL}/${resolvedPath}${hash ? `#${hash}` : ''}`;
 }
 
-export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillModalProps) {
+export function SkillModal({ skill, fallbackName, isOpen, isLoading, error, onClose }: SkillModalProps) {
   const [copied, setCopied] = useState(false);
   const trackedViewSlug = useRef<string | null>(null);
-  const displayName = skill?.metadata?.name ?? skill?.name ?? 'Loading skill';
+  const contentRef = useRef<HTMLDivElement | null>(null);
+  const [showBackToTop, setShowBackToTop] = useState(false);
+  const displayName = skill?.metadata?.name ?? skill?.name ?? fallbackName ?? 'Loading skill';
   const publishedAt = formatSkillPublishedAt(skill?.metadata?.created);
   const fileCountLabel = skill ? `${skill.fileCount} ${skill.fileCount === 1 ? 'file' : 'files'}` : null;
 
@@ -74,6 +78,17 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
       return () => clearTimeout(timeout);
     }
   }, [copied]);
+
+  // Reset content scroll position whenever the modal opens or the skill changes.
+  useEffect(() => {
+    setShowBackToTop(false);
+    contentRef.current?.scrollTo({ top: 0 });
+  }, [isOpen, skill?.slug]);
+
+  const scrollContentToTop = () => {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    contentRef.current?.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+  };
 
   useEffect(() => {
     if (!isOpen) {
@@ -136,8 +151,8 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
                   transition={{ type: 'spring', stiffness: 320, damping: 30 }}
                   className="w-full max-w-3xl"
                 >
-                  <Dialog.Panel className="w-full overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-modal)]">
-                  <div className="flex items-start justify-between gap-4 px-6 pt-6 sm:px-8 sm:pt-7">
+                  <Dialog.Panel className="flex max-h-[calc(100vh-2rem)] max-h-[calc(100dvh-2rem)] w-full flex-col overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-modal)]">
+                  <div className="flex shrink-0 items-start justify-between gap-4 px-6 pt-6 sm:px-8 sm:pt-7">
                     <div className="min-w-0">
                       <Dialog.Title as="h3" className="font-display text-2xl font-bold tracking-tight text-[var(--foreground)] sm:text-3xl">
                         {displayName}
@@ -188,24 +203,77 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
                     </button>
                   </div>
 
-                  <div className="mt-5 max-h-[58vh] overflow-y-auto px-6 pb-2 custom-scrollbar sm:px-8">
+                  <div className="relative flex min-h-0 flex-1 flex-col">
+                    <div
+                      ref={contentRef}
+                      onScroll={(event) => setShowBackToTop(event.currentTarget.scrollTop > 240)}
+                      className="mt-5 min-h-0 flex-1 overflow-y-auto px-6 pb-2 custom-scrollbar sm:max-h-[58dvh] sm:px-8"
+                    >
+                    <AnimatePresence mode="wait" initial={false}>
                     {isLoading ? (
-                      <div className="space-y-3 animate-pulse pb-4">
-                        <div className="h-4 rounded-full bg-[var(--surface-muted)]" />
-                        <div className="h-4 rounded-full bg-[var(--surface-muted)]" />
-                        <div className="h-4 w-5/6 rounded-full bg-[var(--surface-muted)]" />
-                        <div className="h-24 rounded-2xl bg-[var(--surface-muted)]" />
-                      </div>
+                      <motion.div
+                        key="skeleton"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.15 }}
+                        className="space-y-3 pb-4"
+                      >
+                        <div className="space-y-3 animate-pulse">
+                          <div className="h-4 rounded-full bg-[var(--surface-muted)]" />
+                          <div className="h-4 rounded-full bg-[var(--surface-muted)]" />
+                          <div className="h-4 w-5/6 rounded-full bg-[var(--surface-muted)]" />
+                          <div className="h-24 rounded-2xl bg-[var(--surface-muted)]" />
+                        </div>
+                      </motion.div>
                     ) : error ? (
-                      <div className="rounded-2xl bg-[var(--accent-soft)] px-4 py-3 text-sm text-[var(--foreground)]">
+                      <motion.div
+                        key="error"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.15 }}
+                        className="rounded-2xl bg-[var(--accent-soft)] px-4 py-3 text-sm text-[var(--foreground)]"
+                      >
                         {error}
-                      </div>
+                      </motion.div>
                     ) : skill ? (
+                      <motion.div
+                        key="content"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                      >
                       <div className="prose max-w-none text-[var(--foreground)] dark:prose-invert
                         prose-headings:font-display prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-[var(--foreground)] prose-h1:text-2xl prose-h2:text-xl
-                        prose-p:max-w-[65ch] prose-p:text-sm prose-p:leading-7 prose-p:text-[var(--muted)] prose-li:text-sm prose-li:leading-7 prose-li:text-[var(--muted)] prose-a:font-semibold prose-a:text-[var(--accent)]">
+                        prose-p:max-w-[65ch] prose-p:text-sm prose-p:leading-7 prose-p:text-[var(--muted)] prose-li:text-sm prose-li:leading-7 prose-li:text-[var(--muted)] prose-a:font-semibold prose-a:text-[var(--accent)] prose-a:underline prose-a:decoration-[color-mix(in_srgb,var(--accent)_45%,transparent)] prose-a:underline-offset-2">
                         <ReactMarkdown
+                          remarkPlugins={[remarkGfm]}
                           components={{
+                            table({ children }) {
+                              return (
+                                <div className="my-4 overflow-x-auto rounded-xl border border-[var(--border)]">
+                                  <table className="!my-0 w-full min-w-max text-sm">
+                                    {children}
+                                  </table>
+                                </div>
+                              )
+                            },
+                            th({ children, node: _node, ...props }) {
+                              return (
+                                <th {...props} className="border-b border-[var(--border)] bg-[var(--surface-muted)] px-3.5 py-2.5 text-left font-display text-xs font-bold text-[var(--foreground)]">
+                                  {children}
+                                </th>
+                              )
+                            },
+                            td({ children, node: _node, ...props }) {
+                              return (
+                                <td {...props} className="border-b border-[var(--border)] px-3.5 py-2.5 align-top text-[var(--muted)] [&_tr:last-child>&]:border-b-0">
+                                  {children}
+                                </td>
+                              )
+                            },
                             pre({ children }) {
                               return (
                                 <pre className="my-4 overflow-x-auto rounded-xl bg-[var(--surface-muted)] p-4 text-xs text-[var(--foreground)]">
@@ -250,11 +318,32 @@ export function SkillModal({ skill, isOpen, isLoading, error, onClose }: SkillMo
                           {skill.content}
                         </ReactMarkdown>
                       </div>
+                      </motion.div>
                     ) : null}
+                    </AnimatePresence>
+                    </div>
+
+                    <AnimatePresence>
+                      {showBackToTop && (
+                        <motion.button
+                          key="back-to-top"
+                          type="button"
+                          initial={{ opacity: 0, scale: 0.6, y: 8 }}
+                          animate={{ opacity: 1, scale: 1, y: 0 }}
+                          exit={{ opacity: 0, scale: 0.6, y: 8 }}
+                          transition={{ type: 'spring', stiffness: 500, damping: 28 }}
+                          onClick={scrollContentToTop}
+                          className="absolute bottom-4 right-4 grid h-10 w-10 place-items-center rounded-full bg-[var(--accent)] text-[var(--on-accent)] shadow-[var(--shadow-card-hover)]"
+                          aria-label="Back to top"
+                        >
+                          <ArrowUp size={16} />
+                        </motion.button>
+                      )}
+                    </AnimatePresence>
                   </div>
 
                   {skill ? (
-                    <div className="px-6 pb-6 pt-4 sm:px-8 sm:pb-7">
+                    <div className="shrink-0 px-6 pb-6 pt-4 sm:px-8 sm:pb-7">
                       <p className="mb-2 text-xs font-medium text-[var(--muted)]">
                         Install this skill
                       </p>

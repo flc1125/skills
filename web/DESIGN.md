@@ -59,6 +59,7 @@ The only decorative treatment is a faint tangerine radial glow at the top center
 - Cards: `rounded-2xl`, 1px `--border`, `--shadow-card`. Hover: `-translate-y-1`, accent-tinted border, `--shadow-card-hover`.
 - Buttons and inputs: `rounded-full` for pills/icon buttons, `rounded-xl` for inset rows. Minimum 44px touch target where practical.
 - Chips/badges: `rounded-full` fills of `--surface-muted`; accent actions use `--accent-soft` background with `--accent` text.
+- Body-text links always carry an underline (45% accent decoration, offset 2px) — never rely on color alone to signal a link (WCAG 1.4.1).
 - Search: one large pill field, search icon on the left, `⌘K` kbd chip on the right, accent focus ring via border + shadow.
 - Segmented control: muted track pill with a white/surface sliding indicator (`layoutId` spring).
 - Copy buttons: circular, surface background; success state fills with `--accent`.
@@ -66,7 +67,7 @@ The only decorative treatment is a faint tangerine radial glow at the top center
 
 ## 6. Motion
 
-- Springs over easings: cards enter with a soft spring (`stiffness ~260, damping ~28`) and a short per-item stagger (≤12 items, ~35ms each).
+- Springs over easings: cards enter with a soft spring (`stiffness ~260, damping ~28`) and a short per-item stagger (capped, ~35ms each), triggered by `whileInView` (`once: true`) so below-fold cards animate as the user scrolls to them, not on initial page load. The catalog heading uses the same scroll-triggered entrance.
 - The hero (headline, subtext, search, fact pills, install panel) enters as a choreographed sequence — fade-up with ~70ms stagger.
 - Stat numbers (skill/file counts) count up from 0 on first paint (~700ms, instant under reduced motion).
 - Catalog filtering uses `AnimatePresence mode="popLayout"` with `layout` springs; the stagger delay applies to entrance only, never to layout reflow.
@@ -76,8 +77,14 @@ The only decorative treatment is a faint tangerine radial glow at the top center
 - Card hover lift is `whileHover={{ y: -4 }}` (Motion-driven, not a CSS transform, so it composes with layout animations). On hover the title also shifts to the accent color and the arrow button fills.
 - Hovered cards show a cursor-following spotlight: a ~220px radial wash of the accent at 7% alpha, driven by Motion values (no React re-renders on mousemove), faded in/out over 300ms. Keep it at or under 8% alpha — it should read as a sheen, not a glow.
 - Empty states animate in: the panel fades up while the icon springs in with a low-damping wobble.
+- Markdown is rendered with `remark-gfm` (tables, strikethrough, task lists, autolinks). Tables render inside a rounded bordered wrapper with horizontal scroll for wide content; header rows use the muted surface fill.
+- Long modal content gets a circular accent back-to-top button (bottom-right of the scroll area) once scrolled past ~240px; it springs in/out and smooth-scrolls the content. Content scroll resets when the modal opens or the skill changes.
+- The modal panel is a flex column capped at `calc(100dvh - 2rem)`: header and install footer are `shrink-0`, and the markdown area flexes and scrolls internally, so the modal never exceeds the visible viewport on mobile (use `dvh`, not `vh`, to account for mobile browser chrome).
 - Theme switching transitions colors globally (200ms on background/border/color/fill/stroke/box-shadow via a `@layer base` rule that utilities can override).
-- Modal: backdrop fade (200ms), panel spring from `scale 0.96 / y 16`.
+- Modal: backdrop fade (200ms), panel spring from `scale 0.96 / y 16`. The modal receives the card's display name as `fallbackName` so the real title shows even before the fetch resolves.
+- The header starts borderless/translucent and gains its border + a faint shadow (`--shadow-header`, lighter than card shadows) once the page is scrolled (>8px), over a 300ms transition.
+- The theme toggle icon spins in with a spring (rotate + scale) whenever the theme changes.
+- Inside the modal, loading skeleton / error / markdown content swap through a quick `AnimatePresence mode="wait"` fade (150–200ms) rather than a hard cut.
 - Respect `prefers-reduced-motion` everywhere (`MotionConfig reducedMotion="user"` plus the global CSS guard).
 
 ## 7. Functional Invariants

@@ -70,7 +70,8 @@ export function SkillCard({ skill, position, onClick }: SkillCardProps) {
       type="button"
       layout
       initial={{ opacity: 0, y: 18 }}
-      animate={{ opacity: 1, y: 0, transition: { type: 'spring', stiffness: 260, damping: 28, delay: Math.min(position, 12) * 0.035 } }}
+      whileInView={{ opacity: 1, y: 0, transition: { type: 'spring', stiffness: 260, damping: 28, delay: Math.min(position - 1, 6) * 0.035 } }}
+      viewport={{ once: true, margin: '0px 0px -60px 0px' }}
       exit={{ opacity: 0, scale: 0.96, transition: { duration: 0.15 } }}
       transition={{ type: 'spring', stiffness: 320, damping: 30 }}
       whileHover={{ y: -4 }}

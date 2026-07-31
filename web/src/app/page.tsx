@@ -1,6 +1,32 @@
-import { getSkills } from '@/lib/skills';
+import { getSkillBySlug, getSkills } from '@/lib/skills';
 import { Marketplace } from '@/components/Marketplace';
 import { Suspense } from 'react';
+import type { Metadata } from 'next';
+
+interface HomeProps {
+  searchParams: Promise<{ skill?: string }>;
+}
+
+export async function generateMetadata({ searchParams }: HomeProps): Promise<Metadata> {
+  const { skill } = await searchParams;
+
+  if (!skill) {
+    return {};
+  }
+
+  const entry = await getSkillBySlug(skill);
+
+  if (!entry) {
+    return {};
+  }
+
+  const name = entry.metadata?.name ?? entry.name;
+
+  return {
+    title: `${name} · Flc's Skills`,
+    description: entry.metadata?.description ?? entry.description,
+  };
+}
 
 export default async function Home() {
   const skills = await getSkills();

@@ -66,6 +66,9 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
   const [hasMounted, setHasMounted] = useState(false);
   const activeSelectedSkill =
     selectedSkillSlug && selectedSkill?.slug === selectedSkillSlug ? selectedSkill : null;
+  const selectedSkillMeta = selectedSkillSlug
+    ? initialSkills.find((skill) => skill.slug === selectedSkillSlug) ?? null
+    : null;
   const isModalOpen = hasMounted && selectedSkillSlug !== null;
 
   useEffect(() => {
@@ -196,6 +199,24 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
     window.history.pushState(null, '', pathname);
   };
 
+  // Reflect the open skill in the document title so shared ?skill= links
+  // and browser tabs carry the skill name; closing always returns to the
+  // homepage, so restore the known site title rather than a captured one
+  // (which may itself be the skill title on direct ?skill= loads).
+  useEffect(() => {
+    const skillName = selectedSkillMeta?.metadata?.name ?? selectedSkillMeta?.name;
+
+    if (!skillName) {
+      return;
+    }
+
+    document.title = `${skillName} · Flc's Skills`;
+
+    return () => {
+      document.title = "Flc's Skills";
+    };
+  }, [selectedSkillMeta]);
+
   return (
     <MotionConfig reducedMotion="user">
     <motion.div
@@ -261,14 +282,20 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
       </motion.section>
 
       <section className="pb-8" aria-labelledby="catalog-heading">
-        <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '0px 0px -40px 0px' }}
+          transition={{ duration: 0.3, ease: 'easeOut' }}
+          className="mb-6 flex flex-wrap items-end justify-between gap-3"
+        >
           <h2 id="catalog-heading" className="font-display text-2xl font-bold tracking-tight text-[var(--foreground)] sm:text-3xl">
             Browse skills
           </h2>
           <p className="text-sm text-[var(--muted)]" aria-live="polite">
-            {orderedSkills.length} {orderedSkills.length === 1 ? 'skill' : 'skills'} · newest first
+            {orderedSkills.length} {orderedSkills.length === 1 ? 'skill' : 'skills'}
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <AnimatePresence mode="popLayout">
@@ -308,6 +335,7 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
 
       <SkillModal
         skill={activeSelectedSkill}
+        fallbackName={selectedSkillMeta ? selectedSkillMeta.metadata?.name ?? selectedSkillMeta.name : undefined}
         isOpen={isModalOpen}
         isLoading={isLoadingSkill}
         error={skillLoadError}
