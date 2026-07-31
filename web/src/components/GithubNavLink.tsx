@@ -1,5 +1,6 @@
 'use client';
 
+import { MotionConfig, motion } from 'motion/react';
 import { LuGithub } from 'react-icons/lu';
 import { trackEvent } from '@/lib/gtag';
 
@@ -21,7 +22,16 @@ export function GithubNavLink() {
       }}
       className="grid h-9 w-9 place-items-center rounded-full text-[var(--muted)] transition-colors hover:bg-[var(--surface-muted)] hover:text-[var(--foreground)]"
     >
-      <LuGithub size={16} />
+      <MotionConfig reducedMotion="user">
+        <motion.span
+          initial={{ rotate: -120, scale: 0.4, opacity: 0 }}
+          animate={{ rotate: 0, scale: 1, opacity: 1 }}
+          transition={{ type: 'spring', stiffness: 420, damping: 24, delay: 0.08 }}
+          className="grid place-items-center"
+        >
+          <LuGithub size={16} />
+        </motion.span>
+      </MotionConfig>
     </a>
   );
 }
