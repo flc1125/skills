@@ -25,10 +25,26 @@ const jakarta = Plus_Jakarta_Sans({
 const GA_MEASUREMENT_ID = 'G-GYPECK2498';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://skills.flc.io'),
   title: "Flc's Skills",
   description: "A catalog of reusable agent workflow skills.",
   icons: {
     icon: '/favicon.svg',
+  },
+  openGraph: {
+    type: 'website',
+    siteName: "Flc's Skills",
+    images: [
+      {
+        url: '/og.png',
+        width: 1200,
+        height: 630,
+        alt: "Flc's Skills — Reusable workflow skills for agents",
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
   },
 };
 
