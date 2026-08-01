@@ -236,7 +236,7 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
           <span className="text-[var(--accent)]"> workflow.</span>
         </motion.h1>
         <motion.p variants={heroItem} className="mx-auto mt-5 max-w-xl text-base leading-7 text-[var(--muted)] sm:text-lg sm:leading-8">
-          A curated collection of reusable agent skills—turn repeatable engineering, research, and knowledge tasks into one-command workflows.
+          Reusable skills for your AI agents. Turn repeatable engineering, research, and knowledge tasks into one-command workflows.
         </motion.p>
 
         <motion.div variants={heroItem} className="mx-auto mt-9 max-w-xl">
