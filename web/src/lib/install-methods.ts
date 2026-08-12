@@ -26,7 +26,7 @@ export const repositoryInstallMethods: InstallMethod[] = [
       },
       {
         label: 'Install plugin',
-        command: 'codex plugin add skills@flc-skills',
+        command: 'codex plugin add flc-skills@flc1125-skills',
       },
     ],
   },
@@ -43,7 +43,7 @@ export const repositoryInstallMethods: InstallMethod[] = [
       },
       {
         label: 'Install plugin',
-        command: 'claude plugin install skills@flc-skills',
+        command: 'claude plugin install flc-skills@flc1125-skills',
       },
     ],
   },

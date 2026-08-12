@@ -33,25 +33,25 @@ The installable skill content lives in `skills/`. The Next.js marketplace that p
 
 ### Install as a Codex plugin
 
-Add this repository as a Codex plugin marketplace, then install the bundled `skills` plugin:
+Add this repository as a Codex plugin marketplace, then install the bundled `flc-skills` plugin:
 
 ```bash
 codex plugin marketplace add flc1125/skills
-codex plugin add skills@flc-skills
+codex plugin add flc-skills@flc1125-skills
 ```
 
 Use this path when you want the full collection available in Codex.
 
 ### Install as a Claude Code plugin
 
-Add this repository as a Claude Code plugin marketplace, then install the bundled `skills` plugin:
+Add this repository as a Claude Code plugin marketplace, then install the bundled `flc-skills` plugin:
 
 ```bash
 claude plugin marketplace add flc1125/skills
-claude plugin install skills@flc-skills
+claude plugin install flc-skills@flc1125-skills
 ```
 
-Or use the interactive `/plugin` command inside Claude Code. Plugin skills are namespaced, so invoke them as `/skills:<skill-name>` (for example `/skills:code-review`).
+Or use the interactive `/plugin` command inside Claude Code. Plugin skills are namespaced, so invoke them as `/flc-skills:<skill-name>` (for example `/flc-skills:code-review`).
 
 Use this path when you want the full collection available in Claude Code.
 
