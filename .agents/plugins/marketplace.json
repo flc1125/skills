@@ -1,11 +1,11 @@
 {
-  "name": "flc-skills",
+  "name": "flc1125-skills",
   "interface": {
     "displayName": "Flc's Skills"
   },
   "plugins": [
     {
-      "name": "skills",
+      "name": "flc-skills",
       "source": {
         "source": "url",
         "url": "./"
