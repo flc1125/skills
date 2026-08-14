@@ -234,33 +234,37 @@ export function SkillModal({
                               ) : null}
                             </span>
                           ) : null}
-                          <a
-                            href={sourceUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={() => {
-                              trackEvent('skill_source_click', {
-                                skill_slug: skill.slug,
-                                skill_name: displayName,
-                                target: 'github_skill_source',
-                              });
-                            }}
-                            className="inline-flex h-7 items-center gap-1.5 rounded-full bg-[var(--accent-soft)] px-3 font-semibold text-[var(--accent)] transition-colors hover:bg-[var(--accent)] hover:text-[var(--on-accent)]"
-                            title="View source file on GitHub"
-                          >
-                            <ExternalLink size={12} className="shrink-0" />
-                            View on GitHub
-                          </a>
                         </div>
                       ) : null}
                     </div>
-                    <button
-                      onClick={onClose}
-                      className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[var(--surface-muted)] text-[var(--muted)] transition-colors hover:bg-[var(--accent-soft)] hover:text-[var(--accent)]"
-                      aria-label="Close skill details"
-                    >
-                      <X size={17} />
-                    </button>
+                    <div className="flex shrink-0 items-center gap-2">
+                      {skill ? (
+                        <a
+                          href={sourceUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={() => {
+                            trackEvent('skill_source_click', {
+                              skill_slug: skill.slug,
+                              skill_name: displayName,
+                              target: 'github_skill_source',
+                            });
+                          }}
+                          className="grid h-9 w-9 place-items-center rounded-full bg-[var(--surface-muted)] text-[var(--muted)] transition-colors hover:bg-[var(--accent-soft)] hover:text-[var(--accent)]"
+                          aria-label="View source on GitHub"
+                          title="View source on GitHub"
+                        >
+                          <ExternalLink size={16} strokeWidth={1.8} />
+                        </a>
+                      ) : null}
+                      <button
+                        onClick={onClose}
+                        className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[var(--surface-muted)] text-[var(--muted)] transition-colors hover:bg-[var(--accent-soft)] hover:text-[var(--accent)]"
+                        aria-label="Close skill details"
+                      >
+                        <X size={17} />
+                      </button>
+                    </div>
                   </div>
 
                   <div className="relative flex min-h-0 flex-1 flex-col">
