@@ -68,6 +68,15 @@ export function formatSkillPublishedAt(value?: string | null, now = new Date()):
   return formatSkillDate(date);
 }
 
+const interactionCountFormatter = new Intl.NumberFormat('en', {
+  notation: 'compact',
+  maximumFractionDigits: 1,
+});
+
+export function formatInteractionCount(value: number): string {
+  return interactionCountFormatter.format(value);
+}
+
 function isYesterday(date: Date, now: Date): boolean {
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const yesterdayStart = new Date(todayStart);

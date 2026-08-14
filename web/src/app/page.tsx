@@ -1,4 +1,5 @@
 import { getSkillBySlug, getSkills } from '@/lib/skills';
+import { getSkillStats } from '@/lib/skill-stats';
 import { Marketplace } from '@/components/Marketplace';
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
@@ -30,6 +31,7 @@ export async function generateMetadata({ searchParams }: HomeProps): Promise<Met
 
 export default async function Home() {
   const skills = await getSkills();
+  const initialStats = await getSkillStats(skills.map((skill) => skill.slug));
 
   return (
     <div className="min-h-screen">
@@ -47,7 +49,7 @@ export default async function Home() {
           </div>
         </div>
       }>
-        <Marketplace initialSkills={skills} />
+        <Marketplace initialSkills={skills} initialStats={initialStats} />
       </Suspense>
     </div>
   );

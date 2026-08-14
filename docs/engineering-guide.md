@@ -9,6 +9,7 @@ This document provides detailed guidance for developing, debugging, building, an
 *   **Animations**: Framer Motion
 *   **Accessible Components**: Headless UI
 *   **Data Parsing**: gray-matter (Markdown frontmatter parsing)
+*   **Public Interaction Counts**: Upstash Redis through `@upstash/redis`
 *   **Icon Library**: Lucide React
 *   **Linting**: ESLint 9 with `eslint-config-next`
 
@@ -83,12 +84,21 @@ This project is deeply compatible with Vercel; an automated build solution is re
     *   Framework Preset: `Next.js`
     *   Build Command: `npm run build`
     *   Install Command: `npm install`
-3.  **Environment Variables**: This project currently doesn't require specific production environment variables.
+3.  **Environment Variables**: The marketplace works without environment variables, but public skill view and copy counts require an Upstash Redis integration:
+    *   `UPSTASH_REDIS_REST_URL`
+    *   `UPSTASH_REDIS_REST_TOKEN`
+    Install Upstash Redis from the Vercel Marketplace and connect it to the project so Vercel injects both values. Older Marketplace connections may use the supported `KV_REST_API_URL` and `KV_REST_API_TOKEN` aliases instead. When neither pair is present or Redis is unavailable, the marketplace continues to render and hides interaction counts.
 4.  **Deployment**: Click Deploy. Once the build is finished, your site is live.
 
 ### Other Deployment Methods:
 *   **Docker**: Use official Next.js images for containerized deployment.
 *   **Static Export**: Since this project uses API routes for dynamic details loading, `next export` is not recommended unless modified for static routing.
+
+## 7. Public Skill Statistics
+
+The marketplace stores public view and copy totals in Upstash Redis. Counts begin at zero when Redis is connected; existing Google Analytics events are not backfilled automatically. A view is counted at most once per anonymous visitor and skill within 24 hours. A successful command copy is counted at most once per anonymous visitor and skill within 10 seconds. The visitor identifier is an HTTP-only, same-site random cookie and does not encode personal information.
+
+The public `GET /api/stats` endpoint returns all skill totals in one response and is cached at the CDN for 60 seconds. `POST /api/stats/:slug` accepts a `view` or `copy` interaction, validates the skill slug, applies the deduplication window, and returns the updated total. The UI hides the counters when Redis is not configured instead of showing misleading zeroes.
 
 ---
 
