@@ -1,6 +1,6 @@
 import { execFile } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { lstat, mkdir, readFile, rename, rm, writeFile } from 'node:fs/promises';
+import { lstat, mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
@@ -92,15 +92,29 @@ async function listSkillFiles(directoryName) {
     })
     .sort();
 
+  const existingFiles = [];
+
   for (const file of files) {
-    const stats = await lstat(path.join(skillsDir, directoryName, file));
+    let stats;
+
+    try {
+      stats = await lstat(path.join(skillsDir, directoryName, file));
+    } catch (error) {
+      if (error?.code === 'ENOENT') {
+        continue;
+      }
+
+      throw error;
+    }
 
     if (!stats.isFile()) {
       throw new Error(`${directoryName}: archive entries must be regular files: ${file}`);
     }
+
+    existingFiles.push(file);
   }
 
-  return files;
+  return existingFiles;
 }
 
 async function main() {
@@ -111,7 +125,6 @@ async function main() {
     throw new Error(`No skills found in ${skillsDir}`);
   }
 
-  await rm(outputDir, { recursive: true, force: true });
   await mkdir(artifactsDir, { recursive: true });
 
   const entries = [];

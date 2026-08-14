@@ -108,7 +108,7 @@ npm run dev
 
 Use `npm run lint` and `npm run build` inside `web/` to validate marketplace changes.
 
-The web prebuild publishes an Agent Skills Discovery v0.2 index and deterministic, content-addressed archives under `web/public/.well-known/agent-skills/`. Run `npm run generate:skills-distribution` to generate them directly. Only Git-tracked or non-ignored skill files are packaged, so ignored local configuration such as `.env` is never distributed.
+The web prebuild publishes an Agent Skills Discovery v0.2 index and deterministic, content-addressed archives under `web/public/.well-known/agent-skills/`. Run `npm run generate:skills-distribution` to generate them directly. The generated index and archives are version-controlled; commit new artifacts when skill content changes so previously published digest URLs remain available across deployments. Only Git-tracked or non-ignored skill files are packaged, so ignored local configuration such as `.env` is never distributed.
 
 ## 📝 License
 

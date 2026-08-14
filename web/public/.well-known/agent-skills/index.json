@@ -1,0 +1,194 @@
+{
+  "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+  "skills": [
+    {
+      "name": "async",
+      "type": "archive",
+      "description": "Launch and coordinate Codex subagents as deferred tasks. Use when the user wants to start bounded subagent work now, keep the main thread moving without waiting by default, then later join, collect, or redirect that work through a stable task reference.",
+      "url": "artifacts/async-c0fe7d8c02fa5bec631f9bcf3b020f0d50002ab9982e5d53108059cd9c5806f0.tar.gz",
+      "digest": "sha256:c0fe7d8c02fa5bec631f9bcf3b020f0d50002ab9982e5d53108059cd9c5806f0"
+    },
+    {
+      "name": "code-review",
+      "type": "archive",
+      "description": "Request or perform a git-backed code review for a defined diff or SHA range using implementation context and requirements. Use when finishing a task, completing a major feature, preparing to merge, or when you need a fresh review before proceeding.",
+      "url": "artifacts/code-review-66e0e99a9195d8c747f92e1df29e403381ac7ceec49921597cf52e5176881ea0.tar.gz",
+      "digest": "sha256:66e0e99a9195d8c747f92e1df29e403381ac7ceec49921597cf52e5176881ea0"
+    },
+    {
+      "name": "create-plan",
+      "type": "archive",
+      "description": "Create and maintain repository-aware technical plans, implementation plans, refactor proposals, design drafts, and migration plans. Use when Codex is asked to investigate a codebase and propose a solution before implementation; write or update a durable plan file; produce a 方案、实施计划或重构计划; split engineering work into phases or pull requests; document scope, non-goals, API and behavior decisions, breaking changes, migrations, risks, testing, or validation; or transition a plan through draft, planned, in-progress, blocked, and completed states.",
+      "url": "artifacts/create-plan-acbdc61f894482ce70c19b7650349674a7f6dd13a39fbca924b6e58b25f5fb3b.tar.gz",
+      "digest": "sha256:acbdc61f894482ce70c19b7650349674a7f6dd13a39fbca924b6e58b25f5fb3b"
+    },
+    {
+      "name": "engineering-backend-architect",
+      "type": "archive",
+      "description": "Design backend system architecture for new products, large features, platform refactors, API and database design, microservices decomposition, event-driven systems, scaling, reliability, observability, and cloud deployment.",
+      "url": "artifacts/engineering-backend-architect-a0c5e27e7d28d38cec9d78952cce3046462956c6b4a5343ed817a83089b541b5.tar.gz",
+      "digest": "sha256:a0c5e27e7d28d38cec9d78952cce3046462956c6b4a5343ed817a83089b541b5"
+    },
+    {
+      "name": "experts",
+      "type": "archive",
+      "description": "Assemble a panel of experts to assess a problem from multiple professional perspectives, surface agreement and disagreement, and deliver a chaired recommendation with clear tradeoffs. Use when the user wants multi-expert judgment, a second opinion, design critique, option comparison, or a recommendation backed by distinct expert viewpoints.",
+      "url": "artifacts/experts-316c4472dc5bdaaafde7ec4581b8d7a83eed9b8859e2027b8d4d88d156e62a30.tar.gz",
+      "digest": "sha256:316c4472dc5bdaaafde7ec4581b8d7a83eed9b8859e2027b8d4d88d156e62a30"
+    },
+    {
+      "name": "getnote",
+      "type": "archive",
+      "description": "Save, search, list, and organize Get 笔记 notes, images, tags, and knowledge resources through the Get 笔记 OpenAPI. Use when storing text or links as notes, uploading an image into a note workflow, recalling prior notes, inspecting note details, managing tags or knowledge bases, or recovering from Get 笔记 authentication failures with the local auth.json setup.",
+      "url": "artifacts/getnote-e5904cdd43e095722af97b7deade12685dee01ef70d88b3c34d0a257bb44928a.tar.gz",
+      "digest": "sha256:e5904cdd43e095722af97b7deade12685dee01ef70d88b3c34d0a257bb44928a"
+    },
+    {
+      "name": "github-create-pr",
+      "type": "archive",
+      "description": "Create GitHub pull requests from a local branch using a reviewable workflow for branch checks, diff analysis, PR title/body writing, and gh CLI creation. Use when opening a PR, drafting or improving a PR description, preparing a branch for review, or adding reviewers on GitHub.",
+      "url": "artifacts/github-create-pr-c0c0df6702186fdc00c8297bd34c590071bcb97724091b46d1451b9bfee3539d.tar.gz",
+      "digest": "sha256:c0c0df6702186fdc00c8297bd34c590071bcb97724091b46d1451b9bfee3539d"
+    },
+    {
+      "name": "github-release-notes-writer",
+      "type": "archive",
+      "description": "Draft or update user-focused GitHub Release Notes from verified tags, commits, pull requests, existing releases, and supplied changelog baselines. Use when preparing prerelease or stable release notes, turning GitHub's generated What's Changed list into a curated narrative, documenting upgrades or breaking changes, or producing a major-version migration summary. Do not use merely to validate a repository changelog fragment.",
+      "url": "artifacts/github-release-notes-writer-d0dd03b0686906328c27dc6c3d22814cd5461e17c745f732533926aa2a3fbdc0.tar.gz",
+      "digest": "sha256:d0dd03b0686906328c27dc6c3d22814cd5461e17c745f732533926aa2a3fbdc0"
+    },
+    {
+      "name": "github-release-pr-writer",
+      "type": "archive",
+      "description": "Draft or update GitHub release pull request descriptions from verified tags, commits, merged pull requests, and the release diff. Use when a PR prepares a version, aligns release metadata, promotes a prerelease, or needs a reviewer-focused release summary, exact change inventory, breaking-change section, or migration summary. Do not use for ordinary feature or bug-fix pull requests.",
+      "url": "artifacts/github-release-pr-writer-f16d2faa89ea9805ecad8e195c929c652fb94e9634d9379e91b23a364514efb5.tar.gz",
+      "digest": "sha256:f16d2faa89ea9805ecad8e195c929c652fb94e9634d9379e91b23a364514efb5"
+    },
+    {
+      "name": "github-renovate-prs",
+      "type": "archive",
+      "description": "Inspect, triage, approve, and merge GitHub Renovate pull requests with gh. When no repository is provided, use the default preset repository set, build a candidate execution plan, and execute only after explicit user confirmation. Use when the user asks to check, batch-handle, approve, or merge Renovate PRs.",
+      "url": "artifacts/github-renovate-prs-53f9a8deeff1c8068aaefc685af0c7adbc9b95e68ffd7ebc77ddd15ad96e352b.tar.gz",
+      "digest": "sha256:53f9a8deeff1c8068aaefc685af0c7adbc9b95e68ffd7ebc77ddd15ad96e352b"
+    },
+    {
+      "name": "gitlab-create-mr",
+      "type": "archive",
+      "description": "Create GitLab merge requests from a local branch using a reviewable workflow for branch checks, GitLab host detection, diff analysis, title and description writing, and `glab mr create`. Use when opening a GitLab merge request, drafting or improving merge request copy, preparing a branch for review, or working across GitLab.com and self-managed GitLab instances.",
+      "url": "artifacts/gitlab-create-mr-c0360d816b08213dca7145070ea298a3ce3a56234e86f7a9f0f2b693632ba80e.tar.gz",
+      "digest": "sha256:c0360d816b08213dca7145070ea298a3ce3a56234e86f7a9f0f2b693632ba80e"
+    },
+    {
+      "name": "gitlab-mr-inline-comment",
+      "type": "archive",
+      "description": "Publish a single inline comment on a GitLab merge request by anchoring it to a valid diff line with `glab api`. Use when Codex needs to place one review comment on a specific MR file and line, while reusing the user's existing `glab` authentication and stopping on invalid anchors instead of falling back to a general comment.",
+      "url": "artifacts/gitlab-mr-inline-comment-bc377a6a051895194647602371f7a31e0ceac8c0cdb30beee8254c971f11d79e.tar.gz",
+      "digest": "sha256:bc377a6a051895194647602371f7a31e0ceac8c0cdb30beee8254c971f11d79e"
+    },
+    {
+      "name": "glab-cli",
+      "type": "archive",
+      "description": "GitLab CLI (`glab`) reference and workflow for repository, merge request, issue, CI/CD, release, and API operations across GitLab.com and self-managed or dedicated instances. Use when Codex needs to run or explain `glab` commands, usually by relying on the current `glab` context first, and only falling back to `git remote -v` or explicit host and repo arguments when the target platform or repository is unclear.",
+      "url": "artifacts/glab-cli-b36de467609f1917a7dea88d0b97dde445c8b93fdbdb19f88c505c5b38e74746.tar.gz",
+      "digest": "sha256:b36de467609f1917a7dea88d0b97dde445c8b93fdbdb19f88c505c5b38e74746"
+    },
+    {
+      "name": "google-fonts-curator",
+      "type": "archive",
+      "description": "Recommend high-taste Google Fonts for websites based on brand tone, page type, and visual direction. Use when the user needs font selection, font pairing, or aesthetic judgment within the Google Fonts ecosystem for landing pages, brand sites, editorial pages, portfolios, or digital products.",
+      "url": "artifacts/google-fonts-curator-18f3ce105064ff8cbf436a8b6932f2cbfc77b289b60ce1cf50d97212454c4759.tar.gz",
+      "digest": "sha256:18f3ce105064ff8cbf436a8b6932f2cbfc77b289b60ce1cf50d97212454c4759"
+    },
+    {
+      "name": "mac-keychain",
+      "type": "archive",
+      "description": "Work with macOS Keychain generic password items through bundled scripts. Use when Codex needs to check, read metadata, create, update, retrieve, reveal, or delete local credentials by `service + account` on macOS, especially as a thin credential-store wrapper inside another workflow.",
+      "url": "artifacts/mac-keychain-8a2ed712db28d7ec0326dec480caae6ed5dca74b43a1834fa35ce2a957221651.tar.gz",
+      "digest": "sha256:8a2ed712db28d7ec0326dec480caae6ed5dca74b43a1834fa35ce2a957221651"
+    },
+    {
+      "name": "memory-init",
+      "type": "archive",
+      "description": "Scaffold a project-local memory directory and AGENTS.md guidance for reusable agent knowledge. Use when a user wants to initialize `.agents/memories/` or another project memory path so future agents can read and maintain durable project context.",
+      "url": "artifacts/memory-init-d59c7cb547704b28c6a2cc45917431bf6d51c68341e6d03823d12f1505f529ea.tar.gz",
+      "digest": "sha256:d59c7cb547704b28c6a2cc45917431bf6d51c68341e6d03823d12f1505f529ea"
+    },
+    {
+      "name": "multi-codex-orchestrator",
+      "type": "archive",
+      "description": "Orchestrate multiple standalone Codex workers for parallel repository tasks. Use when the user wants task decomposition, isolated worktrees, structured worker outputs, patch collection, and final integration by a single coordinator.",
+      "url": "artifacts/multi-codex-orchestrator-73fed90a402e9a39e3947f60d3c817bef5bade60fbdeb78cd1e83b7d0f51e930.tar.gz",
+      "digest": "sha256:73fed90a402e9a39e3947f60d3c817bef5bade60fbdeb78cd1e83b7d0f51e930"
+    },
+    {
+      "name": "opentelemetry-go-reviewer",
+      "type": "archive",
+      "description": "High-bar review for changes in open-telemetry/opentelemetry-go with strict standards for correctness, compatibility, and performance.",
+      "url": "artifacts/opentelemetry-go-reviewer-5eb8dfc4e0bcd2f532c180d6d0a3b84cb813ecc241290d25023ad2a0625bb47e.tar.gz",
+      "digest": "sha256:5eb8dfc4e0bcd2f532c180d6d0a3b84cb813ecc241290d25023ad2a0625bb47e"
+    },
+    {
+      "name": "otel-changelog-pr-verifier",
+      "type": "archive",
+      "description": "Verify whether CHANGELOG entries in an OpenTelemetry Go repository point to the correct pull requests and whether each `(#NNNN)` matches the described change. Use when checking a release PR, validating a CHANGELOG section, or screening only mismatched changelog-to-PR references.",
+      "url": "artifacts/otel-changelog-pr-verifier-3a9277d8cfa974d816f2c419dc22b4378366f6e6b29424d1c51782eee43014ab.tar.gz",
+      "digest": "sha256:3a9277d8cfa974d816f2c419dc22b4378366f6e6b29424d1c51782eee43014ab"
+    },
+    {
+      "name": "otel-go-reviewer",
+      "type": "archive",
+      "description": "Review pull requests, diffs, patches, or design proposals for the open-telemetry/opentelemetry-go repository with a senior maintainer mindset. Use when changes in opentelemetry-go may affect OpenTelemetry specification compliance, repository contribution rules, changelog requirements, module versioning boundaries, API or telemetry compatibility, performance-sensitive paths, concurrency or lifecycle behavior, or test coverage.",
+      "url": "artifacts/otel-go-reviewer-5d842d65a68e94412b7fb884ca0fb5154b549fce550f441f02f181dbd5673104.tar.gz",
+      "digest": "sha256:5d842d65a68e94412b7fb884ca0fb5154b549fce550f441f02f181dbd5673104"
+    },
+    {
+      "name": "programmer-motivator",
+      "type": "archive",
+      "description": "Give calm, technically grounded encouragement to programmers when the user is stuck on a bug, frustrated by debugging, tired, discouraged, blaming themselves after a mistake, asking for motivation or emotional support while coding, wanting someone to stay with them through a hard problem, celebrating a breakthrough, or reflecting after a rough coding session. Use when Codex should act like a steady programmer motivator with local personalization and controllable memory, not a therapist, generic cheerleader, or broad companion persona.",
+      "url": "artifacts/programmer-motivator-a3d74a33e7689a08ecf5be70e1354b4f5221936c98777c5054ee0d707d98626d.tar.gz",
+      "digest": "sha256:a3d74a33e7689a08ecf5be70e1354b4f5221936c98777c5054ee0d707d98626d"
+    },
+    {
+      "name": "skill-converter",
+      "type": "archive",
+      "description": "Convert an upstream agent spec, prompt file, markdown role definition, or similar source document into a local skill that matches the target repository's conventions. Use when porting an external agent or prompt into this repository's skill format, adapting an existing role definition into reusable local instructions, or auditing whether an imported skill matches local structure, triggering, and packaging rules.",
+      "url": "artifacts/skill-converter-1ebbcf9e1631df4b49d25bfb518868fe3808fe6e8c467d77131ae3e2068d6832.tar.gz",
+      "digest": "sha256:1ebbcf9e1631df4b49d25bfb518868fe3808fe6e8c467d77131ae3e2068d6832"
+    },
+    {
+      "name": "skill-metadata-maintainer",
+      "type": "archive",
+      "description": "Initialize or update the metadata field in one specific skill's SKILL.md according to this repository's CONTRIBUTING.md rules. Use when Codex needs to maintain metadata for exactly one target skill, derive author and created from git history, and require explicit confirmation before overwriting existing metadata values.",
+      "url": "artifacts/skill-metadata-maintainer-b0cce084cd2a593977505249bb8f16038fff549bc204a946eee35af80e5e4478.tar.gz",
+      "digest": "sha256:b0cce084cd2a593977505249bb8f16038fff549bc204a946eee35af80e5e4478"
+    },
+    {
+      "name": "study",
+      "type": "archive",
+      "description": "Guide structured learning for a topic by diagnosing current level, defining stage goals, building a learning path, generating practice, and running review loops. Use when the user wants to learn something step by step, start from zero, build a study plan, prepare for an exam or skill, get guided practice, or continue a topic through staged coaching rather than a one-off answer.",
+      "url": "artifacts/study-b17e3c17a39fb34ff2b55215941c7def8b117c02eb1b25e141947a4db71fd747.tar.gz",
+      "digest": "sha256:b17e3c17a39fb34ff2b55215941c7def8b117c02eb1b25e141947a4db71fd747"
+    },
+    {
+      "name": "subagent-orchestrator",
+      "type": "archive",
+      "description": "Orchestrate subagent workflows for complex tasks that benefit from decomposition, role-based delegation, and parallel execution. Use when Codex should assemble a temporary team of subagents, choose roles from a reusable role library, create a controlled fallback role when no preset role fits, coordinate read-heavy work in parallel, or handle write-heavy work with ownership boundaries, staged execution, and an integrator-led merge path.",
+      "url": "artifacts/subagent-orchestrator-f386fbaee6d963a4161dd0c48f44a79d3b1f5473e2aec0e74359323f0a3cfd9d.tar.gz",
+      "digest": "sha256:f386fbaee6d963a4161dd0c48f44a79d3b1f5473e2aec0e74359323f0a3cfd9d"
+    },
+    {
+      "name": "volcengine-ark-image-generator",
+      "type": "archive",
+      "description": "Generate or validate Volcengine Ark image requests for text-to-image and single-reference image workflows. Use when Codex needs to choose a Seedream or SeedEdit model, shape prompts, execute image generation through the bundled script, explain Ark images.generate options, or guard against invalid parameter combinations.",
+      "url": "artifacts/volcengine-ark-image-generator-c94ca5096566c4e2d6284e7d4cf56b61c69a673740540f825c9a1836e01a8683.tar.gz",
+      "digest": "sha256:c94ca5096566c4e2d6284e7d4cf56b61c69a673740540f825c9a1836e01a8683"
+    },
+    {
+      "name": "yuque",
+      "type": "archive",
+      "description": "Work with Yuque OpenAPI for reading, searching, creating, and updating users, groups, repos, docs, TOC structures, versions, and statistics. Use when Codex needs to operate on Yuque knowledge bases or documents, reorganize document placement in a repo, inspect API capabilities, or prepare guarded plans for destructive Yuque actions.",
+      "url": "artifacts/yuque-0bb7a52617c9a88b31d5d5dc0a75b2f4342ceec2947a35e0146c9c9eb7104373.tar.gz",
+      "digest": "sha256:0bb7a52617c9a88b31d5d5dc0a75b2f4342ceec2947a35e0146c9c9eb7104373"
+    }
+  ]
+}
