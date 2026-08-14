@@ -190,46 +190,13 @@ export function SkillModal({
                   className="w-full max-w-3xl"
                 >
                   <Dialog.Panel className="flex max-h-[calc(100vh-2rem)] max-h-[calc(100dvh-2rem)] w-full flex-col overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-modal)]">
-                  <div className="flex shrink-0 items-start justify-between gap-4 px-6 pt-6 sm:px-8 sm:pt-7">
-                    <div className="min-w-0">
-                      <Dialog.Title as="h3" className="font-display text-2xl font-bold tracking-tight text-[var(--foreground)] sm:text-3xl">
+                  <div className="shrink-0 px-6 pt-6 sm:px-8 sm:pt-7">
+                    <div className="flex items-start justify-between gap-4">
+                      <Dialog.Title as="h3" className="min-w-0 font-display text-2xl font-bold tracking-tight text-[var(--foreground)] sm:text-3xl">
                         {displayName}
                       </Dialog.Title>
-                      {skill ? (
-                        <div className="mt-3 flex min-w-0 flex-wrap items-center gap-2 text-xs">
-                          <span className="inline-flex h-7 max-w-full items-center rounded-full bg-[var(--surface-muted)] px-3 font-mono text-[11px] text-[var(--muted)]">
-                            {skill.name}
-                          </span>
-                          {publishedAt ? (
-                            <span className="inline-flex h-7 items-center gap-1.5 rounded-full bg-[var(--surface-muted)] px-3 text-[var(--muted)]">
-                              <CalendarDays size={12} className="shrink-0" />
-                              {publishedAt}
-                            </span>
-                          ) : null}
-                          {fileCountLabel ? (
-                            <span className="inline-flex h-7 items-center gap-1.5 rounded-full bg-[var(--surface-muted)] px-3 text-[var(--muted)]">
-                              <Files size={12} className="shrink-0" />
-                              {fileCountLabel}
-                            </span>
-                          ) : null}
-                          {stats ? (
-                            <>
-                              <span
-                                className="inline-flex h-7 items-center gap-1.5 rounded-full bg-[var(--surface-muted)] px-3 text-[var(--muted)]"
-                                title={`${stats.views} views`}
-                              >
-                                <Eye size={12} className="shrink-0" />
-                                {formatInteractionCount(stats.views)} views
-                              </span>
-                              <span
-                                className="inline-flex h-7 items-center gap-1.5 rounded-full bg-[var(--surface-muted)] px-3 text-[var(--muted)]"
-                                title={`${stats.copies} copies`}
-                              >
-                                <Copy size={12} className="shrink-0" />
-                                {formatInteractionCount(stats.copies)} copies
-                              </span>
-                            </>
-                          ) : null}
+                      <div className="flex shrink-0 items-center gap-2">
+                        {skill ? (
                           <a
                             href={sourceUrl}
                             target="_blank"
@@ -241,22 +208,63 @@ export function SkillModal({
                                 target: 'github_skill_source',
                               });
                             }}
-                            className="inline-flex h-7 items-center gap-1.5 rounded-full bg-[var(--accent-soft)] px-3 font-semibold text-[var(--accent)] transition-colors hover:bg-[var(--accent)] hover:text-[var(--on-accent)]"
-                            title="View source file on GitHub"
+                            className="grid h-9 w-9 place-items-center rounded-full bg-[var(--surface-muted)] text-[var(--muted)] transition-colors hover:bg-[var(--accent-soft)] hover:text-[var(--accent)]"
+                            aria-label="View source on GitHub"
+                            title="View source on GitHub"
                           >
-                            <ExternalLink size={12} className="shrink-0" />
-                            View on GitHub
+                            <ExternalLink size={16} strokeWidth={1.8} />
                           </a>
-                        </div>
-                      ) : null}
+                        ) : null}
+                        <button
+                          onClick={onClose}
+                          className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[var(--surface-muted)] text-[var(--muted)] transition-colors hover:bg-[var(--accent-soft)] hover:text-[var(--accent)]"
+                          aria-label="Close skill details"
+                        >
+                          <X size={17} />
+                        </button>
+                      </div>
                     </div>
-                    <button
-                      onClick={onClose}
-                      className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[var(--surface-muted)] text-[var(--muted)] transition-colors hover:bg-[var(--accent-soft)] hover:text-[var(--accent)]"
-                      aria-label="Close skill details"
-                    >
-                      <X size={17} />
-                    </button>
+                    {skill ? (
+                      <div className="mt-3 flex min-w-0 flex-wrap items-center gap-2 font-mono text-xs">
+                        <span className="inline-flex h-7 max-w-full items-center rounded-full bg-[var(--surface-muted)] px-3 text-[var(--muted)]">
+                          {skill.name}
+                        </span>
+                        {publishedAt ? (
+                          <span className="inline-flex h-7 items-center gap-1.5 rounded-full bg-[var(--surface-muted)] px-3 text-[var(--muted)]">
+                            <CalendarDays size={12} strokeWidth={1.5} className="shrink-0" />
+                            {publishedAt}
+                          </span>
+                        ) : null}
+                        {fileCountLabel || stats ? (
+                          <span className="inline-flex min-h-7 flex-wrap items-center gap-x-2.5 gap-y-1 rounded-full bg-[var(--surface-muted)] px-3 py-1 text-[var(--muted)]">
+                            {fileCountLabel ? (
+                              <span className="hidden items-center gap-1.5 min-[420px]:flex">
+                                <Files size={12} strokeWidth={1.5} className="shrink-0" />
+                                {fileCountLabel}
+                              </span>
+                            ) : null}
+                            {stats ? (
+                              <>
+                                <span
+                                  className="flex shrink-0 items-center gap-1.5"
+                                  title={`${stats.views.toLocaleString('en')} views`}
+                                >
+                                  <Eye size={12} strokeWidth={1.6} className="shrink-0" />
+                                  {formatInteractionCount(stats.views)} views
+                                </span>
+                                <span
+                                  className="flex shrink-0 items-center gap-1.5"
+                                  title={`${stats.copies.toLocaleString('en')} copies`}
+                                >
+                                  <Copy size={12} strokeWidth={1.6} className="shrink-0" />
+                                  {formatInteractionCount(stats.copies)} copies
+                                </span>
+                              </>
+                            ) : null}
+                          </span>
+                        ) : null}
+                      </div>
+                    ) : null}
                   </div>
 
                   <div className="relative flex min-h-0 flex-1 flex-col">

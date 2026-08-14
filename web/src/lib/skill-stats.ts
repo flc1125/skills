@@ -64,14 +64,54 @@ function statsField(slug: string, interaction: SkillInteraction) {
   return `${slug}:${interaction === 'view' ? 'views' : 'copies'}`;
 }
 
+// Deterministic in-memory stats for local development when Upstash is not
+// configured. Enable with SKILL_STATS_MOCK=true; never active in production.
+const mockStatsStore = new Map<string, SkillStats>();
+
+function isSkillStatsMocked(): boolean {
+  return (
+    process.env.NODE_ENV !== 'production' &&
+    process.env.SKILL_STATS_MOCK === 'true'
+  );
+}
+
+function getMockStats(slug: string): SkillStats {
+  const existing = mockStatsStore.get(slug);
+
+  if (existing) {
+    return existing;
+  }
+
+  let hash = 0;
+  for (const char of slug) {
+    hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
+  }
+
+  const stats: SkillStats = {
+    views: 42 + (hash % 4800),
+    copies: 3 + ((hash >>> 8) % 640),
+  };
+  mockStatsStore.set(slug, stats);
+  return stats;
+}
+
 export function isSkillStatsEnabled(): boolean {
-  return getRedis() !== null;
+  return getRedis() !== null || isSkillStatsMocked();
 }
 
 export async function getSkillStats(
   slugs: string[]
 ): Promise<SkillStatsSnapshot> {
   const redis = getRedis();
+
+  if (!redis && isSkillStatsMocked()) {
+    return {
+      enabled: true,
+      skills: Object.fromEntries(
+        slugs.map((slug) => [slug, getMockStats(slug)])
+      ),
+    };
+  }
 
   if (!redis || slugs.length === 0) {
     return {
@@ -114,7 +154,13 @@ export async function recordSkillInteraction(
   const redis = getRedis();
 
   if (!redis) {
-    return null;
+    if (!isSkillStatsMocked()) {
+      return null;
+    }
+
+    const stats = getMockStats(slug);
+    stats[interaction === 'view' ? 'views' : 'copies'] += 1;
+    return { counted: true, stats };
   }
 
   try {

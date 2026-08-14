@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { motion, useMotionTemplate, useMotionValue } from 'motion/react';
-import { ArrowRight, CalendarDays, Copy, Eye, Files } from 'lucide-react';
+import { ArrowRight, CalendarDays, Copy, Eye } from 'lucide-react';
 import { trackEvent } from '@/lib/gtag';
 import { formatInteractionCount, formatSkillPublishedAt } from '@/lib/utils';
 import type { SkillMetadata } from '@/lib/skills';
@@ -98,31 +98,26 @@ export function SkillCard({ skill, stats, position, onClick }: SkillCardProps) {
         {displayDescription}
       </span>
 
-      {stats ? (
-        <span className="mt-4 flex items-center gap-3 font-mono text-[11px] text-[var(--muted)]">
-          <span className="flex items-center gap-1.5" title={`${stats.views} views`}>
-            <Eye size={12} strokeWidth={1.6} aria-hidden="true" />
-            <span>{formatInteractionCount(stats.views)}</span>
-            <span className="sr-only">views</span>
-          </span>
-          <span className="flex items-center gap-1.5" title={`${stats.copies} copies`}>
-            <Copy size={12} strokeWidth={1.6} aria-hidden="true" />
-            <span>{formatInteractionCount(stats.copies)}</span>
-            <span className="sr-only">copies</span>
-          </span>
-        </span>
-      ) : null}
-
       <span className="mt-auto flex items-center justify-between gap-3 pt-5">
-        <span className="flex min-w-0 items-center gap-3 font-mono text-[11px] text-[var(--muted)]">
+        <span className="flex min-w-0 items-center gap-2.5 font-mono text-xs text-[var(--muted)]">
           <span className="flex items-center gap-1.5">
             <CalendarDays size={12} strokeWidth={1.5} className="shrink-0" />
             <span className="truncate">{publishedAt ?? 'Undated'}</span>
           </span>
-          <span className="flex items-center gap-1.5">
-            <Files size={12} strokeWidth={1.5} className="shrink-0" />
-            {skill.fileCount} {skill.fileCount === 1 ? 'file' : 'files'}
-          </span>
+          {stats ? (
+            <>
+              <span className="flex shrink-0 items-center gap-1.5" title={`${stats.views} views`}>
+                <Eye size={12} strokeWidth={1.6} className="shrink-0" aria-hidden="true" />
+                <span>{formatInteractionCount(stats.views)}</span>
+                <span className="sr-only">views</span>
+              </span>
+              <span className="flex shrink-0 items-center gap-1.5" title={`${stats.copies} copies`}>
+                <Copy size={12} strokeWidth={1.6} className="shrink-0" aria-hidden="true" />
+                <span>{formatInteractionCount(stats.copies)}</span>
+                <span className="sr-only">copies</span>
+              </span>
+            </>
+          ) : null}
         </span>
         <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[var(--surface-muted)] text-[var(--muted)] transition-all duration-200 group-hover:bg-[var(--accent)] group-hover:text-[var(--on-accent)]">
           <ArrowRight size={14} strokeWidth={2} className="transition-transform duration-200 group-hover:translate-x-px" />
