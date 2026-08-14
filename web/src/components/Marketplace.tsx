@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { AnimatePresence, MotionConfig, animate, motion, useMotionValue, useReducedMotion, useTransform } from 'motion/react';
 import type { Variants } from 'motion/react';
@@ -11,9 +11,11 @@ import { SkillModal } from './SkillModal';
 import { trackEvent } from '@/lib/gtag';
 import { parseSkillMetadataDate } from '@/lib/utils';
 import type { Skill, SkillMetadata } from '@/lib/skills';
+import type { SkillStats, SkillStatsSnapshot } from '@/lib/skill-stats';
 
 interface MarketplaceProps {
   initialSkills: SkillMetadata[];
+  initialStats: SkillStatsSnapshot;
 }
 
 function compareSkillsByCreated(left: SkillMetadata, right: SkillMetadata) {
@@ -53,7 +55,7 @@ function AnimatedNumber({ value }: { value: number }) {
   return <motion.span>{rounded}</motion.span>;
 }
 
-export function Marketplace({ initialSkills }: MarketplaceProps) {
+export function Marketplace({ initialSkills, initialStats }: MarketplaceProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const selectedSkillSlug = searchParams.get('skill');
@@ -63,6 +65,7 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
   const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
   const [isLoadingSkill, setIsLoadingSkill] = useState(false);
   const [skillLoadError, setSkillLoadError] = useState<string | null>(null);
+  const [statsSnapshot, setStatsSnapshot] = useState(initialStats);
   // Hydration-safe mount flag without setState-in-effect: false during SSR
   // and the first client render, true afterwards.
   const hasMounted = useSyncExternalStore(
@@ -204,6 +207,16 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
     window.history.pushState(null, '', pathname);
   };
 
+  const handleStatsChange = useCallback((slug: string, stats: SkillStats) => {
+    setStatsSnapshot((current) => ({
+      enabled: true,
+      skills: {
+        ...current.skills,
+        [slug]: stats,
+      },
+    }));
+  }, []);
+
   // Reflect the open skill in the document title so shared ?skill= links
   // and browser tabs carry the skill name; closing always returns to the
   // homepage, so restore the known site title rather than a captured one
@@ -308,6 +321,7 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
               <SkillCard
                 key={skill.slug}
                 skill={skill}
+                stats={statsSnapshot.enabled ? statsSnapshot.skills[skill.slug] : undefined}
                 position={index + 1}
                 onClick={handleCardClick}
               />
@@ -344,6 +358,12 @@ export function Marketplace({ initialSkills }: MarketplaceProps) {
         isOpen={isModalOpen}
         isLoading={isLoadingSkill}
         error={skillLoadError}
+        stats={
+          statsSnapshot.enabled && selectedSkillSlug
+            ? statsSnapshot.skills[selectedSkillSlug]
+            : undefined
+        }
+        onStatsChange={handleStatsChange}
         onClose={handleCloseModal}
       />
     </motion.div>

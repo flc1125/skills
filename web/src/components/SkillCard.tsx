@@ -2,18 +2,20 @@
 
 import { useEffect, useRef } from 'react';
 import { motion, useMotionTemplate, useMotionValue } from 'motion/react';
-import { ArrowRight, CalendarDays, Files } from 'lucide-react';
+import { ArrowRight, CalendarDays, Copy, Eye, Files } from 'lucide-react';
 import { trackEvent } from '@/lib/gtag';
-import { formatSkillPublishedAt } from '@/lib/utils';
+import { formatInteractionCount, formatSkillPublishedAt } from '@/lib/utils';
 import type { SkillMetadata } from '@/lib/skills';
+import type { SkillStats } from '@/lib/skill-stats';
 
 interface SkillCardProps {
   skill: SkillMetadata;
+  stats?: SkillStats;
   position: number;
   onClick: (skill: SkillMetadata) => void;
 }
 
-export function SkillCard({ skill, position, onClick }: SkillCardProps) {
+export function SkillCard({ skill, stats, position, onClick }: SkillCardProps) {
   const cardRef = useRef<HTMLButtonElement | null>(null);
   const hasTrackedImpression = useRef(false);
   const spotlightX = useMotionValue(0);
@@ -95,6 +97,21 @@ export function SkillCard({ skill, position, onClick }: SkillCardProps) {
       <span className="mt-2 line-clamp-2 block text-sm leading-6 text-[var(--muted)]">
         {displayDescription}
       </span>
+
+      {stats ? (
+        <span className="mt-4 flex items-center gap-3 font-mono text-[11px] text-[var(--muted)]">
+          <span className="flex items-center gap-1.5" title={`${stats.views} views`}>
+            <Eye size={12} strokeWidth={1.6} aria-hidden="true" />
+            <span>{formatInteractionCount(stats.views)}</span>
+            <span className="sr-only">views</span>
+          </span>
+          <span className="flex items-center gap-1.5" title={`${stats.copies} copies`}>
+            <Copy size={12} strokeWidth={1.6} aria-hidden="true" />
+            <span>{formatInteractionCount(stats.copies)}</span>
+            <span className="sr-only">copies</span>
+          </span>
+        </span>
+      ) : null}
 
       <span className="mt-auto flex items-center justify-between gap-3 pt-5">
         <span className="flex min-w-0 items-center gap-3 font-mono text-[11px] text-[var(--muted)]">

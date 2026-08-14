@@ -1,6 +1,6 @@
 import { execFile } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { lstat, mkdir, readFile, rename, writeFile } from 'node:fs/promises';
+import { lstat, mkdir, readFile, rename, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
@@ -125,6 +125,7 @@ async function main() {
     throw new Error(`No skills found in ${skillsDir}`);
   }
 
+  await rm(outputDir, { recursive: true, force: true });
   await mkdir(artifactsDir, { recursive: true });
 
   const entries = [];

@@ -1,14 +1,16 @@
 'use client';
 
-import { Skill } from '@/lib/skills';
+import type { Skill } from '@/lib/skills';
 import { Dialog } from '@headlessui/react';
 import { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, MotionConfig, motion } from 'motion/react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { X, Terminal, Copy, Check, ExternalLink, CalendarDays, Files, ArrowUp } from 'lucide-react';
-import { formatSkillPublishedAt } from '@/lib/utils';
+import { X, Terminal, Copy, Check, ExternalLink, CalendarDays, Eye, Files, ArrowUp } from 'lucide-react';
+import { formatInteractionCount, formatSkillPublishedAt } from '@/lib/utils';
 import { trackEvent } from '@/lib/gtag';
+import { recordSkillInteraction } from '@/lib/skill-stats-client';
+import type { SkillStats } from '@/lib/skill-stats';
 
 interface SkillModalProps {
   skill: Skill | null;
@@ -16,6 +18,8 @@ interface SkillModalProps {
   isOpen: boolean;
   isLoading: boolean;
   error: string | null;
+  stats?: SkillStats;
+  onStatsChange: (slug: string, stats: SkillStats) => void;
   onClose: () => void;
 }
 
@@ -63,7 +67,16 @@ function resolveSkillContentLink(skill: Skill, href?: string) {
   return `${GITHUB_BLOB_BASE_URL}/${resolvedPath}${hash ? `#${hash}` : ''}`;
 }
 
-export function SkillModal({ skill, fallbackName, isOpen, isLoading, error, onClose }: SkillModalProps) {
+export function SkillModal({
+  skill,
+  fallbackName,
+  isOpen,
+  isLoading,
+  error,
+  stats,
+  onStatsChange,
+  onClose,
+}: SkillModalProps) {
   const [copied, setCopied] = useState(false);
   const trackedViewSlug = useRef<string | null>(null);
   const contentRef = useRef<HTMLDivElement | null>(null);
@@ -112,8 +125,13 @@ export function SkillModal({ skill, fallbackName, isOpen, isLoading, error, onCl
       skill_name: displayName,
       install_name: skill.installName,
     });
+    void recordSkillInteraction(skill.slug, 'view').then((updatedStats) => {
+      if (updatedStats) {
+        onStatsChange(skill.slug, updatedStats);
+      }
+    });
     trackedViewSlug.current = skill.slug;
-  }, [displayName, isOpen, skill]);
+  }, [displayName, isOpen, onStatsChange, skill]);
 
   const command = skill
     ? `npx skills add https://skills.flc.io --skill ${skill.installName}`
@@ -122,17 +140,30 @@ export function SkillModal({ skill, fallbackName, isOpen, isLoading, error, onCl
     ? `https://github.com/flc1125/skills/blob/main/skills/${skill.path}`
     : '';
 
-  const copyToClipboard = () => {
+  const copyToClipboard = async () => {
     if (!command) return;
-    navigator.clipboard.writeText(command);
-    if (skill) {
+
+    try {
+      await navigator.clipboard.writeText(command);
+
+      if (!skill) {
+        return;
+      }
+
       trackEvent('skill_install_copy', {
         skill_slug: skill.slug,
         skill_name: displayName,
         install_name: skill.installName,
       });
+      setCopied(true);
+      void recordSkillInteraction(skill.slug, 'copy').then((updatedStats) => {
+        if (updatedStats) {
+          onStatsChange(skill.slug, updatedStats);
+        }
+      });
+    } catch (error) {
+      console.error('Failed to copy install command:', error);
     }
-    setCopied(true);
   };
 
   return (
@@ -180,6 +211,24 @@ export function SkillModal({ skill, fallbackName, isOpen, isLoading, error, onCl
                               <Files size={12} className="shrink-0" />
                               {fileCountLabel}
                             </span>
+                          ) : null}
+                          {stats ? (
+                            <>
+                              <span
+                                className="inline-flex h-7 items-center gap-1.5 rounded-full bg-[var(--surface-muted)] px-3 text-[var(--muted)]"
+                                title={`${stats.views} views`}
+                              >
+                                <Eye size={12} className="shrink-0" />
+                                {formatInteractionCount(stats.views)} views
+                              </span>
+                              <span
+                                className="inline-flex h-7 items-center gap-1.5 rounded-full bg-[var(--surface-muted)] px-3 text-[var(--muted)]"
+                                title={`${stats.copies} copies`}
+                              >
+                                <Copy size={12} className="shrink-0" />
+                                {formatInteractionCount(stats.copies)} copies
+                              </span>
+                            </>
                           ) : null}
                           <a
                             href={sourceUrl}
