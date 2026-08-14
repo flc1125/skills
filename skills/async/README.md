@@ -5,6 +5,12 @@ Local skill for launching and coordinating Codex subagent work as tracked async 
 ## Install
 
 ```bash
+npx skills add https://skills.flc.io --skill async
+```
+
+If the custom skill source is temporarily unavailable, install from GitHub:
+
+```bash
 npx skills add https://github.com/flc1125/skills --skill async
 ```
 

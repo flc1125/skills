@@ -5,6 +5,12 @@ Local skill for Codex that performs maintainer-grade review of changes in `open-
 ## Install
 
 ```bash
+npx skills add https://skills.flc.io --skill opentelemetry-go-reviewer
+```
+
+If the custom skill source is temporarily unavailable, install from GitHub:
+
+```bash
 npx skills add https://github.com/flc1125/skills --skill opentelemetry-go-reviewer
 ```
 

@@ -7,6 +7,12 @@ It is a cross-domain expert panel skill, not a domain-specific expert library. I
 ## Install
 
 ```bash
+npx skills add https://skills.flc.io --skill experts
+```
+
+If the custom skill source is temporarily unavailable, install from GitHub:
+
+```bash
 npx skills add https://github.com/flc1125/skills --skill experts
 ```
 

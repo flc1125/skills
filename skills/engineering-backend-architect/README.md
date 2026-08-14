@@ -5,6 +5,12 @@ This is a standalone skill for backend architecture design and review.
 ## Install
 
 ```bash
+npx skills add https://skills.flc.io --skill engineering-backend-architect
+```
+
+If the custom skill source is temporarily unavailable, install from GitHub:
+
+```bash
 npx skills add https://github.com/flc1125/skills --skill engineering-backend-architect
 ```
 

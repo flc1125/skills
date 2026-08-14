@@ -5,6 +5,12 @@ Local Codex skill for posting one anchored inline comment on a GitLab merge requ
 ## Install
 
 ```bash
+npx skills add https://skills.flc.io --skill gitlab-mr-inline-comment
+```
+
+If the custom skill source is temporarily unavailable, install from GitHub:
+
+```bash
 npx skills add https://github.com/flc1125/skills --skill gitlab-mr-inline-comment
 ```
 

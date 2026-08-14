@@ -5,6 +5,12 @@ Local skill for Codex that assembles and coordinates temporary subagent teams fo
 ## Install
 
 ```bash
+npx skills add https://skills.flc.io --skill subagent-orchestrator
+```
+
+If the custom skill source is temporarily unavailable, install from GitHub:
+
+```bash
 npx skills add https://github.com/flc1125/skills --skill subagent-orchestrator
 ```
 

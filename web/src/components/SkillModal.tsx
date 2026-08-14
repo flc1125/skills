@@ -116,7 +116,7 @@ export function SkillModal({ skill, fallbackName, isOpen, isLoading, error, onCl
   }, [displayName, isOpen, skill]);
 
   const command = skill
-    ? `npx skills add https://github.com/flc1125/skills --skill ${skill.installName}`
+    ? `npx skills add https://skills.flc.io --skill ${skill.installName}`
     : '';
   const sourceUrl = skill
     ? `https://github.com/flc1125/skills/blob/main/skills/${skill.path}`

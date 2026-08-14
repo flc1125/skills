@@ -5,6 +5,12 @@ Local Codex skill for preparing and creating GitHub pull requests.
 ## Install
 
 ```bash
+npx skills add https://skills.flc.io --skill github-create-pr
+```
+
+If the custom skill source is temporarily unavailable, install from GitHub:
+
+```bash
 npx skills add https://github.com/flc1125/skills --skill github-create-pr
 ```
 
