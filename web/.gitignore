@@ -1,5 +1,5 @@
 .next/
 data/skills.json
-public/.well-known/agent-skills/**/*.tmp
+public/.well-known/agent-skills/
 node_modules/
 tsconfig.tsbuildinfo
