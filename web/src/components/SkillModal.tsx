@@ -196,39 +196,43 @@ export function SkillModal({
                         {displayName}
                       </Dialog.Title>
                       {skill ? (
-                        <div className="mt-3 flex min-w-0 flex-wrap items-center gap-2 text-xs">
-                          <span className="inline-flex h-7 max-w-full items-center rounded-full bg-[var(--surface-muted)] px-3 font-mono text-[11px] text-[var(--muted)]">
+                        <div className="mt-3 flex min-w-0 flex-wrap items-center gap-2 font-mono text-xs">
+                          <span className="inline-flex h-7 max-w-full items-center rounded-full bg-[var(--surface-muted)] px-3 text-[var(--muted)]">
                             {skill.name}
                           </span>
                           {publishedAt ? (
                             <span className="inline-flex h-7 items-center gap-1.5 rounded-full bg-[var(--surface-muted)] px-3 text-[var(--muted)]">
-                              <CalendarDays size={12} className="shrink-0" />
+                              <CalendarDays size={12} strokeWidth={1.5} className="shrink-0" />
                               {publishedAt}
                             </span>
                           ) : null}
-                          {fileCountLabel ? (
-                            <span className="inline-flex h-7 items-center gap-1.5 rounded-full bg-[var(--surface-muted)] px-3 text-[var(--muted)]">
-                              <Files size={12} className="shrink-0" />
-                              {fileCountLabel}
+                          {fileCountLabel || stats ? (
+                            <span className="inline-flex h-7 items-center gap-2.5 rounded-full bg-[var(--surface-muted)] px-3 text-[var(--muted)]">
+                              {fileCountLabel ? (
+                                <span className="flex items-center gap-1.5">
+                                  <Files size={12} strokeWidth={1.5} className="shrink-0" />
+                                  {fileCountLabel}
+                                </span>
+                              ) : null}
+                              {stats ? (
+                                <>
+                                  <span
+                                    className="flex items-center gap-1.5"
+                                    title={`${stats.views.toLocaleString('en')} views`}
+                                  >
+                                    <Eye size={12} strokeWidth={1.6} className="shrink-0" />
+                                    {formatInteractionCount(stats.views)} views
+                                  </span>
+                                  <span
+                                    className="flex items-center gap-1.5"
+                                    title={`${stats.copies.toLocaleString('en')} copies`}
+                                  >
+                                    <Copy size={12} strokeWidth={1.6} className="shrink-0" />
+                                    {formatInteractionCount(stats.copies)} copies
+                                  </span>
+                                </>
+                              ) : null}
                             </span>
-                          ) : null}
-                          {stats ? (
-                            <>
-                              <span
-                                className="inline-flex h-7 items-center gap-1.5 rounded-full bg-[var(--surface-muted)] px-3 text-[var(--muted)]"
-                                title={`${stats.views} views`}
-                              >
-                                <Eye size={12} className="shrink-0" />
-                                {formatInteractionCount(stats.views)} views
-                              </span>
-                              <span
-                                className="inline-flex h-7 items-center gap-1.5 rounded-full bg-[var(--surface-muted)] px-3 text-[var(--muted)]"
-                                title={`${stats.copies} copies`}
-                              >
-                                <Copy size={12} className="shrink-0" />
-                                {formatInteractionCount(stats.copies)} copies
-                              </span>
-                            </>
                           ) : null}
                           <a
                             href={sourceUrl}
