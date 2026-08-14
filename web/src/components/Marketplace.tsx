@@ -9,7 +9,7 @@ import { RepositoryInstallPanel } from './RepositoryInstallPanel';
 import { SkillCard } from './SkillCard';
 import { SkillModal } from './SkillModal';
 import { trackEvent } from '@/lib/gtag';
-import { parseSkillMetadataDate } from '@/lib/utils';
+import { formatInteractionCount, parseSkillMetadataDate } from '@/lib/utils';
 import type { Skill, SkillMetadata } from '@/lib/skills';
 import type { SkillStats, SkillStatsSnapshot } from '@/lib/skill-stats';
 
@@ -39,10 +39,20 @@ const heroItem: Variants = {
   show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 240, damping: 26 } },
 };
 
-function AnimatedNumber({ value }: { value: number }) {
+const defaultNumberFormat = (value: number) => value.toString();
+
+function AnimatedNumber({
+  value,
+  format = defaultNumberFormat,
+}: {
+  value: number;
+  format?: (value: number) => string;
+}) {
   const shouldReduceMotion = useReducedMotion();
   const motionValue = useMotionValue(0);
-  const rounded = useTransform(motionValue, (latest) => Math.round(latest));
+  const rounded = useTransform(motionValue, (latest) =>
+    format(Math.round(latest))
+  );
 
   useEffect(() => {
     const controls = animate(motionValue, value, {
@@ -168,6 +178,19 @@ export function Marketplace({ initialSkills, initialStats }: MarketplaceProps) {
     () => initialSkills.reduce((sum, skill) => sum + skill.fileCount, 0),
     [initialSkills]
   );
+  const totalInteractions = useMemo(() => {
+    if (!statsSnapshot.enabled) {
+      return null;
+    }
+
+    return Object.values(statsSnapshot.skills).reduce(
+      (totals, stats) => ({
+        views: totals.views + stats.views,
+        copies: totals.copies + stats.copies,
+      }),
+      { views: 0, copies: 0 }
+    );
+  }, [statsSnapshot]);
 
   useEffect(() => {
     const query = search.trim();
@@ -270,15 +293,28 @@ export function Marketplace({ initialSkills, initialStats }: MarketplaceProps) {
         </motion.div>
 
         <motion.div variants={heroItem} className="mt-6 flex flex-wrap items-center justify-center gap-2" aria-label="Collection facts">
-          <span className="inline-flex h-8 items-center rounded-full bg-[var(--surface-muted)] px-3.5 text-xs font-medium text-[var(--muted)]">
-            <strong className="mr-1.5 font-display font-bold text-[var(--foreground)]"><AnimatedNumber value={totalSkills} /></strong> skills
+          <span className="inline-flex h-8 items-center rounded-full bg-[var(--surface-muted)] px-3.5 text-xs font-medium leading-none text-[var(--muted)]">
+            <strong className="mr-1.5 font-display font-bold leading-none text-[var(--foreground)]"><AnimatedNumber value={totalSkills} /></strong> skills
           </span>
-          <span className="inline-flex h-8 items-center rounded-full bg-[var(--surface-muted)] px-3.5 text-xs font-medium text-[var(--muted)]">
-            <strong className="mr-1.5 font-display font-bold text-[var(--foreground)]"><AnimatedNumber value={totalFiles} /></strong> source files
+          <span className="inline-flex h-8 items-center rounded-full bg-[var(--surface-muted)] px-3.5 text-xs font-medium leading-none text-[var(--muted)]">
+            <strong className="mr-1.5 font-display font-bold leading-none text-[var(--foreground)]"><AnimatedNumber value={totalFiles} /></strong> files
           </span>
-          <span className="inline-flex h-8 items-center rounded-full bg-[var(--surface-muted)] px-3.5 text-xs font-medium text-[var(--muted)]">
-            One command to install
-          </span>
+          {totalInteractions ? (
+            <>
+              <span
+                className="inline-flex h-8 items-center rounded-full bg-[var(--surface-muted)] px-3.5 text-xs font-medium leading-none text-[var(--muted)]"
+                title={`${totalInteractions.views.toLocaleString('en')} views`}
+              >
+                <strong className="mr-1.5 font-display font-bold leading-none text-[var(--foreground)]"><AnimatedNumber value={totalInteractions.views} format={formatInteractionCount} /></strong> views
+              </span>
+              <span
+                className="inline-flex h-8 items-center rounded-full bg-[var(--surface-muted)] px-3.5 text-xs font-medium leading-none text-[var(--muted)]"
+                title={`${totalInteractions.copies.toLocaleString('en')} copies`}
+              >
+                <strong className="mr-1.5 font-display font-bold leading-none text-[var(--foreground)]"><AnimatedNumber value={totalInteractions.copies} format={formatInteractionCount} /></strong> copies
+              </span>
+            </>
+          ) : null}
         </motion.div>
       </section>
 
