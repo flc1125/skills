@@ -5,7 +5,7 @@ Local Codex skill for scanning GitHub Renovate pull requests, building a conserv
 ## Install
 
 ```bash
-npx skills add https://github.com/flc1125/skills --skill github-renovate-prs
+npx skills add https://skills.flc.io --skill github-renovate-prs
 ```
 
 ## Purpose

@@ -5,7 +5,7 @@ Structured learning skill for guided, staged study on one topic at a time.
 ## Install
 
 ```bash
-npx skills add https://github.com/flc1125/skills --skill study
+npx skills add https://skills.flc.io --skill study
 ```
 
 ## Purpose

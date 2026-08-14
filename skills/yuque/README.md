@@ -14,7 +14,7 @@ It covers:
 ## Install
 
 ```bash
-npx skills add https://github.com/flc1125/skills --skill yuque
+npx skills add https://skills.flc.io --skill yuque
 ```
 
 ## Structure

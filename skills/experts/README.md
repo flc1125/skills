@@ -7,7 +7,7 @@ It is a cross-domain expert panel skill, not a domain-specific expert library. I
 ## Install
 
 ```bash
-npx skills add https://github.com/flc1125/skills --skill experts
+npx skills add https://skills.flc.io --skill experts
 ```
 
 It is intended for requests such as:

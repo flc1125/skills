@@ -5,7 +5,7 @@ Local Codex skill for drafting and creating GitLab merge requests.
 ## Install
 
 ```bash
-npx skills add https://github.com/flc1125/skills --skill gitlab-create-mr
+npx skills add https://skills.flc.io --skill gitlab-create-mr
 ```
 
 ## Scope

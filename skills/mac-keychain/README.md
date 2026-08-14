@@ -5,7 +5,7 @@ Thin Codex skill for working with macOS Keychain generic password items.
 ## Install
 
 ```bash
-npx skills add https://github.com/flc1125/skills --skill mac-keychain
+npx skills add https://skills.flc.io --skill mac-keychain
 ```
 
 ## Purpose

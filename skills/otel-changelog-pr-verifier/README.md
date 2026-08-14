@@ -5,7 +5,7 @@ Local skill for checking whether changelog PR references match the actual GitHub
 ## Install
 
 ```bash
-npx skills add https://github.com/flc1125/skills --skill otel-changelog-pr-verifier
+npx skills add https://skills.flc.io --skill otel-changelog-pr-verifier
 ```
 
 ## Scope

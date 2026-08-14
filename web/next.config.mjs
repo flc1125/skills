@@ -13,6 +13,32 @@ const nextConfig = {
   turbopack: {
     root: repoRoot,
   },
+  async headers() {
+    return [
+      {
+        source: '/.well-known/agent-skills/index.json',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=0, must-revalidate',
+          },
+          {
+            key: 'Vercel-CDN-Cache-Control',
+            value: 'public, max-age=300',
+          },
+        ],
+      },
+      {
+        source: '/.well-known/agent-skills/artifacts/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;

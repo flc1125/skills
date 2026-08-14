@@ -18,14 +18,14 @@
 
 An open repository of reusable skills maintained for personal use and public reuse.
 
-This repo contains a Codex plugin, a Claude Code plugin, and installable skills that can be added directly from GitHub and used as building blocks for agent workflows, AI assistants, or other compatible tools.
+This repo contains a Codex plugin, a Claude Code plugin, and installable skills that can be added from [skills.flc.io](https://skills.flc.io) and used as building blocks for agent workflows, AI assistants, or other compatible tools.
 
 The installable skill content lives in `skills/`. The Next.js marketplace that powers [skills.flc.io](https://skills.flc.io) now lives in `web/`.
 
 ## ✨ Overview
 
 - Install the full skill collection as a Codex or Claude Code plugin
-- Install individual skills directly from this repository
+- Install individual skills from the published skill source
 - Browse available skills on the visual marketplace at [skills.flc.io](https://skills.flc.io)
 - Reuse the repository as a lightweight source of portable skills
 
@@ -62,19 +62,19 @@ Use `npx skills add` when you only want one skill, want to choose from an intera
 Choose a skill interactively:
 
 ```bash
-npx skills add https://github.com/flc1125/skills
+npx skills add https://skills.flc.io
 ```
 
 Install a specific skill directly:
 
 ```bash
-npx skills add https://github.com/flc1125/skills --skill <skill-name>
+npx skills add https://skills.flc.io --skill <skill-name>
 ```
 
 For example:
 
 ```bash
-npx skills add https://github.com/flc1125/skills --skill engineering-backend-architect
+npx skills add https://skills.flc.io --skill engineering-backend-architect
 ```
 
 If you install a specific skill directly, use the skill's install name shown on the marketplace or in its `SKILL.md`, not the marketplace URL slug.
@@ -98,6 +98,8 @@ npm run dev
 ```
 
 Use `npm run lint` and `npm run build` inside `web/` to validate marketplace changes.
+
+The web prebuild publishes an Agent Skills Discovery v0.2 index and deterministic, content-addressed archives under `web/public/.well-known/agent-skills/`. Run `npm run generate:skills-distribution` to generate them directly. Only Git-tracked or non-ignored skill files are packaged, so ignored local configuration such as `.env` is never distributed.
 
 ## 📝 License
 

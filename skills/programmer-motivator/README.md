@@ -5,7 +5,7 @@
 ## Install
 
 ```bash
-npx skills add https://github.com/flc1125/skills --skill programmer-motivator
+npx skills add https://skills.flc.io --skill programmer-motivator
 ```
 
 After installation, invoke it with:

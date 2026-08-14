@@ -5,7 +5,7 @@ Local Codex skill for coordinating multiple standalone Codex workers against one
 ## Install
 
 ```bash
-npx skills add https://github.com/flc1125/skills --skill multi-codex-orchestrator
+npx skills add https://skills.flc.io --skill multi-codex-orchestrator
 ```
 
 ## Scope

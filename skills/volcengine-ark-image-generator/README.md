@@ -12,7 +12,7 @@ It focuses on a narrow executable path:
 ## Install
 
 ```bash
-npx skills add https://github.com/flc1125/skills --skill volcengine-ark-image-generator
+npx skills add https://skills.flc.io --skill volcengine-ark-image-generator
 ```
 
 ## Structure
