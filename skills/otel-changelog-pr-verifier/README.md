@@ -8,6 +8,12 @@ Local skill for checking whether changelog PR references match the actual GitHub
 npx skills add https://skills.flc.io --skill otel-changelog-pr-verifier
 ```
 
+If the custom skill source is temporarily unavailable, install from GitHub:
+
+```bash
+npx skills add https://github.com/flc1125/skills --skill otel-changelog-pr-verifier
+```
+
 ## Scope
 
 - review a release PR that updates `CHANGELOG.md`

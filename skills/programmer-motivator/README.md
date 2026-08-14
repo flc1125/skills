@@ -8,6 +8,12 @@
 npx skills add https://skills.flc.io --skill programmer-motivator
 ```
 
+If the custom skill source is temporarily unavailable, install from GitHub:
+
+```bash
+npx skills add https://github.com/flc1125/skills --skill programmer-motivator
+```
+
 After installation, invoke it with:
 
 ```text

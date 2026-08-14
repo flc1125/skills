@@ -79,6 +79,15 @@ npx skills add https://skills.flc.io --skill engineering-backend-architect
 
 If you install a specific skill directly, use the skill's install name shown on the marketplace or in its `SKILL.md`, not the marketplace URL slug.
 
+#### GitHub fallback
+
+If the custom skill source is temporarily unavailable, install from the GitHub repository instead:
+
+```bash
+npx skills add https://github.com/flc1125/skills
+npx skills add https://github.com/flc1125/skills --skill <skill-name>
+```
+
 ## 🚀 Usage
 
 Browse all published skills at [skills.flc.io](https://skills.flc.io).

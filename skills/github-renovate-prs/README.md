@@ -8,6 +8,12 @@ Local Codex skill for scanning GitHub Renovate pull requests, building a conserv
 npx skills add https://skills.flc.io --skill github-renovate-prs
 ```
 
+If the custom skill source is temporarily unavailable, install from GitHub:
+
+```bash
+npx skills add https://github.com/flc1125/skills --skill github-renovate-prs
+```
+
 ## Purpose
 
 Use this skill when you want Codex to batch-check Renovate PRs across a known repository set or a specific GitHub repository, then prepare a compact candidate plan before taking any write action.

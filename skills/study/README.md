@@ -8,6 +8,12 @@ Structured learning skill for guided, staged study on one topic at a time.
 npx skills add https://skills.flc.io --skill study
 ```
 
+If the custom skill source is temporarily unavailable, install from GitHub:
+
+```bash
+npx skills add https://github.com/flc1125/skills --skill study
+```
+
 ## Purpose
 
 Use this skill when you want to:

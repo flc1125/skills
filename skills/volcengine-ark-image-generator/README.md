@@ -15,6 +15,12 @@ It focuses on a narrow executable path:
 npx skills add https://skills.flc.io --skill volcengine-ark-image-generator
 ```
 
+If the custom skill source is temporarily unavailable, install from GitHub:
+
+```bash
+npx skills add https://github.com/flc1125/skills --skill volcengine-ark-image-generator
+```
+
 ## Structure
 
 - `SKILL.md`: agent-facing workflow, routing rules, and execution posture

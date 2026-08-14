@@ -8,6 +8,12 @@ Local skill for initializing project-local memory files and agent guidance.
 npx skills add https://skills.flc.io --skill memory-init
 ```
 
+If the custom skill source is temporarily unavailable, install from GitHub:
+
+```bash
+npx skills add https://github.com/flc1125/skills --skill memory-init
+```
+
 ## Scope
 
 - create a lightweight `.agents/memories/` scaffold by default

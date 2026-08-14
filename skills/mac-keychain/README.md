@@ -8,6 +8,12 @@ Thin Codex skill for working with macOS Keychain generic password items.
 npx skills add https://skills.flc.io --skill mac-keychain
 ```
 
+If the custom skill source is temporarily unavailable, install from GitHub:
+
+```bash
+npx skills add https://github.com/flc1125/skills --skill mac-keychain
+```
+
 ## Purpose
 
 Use this skill when you need to work with local credentials stored in macOS Keychain by `service + account`, including:

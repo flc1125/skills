@@ -8,6 +8,12 @@ Local skill for requesting or performing a focused code review on a defined chan
 npx skills add https://skills.flc.io --skill code-review
 ```
 
+If the custom skill source is temporarily unavailable, install from GitHub:
+
+```bash
+npx skills add https://github.com/flc1125/skills --skill code-review
+```
+
 ## Scope
 
 - define a review range with git SHAs

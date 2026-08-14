@@ -8,6 +8,12 @@ Local Codex skill for coordinating multiple standalone Codex workers against one
 npx skills add https://skills.flc.io --skill multi-codex-orchestrator
 ```
 
+If the custom skill source is temporarily unavailable, install from GitHub:
+
+```bash
+npx skills add https://github.com/flc1125/skills --skill multi-codex-orchestrator
+```
+
 ## Scope
 
 - Split one repository task into bounded worker scopes
