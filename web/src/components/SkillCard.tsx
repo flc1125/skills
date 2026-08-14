@@ -99,7 +99,7 @@ export function SkillCard({ skill, stats, position, onClick }: SkillCardProps) {
       </span>
 
       <span className="mt-auto flex items-center justify-between gap-3 pt-5">
-        <span className="flex min-w-0 items-center gap-2.5 font-mono text-[11px] text-[var(--muted)]">
+        <span className="flex min-w-0 items-center gap-2.5 font-mono text-xs text-[var(--muted)]">
           <span className="flex items-center gap-1.5">
             <CalendarDays size={12} strokeWidth={1.5} className="shrink-0" />
             <span className="truncate">{publishedAt ?? 'Undated'}</span>
