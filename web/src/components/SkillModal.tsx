@@ -1,176 +1,50 @@
 'use client';
 
-import type { Skill } from '@/lib/skills';
+import { useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Dialog } from '@headlessui/react';
-import { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, MotionConfig, motion } from 'motion/react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import { X, Terminal, Copy, Check, ExternalLink, CalendarDays, Eye, Files, ArrowUp } from 'lucide-react';
-import { formatInteractionCount, formatSkillPublishedAt } from '@/lib/utils';
+import { X, ExternalLink, ArrowUp } from 'lucide-react';
+import type { Skill } from '@/lib/skills';
 import { trackEvent } from '@/lib/gtag';
-import { recordSkillInteraction } from '@/lib/skill-stats-client';
-import type { SkillStats } from '@/lib/skill-stats';
+import { SkillMarkdown } from './SkillMarkdown';
+import { SkillMetaPills } from './SkillMetaPills';
+import { SkillInstallAction } from './SkillInstallAction';
 
 interface SkillModalProps {
-  skill: Skill | null;
-  fallbackName?: string;
-  isOpen: boolean;
-  isLoading: boolean;
-  error: string | null;
-  stats?: SkillStats;
-  onStatsChange: (slug: string, stats: SkillStats) => void;
-  onClose: () => void;
+  skill: Skill;
 }
 
-const GITHUB_BLOB_BASE_URL = 'https://github.com/flc1125/skills/blob/main/skills';
-
-function normalizeGithubPathParts(parts: string[]) {
-  const normalized: string[] = [];
-
-  for (const part of parts) {
-    if (!part || part === '.') {
-      continue;
-    }
-
-    if (part === '..') {
-      normalized.pop();
-      continue;
-    }
-
-    normalized.push(part);
-  }
-
-  return normalized;
-}
-
-function resolveSkillContentLink(skill: Skill, href?: string) {
-  if (!href) {
-    return href;
-  }
-
-  if (
-    href.startsWith('http://') ||
-    href.startsWith('https://') ||
-    href.startsWith('mailto:') ||
-    href.startsWith('tel:') ||
-    href.startsWith('#')
-  ) {
-    return href;
-  }
-
-  const [pathname, hash = ''] = href.split('#');
-  const baseDir = skill.path.split('/').slice(0, -1);
-  const targetParts = pathname.split('/');
-  const resolvedPath = normalizeGithubPathParts([...baseDir, ...targetParts]).join('/');
-
-  return `${GITHUB_BLOB_BASE_URL}/${resolvedPath}${hash ? `#${hash}` : ''}`;
-}
-
-export function SkillModal({
-  skill,
-  fallbackName,
-  isOpen,
-  isLoading,
-  error,
-  stats,
-  onStatsChange,
-  onClose,
-}: SkillModalProps) {
-  const [copied, setCopied] = useState(false);
-  const trackedViewSlug = useRef<string | null>(null);
+export function SkillModal({ skill }: SkillModalProps) {
+  const router = useRouter();
+  const [open, setOpen] = useState(true);
+  const didClose = useRef(false);
   const contentRef = useRef<HTMLDivElement | null>(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
-  const displayName = skill?.metadata?.name ?? skill?.name ?? fallbackName ?? 'Loading skill';
-  const publishedAt = formatSkillPublishedAt(skill?.metadata?.created);
-  const fileCountLabel = skill ? `${skill.fileCount} ${skill.fileCount === 1 ? 'file' : 'files'}` : null;
+  const displayName = skill.metadata?.name ?? skill.name;
+  const sourceUrl = `https://github.com/flc1125/skills/blob/main/skills/${skill.path}`;
 
-  useEffect(() => {
-    if (copied) {
-      const timeout = setTimeout(() => setCopied(false), 2000);
-      return () => clearTimeout(timeout);
-    }
-  }, [copied]);
-
-  // Reset scroll position whenever the modal opens or the skill changes.
-  // The state flag resets during render; the DOM scroll stays in an effect.
-  const scrollResetKey = `${isOpen}:${skill?.slug ?? ''}`;
-  const [prevScrollResetKey, setPrevScrollResetKey] = useState(scrollResetKey);
-  if (prevScrollResetKey !== scrollResetKey) {
-    setPrevScrollResetKey(scrollResetKey);
-    setShowBackToTop(false);
-  }
-
-  useEffect(() => {
-    contentRef.current?.scrollTo({ top: 0 });
-  }, [isOpen, skill?.slug]);
+  const handleClose = () => {
+    didClose.current = true;
+    setOpen(false);
+  };
 
   const scrollContentToTop = () => {
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     contentRef.current?.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
   };
 
-  useEffect(() => {
-    if (!isOpen) {
-      trackedViewSlug.current = null;
-      return;
-    }
-
-    if (!skill || trackedViewSlug.current === skill.slug) {
-      return;
-    }
-
-    trackEvent('skill_detail_view', {
-      skill_slug: skill.slug,
-      skill_name: displayName,
-      install_name: skill.installName,
-    });
-    void recordSkillInteraction(skill.slug, 'view').then((updatedStats) => {
-      if (updatedStats) {
-        onStatsChange(skill.slug, updatedStats);
-      }
-    });
-    trackedViewSlug.current = skill.slug;
-  }, [displayName, isOpen, onStatsChange, skill]);
-
-  const command = skill
-    ? `npx skills add https://skills.flc.io --skill ${skill.installName}`
-    : '';
-  const sourceUrl = skill
-    ? `https://github.com/flc1125/skills/blob/main/skills/${skill.path}`
-    : '';
-
-  const copyToClipboard = async () => {
-    if (!command) return;
-
-    try {
-      await navigator.clipboard.writeText(command);
-
-      if (!skill) {
-        return;
-      }
-
-      trackEvent('skill_install_copy', {
-        skill_slug: skill.slug,
-        skill_name: displayName,
-        install_name: skill.installName,
-      });
-      setCopied(true);
-      void recordSkillInteraction(skill.slug, 'copy').then((updatedStats) => {
-        if (updatedStats) {
-          onStatsChange(skill.slug, updatedStats);
-        }
-      });
-    } catch (error) {
-      console.error('Failed to copy install command:', error);
-    }
-  };
-
   return (
     <MotionConfig reducedMotion="user">
-      <AnimatePresence>
-        {isOpen && (
-          <Dialog open={isOpen} onClose={onClose} className="relative z-50">
+      <AnimatePresence
+        onExitComplete={() => {
+          if (didClose.current) {
+            router.back();
+          }
+        }}
+      >
+        {open && (
+          <Dialog open={open} onClose={handleClose} className="relative z-50">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -190,13 +64,12 @@ export function SkillModal({
                   className="w-full max-w-3xl"
                 >
                   <Dialog.Panel className="flex max-h-[calc(100vh-2rem)] max-h-[calc(100dvh-2rem)] w-full flex-col overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-modal)]">
-                  <div className="shrink-0 px-6 pt-6 sm:px-8 sm:pt-7">
-                    <div className="flex items-start justify-between gap-4">
-                      <Dialog.Title as="h3" className="min-w-0 font-display text-2xl font-bold tracking-tight text-[var(--foreground)] sm:text-3xl">
-                        {displayName}
-                      </Dialog.Title>
-                      <div className="flex shrink-0 items-center gap-2">
-                        {skill ? (
+                    <div className="shrink-0 px-6 pt-6 sm:px-8 sm:pt-7">
+                      <div className="flex items-start justify-between gap-4">
+                        <Dialog.Title as="h3" className="min-w-0 font-display text-2xl font-bold tracking-tight text-[var(--foreground)] sm:text-3xl">
+                          {displayName}
+                        </Dialog.Title>
+                        <div className="flex shrink-0 items-center gap-2">
                           <a
                             href={sourceUrl}
                             target="_blank"
@@ -214,240 +87,49 @@ export function SkillModal({
                           >
                             <ExternalLink size={16} strokeWidth={1.8} />
                           </a>
-                        ) : null}
-                        <button
-                          onClick={onClose}
-                          className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[var(--surface-muted)] text-[var(--muted)] transition-colors hover:bg-[var(--accent-soft)] hover:text-[var(--accent)]"
-                          aria-label="Close skill details"
-                        >
-                          <X size={17} />
-                        </button>
-                      </div>
-                    </div>
-                    {skill ? (
-                      <div className="mt-3 flex min-w-0 flex-wrap items-center gap-2 font-mono text-xs">
-                        <span className="inline-flex h-7 max-w-full items-center rounded-full bg-[var(--surface-muted)] px-3 text-[var(--muted)]">
-                          {skill.name}
-                        </span>
-                        {publishedAt ? (
-                          <span className="inline-flex h-7 items-center gap-1.5 rounded-full bg-[var(--surface-muted)] px-3 text-[var(--muted)]">
-                            <CalendarDays size={12} strokeWidth={1.5} className="shrink-0" />
-                            {publishedAt}
-                          </span>
-                        ) : null}
-                        {fileCountLabel || stats ? (
-                          <span className="inline-flex min-h-7 flex-wrap items-center gap-x-2.5 gap-y-1 rounded-full bg-[var(--surface-muted)] px-3 py-1 text-[var(--muted)]">
-                            {fileCountLabel ? (
-                              <span className="hidden items-center gap-1.5 min-[420px]:flex">
-                                <Files size={12} strokeWidth={1.5} className="shrink-0" />
-                                {fileCountLabel}
-                              </span>
-                            ) : null}
-                            {stats ? (
-                              <>
-                                <span
-                                  className="flex shrink-0 items-center gap-1.5"
-                                  title={`${stats.views.toLocaleString('en')} views`}
-                                >
-                                  <Eye size={12} strokeWidth={1.6} className="shrink-0" />
-                                  {formatInteractionCount(stats.views)} views
-                                </span>
-                                <span
-                                  className="flex shrink-0 items-center gap-1.5"
-                                  title={`${stats.copies.toLocaleString('en')} copies`}
-                                >
-                                  <Copy size={12} strokeWidth={1.6} className="shrink-0" />
-                                  {formatInteractionCount(stats.copies)} copies
-                                </span>
-                              </>
-                            ) : null}
-                          </span>
-                        ) : null}
-                      </div>
-                    ) : null}
-                  </div>
-
-                  <div className="relative flex min-h-0 flex-1 flex-col">
-                    <div
-                      ref={contentRef}
-                      onScroll={(event) => setShowBackToTop(event.currentTarget.scrollTop > 240)}
-                      className="mt-5 min-h-0 flex-1 overflow-y-auto px-6 pb-2 custom-scrollbar sm:max-h-[58dvh] sm:px-8"
-                    >
-                    <AnimatePresence mode="wait" initial={false}>
-                    {isLoading ? (
-                      <motion.div
-                        key="skeleton"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.15 }}
-                        className="space-y-3 pb-4"
-                      >
-                        <div className="space-y-3 animate-pulse">
-                          <div className="h-4 rounded-full bg-[var(--surface-muted)]" />
-                          <div className="h-4 rounded-full bg-[var(--surface-muted)]" />
-                          <div className="h-4 w-5/6 rounded-full bg-[var(--surface-muted)]" />
-                          <div className="h-24 rounded-2xl bg-[var(--surface-muted)]" />
+                          <button
+                            onClick={handleClose}
+                            className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[var(--surface-muted)] text-[var(--muted)] transition-colors hover:bg-[var(--accent-soft)] hover:text-[var(--accent)]"
+                            aria-label="Close skill details"
+                          >
+                            <X size={17} />
+                          </button>
                         </div>
-                      </motion.div>
-                    ) : error ? (
-                      <motion.div
-                        key="error"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.15 }}
-                        className="rounded-2xl bg-[var(--accent-soft)] px-4 py-3 text-sm text-[var(--foreground)]"
-                      >
-                        {error}
-                      </motion.div>
-                    ) : skill ? (
-                      <motion.div
-                        key="content"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                      <div className="prose max-w-none text-[var(--foreground)] dark:prose-invert
-                        prose-headings:font-display prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-[var(--foreground)] prose-h1:text-2xl prose-h2:text-xl
-                        prose-p:max-w-[65ch] prose-p:text-sm prose-p:leading-7 prose-p:text-[var(--muted)] prose-li:text-sm prose-li:leading-7 prose-li:text-[var(--muted)] prose-a:font-semibold prose-a:text-[var(--accent)] prose-a:underline prose-a:decoration-[color-mix(in_srgb,var(--accent)_45%,transparent)] prose-a:underline-offset-2">
-                        <ReactMarkdown
-                          remarkPlugins={[remarkGfm]}
-                          components={{
-                            table({ children }) {
-                              return (
-                                <div className="my-4 overflow-x-auto rounded-xl border border-[var(--border)]">
-                                  <table className="!my-0 w-full min-w-max text-sm">
-                                    {children}
-                                  </table>
-                                </div>
-                              )
-                            },
-                            th({ children, node: _node, ...props }) {
-                              return (
-                                <th {...props} className="border-b border-[var(--border)] bg-[var(--surface-muted)] px-3.5 py-2.5 text-left font-display text-xs font-bold text-[var(--foreground)]">
-                                  {children}
-                                </th>
-                              )
-                            },
-                            td({ children, node: _node, ...props }) {
-                              return (
-                                <td {...props} className="border-b border-[var(--border)] px-3.5 py-2.5 align-top text-[var(--muted)] [&_tr:last-child>&]:border-b-0">
-                                  {children}
-                                </td>
-                              )
-                            },
-                            pre({ children }) {
-                              return (
-                                <pre className="my-4 overflow-x-auto rounded-xl bg-[var(--surface-muted)] p-4 text-xs text-[var(--foreground)]">
-                                  {children}
-                                </pre>
-                              )
-                            },
-                            code(props) {
-                              const { children, className, ...codeProps } = props;
-                              const { node: _node, inline: _inline, ...rest } = codeProps as typeof codeProps & {
-                                inline?: boolean;
-                                node?: unknown;
-                              };
-                              const match = /language-(\w+)/.exec(className || '');
-                              return match ? (
-                                <code className={className} {...rest}>
-                                  {children}
-                                </code>
-                              ) : (
-                                <code className="mx-0.5 rounded-md bg-[var(--surface-muted)] px-1.5 py-0.5 font-semibold text-[var(--foreground)] before:content-none after:content-none" {...rest}>
-                                  {children}
-                                </code>
-                              )
-                            },
-                            a({ href, children, ...props }) {
-                              const resolvedHref = skill ? resolveSkillContentLink(skill, href) : href;
-                              const isExternal = resolvedHref?.startsWith('http://') || resolvedHref?.startsWith('https://');
-
-                              return (
-                                <a
-                                  href={resolvedHref}
-                                  target={isExternal ? '_blank' : undefined}
-                                  rel={isExternal ? 'noopener noreferrer' : undefined}
-                                  {...props}
-                                >
-                                  {children}
-                                </a>
-                              );
-                            }
-                          }}
-                        >
-                          {skill.content}
-                        </ReactMarkdown>
                       </div>
-                      </motion.div>
-                    ) : null}
-                    </AnimatePresence>
+                      <SkillMetaPills skill={skill} />
                     </div>
 
-                    <AnimatePresence>
-                      {showBackToTop && (
-                        <motion.button
-                          key="back-to-top"
-                          type="button"
-                          initial={{ opacity: 0, scale: 0.6, y: 8 }}
-                          animate={{ opacity: 1, scale: 1, y: 0 }}
-                          exit={{ opacity: 0, scale: 0.6, y: 8 }}
-                          transition={{ type: 'spring', stiffness: 500, damping: 28 }}
-                          onClick={scrollContentToTop}
-                          className="absolute bottom-4 right-4 grid h-10 w-10 place-items-center rounded-full bg-[var(--accent)] text-[var(--on-accent)] shadow-[var(--shadow-card-hover)]"
-                          aria-label="Back to top"
-                        >
-                          <ArrowUp size={16} />
-                        </motion.button>
-                      )}
-                    </AnimatePresence>
-                  </div>
+                    <div className="relative flex min-h-0 flex-1 flex-col">
+                      <div
+                        ref={contentRef}
+                        onScroll={(event) => setShowBackToTop(event.currentTarget.scrollTop > 240)}
+                        className="mt-5 min-h-0 flex-1 overflow-y-auto px-6 pb-2 custom-scrollbar sm:max-h-[58dvh] sm:px-8"
+                      >
+                        <SkillMarkdown skill={skill} />
+                      </div>
 
-                  {skill ? (
+                      <AnimatePresence>
+                        {showBackToTop && (
+                          <motion.button
+                            key="back-to-top"
+                            type="button"
+                            initial={{ opacity: 0, scale: 0.6, y: 8 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.6, y: 8 }}
+                            transition={{ type: 'spring', stiffness: 500, damping: 28 }}
+                            onClick={scrollContentToTop}
+                            className="absolute bottom-4 right-4 grid h-10 w-10 place-items-center rounded-full bg-[var(--accent)] text-[var(--on-accent)] shadow-[var(--shadow-card-hover)]"
+                            aria-label="Back to top"
+                          >
+                            <ArrowUp size={16} />
+                          </motion.button>
+                        )}
+                      </AnimatePresence>
+                    </div>
+
                     <div className="shrink-0 px-6 pb-6 pt-4 sm:px-8 sm:pb-7">
-                      <p className="mb-2 text-xs font-medium text-[var(--muted)]">
-                        Install this skill
-                      </p>
-                      <div className="flex items-center gap-3 rounded-xl bg-[var(--surface-muted)] py-2.5 pl-4 pr-2">
-                        <Terminal size={15} className="shrink-0 text-[var(--accent)]" />
-                        <code className="min-w-0 flex-1 select-all truncate font-mono text-xs text-[var(--foreground)]">
-                          {command}
-                        </code>
-                        <motion.button
-                          onClick={copyToClipboard}
-                          type="button"
-                          whileTap={{ scale: 0.92 }}
-                          className={`flex h-9 shrink-0 items-center gap-1.5 rounded-full px-4 text-xs font-semibold transition-colors ${
-                            copied
-                              ? 'bg-[var(--accent)] text-[var(--on-accent)]'
-                              : 'bg-[var(--surface)] text-[var(--muted)] shadow-[var(--shadow-card)] hover:text-[var(--accent)]'
-                          }`}
-                        >
-                          <span className="grid">
-                            <span
-                              className={`col-start-1 row-start-1 flex items-center justify-center gap-1.5 transition-[opacity,transform] duration-150 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
-                                copied ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
-                              }`}
-                            >
-                              <Check size={13} />
-                              <span>Copied</span>
-                            </span>
-                            <span
-                              className={`col-start-1 row-start-1 flex items-center justify-center gap-1.5 transition-[opacity,transform] duration-150 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
-                                copied ? 'scale-75 opacity-0' : 'scale-100 opacity-100'
-                              }`}
-                            >
-                              <Copy size={13} />
-                              <span>Copy</span>
-                            </span>
-                          </span>
-                        </motion.button>
-                      </div>
+                      <SkillInstallAction skill={skill} />
                     </div>
-                  ) : null}
                   </Dialog.Panel>
                 </motion.div>
               </div>

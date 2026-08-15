@@ -1,21 +1,19 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { AnimatePresence, MotionConfig, animate, motion, useMotionValue, useReducedMotion, useTransform } from 'motion/react';
 import type { Variants } from 'motion/react';
 import { Search } from 'lucide-react';
 import { RepositoryInstallPanel } from './RepositoryInstallPanel';
 import { SkillCard } from './SkillCard';
-import { SkillModal } from './SkillModal';
 import { trackEvent } from '@/lib/gtag';
 import { formatInteractionCount, parseSkillMetadataDate } from '@/lib/utils';
-import type { Skill, SkillMetadata } from '@/lib/skills';
-import type { SkillStats, SkillStatsSnapshot } from '@/lib/skill-stats';
+import type { SkillMetadata } from '@/lib/skills';
+import { useStats } from './StatsProvider';
 
 interface MarketplaceProps {
   initialSkills: SkillMetadata[];
-  initialStats: SkillStatsSnapshot;
 }
 
 function compareSkillsByCreated(left: SkillMetadata, right: SkillMetadata) {
@@ -65,40 +63,12 @@ function AnimatedNumber({
   return <motion.span>{rounded}</motion.span>;
 }
 
-export function Marketplace({ initialSkills, initialStats }: MarketplaceProps) {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const selectedSkillSlug = searchParams.get('skill');
+export function Marketplace({ initialSkills }: MarketplaceProps) {
+  const router = useRouter();
+  const { snapshot: statsSnapshot } = useStats();
   const searchInputRef = useRef<HTMLInputElement | null>(null);
   const lastTrackedSearch = useRef<string | null>(null);
   const [search, setSearch] = useState('');
-  const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
-  const [isLoadingSkill, setIsLoadingSkill] = useState(false);
-  const [skillLoadError, setSkillLoadError] = useState<string | null>(null);
-  const [statsSnapshot, setStatsSnapshot] = useState(initialStats);
-  // Hydration-safe mount flag without setState-in-effect: false during SSR
-  // and the first client render, true afterwards.
-  const hasMounted = useSyncExternalStore(
-    () => () => {},
-    () => true,
-    () => false
-  );
-  const activeSelectedSkill =
-    selectedSkillSlug && selectedSkill?.slug === selectedSkillSlug ? selectedSkill : null;
-  const selectedSkillMeta = selectedSkillSlug
-    ? initialSkills.find((skill) => skill.slug === selectedSkillSlug) ?? null
-    : null;
-  const isModalOpen = hasMounted && selectedSkillSlug !== null;
-
-  // Reset detail state when the selected slug changes or clears, using the
-  // render-time adjustment pattern instead of an effect.
-  const [prevSlug, setPrevSlug] = useState(selectedSkillSlug);
-  if (prevSlug !== selectedSkillSlug) {
-    setPrevSlug(selectedSkillSlug);
-    setSelectedSkill(null);
-    setIsLoadingSkill(false);
-    setSkillLoadError(null);
-  }
 
   useEffect(() => {
     const handleShortcut = (event: KeyboardEvent) => {
@@ -111,50 +81,6 @@ export function Marketplace({ initialSkills, initialStats }: MarketplaceProps) {
     window.addEventListener('keydown', handleShortcut);
     return () => window.removeEventListener('keydown', handleShortcut);
   }, []);
-
-  useEffect(() => {
-    if (!hasMounted || !selectedSkillSlug) {
-      return;
-    }
-
-    let cancelled = false;
-
-    const fetchSkill = async () => {
-      setIsLoadingSkill(true);
-      setSkillLoadError(null);
-
-      try {
-        const response = await fetch(`/api/skills/${selectedSkillSlug}`);
-
-        if (!response.ok) {
-          throw new Error(response.status === 404 ? 'Skill not found.' : 'Failed to load skill details.');
-        }
-
-        const data = await response.json();
-
-        if (!cancelled) {
-          setSelectedSkill(data);
-        }
-      } catch (error) {
-        console.error('Failed to fetch skill details:', error);
-
-        if (!cancelled) {
-          setSelectedSkill(null);
-          setSkillLoadError(error instanceof Error ? error.message : 'Failed to load skill details.');
-        }
-      } finally {
-        if (!cancelled) {
-          setIsLoadingSkill(false);
-        }
-      }
-    };
-
-    fetchSkill();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [hasMounted, selectedSkillSlug]);
 
   const orderedSkills = useMemo(() => {
     const normalizedSearch = search.toLowerCase();
@@ -218,45 +144,8 @@ export function Marketplace({ initialSkills, initialStats }: MarketplaceProps) {
   }, [orderedSkills.length, search]);
 
   const handleCardClick = (skillMeta: SkillMetadata) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('skill', skillMeta.slug);
-    window.history.pushState(null, '', `${pathname}?${params.toString()}`);
+    router.push(`/${skillMeta.slug}`, { scroll: false });
   };
-
-  const handleCloseModal = () => {
-    setSelectedSkill(null);
-    setSkillLoadError(null);
-    setIsLoadingSkill(false);
-    window.history.pushState(null, '', pathname);
-  };
-
-  const handleStatsChange = useCallback((slug: string, stats: SkillStats) => {
-    setStatsSnapshot((current) => ({
-      enabled: true,
-      skills: {
-        ...current.skills,
-        [slug]: stats,
-      },
-    }));
-  }, []);
-
-  // Reflect the open skill in the document title so shared ?skill= links
-  // and browser tabs carry the skill name; closing always returns to the
-  // homepage, so restore the known site title rather than a captured one
-  // (which may itself be the skill title on direct ?skill= loads).
-  useEffect(() => {
-    const skillName = selectedSkillMeta?.metadata?.name ?? selectedSkillMeta?.name;
-
-    if (!skillName) {
-      return;
-    }
-
-    document.title = `${skillName} · Flc's Skills`;
-
-    return () => {
-      document.title = "Flc's Skills";
-    };
-  }, [selectedSkillMeta]);
 
   return (
     <MotionConfig reducedMotion="user">
@@ -387,21 +276,6 @@ export function Marketplace({ initialSkills, initialStats }: MarketplaceProps) {
           </motion.div>
         ) : null}
       </section>
-
-      <SkillModal
-        skill={activeSelectedSkill}
-        fallbackName={selectedSkillMeta ? selectedSkillMeta.metadata?.name ?? selectedSkillMeta.name : undefined}
-        isOpen={isModalOpen}
-        isLoading={isLoadingSkill}
-        error={skillLoadError}
-        stats={
-          statsSnapshot.enabled && selectedSkillSlug
-            ? statsSnapshot.skills[selectedSkillSlug]
-            : undefined
-        }
-        onStatsChange={handleStatsChange}
-        onClose={handleCloseModal}
-      />
     </motion.div>
     </MotionConfig>
   );

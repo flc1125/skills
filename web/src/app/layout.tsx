@@ -9,6 +9,9 @@ import { GithubNavLink } from '@/components/GithubNavLink';
 import { HeaderShell } from '@/components/HeaderShell';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { BrandMark } from '@/components/BrandMark';
+import { StatsProvider } from '@/components/StatsProvider';
+import { getSkills } from '@/lib/skills';
+import { getSkillStats } from '@/lib/skill-stats';
 import "./globals.css";
 
 const inter = Inter({
@@ -49,11 +52,15 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
+  const skills = await getSkills();
+  const initialStats = await getSkillStats(skills.map((skill) => skill.slug));
   const themeScript = `
     (() => {
       const storageKey = 'theme-preference';
@@ -112,7 +119,10 @@ export default function RootLayout({
             </nav>
           </div>
         </HeaderShell>
-        <main className="pt-16">{children}</main>
+        <StatsProvider initial={initialStats}>
+          <main className="pt-16">{children}</main>
+          {modal}
+        </StatsProvider>
         <BackToTop />
         <footer className="mt-12 border-t border-[var(--border)] py-10">
           <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 px-5 text-center sm:px-8">
