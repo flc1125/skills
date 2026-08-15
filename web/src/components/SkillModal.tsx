@@ -4,12 +4,12 @@ import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Dialog } from '@headlessui/react';
 import { AnimatePresence, MotionConfig, motion } from 'motion/react';
-import { X, ExternalLink, ArrowUp } from 'lucide-react';
+import { X, ArrowUp } from 'lucide-react';
 import type { Skill } from '@/lib/skills';
-import { trackEvent } from '@/lib/gtag';
 import { SkillMarkdown } from './SkillMarkdown';
 import { SkillMetaPills } from './SkillMetaPills';
 import { SkillInstallAction } from './SkillInstallAction';
+import { SkillSourceLink } from './SkillSourceLink';
 
 interface SkillModalProps {
   skill: Skill;
@@ -70,23 +70,7 @@ export function SkillModal({ skill }: SkillModalProps) {
                           {displayName}
                         </Dialog.Title>
                         <div className="flex shrink-0 items-center gap-2">
-                          <a
-                            href={sourceUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={() => {
-                              trackEvent('skill_source_click', {
-                                skill_slug: skill.slug,
-                                skill_name: displayName,
-                                target: 'github_skill_source',
-                              });
-                            }}
-                            className="grid h-9 w-9 place-items-center rounded-full bg-[var(--surface-muted)] text-[var(--muted)] transition-colors hover:bg-[var(--accent-soft)] hover:text-[var(--accent)]"
-                            aria-label="View source on GitHub"
-                            title="View source on GitHub"
-                          >
-                            <ExternalLink size={16} strokeWidth={1.8} />
-                          </a>
+                          <SkillSourceLink url={sourceUrl} slug={skill.slug} name={displayName} />
                           <button
                             onClick={handleClose}
                             className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[var(--surface-muted)] text-[var(--muted)] transition-colors hover:bg-[var(--accent-soft)] hover:text-[var(--accent)]"

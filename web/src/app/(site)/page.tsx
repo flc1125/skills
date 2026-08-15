@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { getSkills } from '@/lib/skills';
+import { getSkills, getSkillBySlug } from '@/lib/skills';
 import { Marketplace } from '@/components/Marketplace';
 import { Suspense } from 'react';
 
@@ -12,7 +12,11 @@ export default async function Home({ searchParams }: HomeProps) {
   const { skill } = await searchParams;
 
   if (skill) {
-    redirect(`/${skill}`);
+    const target = await getSkillBySlug(skill);
+
+    if (target) {
+      redirect(`/${target.slug}`);
+    }
   }
 
   return (

@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { ExternalLink } from 'lucide-react';
 import { getSkillBySlug } from '@/lib/skills';
 import { SkillMarkdown } from '@/components/SkillMarkdown';
 import { SkillMetaPills } from '@/components/SkillMetaPills';
 import { SkillInstallAction } from '@/components/SkillInstallAction';
+import { SkillSourceLink } from '@/components/SkillSourceLink';
 
 interface SkillPageProps {
   params: Promise<{ slug: string }>;
@@ -32,6 +32,14 @@ export async function generateMetadata({ params }: SkillPageProps): Promise<Meta
       url,
       type: 'article',
       siteName: "Flc's Skills",
+      images: [
+        {
+          url: '/og.png',
+          width: 1200,
+          height: 630,
+          alt: `${name} — Reusable workflow skill`,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
@@ -59,27 +67,19 @@ export default async function SkillPage({ params }: SkillPageProps) {
     description,
     url: `https://skills.flc.io/${slug}`,
   };
+  const jsonLdHtml = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
 
   return (
     <div className="mx-auto max-w-3xl px-5 py-10 sm:px-8 sm:py-14">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdHtml }}
       />
       <div className="flex items-start justify-between gap-4">
         <h1 className="min-w-0 font-display text-2xl font-bold tracking-tight text-[var(--foreground)] sm:text-3xl">
           {name}
         </h1>
-        <a
-          href={sourceUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[var(--surface-muted)] text-[var(--muted)] transition-colors hover:bg-[var(--accent-soft)] hover:text-[var(--accent)]"
-          aria-label="View source on GitHub"
-          title="View source on GitHub"
-        >
-          <ExternalLink size={16} strokeWidth={1.8} />
-        </a>
+        <SkillSourceLink url={sourceUrl} slug={slug} name={name} />
       </div>
       <SkillMetaPills skill={skill} />
       <div className="mt-5">
