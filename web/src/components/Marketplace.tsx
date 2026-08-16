@@ -353,17 +353,17 @@ export function Marketplace({ initialSkills, initialStats }: MarketplaceProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '0px 0px -40px 0px' }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
-          className="mb-6 flex flex-wrap items-end justify-between gap-3"
+          className="mb-6 flex flex-wrap items-center justify-between gap-3"
         >
-          <h2 id="catalog-heading" className="font-display text-2xl font-bold tracking-tight text-[var(--foreground)] sm:text-3xl">
-            Browse skills
-          </h2>
-          <div className="flex flex-wrap items-center gap-3">
-            <SortSelect value={sortKey} options={visibleSortOptions} onChange={handleSortChange} />
+          <div className="flex items-baseline gap-2.5">
+            <h2 id="catalog-heading" className="font-display text-2xl font-bold tracking-tight text-[var(--foreground)] sm:text-3xl">
+              Browse skills
+            </h2>
             <p className="text-sm text-[var(--muted)]" aria-live="polite">
               {orderedSkills.length} {orderedSkills.length === 1 ? 'skill' : 'skills'}
             </p>
           </div>
+          <SortSelect value={sortKey} options={visibleSortOptions} onChange={handleSortChange} />
         </motion.div>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
