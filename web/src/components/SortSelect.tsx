@@ -25,14 +25,14 @@ export function SortSelect({ value, options, onChange }: SortSelectProps) {
   return (
     <div className="relative">
       <Listbox value={value} onChange={onChange}>
-        <ListboxButton className="group flex h-9 items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] pl-3.5 pr-2.5 text-sm text-[var(--foreground)] shadow-[var(--shadow-card)] transition-[border-color,box-shadow] hover:border-[var(--border-strong)] focus:outline-none data-[focus]:ring-2 data-[focus]:ring-[var(--accent)]">
-          <ArrowUpDown size={13} strokeWidth={2} className="shrink-0 text-[var(--muted)]" aria-hidden="true" />
+        <ListboxButton className="group flex h-9 items-center gap-2 rounded-full border border-transparent px-3 text-sm text-[var(--muted)] transition-colors hover:border-[var(--border-strong)] hover:text-[var(--foreground)] focus:outline-none data-[focus]:ring-2 data-[focus]:ring-[var(--accent)]">
+          <ArrowUpDown size={13} strokeWidth={2} className="shrink-0" aria-hidden="true" />
           <span className="sr-only">Sort skills</span>
           <span className="truncate">{currentOption.label}</span>
           <ChevronDown
             size={14}
             strokeWidth={2}
-            className="shrink-0 text-[var(--muted)] transition-transform duration-200 group-data-[open]:rotate-180"
+            className="shrink-0 transition-transform duration-200 group-data-[open]:rotate-180"
             aria-hidden="true"
           />
         </ListboxButton>
