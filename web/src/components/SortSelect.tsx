@@ -25,7 +25,7 @@ export function SortSelect({ value, options, onChange }: SortSelectProps) {
   return (
     <div className="relative">
       <Listbox value={value} onChange={onChange}>
-        <ListboxButton className="group flex h-9 items-center gap-2 rounded-full border border-transparent px-3 text-sm text-[var(--muted)] transition-colors hover:border-[var(--border-strong)] hover:text-[var(--foreground)] focus:outline-none data-[focus]:ring-2 data-[focus]:ring-[var(--accent)]">
+        <ListboxButton className="group flex h-9 items-center gap-2 rounded-full border border-transparent px-3 text-sm text-[var(--muted)] transition-colors hover:border-[var(--border-strong)] hover:bg-[var(--surface)] hover:text-[var(--foreground)] focus:outline-none data-[focus]:ring-2 data-[focus]:ring-[var(--accent)]">
           <ArrowUpDown size={13} strokeWidth={2} className="shrink-0" aria-hidden="true" />
           <span className="sr-only">Sort skills</span>
           <span className="truncate">{currentOption.label}</span>
