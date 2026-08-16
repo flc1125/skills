@@ -25,7 +25,7 @@ export function SortSelect({ value, options, onChange }: SortSelectProps) {
   return (
     <div className="relative">
       <Listbox value={value} onChange={onChange}>
-        <ListboxButton className="group flex h-9 items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] pl-3.5 pr-2.5 text-sm text-[var(--foreground)] shadow-[var(--shadow-card)] transition-[border-color,box-shadow] hover:border-[var(--border-strong)] focus-visible:outline-offset-2">
+        <ListboxButton className="group flex h-9 items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] pl-3.5 pr-2.5 text-sm text-[var(--foreground)] shadow-[var(--shadow-card)] transition-[border-color,box-shadow] hover:border-[var(--border-strong)] focus:outline-none data-[focus]:ring-2 data-[focus]:ring-[var(--accent)]">
           <ArrowUpDown size={13} strokeWidth={2} className="shrink-0 text-[var(--muted)]" aria-hidden="true" />
           <span className="sr-only">Sort skills</span>
           <span className="truncate">{currentOption.label}</span>
@@ -36,12 +36,12 @@ export function SortSelect({ value, options, onChange }: SortSelectProps) {
             aria-hidden="true"
           />
         </ListboxButton>
-        <ListboxOptions className="absolute right-0 z-30 mt-2 w-44 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-1.5 shadow-[var(--shadow-modal)]">
+        <ListboxOptions className="absolute right-0 z-30 mt-2 w-44 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-1.5 shadow-[var(--shadow-modal)] focus:outline-none">
           {options.map((option) => (
             <ListboxOption
               key={option.key}
               value={option.key}
-              className="flex cursor-pointer items-center justify-between gap-3 rounded-lg px-3 py-2 text-sm text-[var(--muted)] transition-colors hover:bg-[var(--surface-muted)] data-[focus]:bg-[var(--surface-muted)]"
+              className="flex cursor-pointer items-center justify-between gap-3 rounded-lg px-3 py-2 text-sm text-[var(--muted)] transition-colors hover:bg-[var(--surface-muted)] data-[focus]:bg-[var(--surface-muted)] focus:outline-none"
             >
               {({ selected }) => (
                 <>
