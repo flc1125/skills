@@ -239,7 +239,10 @@ export function Marketplace({ initialSkills, initialStats }: MarketplaceProps) {
     setSelectedSkill(null);
     setSkillLoadError(null);
     setIsLoadingSkill(false);
-    window.history.pushState(null, '', pathname);
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete('skill');
+    const queryString = params.toString();
+    window.history.pushState(null, '', `${pathname}${queryString ? `?${queryString}` : ''}`);
   };
 
   const handleStatsChange = useCallback((slug: string, stats: SkillStats) => {
