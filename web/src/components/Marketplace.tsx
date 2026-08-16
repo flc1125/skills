@@ -8,25 +8,17 @@ import { Search } from 'lucide-react';
 import { RepositoryInstallPanel } from './RepositoryInstallPanel';
 import { SkillCard } from './SkillCard';
 import { SkillModal } from './SkillModal';
+import { SortSelect } from './SortSelect';
 import { trackEvent } from '@/lib/gtag';
-import { formatInteractionCount, parseSkillMetadataDate } from '@/lib/utils';
+import { formatInteractionCount } from '@/lib/utils';
+import { DEFAULT_SORT_KEY, SORT_OPTIONS, getSkillComparator, isStatsSortKey, normalizeSortKey } from '@/lib/sorting';
+import type { SortKey } from '@/lib/sorting';
 import type { Skill, SkillMetadata } from '@/lib/skills';
 import type { SkillStats, SkillStatsSnapshot } from '@/lib/skill-stats';
 
 interface MarketplaceProps {
   initialSkills: SkillMetadata[];
   initialStats: SkillStatsSnapshot;
-}
-
-function compareSkillsByCreated(left: SkillMetadata, right: SkillMetadata) {
-  const leftTime = parseSkillMetadataDate(left.metadata?.created)?.getTime() ?? 0;
-  const rightTime = parseSkillMetadataDate(right.metadata?.created)?.getTime() ?? 0;
-
-  if (leftTime !== rightTime) {
-    return rightTime - leftTime;
-  }
-
-  return left.name.localeCompare(right.name);
 }
 
 const heroContainer: Variants = {
@@ -76,6 +68,14 @@ export function Marketplace({ initialSkills, initialStats }: MarketplaceProps) {
   const [isLoadingSkill, setIsLoadingSkill] = useState(false);
   const [skillLoadError, setSkillLoadError] = useState<string | null>(null);
   const [statsSnapshot, setStatsSnapshot] = useState(initialStats);
+  const requestedSortKey = normalizeSortKey(searchParams.get('sort'));
+  const sortKey: SortKey =
+    isStatsSortKey(requestedSortKey) && !statsSnapshot.enabled
+      ? DEFAULT_SORT_KEY
+      : requestedSortKey;
+  const visibleSortOptions = SORT_OPTIONS.filter(
+    (option) => !option.requiresStats || statsSnapshot.enabled
+  );
   // Hydration-safe mount flag without setState-in-effect: false during SSR
   // and the first client render, true afterwards.
   const hasMounted = useSyncExternalStore(
@@ -169,8 +169,8 @@ export function Marketplace({ initialSkills, initialStats }: MarketplaceProps) {
           displayDescription.toLowerCase().includes(normalizedSearch)
         );
       })
-      .sort(compareSkillsByCreated);
-  }, [initialSkills, search]);
+      .sort(getSkillComparator(sortKey, statsSnapshot));
+  }, [initialSkills, search, sortKey, statsSnapshot]);
 
   const totalSkills = initialSkills.length;
   const isSearching = search.trim().length > 0;
@@ -223,11 +223,26 @@ export function Marketplace({ initialSkills, initialStats }: MarketplaceProps) {
     window.history.pushState(null, '', `${pathname}?${params.toString()}`);
   };
 
+  const handleSortChange = (key: SortKey) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (key === DEFAULT_SORT_KEY) {
+      params.delete('sort');
+    } else {
+      params.set('sort', key);
+    }
+    const queryString = params.toString();
+    window.history.pushState(null, '', `${pathname}${queryString ? `?${queryString}` : ''}`);
+    trackEvent('skill_sort', { sort_key: key });
+  };
+
   const handleCloseModal = () => {
     setSelectedSkill(null);
     setSkillLoadError(null);
     setIsLoadingSkill(false);
-    window.history.pushState(null, '', pathname);
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete('skill');
+    const queryString = params.toString();
+    window.history.pushState(null, '', `${pathname}${queryString ? `?${queryString}` : ''}`);
   };
 
   const handleStatsChange = useCallback((slug: string, stats: SkillStats) => {
@@ -341,14 +356,17 @@ export function Marketplace({ initialSkills, initialStats }: MarketplaceProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '0px 0px -40px 0px' }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
-          className="mb-6 flex flex-wrap items-end justify-between gap-3"
+          className="mb-6 flex flex-wrap items-center justify-between gap-3"
         >
-          <h2 id="catalog-heading" className="font-display text-2xl font-bold tracking-tight text-[var(--foreground)] sm:text-3xl">
-            Browse skills
-          </h2>
-          <p className="text-sm text-[var(--muted)]" aria-live="polite">
-            {orderedSkills.length} {orderedSkills.length === 1 ? 'skill' : 'skills'}
-          </p>
+          <div className="flex items-baseline gap-2.5">
+            <h2 id="catalog-heading" className="font-display text-2xl font-bold tracking-tight text-[var(--foreground)] sm:text-3xl">
+              Browse skills
+            </h2>
+            <p className="text-sm text-[var(--muted)]" aria-live="polite">
+              {orderedSkills.length} {orderedSkills.length === 1 ? 'skill' : 'skills'}
+            </p>
+          </div>
+          <SortSelect value={sortKey} options={visibleSortOptions} onChange={handleSortChange} />
         </motion.div>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
