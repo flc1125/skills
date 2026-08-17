@@ -21,7 +21,7 @@
     "glob": "^13.0.0",
     "gray-matter": "^4.0.3",
     "lucide-react": "^1.28.0",
-    "motion": "^12.0.0",
+    "motion": "^13.0.0",
     "next": "^16.1.6",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
