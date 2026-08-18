@@ -37,11 +37,11 @@ Declare `reads`, `writes`, `side_effects`, `idempotent`, `timeout`, `retry`, and
 
 ## Edge Contracts
 
-Every edge declares `from` and `to`. Add `when` for a guarded route and `default: true` for its fallback. A guarded edge also declares `reads`, listing every state field used by its condition. Those fields must be available in the source node's declared reads or writes.
+Every edge declares `from` and `to`. Add `when` for a guarded route and `default: true` for its fallback. A guarded edge also declares `reads`, listing every state field used by its condition. Those fields must be available in the source node's declared reads or writes. Do not duplicate an edge with the same source, destination, normalized guard, and default semantics.
 
 For a router or any conditional branch, provide exactly one default edge and conditions for the remaining edges. Duplicate guards are invalid. When more than one guarded edge leaves a node, assign each guard a distinct positive `priority`. This makes overlap deterministic; the validator cannot prove logical exclusivity for arbitrary runtime expressions, so test guard semantics in the target runtime.
 
-Multiple unconditional outgoing edges represent fan-out. Record the corresponding branches and join in `parallel_groups` so aggregation semantics remain explicit. Parallel branches may share a state field only when its merge policy is `append` or `reduce`; `replace` and `reject-conflict` are rejected because completion order would affect the result. `on_partial_failure` must resolve to a node.
+Multiple unconditional outgoing edges represent fan-out. Record every fan-out in exactly one `parallel_groups` entry with its `source`, exact direct `branches`, `join`, and `on_partial_failure` destination. A parallel group cannot describe guarded or default alternatives. Normal and failure/recovery transitions cannot enter a branch from outside that branch's source-owned region. Every normal branch exit reaches its group join; branch-local failure, exhaustion, and partial-failure exits use the group's `on_partial_failure` destination. Graph-wide cancellation and unhandled-error recovery remain graph-level contracts. The join accepts normal inputs only from its branch region, and each join belongs to one parallel group. Parallel branches may share a state field only when its merge policy is `append` or `reduce`; `replace` and `reject-conflict` are rejected because completion order would affect the result.
 
 ## Loop Contracts
 

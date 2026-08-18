@@ -22,7 +22,7 @@ classify -> routine_path
 
 ## Fan-Out and Fan-In
 
-Use parallel branches for independent work and an explicit join for aggregation. Declare whether the join waits for all, any, or a quorum, and how partial failures affect the result.
+Use parallel branches for independent work and an explicit join for aggregation. In a Graph Spec, bind the group to the fan-out `source` and list its exact direct unconditional targets as `branches`. Declare whether the join waits for all, any, or a quorum, and how partial failures affect the result.
 
 ```text
 plan -> research -------\
@@ -30,7 +30,7 @@ plan -> research -------\
      -> cost_analysis ---/
 ```
 
-Avoid parallel branches that write the same state without a reducer or conflict policy.
+Do not treat guarded or default alternatives as parallel branches. Keep every normal and recovery entry inside its source-owned branch, route normal exits through the group join, and do not reuse the join across groups. Avoid parallel branches that write the same state without a reducer or conflict policy.
 
 ## Bounded Review Loop
 

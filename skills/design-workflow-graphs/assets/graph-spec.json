@@ -396,6 +396,7 @@
   "parallel_groups": [
     {
       "id": "analysis",
+      "source": "intake",
       "branches": [
         "research",
         "risk_assessment"

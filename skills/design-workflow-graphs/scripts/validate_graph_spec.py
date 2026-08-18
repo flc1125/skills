@@ -81,18 +81,6 @@ def walk(start: str, adjacency: dict[str, set[str]]) -> set[str]:
     return visited
 
 
-def walk_until(start: str, stop: str, adjacency: dict[str, set[str]]) -> set[str]:
-    visited: set[str] = set()
-    queue = deque([start])
-    while queue:
-        node = queue.popleft()
-        if node == stop or node in visited:
-            continue
-        visited.add(node)
-        queue.extend(adjacency.get(node, set()) - visited - {stop})
-    return visited
-
-
 def cyclic_components(node_ids: Any, adjacency: dict[str, set[str]]) -> list[set[str]]:
     index = 0
     indices: dict[str, int] = {}
@@ -376,6 +364,7 @@ def validate_document(document: Any) -> tuple[list[str], list[str]]:
     outgoing: dict[str, list[tuple[int, dict[str, Any], list[str]]]] = defaultdict(list)
     incoming: dict[str, list[tuple[int, dict[str, Any], list[str]]]] = defaultdict(list)
     adjacency: dict[str, set[str]] = defaultdict(set)
+    seen_edge_semantics: dict[tuple[str, str, str | None, bool], int] = {}
     for index, edge in enumerate(edge_items):
         label = f"edges[{index}]"
         if not is_mapping(edge):
@@ -427,6 +416,24 @@ def validate_document(document: Any) -> tuple[list[str], list[str]]:
                 errors.append(f"{label}.priority must be a positive integer")
 
         if valid_source and valid_target:
+            normalized_guard = (
+                " ".join(guard.split())
+                if has_guard and isinstance(guard, str) and guard.strip()
+                else None
+            )
+            if not has_guard or normalized_guard is not None:
+                semantic_key = (
+                    source,
+                    target,
+                    normalized_guard,
+                    edge.get("default") is True,
+                )
+                if semantic_key in seen_edge_semantics:
+                    errors.append(
+                        f"{label} duplicates edges[{seen_edge_semantics[semantic_key]}]"
+                    )
+                else:
+                    seen_edge_semantics[semantic_key] = index
             record = (index, edge, guard_reads)
             validated_edges.append(record)
             outgoing[source].append(record)
@@ -434,6 +441,7 @@ def validate_document(document: Any) -> tuple[list[str], list[str]]:
             adjacency[source].add(target)
 
     routing_nodes: set[str] = set()
+    fanout_targets: dict[str, set[str]] = {}
     for node_id, node in nodes.items():
         edges = outgoing[node_id]
         if node.get("kind") == "terminal":
@@ -444,6 +452,13 @@ def validate_document(document: Any) -> tuple[list[str], list[str]]:
 
         guarded = [record for record in edges if "when" in record[1]]
         defaults = [record for record in edges if record[1].get("default") is True]
+        unconditional_targets = {
+            record[1]["to"]
+            for record in edges
+            if "when" not in record[1] and record[1].get("default") is not True
+        }
+        if len(unconditional_targets) >= 2:
+            fanout_targets[node_id] = unconditional_targets
         requires_routing = node.get("kind") == "router" or bool(guarded) or bool(defaults)
         if requires_routing:
             routing_nodes.add(node_id)
@@ -506,14 +521,19 @@ def validate_document(document: Any) -> tuple[list[str], list[str]]:
                     )
 
     reachability_adjacency: dict[str, set[str]] = defaultdict(set)
+    reverse_adjacency: dict[str, set[str]] = defaultdict(set)
     for source, targets in adjacency.items():
         reachability_adjacency[source].update(targets)
+        for target in targets:
+            reverse_adjacency[target].add(source)
     virtual_transitions: dict[tuple[str, str], bool] = {}
+    virtual_transition_kinds: dict[tuple[str, str], set[str]] = defaultdict(set)
 
     def add_virtual_transition(
         source: str,
         target: str,
         *,
+        kind: str,
         include_source_writes: bool = False,
     ) -> None:
         reachability_adjacency[source].add(target)
@@ -524,6 +544,7 @@ def validate_document(document: Any) -> tuple[list[str], list[str]]:
             )
         else:
             virtual_transitions[key] = include_source_writes
+        virtual_transition_kinds[key].add(kind)
 
     for node_id, target in failure_targets.items():
         if not isinstance(target, str) or target not in nodes:
@@ -531,13 +552,16 @@ def validate_document(document: Any) -> tuple[list[str], list[str]]:
         elif nodes[target].get("kind") == "join":
             errors.append(f"node {node_id}.failure.on_failure must not target a join")
         else:
-            add_virtual_transition(node_id, target)
+            add_virtual_transition(node_id, target, kind="node_failure")
 
     parallel_items = document.get("parallel_groups", [])
     if not is_list(parallel_items):
         errors.append("parallel_groups must be a list")
         parallel_items = []
     seen_parallel: set[str] = set()
+    parallel_source_counts: dict[str, int] = defaultdict(int)
+    parallel_join_counts: dict[str, int] = defaultdict(int)
+    parallel_regions: list[tuple[str, dict[str, str], str | None]] = []
     for index, group in enumerate(parallel_items):
         label = f"parallel_groups[{index}]"
         if not is_mapping(group):
@@ -556,22 +580,89 @@ def validate_document(document: Any) -> tuple[list[str], list[str]]:
         if unknown_branches:
             errors.append(f"{label} references unknown branches: {', '.join(unknown_branches)}")
 
+        source = group.get("source")
+        if not isinstance(source, str) or source not in nodes:
+            errors.append(f"{label}.source must reference a node")
+        else:
+            parallel_source_counts[source] += 1
+            expected_branches = fanout_targets.get(source, set())
+            if not expected_branches:
+                errors.append(f"{label}.source must have at least two unconditional targets")
+            elif set(branches) != expected_branches:
+                errors.append(
+                    f"{label}.branches must exactly match unconditional targets from {source}: "
+                    f"expected {', '.join(sorted(expected_branches))}; "
+                    f"got {', '.join(sorted(set(branches)))}"
+                )
+
         join_id = group.get("join")
         valid_join = isinstance(join_id, str) and join_id in nodes
         if not isinstance(join_id, str):
             errors.append(f"{label}.join must be a node identifier")
         elif not valid_join or nodes[join_id].get("kind") != "join":
             errors.append(f"{label}.join must reference a join node")
+        else:
+            parallel_join_counts[join_id] += 1
 
         branch_paths: dict[str, set[str]] = {}
         if valid_join:
+            can_reach_join = walk(join_id, reverse_adjacency)
             for branch in branches:
                 if branch not in nodes:
                     continue
-                if join_id not in walk(branch, adjacency):
+                branch_reachable = walk(branch, adjacency)
+                if join_id not in branch_reachable:
                     errors.append(f"parallel branch {branch} cannot reach join {join_id}")
                     continue
-                branch_paths[branch] = walk_until(branch, join_id, adjacency)
+                branch_paths[branch] = (branch_reachable & can_reach_join) - {join_id}
+
+        region_nodes: set[str] = set().union(*branch_paths.values()) if branch_paths else set()
+        branch_membership: dict[str, str] = {}
+        for branch, path_nodes in branch_paths.items():
+            for path_node in path_nodes:
+                branch_membership.setdefault(path_node, branch)
+        if isinstance(source, str) and source in nodes:
+            for region_node in sorted(region_nodes):
+                owner_branch = branch_membership.get(region_node)
+                outside_sources = sorted(
+                    {
+                        record[1]["from"]
+                        for record in incoming[region_node]
+                        if record[1]["from"] != source
+                        and branch_membership.get(record[1]["from"]) != owner_branch
+                    }
+                )
+                if outside_sources:
+                    errors.append(
+                        f"{label} branch region node {region_node} has incoming edges "
+                        f"outside source {source}: {', '.join(outside_sources)}"
+                    )
+                outside_targets = sorted(
+                    {
+                        record[1]["to"]
+                        for record in outgoing[region_node]
+                        if record[1]["to"] != join_id
+                        and branch_membership.get(record[1]["to"]) != owner_branch
+                    }
+                )
+                if outside_targets:
+                    errors.append(
+                        f"{label} branch region node {region_node} has normal exits "
+                        f"outside its branch or join {join_id}: {', '.join(outside_targets)}"
+                    )
+        if valid_join:
+            outside_join_sources = sorted(
+                {
+                    record[1]["from"]
+                    for record in incoming[join_id]
+                    if record[1]["from"] not in region_nodes
+                }
+            )
+            if outside_join_sources:
+                errors.append(
+                    f"{label}.join has incoming edges outside its branch region: "
+                    f"{', '.join(outside_join_sources)}"
+                )
 
         valid_branches = sorted(branch_paths)
         for left_index, left in enumerate(valid_branches):
@@ -597,6 +688,7 @@ def validate_document(document: Any) -> tuple[list[str], list[str]]:
                         )
 
         partial_failure = group.get("on_partial_failure")
+        valid_partial_failure: str | None = None
         if not isinstance(partial_failure, str) or not partial_failure.strip():
             errors.append(f"{label}.on_partial_failure must reference a recovery node")
         elif partial_failure not in nodes:
@@ -604,9 +696,33 @@ def validate_document(document: Any) -> tuple[list[str], list[str]]:
         elif nodes[partial_failure].get("kind") == "join":
             errors.append(f"{label}.on_partial_failure must not target a join")
         else:
+            valid_partial_failure = partial_failure
             for branch in branches:
                 if branch in nodes:
-                    add_virtual_transition(branch, partial_failure)
+                    add_virtual_transition(
+                        branch,
+                        partial_failure,
+                        kind="partial_failure",
+                    )
+        if branch_membership:
+            parallel_regions.append(
+                (label, branch_membership, valid_partial_failure)
+            )
+
+    for source, targets in sorted(fanout_targets.items()):
+        group_count = parallel_source_counts.get(source, 0)
+        if group_count == 0:
+            errors.append(
+                f"unconditional fan-out from {source} to {', '.join(sorted(targets))} "
+                "needs exactly one parallel group"
+            )
+        elif group_count > 1:
+            errors.append(
+                f"unconditional fan-out from {source} has multiple parallel groups"
+            )
+    for join_id, group_count in sorted(parallel_join_counts.items()):
+        if group_count > 1:
+            errors.append(f"join {join_id} belongs to multiple parallel groups")
 
     loop_items = document.get("loops", [])
     if not is_list(loop_items):
@@ -681,6 +797,7 @@ def validate_document(document: Any) -> tuple[list[str], list[str]]:
                 add_virtual_transition(
                     member,
                     exhausted,
+                    kind="loop_exhaustion",
                     include_source_writes=True,
                 )
 
@@ -761,7 +878,36 @@ def validate_document(document: Any) -> tuple[list[str], list[str]]:
             else:
                 for source, node in nodes.items():
                     if source != target and node.get("kind") != "terminal":
-                        add_virtual_transition(source, target)
+                        add_virtual_transition(
+                            source,
+                            target,
+                            kind=f"recovery_{key}",
+                        )
+
+    branch_exit_kinds = {"node_failure", "loop_exhaustion", "partial_failure"}
+    for label, branch_membership, partial_failure_target in parallel_regions:
+        for (transition_source, transition_target), _ in virtual_transitions.items():
+            transition_kinds = virtual_transition_kinds[(transition_source, transition_target)]
+            source_branch = branch_membership.get(transition_source)
+            target_branch = branch_membership.get(transition_target)
+            if target_branch is not None and source_branch != target_branch:
+                errors.append(
+                    f"{label} branch region node {transition_target} has a virtual transition "
+                    f"from outside its branch: {transition_source}"
+                )
+            constrained_exit_kinds = sorted(transition_kinds & branch_exit_kinds)
+            if (
+                source_branch is not None
+                and target_branch != source_branch
+                and partial_failure_target is not None
+                and transition_target != partial_failure_target
+                and constrained_exit_kinds
+            ):
+                errors.append(
+                    f"{label} branch {source_branch} exits through "
+                    f"{', '.join(constrained_exit_kinds)} to {transition_target} instead of "
+                    f"on_partial_failure {partial_failure_target}"
+                )
 
     actual_cycles = cyclic_components(nodes.keys(), reachability_adjacency)
     for component in actual_cycles:
@@ -964,6 +1110,31 @@ def run_self_test() -> int:
             print(f"  - warning: {message}")
         return 1
 
+    cancel_valid = json.loads(json.dumps(valid))
+    cancel_valid["graph"]["terminals"].append("cancelled")
+    cancel_valid["nodes"].append(
+        {
+            "id": "cancelled",
+            "kind": "terminal",
+            "purpose": "End a graph-wide cancellation.",
+            "reads": [],
+            "writes": [],
+            "side_effects": [],
+            "idempotent": True,
+            "timeout": "1m",
+            "retry": {"max_attempts": 1},
+        }
+    )
+    cancel_valid["recovery"]["on_cancel"] = "cancelled"
+    cancel_errors, cancel_warnings = validate_document(cancel_valid)
+    if cancel_errors or cancel_warnings:
+        print("[ERROR] self-test valid graph cancellation fixture failed:")
+        for message in cancel_errors:
+            print(f"  - error: {message}")
+        for message in cancel_warnings:
+            print(f"  - warning: {message}")
+        return 1
+
     cases: list[tuple[str, dict[str, Any], str]] = []
 
     missing_target = json.loads(json.dumps(valid))
@@ -1003,6 +1174,230 @@ def run_self_test() -> int:
             "on_partial_failure references unknown node",
         )
     )
+
+    undeclared_fanout = json.loads(json.dumps(valid))
+    undeclared_fanout["parallel_groups"] = []
+    cases.append(
+        (
+            "undeclared fan-out",
+            undeclared_fanout,
+            "needs exactly one parallel group",
+        )
+    )
+
+    conditional_parallel = json.loads(json.dumps(valid))
+    intake_edges = [
+        edge for edge in conditional_parallel["edges"] if edge["from"] == "intake"
+    ]
+    intake_edges[0]["when"] = 'request.mode == "research"'
+    intake_edges[0]["reads"] = ["request"]
+    intake_edges[1]["default"] = True
+    cases.append(
+        (
+            "conditional alternatives as parallel",
+            conditional_parallel,
+            "source must have at least two unconditional targets",
+        )
+    )
+
+    missing_parallel_source = json.loads(json.dumps(valid))
+    missing_parallel_source["parallel_groups"][0].pop("source")
+    cases.append(
+        (
+            "missing parallel source",
+            missing_parallel_source,
+            ".source must reference a node",
+        )
+    )
+
+    mismatched_parallel_branches = json.loads(json.dumps(valid))
+    mismatched_parallel_branches["parallel_groups"][0]["branches"] = [
+        "research",
+        "approval",
+    ]
+    cases.append(
+        (
+            "mismatched parallel branches",
+            mismatched_parallel_branches,
+            "branches must exactly match unconditional targets",
+        )
+    )
+
+    duplicate_parallel_source = json.loads(json.dumps(valid))
+    duplicate_group = json.loads(
+        json.dumps(duplicate_parallel_source["parallel_groups"][0])
+    )
+    duplicate_group["id"] = "analysis_duplicate"
+    duplicate_parallel_source["parallel_groups"].append(duplicate_group)
+    cases.append(
+        (
+            "duplicate parallel source",
+            duplicate_parallel_source,
+            "has multiple parallel groups",
+        )
+    )
+    cases.append(
+        (
+            "duplicate parallel join",
+            duplicate_parallel_source,
+            "belongs to multiple parallel groups",
+        )
+    )
+
+    bypassed_parallel_source = json.loads(json.dumps(valid))
+    request_state = next(
+        field for field in bypassed_parallel_source["state"] if field["name"] == "request"
+    )
+    request_state["initial"] = True
+    bypassed_parallel_source["state"].append(
+        {
+            "name": "choice",
+            "description": "Initial route choice for the regression fixture.",
+            "type": "object",
+            "owner": "input",
+            "writers": [],
+            "merge": "replace",
+            "sensitive": False,
+            "persist": True,
+            "initial": True,
+        }
+    )
+    bypassed_parallel_source["nodes"].append(
+        {
+            "id": "choose",
+            "kind": "router",
+            "purpose": "Choose whether to enter or bypass the fan-out source.",
+            "reads": ["choice"],
+            "writes": [],
+            "side_effects": [],
+            "idempotent": True,
+            "timeout": "1m",
+            "retry": {"max_attempts": 1},
+            "failure": {"classification": "terminal", "on_failure": "failed"},
+        }
+    )
+    bypassed_parallel_source["graph"]["entry"] = "choose"
+    bypassed_parallel_source["edges"].extend(
+        [
+            {
+                "from": "choose",
+                "to": "intake",
+                "when": 'choice.enter_fanout == true',
+                "reads": ["choice"],
+            },
+            {"from": "choose", "to": "research", "default": True},
+        ]
+    )
+    cases.append(
+        (
+            "bypassed parallel source",
+            bypassed_parallel_source,
+            "incoming edges outside source intake",
+        )
+    )
+
+    failure_bypassed_parallel_source = json.loads(json.dumps(valid))
+    request_state = next(
+        field
+        for field in failure_bypassed_parallel_source["state"]
+        if field["name"] == "request"
+    )
+    request_state["initial"] = True
+    failure_bypassed_parallel_source["nodes"].append(
+        {
+            "id": "preflight",
+            "kind": "task",
+            "purpose": "Run before entering the fan-out source.",
+            "reads": [],
+            "writes": [],
+            "side_effects": [],
+            "idempotent": True,
+            "timeout": "1m",
+            "retry": {"max_attempts": 1},
+            "failure": {"classification": "correctable", "on_failure": "research"},
+        }
+    )
+    failure_bypassed_parallel_source["graph"]["entry"] = "preflight"
+    failure_bypassed_parallel_source["edges"].append(
+        {"from": "preflight", "to": "intake"}
+    )
+    cases.append(
+        (
+            "failure bypasses parallel source",
+            failure_bypassed_parallel_source,
+            "virtual transition from outside its branch: preflight",
+        )
+    )
+
+    branch_escapes_join = json.loads(json.dumps(valid))
+    research_node = next(
+        node for node in branch_escapes_join["nodes"] if node["id"] == "research"
+    )
+    research_node["kind"] = "router"
+    research_join_edge = next(
+        edge
+        for edge in branch_escapes_join["edges"]
+        if edge["from"] == "research" and edge["to"] == "synthesize"
+    )
+    research_join_edge["when"] = 'research.status == "complete"'
+    research_join_edge["reads"] = ["research"]
+    branch_escapes_join["nodes"].append(
+        {
+            "id": "skipped",
+            "kind": "terminal",
+            "purpose": "Exit one branch without reaching the group join.",
+            "reads": [],
+            "writes": [],
+            "side_effects": [],
+            "idempotent": True,
+            "timeout": "1m",
+            "retry": {"max_attempts": 1},
+        }
+    )
+    branch_escapes_join["graph"]["terminals"].append("skipped")
+    branch_escapes_join["edges"].append(
+        {"from": "research", "to": "skipped", "default": True}
+    )
+    cases.append(
+        (
+            "parallel branch escapes join",
+            branch_escapes_join,
+            "normal exits outside its branch or join synthesize: skipped",
+        )
+    )
+
+    branch_failure_bypasses_group = json.loads(json.dumps(valid))
+    branch_failure_bypasses_group["graph"]["terminals"].append("recovered")
+    branch_failure_bypasses_group["nodes"].append(
+        {
+            "id": "recovered",
+            "kind": "terminal",
+            "purpose": "Exit one failed branch outside the group failure route.",
+            "reads": [],
+            "writes": [],
+            "side_effects": [],
+            "idempotent": True,
+            "timeout": "1m",
+            "retry": {"max_attempts": 1},
+        }
+    )
+    research_node = next(
+        node
+        for node in branch_failure_bypasses_group["nodes"]
+        if node["id"] == "research"
+    )
+    research_node["failure"]["on_failure"] = "recovered"
+    cases.append(
+        (
+            "branch failure bypasses group failure",
+            branch_failure_bypasses_group,
+            "instead of on_partial_failure failed",
+        )
+    )
+
+    duplicate_edge = json.loads(json.dumps(valid))
+    duplicate_edge["edges"].append(json.loads(json.dumps(duplicate_edge["edges"][0])))
+    cases.append(("duplicate edge", duplicate_edge, "duplicates edges[0]"))
 
     conflict = json.loads(json.dumps(valid))
     research = next(node for node in conflict["nodes"] if node["id"] == "research")

@@ -17,6 +17,10 @@ Use the applicable checks. Report findings by severity and identify the affected
 - Conditions are mutually exclusive or have explicit priority.
 - Every router has exactly one fallback.
 - Alternative routing is not confused with parallel fan-out.
+- Every unconditional fan-out has exactly one parallel group with the same source and direct targets.
+- Branch regions have no normal or recovery entries that bypass their source.
+- Normal branch exits reach the group join, and joins are not shared across groups.
+- Branch-local exceptional exits use the group partial-failure route.
 - Guard `reads` declare every state dependency available to the source node.
 - Route decisions depend on explicit state and have runtime boundary tests.
 

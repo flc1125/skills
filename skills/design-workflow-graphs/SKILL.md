@@ -116,7 +116,7 @@ Use distinct positive priorities whenever multiple guarded edges leave the same 
 
 ### 6. Add joins, loops, and approvals
 
-For parallel work, define branch isolation, join policy, timeout behavior, partial-result policy, and state merge semantics.
+For parallel work, define the fan-out source, exact direct branch entries, join policy, timeout behavior, partial-result policy, and state merge semantics. Require every node with multiple unconditional outgoing edges to have exactly one matching parallel group; never model guarded or default alternatives as parallel branches. Reject normal or recovery entries from outside a branch, normal exits that bypass the group join, branch-local exceptional exits that bypass `on_partial_failure`, non-branch inputs to the join, and reuse of one join by multiple groups. Keep graph-wide cancellation and unhandled-error recovery separate.
 
 Do not allow concurrent branches to write the same `replace` or `reject-conflict` field. Use independently owned fields, or an explicit `append` or `reduce` contract when concurrent aggregation is intentional.
 
