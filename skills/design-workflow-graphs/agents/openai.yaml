@@ -1,0 +1,4 @@
+interface:
+  display_name: "Design Workflow Graphs"
+  short_description: "Design and review reliable workflow graphs"
+  default_prompt: "Use $design-workflow-graphs to design a reliable workflow graph for this process."
