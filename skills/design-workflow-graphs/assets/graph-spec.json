@@ -1,0 +1,293 @@
+{
+  "schema_version": "1",
+  "graph": {
+    "id": "proposal_workflow",
+    "goal": "Produce, review, and publish an approved proposal.",
+    "entry": "intake",
+    "terminals": [
+      "done"
+    ],
+    "controls": {
+      "max_steps": 20,
+      "timeout": "30m"
+    }
+  },
+  "state": [
+    {
+      "name": "request",
+      "description": "Original request and acceptance criteria.",
+      "owner": "input",
+      "merge": "replace",
+      "sensitive": false,
+      "persist": true
+    },
+    {
+      "name": "research",
+      "description": "Evidence collected for the proposal.",
+      "owner": "research",
+      "merge": "replace",
+      "sensitive": false,
+      "persist": true
+    },
+    {
+      "name": "risks",
+      "description": "Identified risks and mitigations.",
+      "owner": "risk_assessment",
+      "merge": "replace",
+      "sensitive": false,
+      "persist": true
+    },
+    {
+      "name": "proposal",
+      "description": "Current proposal candidate.",
+      "owner": "synthesize",
+      "merge": "replace",
+      "sensitive": false,
+      "persist": true
+    },
+    {
+      "name": "review_decision",
+      "description": "Structured review outcome and feedback.",
+      "owner": "review",
+      "merge": "replace",
+      "sensitive": false,
+      "persist": true
+    }
+  ],
+  "nodes": [
+    {
+      "id": "intake",
+      "kind": "task",
+      "purpose": "Normalize the request and acceptance criteria.",
+      "reads": [
+
+      ],
+      "writes": [
+        "request"
+      ],
+      "side_effects": [
+
+      ],
+      "idempotent": true,
+      "timeout": "1m",
+      "retry": {
+        "max_attempts": 1
+      }
+    },
+    {
+      "id": "research",
+      "kind": "task",
+      "purpose": "Gather evidence relevant to the request.",
+      "reads": [
+        "request"
+      ],
+      "writes": [
+        "research"
+      ],
+      "side_effects": [
+
+      ],
+      "idempotent": true,
+      "timeout": "5m",
+      "retry": {
+        "max_attempts": 2
+      }
+    },
+    {
+      "id": "risk_assessment",
+      "kind": "task",
+      "purpose": "Identify material risks and mitigations.",
+      "reads": [
+        "request"
+      ],
+      "writes": [
+        "risks"
+      ],
+      "side_effects": [
+
+      ],
+      "idempotent": true,
+      "timeout": "5m",
+      "retry": {
+        "max_attempts": 2
+      }
+    },
+    {
+      "id": "synthesize",
+      "kind": "join",
+      "purpose": "Combine evidence and risks into a proposal.",
+      "reads": [
+        "request",
+        "research",
+        "risks"
+      ],
+      "writes": [
+        "proposal"
+      ],
+      "side_effects": [
+
+      ],
+      "idempotent": true,
+      "timeout": "3m",
+      "retry": {
+        "max_attempts": 1
+      },
+      "join": {
+        "strategy": "all"
+      }
+    },
+    {
+      "id": "review",
+      "kind": "router",
+      "purpose": "Decide whether the proposal meets the acceptance criteria.",
+      "reads": [
+        "request",
+        "proposal"
+      ],
+      "writes": [
+        "review_decision"
+      ],
+      "side_effects": [
+
+      ],
+      "idempotent": true,
+      "timeout": "2m",
+      "retry": {
+        "max_attempts": 1
+      }
+    },
+    {
+      "id": "revise",
+      "kind": "task",
+      "purpose": "Revise the proposal using actionable review feedback.",
+      "reads": [
+        "proposal",
+        "review_decision"
+      ],
+      "writes": [
+        "proposal"
+      ],
+      "side_effects": [
+
+      ],
+      "idempotent": true,
+      "timeout": "3m",
+      "retry": {
+        "max_attempts": 1
+      }
+    },
+    {
+      "id": "publish",
+      "kind": "side_effect",
+      "purpose": "Publish the approved proposal exactly once.",
+      "reads": [
+        "proposal"
+      ],
+      "writes": [
+
+      ],
+      "side_effects": [
+        "publish_proposal"
+      ],
+      "idempotent": true,
+      "timeout": "2m",
+      "retry": {
+        "max_attempts": 2
+      }
+    },
+    {
+      "id": "done",
+      "kind": "terminal",
+      "purpose": "Mark the workflow complete.",
+      "reads": [
+        "proposal"
+      ],
+      "writes": [
+
+      ],
+      "side_effects": [
+
+      ],
+      "idempotent": true,
+      "timeout": "1m",
+      "retry": {
+        "max_attempts": 1
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "intake",
+      "to": "research"
+    },
+    {
+      "from": "intake",
+      "to": "risk_assessment"
+    },
+    {
+      "from": "research",
+      "to": "synthesize"
+    },
+    {
+      "from": "risk_assessment",
+      "to": "synthesize"
+    },
+    {
+      "from": "synthesize",
+      "to": "review"
+    },
+    {
+      "from": "review",
+      "to": "publish",
+      "when": "review_decision.status == \"approved\""
+    },
+    {
+      "from": "review",
+      "to": "revise",
+      "default": true
+    },
+    {
+      "from": "revise",
+      "to": "review"
+    },
+    {
+      "from": "publish",
+      "to": "done"
+    }
+  ],
+  "parallel_groups": [
+    {
+      "id": "analysis",
+      "branches": [
+        "research",
+        "risk_assessment"
+      ],
+      "join": "synthesize",
+      "on_partial_failure": "fail"
+    }
+  ],
+  "loops": [
+    {
+      "id": "proposal_revision",
+      "nodes": [
+        "review",
+        "revise"
+      ],
+      "exit_when": "review_decision.status == \"approved\"",
+      "max_iterations": 3,
+      "on_exhausted": "fail"
+    }
+  ],
+  "observability": {
+    "capture": [
+      "node_start",
+      "node_end",
+      "edge_selected",
+      "state_delta",
+      "retry",
+      "latency",
+      "error"
+    ],
+    "redact_sensitive_state": true
+  }
+}
