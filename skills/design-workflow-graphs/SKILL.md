@@ -5,7 +5,7 @@ metadata:
   name: Design Workflow Graphs
   description: Design and review reliable graph-based workflows with explicit control flow, state, failure, and termination semantics.
   author: FLC
-  created: "2026-08-18T14:22:56Z"
+  created: "2026-08-18T15:14:41Z"
 ---
 
 # Design Workflow Graphs
@@ -31,7 +31,7 @@ Load only what the request needs:
 - For reusable topologies, read [references/graph-patterns.md](references/graph-patterns.md).
 - For audits or final design review, read [references/review-checklist.md](references/review-checklist.md).
 - To create a machine-readable artifact, copy [assets/graph-spec.json](assets/graph-spec.json) and adapt it.
-- To validate a Graph Spec, run `python3 scripts/validate_graph_spec.py path/to/graph.json`.
+- To validate a Graph Spec, run `python3 scripts/validate_graph_spec.py --strict path/to/graph.json`.
 
 ## Choose the Work Mode
 
@@ -84,6 +84,8 @@ List every shared state field and define:
 
 Keep large artifacts outside shared state when a reference is sufficient. Do not use conversation history as an implicit state schema.
 
+In a Graph Spec, declare `state.writers` as the complete authorization set. It must exactly match the nodes that list the field under `writes`. Mark fields available before entry with `initial: true`; every node read must be available on every normal or recovery path into that node.
+
 ### 4. Define node contracts
 
 Give every node one primary responsibility. Specify:
@@ -97,6 +99,8 @@ Give every node one primary responsibility. Specify:
 
 Split a node when its outputs need different retry, permission, evaluation, or ownership semantics. Merge nodes when separation creates no meaningful control boundary.
 
+Classify each non-terminal node's exhausted failure as `retryable`, `correctable`, `rejectable`, or `terminal`, and route it to an explicit `on_failure` node.
+
 ### 5. Define edges and routing
 
 For every edge, define its source, destination, and reason for selection.
@@ -104,22 +108,34 @@ For every edge, define its source, destination, and reason for selection.
 - Make conditional routes collectively exhaustive.
 - Make conditions mutually exclusive or define priority explicitly.
 - Add a default route for unclassified results.
+- Declare each guard's state dependencies under edge `reads`.
 - Keep routing decisions based on explicit state, not hidden prompt context.
 - Distinguish alternative branches from fan-out parallelism.
+
+Use distinct positive priorities whenever multiple guarded edges leave the same node. Treat the validator as a structural check: arbitrary guard expressions still need runtime-specific tests for meaning, overlap, and boundary behavior.
 
 ### 6. Add joins, loops, and approvals
 
 For parallel work, define branch isolation, join policy, timeout behavior, partial-result policy, and state merge semantics.
+
+Do not allow concurrent branches to write the same `replace` or `reject-conflict` field. Use independently owned fields, or an explicit `append` or `reduce` contract when concurrent aggregation is intentional.
 
 For every loop, define:
 
 - loop members
 - progress signal
 - exit condition
+- member after which the exit condition is evaluated
 - maximum iterations, duration, or cost
 - behavior when the budget is exhausted
 
+Require the declared loop members to match the actual cyclic component exactly. Do not add downstream nodes merely to make an exit condition appear available.
+
 Represent human approval as an explicit resumable boundary. Persist the decision input, approver identity when required, decision, and continuation state.
+
+Make approval rejection, expiry, loop exhaustion, partial failure, unhandled failure, and cancellation resolve to explicit nodes rather than free-form outcomes.
+
+Include these implicit failure and recovery transitions when checking reachability and cycles. Re-entering normal work from recovery requires its own measurable loop boundary.
 
 ### 7. Design failure and side-effect behavior
 
@@ -145,9 +161,9 @@ Define evaluation at the smallest useful level:
 
 ### 9. Validate and deliver
 
-Read [references/review-checklist.md](references/review-checklist.md). When producing a Graph Spec, run the bundled validator and fix errors before handoff.
+Read [references/review-checklist.md](references/review-checklist.md). When producing a Graph Spec, run the bundled validator in strict mode and fix errors and warnings before handoff.
 
-Treat warnings as design questions. Explain any warning intentionally retained.
+The validator checks structural contracts and reference integrity. It does not interpret arbitrary guard languages or prove runtime behavior; add execution tests for route boundaries, recovery, resume, and side-effect semantics.
 
 ## Deliverables
 
@@ -174,9 +190,14 @@ Before finishing, verify that:
 - every terminal state is explicit
 - every branch has total routing behavior
 - every join defines completion and merge semantics
+- every quorum is achievable from its incoming paths
 - every cycle has a measurable bound and exhaustion path
 - concurrent writers have a declared merge or conflict policy
 - retries cannot duplicate unsafe side effects
 - approval and resume state can survive process interruption
+- failure, cancellation, and partial-result routes resolve to nodes
+- node reads are initialized on every normal and recovery arrival path
+- failure and recovery routes cannot create undeclared cycles
+- evaluation checks identify resolvable targets and stable metrics
 - observability can explain which edge ran and why
 - the design can be understood without framework-specific source code

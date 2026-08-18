@@ -5,7 +5,8 @@
     "goal": "Produce, review, and publish an approved proposal.",
     "entry": "intake",
     "terminals": [
-      "done"
+      "done",
+      "failed"
     ],
     "controls": {
       "max_steps": 20,
@@ -16,42 +17,81 @@
     {
       "name": "request",
       "description": "Original request and acceptance criteria.",
+      "type": "object",
       "owner": "input",
+      "writers": [
+        "intake"
+      ],
       "merge": "replace",
       "sensitive": false,
-      "persist": true
+      "persist": true,
+      "initial": false
     },
     {
       "name": "research",
       "description": "Evidence collected for the proposal.",
+      "type": "object",
       "owner": "research",
+      "writers": [
+        "research"
+      ],
       "merge": "replace",
       "sensitive": false,
-      "persist": true
+      "persist": true,
+      "initial": false
     },
     {
       "name": "risks",
       "description": "Identified risks and mitigations.",
+      "type": "object",
       "owner": "risk_assessment",
+      "writers": [
+        "risk_assessment"
+      ],
       "merge": "replace",
       "sensitive": false,
-      "persist": true
+      "persist": true,
+      "initial": false
     },
     {
       "name": "proposal",
       "description": "Current proposal candidate.",
+      "type": "object",
       "owner": "synthesize",
+      "writers": [
+        "synthesize",
+        "revise"
+      ],
       "merge": "replace",
       "sensitive": false,
-      "persist": true
+      "persist": true,
+      "initial": false
     },
     {
       "name": "review_decision",
       "description": "Structured review outcome and feedback.",
+      "type": "object",
       "owner": "review",
+      "writers": [
+        "review"
+      ],
       "merge": "replace",
       "sensitive": false,
-      "persist": true
+      "persist": true,
+      "initial": false
+    },
+    {
+      "name": "approval_decision",
+      "description": "Durable approval outcome used to resume publication.",
+      "type": "object",
+      "owner": "approval",
+      "writers": [
+        "approval"
+      ],
+      "merge": "replace",
+      "sensitive": false,
+      "persist": true,
+      "initial": false
     }
   ],
   "nodes": [
@@ -72,6 +112,10 @@
       "timeout": "1m",
       "retry": {
         "max_attempts": 1
+      },
+      "failure": {
+        "classification": "terminal",
+        "on_failure": "failed"
       }
     },
     {
@@ -91,6 +135,10 @@
       "timeout": "5m",
       "retry": {
         "max_attempts": 2
+      },
+      "failure": {
+        "classification": "retryable",
+        "on_failure": "failed"
       }
     },
     {
@@ -110,6 +158,10 @@
       "timeout": "5m",
       "retry": {
         "max_attempts": 2
+      },
+      "failure": {
+        "classification": "retryable",
+        "on_failure": "failed"
       }
     },
     {
@@ -131,6 +183,10 @@
       "timeout": "3m",
       "retry": {
         "max_attempts": 1
+      },
+      "failure": {
+        "classification": "correctable",
+        "on_failure": "failed"
       },
       "join": {
         "strategy": "all"
@@ -154,6 +210,10 @@
       "timeout": "2m",
       "retry": {
         "max_attempts": 1
+      },
+      "failure": {
+        "classification": "correctable",
+        "on_failure": "failed"
       }
     },
     {
@@ -174,6 +234,45 @@
       "timeout": "3m",
       "retry": {
         "max_attempts": 1
+      },
+      "failure": {
+        "classification": "correctable",
+        "on_failure": "failed"
+      }
+    },
+    {
+      "id": "approval",
+      "kind": "approval",
+      "purpose": "Pause for a durable external approval decision.",
+      "reads": [
+        "request",
+        "proposal",
+        "review_decision"
+      ],
+      "writes": [
+        "approval_decision"
+      ],
+      "side_effects": [
+
+      ],
+      "idempotent": true,
+      "timeout": "24h",
+      "retry": {
+        "max_attempts": 1
+      },
+      "failure": {
+        "classification": "rejectable",
+        "on_failure": "failed"
+      },
+      "approval": {
+        "decision_state": "approval_decision",
+        "resume_state": [
+          "request",
+          "proposal",
+          "review_decision"
+        ],
+        "on_rejected": "failed",
+        "on_expired": "failed"
       }
     },
     {
@@ -193,6 +292,10 @@
       "timeout": "2m",
       "retry": {
         "max_attempts": 2
+      },
+      "failure": {
+        "classification": "retryable",
+        "on_failure": "failed"
       }
     },
     {
@@ -201,6 +304,25 @@
       "purpose": "Mark the workflow complete.",
       "reads": [
         "proposal"
+      ],
+      "writes": [
+
+      ],
+      "side_effects": [
+
+      ],
+      "idempotent": true,
+      "timeout": "1m",
+      "retry": {
+        "max_attempts": 1
+      }
+    },
+    {
+      "id": "failed",
+      "kind": "terminal",
+      "purpose": "End the workflow after rejection, exhaustion, cancellation, or failure.",
+      "reads": [
+
       ],
       "writes": [
 
@@ -238,8 +360,11 @@
     },
     {
       "from": "review",
-      "to": "publish",
-      "when": "review_decision.status == \"approved\""
+      "to": "approval",
+      "when": "review_decision.status == \"approved\"",
+      "reads": [
+        "review_decision"
+      ]
     },
     {
       "from": "review",
@@ -249,6 +374,19 @@
     {
       "from": "revise",
       "to": "review"
+    },
+    {
+      "from": "approval",
+      "to": "publish",
+      "when": "approval_decision.status == \"approved\"",
+      "reads": [
+        "approval_decision"
+      ]
+    },
+    {
+      "from": "approval",
+      "to": "failed",
+      "default": true
     },
     {
       "from": "publish",
@@ -263,7 +401,7 @@
         "risk_assessment"
       ],
       "join": "synthesize",
-      "on_partial_failure": "fail"
+      "on_partial_failure": "failed"
     }
   ],
   "loops": [
@@ -274,10 +412,38 @@
         "revise"
       ],
       "exit_when": "review_decision.status == \"approved\"",
+      "reads": [
+        "review_decision"
+      ],
+      "evaluate_after": "review",
       "max_iterations": 3,
-      "on_exhausted": "fail"
+      "on_exhausted": "failed"
     }
   ],
+  "recovery": {
+    "checkpoint_state": [
+      "request",
+      "proposal",
+      "review_decision",
+      "approval_decision"
+    ],
+    "on_unhandled_error": "failed",
+    "on_cancel": "failed"
+  },
+  "evaluation": {
+    "checks": [
+      {
+        "scope": "route",
+        "target": "review",
+        "metric": "review_route_accuracy"
+      },
+      {
+        "scope": "graph",
+        "target": "proposal_workflow",
+        "metric": "approved_proposal_published_once"
+      }
+    ]
+  },
   "observability": {
     "capture": [
       "node_start",
