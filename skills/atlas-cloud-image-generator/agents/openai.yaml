@@ -1,0 +1,7 @@
+interface:
+  display_name: "Atlas Cloud Image Generator"
+  short_description: "Generate images through Atlas Cloud"
+  default_prompt: "Use $atlas-cloud-image-generator to validate an Atlas Cloud text-to-image request, preview the payload, and execute exactly one generation request only when the user authorizes it."
+
+policy:
+  allow_implicit_invocation: true
