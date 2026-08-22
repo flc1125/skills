@@ -2,8 +2,10 @@
 name: short-fiction-scaffolder
 description: Scaffold a new Chinese commercial short-fiction project with versioned drafts, one maintained outline, publication metadata, revision notes, and optional cover artwork. Use when starting a new short-story repository or directory; do not use for drafting or revising an existing story.
 metadata:
-  name: 短篇小说骨架器
+  name: Short Fiction Scaffolder
   description: Create a safe, versioned, and sustainable project skeleton for Chinese commercial short fiction.
+  author: FLC
+  created: 2026-08-22T02:47:52Z
 ---
 
 # Short Fiction Scaffolder

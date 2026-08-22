@@ -1,4 +1,4 @@
 interface:
-  display_name: "短篇小说骨架器"
-  short_description: "为中文商业短篇小说创建可持续迭代的项目目录与文档模板"
-  default_prompt: "使用 $short-fiction-scaffolder 初始化一个新的中文商业短篇小说项目。"
+  display_name: "Short Fiction Scaffolder"
+  short_description: "Create versioned Chinese short-fiction project templates"
+  default_prompt: "Use $short-fiction-scaffolder to create a new Chinese commercial short-fiction project."
