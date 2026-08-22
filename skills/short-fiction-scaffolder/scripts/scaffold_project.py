@@ -27,41 +27,41 @@ class ScaffoldError(Exception):
 def single_line(value: Optional[str], label: str, required: bool = False) -> Optional[str]:
     if value is None:
         if required:
-            raise ScaffoldError(f"缺少{label}")
+            raise ScaffoldError(f"Missing {label}")
         return None
 
     normalized = value.strip()
     if required and not normalized:
-        raise ScaffoldError(f"{label}不能为空")
+        raise ScaffoldError(f"{label} must not be empty")
     if not normalized:
         return None
     if "\n" in normalized or "\r" in normalized:
-        raise ScaffoldError(f"{label}必须为单行文本")
+        raise ScaffoldError(f"{label} must be a single line")
     return normalized
 
 
 def inspect_png(path: Path) -> Tuple[int, int]:
     if not path.is_file():
-        raise ScaffoldError(f"封面文件不存在或不是普通文件：{path}")
+        raise ScaffoldError(f"Cover does not exist or is not a regular file: {path}")
 
     with path.open("rb") as source:
         header = source.read(24)
 
     if len(header) < 24 or header[:8] != PNG_SIGNATURE or header[12:16] != b"IHDR":
-        raise ScaffoldError(f"封面必须是真实的 PNG 文件：{path}")
+        raise ScaffoldError(f"Cover must be a valid PNG file: {path}")
 
     return struct.unpack(">II", header[16:24])
 
 
 def validate_destination(output: Path) -> None:
     if output.is_symlink():
-        raise ScaffoldError(f"目标路径不能是符号链接：{output}")
+        raise ScaffoldError(f"Target path must not be a symbolic link: {output}")
     if not output.exists():
         return
     if not output.is_dir():
-        raise ScaffoldError(f"目标路径已存在且不是目录：{output}")
+        raise ScaffoldError(f"Target exists and is not a directory: {output}")
     if any(output.iterdir()):
-        raise ScaffoldError(f"目标目录不是空目录，已安全停止：{output}")
+        raise ScaffoldError(f"Target directory is not empty; stopped safely: {output}")
 
 
 def render_template(source: Path, destination: Path, values: Dict[str, str]) -> None:
@@ -72,7 +72,7 @@ def render_template(source: Path, destination: Path, values: Dict[str, str]) -> 
     unresolved = sorted(set(TOKEN_PATTERN.findall(content)))
     if unresolved:
         raise ScaffoldError(
-            f"模板 {source.relative_to(TEMPLATE_ROOT)} 含有未替换标记：{', '.join(unresolved)}"
+            f"Template {source.relative_to(TEMPLATE_ROOT)} has unresolved markers: {', '.join(unresolved)}"
         )
 
     destination.parent.mkdir(parents=True, exist_ok=True)
@@ -134,7 +134,7 @@ def build_values(
 
 def materialize(destination: Path, values: Dict[str, str], cover: Optional[Path]) -> None:
     if not TEMPLATE_ROOT.is_dir():
-        raise ScaffoldError(f"找不到项目模板：{TEMPLATE_ROOT}")
+        raise ScaffoldError(f"Project template not found: {TEMPLATE_ROOT}")
 
     for source in sorted(TEMPLATE_ROOT.rglob("*")):
         relative = source.relative_to(TEMPLATE_ROOT)
@@ -152,11 +152,11 @@ def materialize(destination: Path, values: Dict[str, str], cover: Optional[Path]
 
 
 def scaffold(args: argparse.Namespace) -> Path:
-    title = single_line(args.title, "作品名", required=True)
-    output_value = single_line(args.output, "输出路径", required=True)
-    pen_name = single_line(args.pen_name, "笔名")
-    genre = single_line(args.genre, "类型")
-    target_length = single_line(args.target_length, "目标字数")
+    title = single_line(args.title, "work title", required=True)
+    output_value = single_line(args.output, "output path", required=True)
+    pen_name = single_line(args.pen_name, "pen name")
+    genre = single_line(args.genre, "genre")
+    target_length = single_line(args.target_length, "target length")
     assert title is not None and output_value is not None
 
     output = Path(output_value).expanduser()
@@ -181,14 +181,14 @@ def scaffold(args: argparse.Namespace) -> Path:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="创建中文商业短篇小说的版本化项目骨架。"
+        description="Create a versioned project skeleton for Chinese commercial short fiction."
     )
-    parser.add_argument("--output", required=True, help="新项目的输出目录")
-    parser.add_argument("--title", required=True, help="作品名")
-    parser.add_argument("--pen-name", help="可选笔名")
-    parser.add_argument("--genre", help="可选类型")
-    parser.add_argument("--target-length", help="可选目标字数或范围")
-    parser.add_argument("--cover", help="可选 PNG 封面路径")
+    parser.add_argument("--output", required=True, help="output directory for the new project")
+    parser.add_argument("--title", required=True, help="work title")
+    parser.add_argument("--pen-name", help="optional pen name")
+    parser.add_argument("--genre", help="optional genre")
+    parser.add_argument("--target-length", help="optional target length or range")
+    parser.add_argument("--cover", help="optional PNG cover path")
     return parser.parse_args()
 
 
@@ -196,10 +196,10 @@ def main() -> int:
     try:
         output = scaffold(parse_args())
     except (OSError, ScaffoldError) as error:
-        print(f"错误：{error}", file=sys.stderr)
+        print(f"Error: {error}", file=sys.stderr)
         return 1
 
-    print(f"已创建短篇小说项目：{output}")
+    print(f"Created short-fiction project: {output}")
     return 0
 
 

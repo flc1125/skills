@@ -3,68 +3,68 @@ name: short-fiction-scaffolder
 description: Scaffold a new Chinese commercial short-fiction project with versioned drafts, one maintained outline, publication metadata, revision notes, and optional cover artwork. Use when starting a new short-story repository or directory; do not use for drafting or revising an existing story.
 metadata:
   name: 短篇小说骨架器
-  description: 为中文商业短篇小说创建安全、版本化且可持续迭代的项目骨架。
+  description: Create a safe, versioned, and sustainable project skeleton for Chinese commercial short fiction.
 ---
 
-# 短篇小说骨架器
+# Short Fiction Scaffolder
 
-为新的中文商业短篇小说创建一套可持续迭代的项目骨架。只初始化项目；不要代替用户编造人物、剧情、正文或宣传文案，也不要把初始化授权扩大为 Git 或 GitHub 操作。
+Create a sustainable project skeleton for a new Chinese commercial short story. Initialize structure only: do not invent characters, plot, manuscript prose, or promotional copy, and do not treat scaffolding permission as authorization for Git or GitHub operations.
 
-## 收集输入
+## Collect Inputs
 
-开始前取得两个必填项：
+Obtain two required inputs before starting:
 
-- 输出路径
-- 作品名
+- output path
+- work title
 
-以下内容可选；未提供时不要追问，除非用户明确表示它会影响当前初始化：
+The following inputs are optional. Do not ask for them when omitted unless the user says they affect the current initialization:
 
-- 笔名
-- 类型
-- 目标字数或字数范围
-- PNG 封面文件路径
+- pen name
+- genre
+- target length or length range
+- PNG cover path
 
-优先从用户的自然语言中整理这些值，再调用确定性脚本。不要让用户为了使用脚本而改写成命令行参数。
+Extract these values from the user's natural-language request, then call the deterministic script. Do not require the user to restate their request as command-line arguments.
 
-## 初始化
+## Scaffold the Project
 
-运行本 Skill 的 `scripts/scaffold_project.py`：
+Run this skill's `scripts/scaffold_project.py`:
 
 ```bash
 python3 <skill-directory>/scripts/scaffold_project.py \
   --output <project-path> \
-  --title <作品名> \
-  [--pen-name <笔名>] \
-  [--genre <类型>] \
-  [--target-length <目标字数>] \
+  --title <work-title> \
+  [--pen-name <pen-name>] \
+  [--genre <genre>] \
+  [--target-length <target-length>] \
   [--cover <png-path>]
 ```
 
-脚本只接受不存在或为空的目标目录。目标目录含有任何文件时，应保留现场并向用户说明，不要添加或模拟强制覆盖。提供封面时，脚本验证 PNG 格式并复制为 `assets/cover.png`；未提供封面时，README 不生成图片链接。
+The script accepts only a nonexistent or empty target directory. If the target contains any file, preserve it and explain the refusal; do not add or simulate a force-overwrite option. When a cover is provided, the script validates the PNG and copies it to `assets/cover.png`. Without a cover, the README must not contain an image link.
 
-不要在初始化过程中执行 `git init`、创建远程仓库、提交或推送。用户随后明确要求这些操作时，将其作为独立任务处理并再次确认相应范围。
+Do not run `git init`, create a remote repository, commit, or push during scaffolding. If the user explicitly requests one of those operations afterward, treat it as a separate task and confirm its scope.
 
-## 输出约定
+## Preserve the Output Contract
 
-生成结果必须保持以下关系：
+The generated project must preserve these relationships:
 
-- `README.md` 是项目入口，只指向当前推荐稿、大纲、发布资料和当前版本确实存在的修改说明。
-- `docs/outline.md` 是唯一、持续维护的故事大纲。
-- 正文使用 `docs/drafts/vN.md`；重大改写创建下一版本，不覆盖历史稿。
-- 修改说明使用 `docs/revision-notes/vN.md` 并与正文版本一致；初始 `v1.md` 不创建修改说明。
-- `docs/publication/metadata.md` 预留正式稿、宣传语、无剧透简介、标签、内容提示、署名和封面信息。
-- 发布素材位于 `assets/`，主封面固定为 `assets/cover.png`。
-- 不创建 `latest.md`、`current.md` 或其他重复的“当前版本”文件。
+- `README.md` is the project entry point. It links only to the current recommended draft, the outline, publication metadata, and revision notes that actually exist for the current version.
+- `docs/outline.md` is the single continuously maintained story outline.
+- Manuscripts use `docs/drafts/vN.md`. A major rewrite creates the next version instead of overwriting history.
+- Revision notes use `docs/revision-notes/vN.md` and match the manuscript version. Do not create revision notes for the initial `v1.md`.
+- `docs/publication/metadata.md` reserves the formal-draft path, one-line pitch, spoiler-free synopsis, tags, content notice, byline, and cover information.
+- Publication assets live in `assets/`; the primary cover is always `assets/cover.png`.
+- Do not create `latest.md`, `current.md`, or other duplicate current-version files.
 
-模板只建立结构和写作提示，不填入具体作品内容。Markdown 使用 UTF-8，每份文档只包含一个 H1；`---` 只用于正文中的场景或章节分隔。
+Templates establish structure and writing prompts only; they do not fill in story-specific content. Markdown files use UTF-8 and exactly one H1 each. Use `---` only for scene or chapter breaks in the manuscript.
 
-## 完成检查
+## Verify the Result
 
-初始化后：
+After scaffolding:
 
-1. 列出生成文件，确认目录和可选字段符合用户输入。
-2. 搜索未替换的 `{{TOKEN}}` 标记。
-3. 确认 README 的所有本地链接均存在；无封面时确认不存在封面图片标签。
-4. 若目标目录已经位于 Git 仓库中，可运行 `git diff --check`，但不要因此初始化、提交或推送仓库。
+1. List generated files and confirm that the structure and optional fields match the user's inputs.
+2. Search for unreplaced `{{TOKEN}}` markers.
+3. Confirm that every local README link exists and that a coverless project has no cover image tag.
+4. If the target already belongs to a Git repository, run `git diff --check` when useful, but do not initialize, commit, or push merely to perform validation.
 
-向用户报告生成路径、采用的可选信息和未执行的外部操作。
+Report the generated path, the optional inputs used, and the external operations that were intentionally not performed.
