@@ -1,0 +1,4 @@
+interface:
+  display_name: "Short Fiction Scaffolder"
+  short_description: "Create versioned Chinese short-fiction project templates"
+  default_prompt: "Use $short-fiction-scaffolder to create a new Chinese commercial short-fiction project."
