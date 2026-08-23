@@ -54,6 +54,7 @@ When the user does not specify a target repository, use this fixed preset set:
 - `flc1125/go-cron`
 - `flc1125/go-gitlab-webhook`
 - `flc1125/go-yuque`
+- `flc1125/go-build-tools`
 
 Do not ask for confirmation before scanning this preset set. Scanning is read-only.
 

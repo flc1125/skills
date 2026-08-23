@@ -47,6 +47,7 @@ When no repository is specified, the skill scans this preset set:
 - `flc1125/go-cron`
 - `flc1125/go-gitlab-webhook`
 - `flc1125/go-yuque`
+- `flc1125/go-build-tools`
 
 ## How It Works
 
