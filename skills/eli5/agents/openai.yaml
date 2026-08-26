@@ -1,0 +1,4 @@
+interface:
+  display_name: "ELI5"
+  short_description: "Picture-first explainers with very few words"
+  default_prompt: "Use $eli5 to turn this topic into a dead-simple, picture-first HTML explainer for someone with no prior knowledge."
