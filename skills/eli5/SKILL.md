@@ -5,7 +5,7 @@ metadata:
   name: ELI5
   description: Turn a topic into a picture-first HTML explainer for someone with no prior knowledge.
   author: Flc
-  created: 2026-08-26T01:01:38Z
+  created: 2026-08-26T01:45:03Z
 ---
 
 # ELI5
