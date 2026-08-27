@@ -19,6 +19,7 @@ interface SkillModalProps {
   isOpen: boolean;
   isLoading: boolean;
   error: string | null;
+  publishedAtReference: Date | null;
   stats?: SkillStats;
   onStatsChange: (slug: string, stats: SkillStats) => void;
   onClose: () => void;
@@ -74,6 +75,7 @@ export function SkillModal({
   isOpen,
   isLoading,
   error,
+  publishedAtReference,
   stats,
   onStatsChange,
   onClose,
@@ -83,7 +85,10 @@ export function SkillModal({
   const contentRef = useRef<HTMLDivElement | null>(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const displayName = skill?.metadata?.name ?? skill?.name ?? fallbackName ?? 'Loading skill';
-  const publishedAt = formatSkillPublishedAt(skill?.metadata?.created);
+  const publishedAt = formatSkillPublishedAt(
+    skill?.metadata?.created,
+    publishedAtReference
+  );
   const fileCountLabel = skill ? `${skill.fileCount} ${skill.fileCount === 1 ? 'file' : 'files'}` : null;
 
   useEffect(() => {
