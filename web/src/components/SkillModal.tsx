@@ -10,6 +10,7 @@ import { X, Terminal, Copy, Check, ExternalLink, CalendarDays, Eye, Files, Arrow
 import { formatInteractionCount, formatSkillPublishedAt } from '@/lib/utils';
 import { trackEvent } from '@/lib/gtag';
 import { recordSkillInteraction } from '@/lib/skill-stats-client';
+import { getSkillInstallCommand } from '@/lib/install-methods';
 import type { SkillStats } from '@/lib/skill-stats';
 
 interface SkillModalProps {
@@ -134,7 +135,7 @@ export function SkillModal({
   }, [displayName, isOpen, onStatsChange, skill]);
 
   const command = skill
-    ? `npx skills add https://skills.flc.io --skill ${skill.installName}`
+    ? getSkillInstallCommand(skill.installName)
     : '';
   const sourceUrl = skill
     ? `https://github.com/flc1125/skills/blob/main/skills/${skill.path}`

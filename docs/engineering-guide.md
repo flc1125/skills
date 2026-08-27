@@ -100,6 +100,17 @@ The marketplace stores public view and copy totals in Upstash Redis. Counts begi
 
 The public `GET /api/stats` endpoint returns all skill totals in one response and is cached at the CDN for 60 seconds. `POST /api/stats/:slug` accepts a `view` or `copy` interaction, validates the skill slug, applies the deduplication window, and returns the updated total. The UI hides the counters when Redis is not configured instead of showing misleading zeroes.
 
+## 8. WebMCP Progressive Enhancement
+
+The marketplace exposes four browser-native WebMCP tools when the current browser implements `document.modelContext.registerTool()`:
+
+*   `search_skills`: Search skill names and descriptions or list the newest skills.
+*   `get_skill_detail`: Load the complete metadata and Markdown content for a skill.
+*   `get_install_command`: Return the individual `npx skills add` command for a skill.
+*   `open_skill`: Open a skill detail modal in the current browser tab.
+
+WebMCP is a progressive enhancement. The registration component performs feature detection in the browser and renders nothing. Unsupported and older browsers skip registration while retaining the complete marketplace UI and API behavior. Registration uses an `AbortSignal` so tools are automatically removed when the component unmounts, and registration failures do not block page rendering.
+
 ---
 
 *For further technical questions, please refer to the [Next.js Documentation](https://nextjs.org/docs).*
