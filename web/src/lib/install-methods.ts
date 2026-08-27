@@ -12,6 +12,12 @@ export type InstallMethod = {
   commands: InstallCommand[];
 };
 
+const SKILLS_REGISTRY_URL = 'https://skills.flc.io';
+
+export function getSkillInstallCommand(installName: string): string {
+  return `npx skills add ${SKILLS_REGISTRY_URL} --skill ${installName}`;
+}
+
 export const repositoryInstallMethods: InstallMethod[] = [
   {
     id: 'codex',

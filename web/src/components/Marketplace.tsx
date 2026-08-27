@@ -9,7 +9,9 @@ import { RepositoryInstallPanel } from './RepositoryInstallPanel';
 import { SkillCard } from './SkillCard';
 import { SkillModal } from './SkillModal';
 import { SortSelect } from './SortSelect';
+import { WebMcpTools } from './WebMcpTools';
 import { trackEvent } from '@/lib/gtag';
+import { filterSkillsByQuery } from '@/lib/skill-catalog';
 import { formatInteractionCount } from '@/lib/utils';
 import { DEFAULT_SORT_KEY, SORT_OPTIONS, getSkillComparator, isStatsSortKey, normalizeSortKey } from '@/lib/sorting';
 import type { SortKey } from '@/lib/sorting';
@@ -157,19 +159,9 @@ export function Marketplace({ initialSkills, initialStats }: MarketplaceProps) {
   }, [hasMounted, selectedSkillSlug]);
 
   const orderedSkills = useMemo(() => {
-    const normalizedSearch = search.toLowerCase();
-
-    return initialSkills
-      .filter((skill) => {
-        const displayName = skill.metadata?.name ?? skill.name;
-        const displayDescription = skill.metadata?.description ?? skill.description;
-
-        return (
-          displayName.toLowerCase().includes(normalizedSearch) ||
-          displayDescription.toLowerCase().includes(normalizedSearch)
-        );
-      })
-      .sort(getSkillComparator(sortKey, statsSnapshot));
+    return filterSkillsByQuery(initialSkills, search).sort(
+      getSkillComparator(sortKey, statsSnapshot)
+    );
   }, [initialSkills, search, sortKey, statsSnapshot]);
 
   const totalSkills = initialSkills.length;
@@ -217,11 +209,11 @@ export function Marketplace({ initialSkills, initialStats }: MarketplaceProps) {
     return () => window.clearTimeout(timeout);
   }, [orderedSkills.length, search]);
 
-  const handleCardClick = (skillMeta: SkillMetadata) => {
+  const openSkill = useCallback((skillMeta: SkillMetadata) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set('skill', skillMeta.slug);
     window.history.pushState(null, '', `${pathname}?${params.toString()}`);
-  };
+  }, [pathname, searchParams]);
 
   const handleSortChange = (key: SortKey) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -377,7 +369,7 @@ export function Marketplace({ initialSkills, initialStats }: MarketplaceProps) {
                 skill={skill}
                 stats={statsSnapshot.enabled ? statsSnapshot.skills[skill.slug] : undefined}
                 position={index + 1}
-                onClick={handleCardClick}
+                onClick={openSkill}
               />
             ))}
           </AnimatePresence>
@@ -420,6 +412,7 @@ export function Marketplace({ initialSkills, initialStats }: MarketplaceProps) {
         onStatsChange={handleStatsChange}
         onClose={handleCloseModal}
       />
+      <WebMcpTools skills={initialSkills} onOpenSkill={openSkill} />
     </motion.div>
     </MotionConfig>
   );
