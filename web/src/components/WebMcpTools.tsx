@@ -16,7 +16,7 @@ interface WebMcpToolsProps {
 }
 
 interface WebMcpExecuteOptions {
-  signal: AbortSignal;
+  signal?: AbortSignal;
 }
 
 interface WebMcpTool {
@@ -26,7 +26,7 @@ interface WebMcpTool {
   inputSchema: Record<string, unknown>;
   execute: (
     input: Record<string, unknown>,
-    options: WebMcpExecuteOptions
+    options?: WebMcpExecuteOptions
   ) => Promise<unknown>;
   annotations?: {
     readOnlyHint?: boolean;
@@ -103,21 +103,25 @@ function findSkillBySlug(skills: SkillMetadata[], slug: string): SkillMetadata {
   return skill;
 }
 
-async function waitForUiUpdate(signal: AbortSignal): Promise<void> {
-  if (signal.aborted) {
-    throw signal.reason;
+function getAbortReason(signal: AbortSignal): unknown {
+  return signal.reason ?? new DOMException('The operation was aborted.', 'AbortError');
+}
+
+async function waitForUiUpdate(signal?: AbortSignal): Promise<void> {
+  if (signal?.aborted) {
+    throw getAbortReason(signal);
   }
 
   await new Promise<void>((resolve, reject) => {
     let frame = 0;
     const handleAbort = () => {
       window.cancelAnimationFrame(frame);
-      reject(signal.reason);
+      reject(signal ? getAbortReason(signal) : undefined);
     };
 
-    signal.addEventListener('abort', handleAbort, { once: true });
+    signal?.addEventListener('abort', handleAbort, { once: true });
     frame = window.requestAnimationFrame(() => {
-      signal.removeEventListener('abort', handleAbort);
+      signal?.removeEventListener('abort', handleAbort);
       resolve();
     });
   });
@@ -211,12 +215,12 @@ export function WebMcpTools({ skills, onOpenSkill }: WebMcpToolsProps) {
           readOnlyHint: true,
           untrustedContentHint: true,
         },
-        async execute(input, { signal }) {
+        async execute(input, options) {
           const slug = readStringInput(input, 'slug', { required: true });
           findSkillBySlug(skillsRef.current, slug);
 
           const response = await fetch(`/api/skills/${encodeURIComponent(slug)}`, {
-            signal,
+            signal: options?.signal,
           });
 
           if (!response.ok) {
@@ -279,12 +283,12 @@ export function WebMcpTools({ skills, onOpenSkill }: WebMcpToolsProps) {
           required: ['slug'],
           additionalProperties: false,
         },
-        async execute(input, { signal }) {
+        async execute(input, options) {
           const slug = readStringInput(input, 'slug', { required: true });
           const skill = findSkillBySlug(skillsRef.current, slug);
 
           onOpenSkillRef.current(skill);
-          await waitForUiUpdate(signal);
+          await waitForUiUpdate(options?.signal);
 
           return {
             opened: true,

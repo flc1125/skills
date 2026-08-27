@@ -12,10 +12,17 @@ interface SkillCardProps {
   skill: SkillMetadata;
   stats?: SkillStats;
   position: number;
+  publishedAtReference: Date | null;
   onClick: (skill: SkillMetadata) => void;
 }
 
-export function SkillCard({ skill, stats, position, onClick }: SkillCardProps) {
+export function SkillCard({
+  skill,
+  stats,
+  position,
+  publishedAtReference,
+  onClick,
+}: SkillCardProps) {
   const cardRef = useRef<HTMLButtonElement | null>(null);
   const hasTrackedImpression = useRef(false);
   const spotlightX = useMotionValue(0);
@@ -23,7 +30,10 @@ export function SkillCard({ skill, stats, position, onClick }: SkillCardProps) {
   const spotlight = useMotionTemplate`radial-gradient(220px circle at ${spotlightX}px ${spotlightY}px, color-mix(in srgb, var(--accent) 7%, transparent), transparent 72%)`;
   const displayName = skill.metadata?.name ?? skill.name;
   const displayDescription = skill.metadata?.description ?? skill.description;
-  const publishedAt = formatSkillPublishedAt(skill.metadata?.created);
+  const publishedAt = formatSkillPublishedAt(
+    skill.metadata?.created,
+    publishedAtReference
+  );
 
   useEffect(() => {
     const element = cardRef.current;

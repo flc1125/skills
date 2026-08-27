@@ -91,6 +91,7 @@ export function Marketplace({ initialSkills, initialStats }: MarketplaceProps) {
     ? initialSkills.find((skill) => skill.slug === selectedSkillSlug) ?? null
     : null;
   const isModalOpen = hasMounted && selectedSkillSlug !== null;
+  const publishedAtReference = hasMounted ? new Date() : null;
 
   // Reset detail state when the selected slug changes or clears, using the
   // render-time adjustment pattern instead of an effect.
@@ -369,6 +370,7 @@ export function Marketplace({ initialSkills, initialStats }: MarketplaceProps) {
                 skill={skill}
                 stats={statsSnapshot.enabled ? statsSnapshot.skills[skill.slug] : undefined}
                 position={index + 1}
+                publishedAtReference={publishedAtReference}
                 onClick={openSkill}
               />
             ))}
@@ -404,6 +406,7 @@ export function Marketplace({ initialSkills, initialStats }: MarketplaceProps) {
         isOpen={isModalOpen}
         isLoading={isLoadingSkill}
         error={skillLoadError}
+        publishedAtReference={publishedAtReference}
         stats={
           statsSnapshot.enabled && selectedSkillSlug
             ? statsSnapshot.skills[selectedSkillSlug]

@@ -18,23 +18,30 @@ export function parseSkillMetadataDate(value?: string | null): Date | null {
   }
 
   const [, year, month, day, hour, minute, second] = match;
-  const date = new Date(
+  const date = new Date(Date.UTC(
     Number(year),
     Number(month) - 1,
     Number(day),
     Number(hour),
     Number(minute),
     Number(second)
-  );
+  ));
 
   return Number.isNaN(date.getTime()) ? null : date;
 }
 
-export function formatSkillPublishedAt(value?: string | null, now = new Date()): string | null {
+export function formatSkillPublishedAt(
+  value?: string | null,
+  now: Date | null = new Date()
+): string | null {
   const date = parseSkillMetadataDate(value);
 
   if (!date) {
     return null;
+  }
+
+  if (!now) {
+    return formatSkillDate(date);
   }
 
   const diffMs = now.getTime() - date.getTime();
@@ -86,9 +93,9 @@ function isYesterday(date: Date, now: Date): boolean {
 }
 
 function formatSkillDate(date: Date): string {
-  const year = date.getFullYear();
-  const month = `${date.getMonth() + 1}`.padStart(2, '0');
-  const day = `${date.getDate()}`.padStart(2, '0');
+  const year = date.getUTCFullYear();
+  const month = `${date.getUTCMonth() + 1}`.padStart(2, '0');
+  const day = `${date.getUTCDate()}`.padStart(2, '0');
 
   return `${year}-${month}-${day}`;
 }
