@@ -2,7 +2,7 @@
 
 Create a picture-first explanation of a topic for someone with no prior knowledge.
 
-The skill produces a self-contained HTML artifact with large visuals, short labels, one concrete example, and a concise takeaway.
+By default, the skill produces a self-contained HTML artifact with large visuals, short labels, one concrete example, and a concise takeaway. If you request another medium, it adapts the explanation to that format.
 
 ## Install
 
@@ -34,6 +34,9 @@ This repository keeps the upstream idea of explaining a topic with big pictures 
 - a standalone HTML output contract with no packages, build step, or network access
 - guidance for accurate analogies, responsive layout, and accessibility
 - clearer activation boundaries and fallback behavior for other requested output formats
+- visual selection based on the concept, with labeled relationships and explicit mappings between analogies and real concepts
+- interaction only when it helps explain a change or cause and effect
+- file delivery and visual checks when the environment supports them, with disclosure when preview is unavailable
 
 ## Structure
 
