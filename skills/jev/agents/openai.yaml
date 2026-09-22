@@ -1,0 +1,4 @@
+interface:
+  display_name: "Jev"
+  short_description: "Solve tasks with adaptive Jev judgments and code"
+  default_prompt: "Use $jev to design and execute a workflow for my task using Jev judgments and code."
