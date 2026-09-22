@@ -1,0 +1,6 @@
+interface:
+  display_name: "Jev"
+  icon_small: "./assets/icon-small.png"
+  icon_large: "./assets/icon.png"
+  short_description: "Solve tasks with adaptive Jev judgments and code"
+  default_prompt: "Use $jev to design and execute a workflow for my task using Jev judgments and code."
