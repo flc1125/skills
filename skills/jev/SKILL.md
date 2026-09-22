@@ -4,6 +4,8 @@ description: Solve user tasks by dynamically designing and executing workflows t
 metadata:
   name: Jev
   description: Complete user tasks with adaptable semantic judgments and executable workflows.
+  author: Flc
+  created: "2026-09-22T09:19:27Z"
 ---
 
 # Jev
