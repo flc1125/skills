@@ -32,7 +32,9 @@ Ask independent questions about the same state together, including useful branch
 
 Requires Node.js 20 or newer; no npm installation is needed. Resolve `scripts/jev.mjs` relative to this skill's actual directory, not the user's working directory.
 
-Read [the runner reference](references/runner.md) for configuration, input shapes, output handling, and CLI options. Run `config check` to inspect configuration without exposing credentials or making an API request. Missing credentials do not prevent designing and validating a request, but do prevent live evaluation; report that boundary accurately. Never request a key in chat or copy it into task files.
+Read [the runner reference](references/runner.md) as needed for input shapes, output handling, and CLI options. Assume configuration is ready and execute the task directly. Do not run `config check`, inspect configuration files or environment variables, or load configuration guidance as a routine preflight. The helper reads and validates configuration internally.
+
+Only read [the configuration guide](references/configuration.md) when execution fails with evidence of a configuration or authentication problem, or when the user explicitly asks to configure Jev. Diagnose the specific error before suggesting setup changes; request-format errors, network failures, and rate limits do not by themselves indicate bad configuration.
 
 Construct the task's JSON request and pass it on stdin or with `--input`. Capture stdout as JSON; inspect the exit code before consuming it as a result. Use `--output` when a large response could exceed tool output limits or the user wants a saved result. Use structured process arguments or a safely quoted heredoc; do not interpolate user material into shell code.
 

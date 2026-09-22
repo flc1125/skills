@@ -1,32 +1,8 @@
-# Runner and configuration
+# Runner
 
 Use Node.js 20+ and the bundled `scripts/jev.mjs`; all dependencies are Node built-ins. Commands below use `<skill-dir>` as the absolute directory containing this skill.
 
-## Configuration
-
-Default file: `~/.config/jev/config.json`. Override its location with `JEV_CONFIG_FILE` (relative paths resolve from the current directory; `~/` is supported).
-
-```json
-{
-  "api_key": "your-api-key",
-  "base_url": "https://api.typesafe.ai",
-  "model": "jev-latest"
-}
-```
-
-Environment variables override file values: `TYPESAFE_API_KEY`, `TYPESAFE_BASE_URL`, and `TYPESAFE_MODEL`. Empty environment values are ignored. Only the key is required for live evaluation; the base URL and model default to the values above. An explicit request `model` overrides the configured model.
-
-`base_url` is the service root, not the evaluation endpoint: the runner appends `/v1/systemone`. Trailing slashes are accepted and a gateway path prefix is preserved. Do not include `/v1`, `/v1/systemone`, URL credentials, query parameters, or fragments. HTTP and HTTPS are supported. A custom endpoint must implement the TypeSafe v1 contract, not an OpenAI chat-completions API.
-
-```sh
-node <skill-dir>/scripts/jev.mjs config init
-node <skill-dir>/scripts/jev.mjs config edit
-node <skill-dir>/scripts/jev.mjs config check
-```
-
-`init` and `edit` require an interactive terminal, hide key input, and write the file with mode `0600` on POSIX. `init` refuses to overwrite an existing file. `edit` preserves fields not being changed; blank input keeps the existing value. Environment overrides are not saved into the file. Do not pass a key on the command line or ask the user to paste it into chat. The user can run the interactive command in their terminal or edit the file locally.
-
-`check` is offline. It reports the resolved path, whether a key is set, the effective base URL, and model; it never prints the key. When the key is missing it returns this same summary with `api_key_set: false` and exits with code 2 (not an error envelope). A configured key is not proof that it is valid with the service. Missing default configuration is allowed when environment variables supply it; an explicitly selected missing file is an error, except when running `config init` to create it.
+Execute directly; configuration is handled inside the helper. Load [configuration guidance](configuration.md) only for a configuration-related execution failure or an explicit setup request.
 
 ## Evaluate
 
